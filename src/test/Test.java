@@ -14,4 +14,8 @@ public class Test {
 	public void printUwaaaaa(){
 		System.out.println("uwaaaaaaaaaaaa");
 	}
+
+	public void printUoooooo(){
+		System.out.println("uooooooooooooo");
+	}
 }
