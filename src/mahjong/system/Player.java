@@ -10,7 +10,7 @@ public class Player {
 	private List<Hai> sutehai = new ArrayList<Hai>();
 
 	private int score = 25000;
-	public boolean isReach = false;
+	private boolean isReach = false;
 	
 	public Hai getTehai(int index) {
 		return tehai.get(index);
@@ -67,6 +67,9 @@ public class Player {
 		Collections.sort(tehai);
 	}
 	
+	public boolean isReach(){
+		return this.isReach;
+	}
 	public void doReach(){
 		isReach = true;
 	}
