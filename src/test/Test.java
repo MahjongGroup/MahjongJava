@@ -16,6 +16,6 @@ public class Test {
 	}
 
 	public void printUoooooo(){
-		System.out.println("uonononononononon");
+		System.out.println("gununununu");
 	}
 }
