@@ -18,7 +18,4 @@ public class Test {
 	public void printUoooooo(){
 		System.out.println("uooooooooooooo");
 	}
-	public void imatomi(){
-		System.out.println("I am Imatomi!");
-	}
 }
