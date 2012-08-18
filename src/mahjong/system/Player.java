@@ -74,6 +74,9 @@ public class Player {
 	public void doReach(){
 		isReach = true;
 	}
+	public void clearReach(){
+		isReach = false;
+	}
 	public boolean isAnkanable(){
 		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
 		for(HaiType type : singleList){
