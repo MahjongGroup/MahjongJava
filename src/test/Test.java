@@ -11,17 +11,11 @@ public class Test {
 	public void printTest(){
 		System.out.println(pass);
 	}
-	public void printUwaaaaa(){
-		System.out.println("uwaaaaaaaaaaaa");
-	}
 
 	public void printHogehoge(){
 		System.out.println("hogehoge");
 	}
-	public void printJ(){
-		System.out.println("J");
-	}
-	public void printMoseshi(){
-		System.out.println("mosemosemoseshi");
+	public void testConflict(){
+		System.out.println("test");
 	}
 }
