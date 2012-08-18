@@ -8,4 +8,7 @@ public class Test {
 	public Test(String pass){
 		this.pass = pass;
 	}
+	public void printTest(){
+		System.out.println(pass);
+	}
 }
