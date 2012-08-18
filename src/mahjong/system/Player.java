@@ -1,4 +1,4 @@
-package mahjong.system;
+ package mahjong.system;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,13 +9,16 @@ public class Player {
 	private List<Hai> nakihai = new ArrayList<Hai>();
 	private List<Hai> sutehai = new ArrayList<Hai>();
 
+	private Kaze kaze ;
+	private boolean isReach = false;
+	
 	private int score = 25000;
 
 	public Hai getTehai(int index) {
 		return tehai.get(index);
 	}
 	
-	public List<Hai> makeTehai(Player player) {
+	public List<Hai> makeTehai() {
 		return new ArrayList<Hai>(tehai);
 	}
 
@@ -36,6 +39,16 @@ public class Player {
 		score = score+index;
 	}
 	
+	public int getKaze(){
+		return kaze.getKazeType();
+	}
+	
+	public void doReach(){
+		isReach = true;
+	}
+	public void clearReach(){
+		isReach = false;
+	}
 	public void tsumo(Hai hai) {
 		tehai.add(hai);
 	}
@@ -48,7 +61,7 @@ public class Player {
 		tehai.remove(index1);
 		tehai.remove(index2);
 	}
-
+ 
 	public void dahai(int index) {
 		sutehai.add(getTehai(index));
 		tehai.remove(index);
