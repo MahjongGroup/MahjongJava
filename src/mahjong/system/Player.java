@@ -1,5 +1,6 @@
 package mahjong.system;
 
+import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +12,7 @@ public class Player {
 
 	private int score = 25000;
 	private boolean isReach = false;
+	private int KanCount = 0;
 	
 	public Hai getTehai(int index) {
 		return tehai.get(index);
@@ -68,10 +70,26 @@ public class Player {
 	}
 	
 	public boolean isReach(){
-		return this.isReach;
+		return isReach;
 	}
 	public void doReach(){
 		isReach = true;
 	}
-	
+	public boolean isAnkanable(){
+		
+		return false;
+	}
+	public void doAnkan(Hai hai){
+		for(int i = 0;i<4;i++){
+			if(hai == null){
+				throw new IllegalArgumentException();
+			}
+			nakihai.add(hai);
+			tehai.remove(hai);
+		}
+		KanCount++;
+	}
+	public int getKanCount(){
+		return KanCount;
+	}
 }
