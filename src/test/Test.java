@@ -18,4 +18,7 @@ public class Test {
 	public void printHogehoge(){
 		System.out.println("hogehoge");
 	}
+	public void printJ(){
+		System.out.println("J");
+	}
 }
