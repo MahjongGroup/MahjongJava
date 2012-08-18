@@ -33,13 +33,16 @@ public class Field {
 			wanpai.add(getHai());
 		}
 		doras.add(wanpai.get(4));
-		for(int i = 0;i < 4;i++){
-			for(Player player:players){
-				if(i != 3)
-					for(int j = 0;j < 3;j++)
-						player.tsumo(getHai());
+		for(Player player:players){
+			for(int j = 0;j < 13;j++)
 				player.tsumo(getHai());
-			}
+			player.clearReach();
+		}
+	}
+
+	public void sortTehai(){
+		for(Player player:players){
+			player.sortTehai();
 		}
 	}
 
@@ -62,7 +65,7 @@ public class Field {
 	}
 	public void dahai(int index){
 		currentPlayer.dahai(index);
-		reach++;
+		currentPlayer.sortTehai();
 	}
 
 	public void doReach(){
@@ -74,25 +77,55 @@ public class Field {
 		return currentPlayer.isAnkanable();
 	}
 	
-	public void doAnkan(){
+	public void doAnkan(int index){
 		Hai hai;
-		currentPlayer.doAnkan();
+		currentPlayer.doAnkan(index);
 		currentPlayer.tsumo(hai = wanpai.get(2 * (doras.size() - 1)));
 		wanpai.set(wanpai.indexOf(hai), null);
 		doras.add(wanpai.get(4 + 2 * doras.size()));
 	}
 	
-	public void ryukyoku(){
-		if(kyoku == 4)kyoku = 0;
-		fieldWind.getNextKaze();
+	public void oyaNagare(){
+		if(kyoku == 4){
+			kyoku = 0;
+			fieldWind = fieldWind.getNextKaze();
+		}
 		kyoku++;
 		honba = 0;
 	}
+	
 	public Hai getHai(){
 		Hai hai = yama.get(rand.nextInt(yama.size()));
 		yama.remove(hai);
 		return hai;
 	}
+	
+	public boolean isSuhurenda(){
+		HaiType previous = null;
+		HaiType current = null;
+		for(Player player:players){
+			current = player.getSutehai(0).getType();
+			if(previous == null)previous = current;
+			if(previous != current)return false;
+			previous = current;
+		}
+		if(current != HaiType.TON || current != HaiType.NAN ||
+				current != HaiType.SYA || current != HaiType.PE)return false;
+		return true;
+	}
+	
+	public boolean isSukaikan(){
+		int kanCount = 0;
+		int numberOfPerson = 0;
+		for(Player player:players){
+			if(player.getKanCount() != 0){
+				kanCount+=player.getKanCount();
+				numberOfPerson++;
+			}
+		}
+		return (kanCount > 3 && numberOfPerson > 1);
+	}
+	
 	public int getReachStick(){
 		int reach_point = reach;
 		reach = 0;
@@ -102,6 +135,7 @@ public class Field {
 	public int getHonba(){
 		return honba;
 	}
+	
 	public Hai RinsyanTsumo(){
 		Hai hai = wanpai.get((doras.size() - 1) * 2);
 		wanpai.set(wanpai.indexOf(hai), null);
