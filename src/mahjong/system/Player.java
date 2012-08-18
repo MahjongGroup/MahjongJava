@@ -10,7 +10,7 @@ public class Player {
 	private List<Hai> sutehai = new ArrayList<Hai>();
 
 	private int score = 25000;
-	private boolean isReach = false;
+	public boolean isReach = false;
 	
 	public Hai getTehai(int index) {
 		return tehai.get(index);
