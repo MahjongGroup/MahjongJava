@@ -26,3 +26,4 @@ public class AgariCheckTest {
 		System.out.println(AgariChecker.isAgari(Arrays.asList(hais), new Hai(HaiType.NAN, false)));
 	}
 }
+	
