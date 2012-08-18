@@ -16,9 +16,9 @@ enum HaiType {
 	public boolean isSuhai(int x){
 		
 		if(x >= 0 && x <= 26){
-		return true;
+			return true;
 		}
-	return false;
+		return false;
 	}
 	
 	
@@ -32,9 +32,9 @@ enum HaiType {
 	
 	public boolean isTsuhai(int x){
 		if(x >= 27 && x <= 33){
-		return true;
+			return true;
 		}	
-	return false;
+		return false;
 	}
 	
 	public boolean isSangenhai(int x){

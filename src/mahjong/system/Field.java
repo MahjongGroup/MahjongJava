@@ -5,17 +5,19 @@ import java.util.Random;
 public class Field {
 	private ArrayList<Hai> yama = new ArrayList<Hai>();
 	private ArrayList<Hai> wanpai = new ArrayList<Hai>();
-	private ArrayList<Player> players = new ArrayList<Player>();
+//	private ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<Player> players;
 	private ArrayList<Hai> doras = new ArrayList<Hai>();
-	private HaiType fieldWind = HaiType.TON;
+	private Kaze fieldWind = HaiType.TON;
 	private int kyoku = 0;
 	private int honba = 0;
 	private Random rand;
 	private int reach = 0;
-	
-	public Field(){
-		for(int i = 0;i < 4;i++)
-			players.add(new Player());
+
+	public Field(ArrayList<Player> players){
+		this.players = players;
+//		for(int i = 0;i < 4;i++)
+//			players.add(new Player());
 	}
 	
 	public void chipai(){
@@ -49,9 +51,14 @@ public class Field {
 		kyoku++;
 		honba = 0;
 	}
-	public Hai getHai(){
+	private Hai getHai(){
 		Hai hai = yama.get(rand.nextInt(yama.size()));
 		yama.remove(hai);
 		return hai;
 	}
+	
+	public playerLoop(){
+		
+	}
+	
 }
