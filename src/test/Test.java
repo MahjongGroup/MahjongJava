@@ -11,11 +11,11 @@ public class Test {
 	public void printTest(){
 		System.out.println(pass);
 	}
-	public void printUwaaaaa(){
-		System.out.println("uwaaaaaaaaaaaa");
-	}
 
 	public void printUoooooo(){
 		System.out.println("uooooooooooooo");
+	}
+	public void testConflict(){
+		System.out.println("test");
 	}
 }
