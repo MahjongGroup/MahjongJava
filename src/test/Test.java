@@ -21,4 +21,7 @@ public class Test {
 	public void printJ(){
 		System.out.println("J");
 	}
+	public void printMoseshi(){
+		System.out.println("mosemosemoseshi");
+	}
 }
