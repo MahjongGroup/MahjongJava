@@ -12,8 +12,12 @@ public class Test {
 		System.out.println(pass);
 	}
 
-	public void printHogehoge(){
-		System.out.println("hogehoge");
+	public void printUoooooo(){
+		System.out.println("uooooooooooooo");
+	}
+	public void printMoseshi(){
+		System.out.println("mosemosemoseshi");
+		
 	}
 	public void testConflict(){
 		System.out.println("test");
