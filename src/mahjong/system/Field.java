@@ -40,6 +40,12 @@ public class Field {
 		}
 	}
 
+	public void sortTehai(){
+		for(Player player:players){
+			player.sortTehai();
+		}
+	}
+
 	public Hai tsumo(){
 		Hai hai = getHai();
 		currentPlayer.tsumo(hai);
@@ -60,7 +66,7 @@ public class Field {
 	
 	public void dahai(int index){
 		currentPlayer.dahai(index);
-		reach++;
+		currentPlayer.sortTehai();
 	}
 
 	public void doReach(){
@@ -72,17 +78,19 @@ public class Field {
 		return currentPlayer.isAnkanable();
 	}
 	
-	public void doAnkan(){
+	public void doAnkan(int index){
 		Hai hai;
-		currentPlayer.doAnkan();
+		currentPlayer.doAnkan(index);
 		currentPlayer.tsumo(hai = wanpai.get(2 * (doras.size() - 1)));
 		wanpai.set(wanpai.indexOf(hai), null);
 		doras.add(wanpai.get(4 + 2 * doras.size()));
 	}
 	
-	public void ryukyoku(){
-		if(kyoku == 4)kyoku = 0;
-		fieldWind.getNextKaze();
+	public void oyaNagare(){
+		if(kyoku == 4){
+			kyoku = 0;
+			fieldWind = fieldWind.getNextKaze();
+		}
 		kyoku++;
 		honba = 0;
 	}
@@ -91,6 +99,32 @@ public class Field {
 		Hai hai = yama.get(rand.nextInt(yama.size()));
 		yama.remove(hai);
 		return hai;
+	}
+	
+	public boolean isSuhurenda(){
+		HaiType previous = null;
+		HaiType current = null;
+		for(Player player:players){
+			current = player.getSutehai(0).getType();
+			if(previous == null)previous = current;
+			if(previous != current)return false;
+			previous = current;
+		}
+		if(current != HaiType.TON || current != HaiType.NAN ||
+				current != HaiType.SYA || current != HaiType.PE)return false;
+		return true;
+	}
+	
+	public boolean isSukaikan(){
+		int kanCount = 0;
+		int numberOfPerson = 0;
+		for(Player player:players){
+			if(player.getKanCount() != 0){
+				kanCount+=player.getKanCount();
+				numberOfPerson++;
+			}
+		}
+		return (kanCount > 3 && numberOfPerson > 1);
 	}
 	
 	public int getReachStick(){
