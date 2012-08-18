@@ -15,7 +15,8 @@ public class Test {
 	public void printUoooooo(){
 		System.out.println("uooooooooooooo");
 	}
-	public void testConflict(){
-		System.out.println("test");
+	public void printMoseshi(){
+		System.out.println("mosemosemoseshi");
+		
 	}
 }
