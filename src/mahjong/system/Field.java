@@ -33,13 +33,10 @@ public class Field {
 			wanpai.add(getHai());
 		}
 		doras.add(wanpai.get(4));
-		for(int i = 0;i < 4;i++){
-			for(Player player:players){
-				if(i != 3)
-					for(int j = 0;j < 3;j++)
-						player.tsumo(getHai());
+		for(Player player:players){
+			for(int j = 0;j < 13;j++)
 				player.tsumo(getHai());
-			}
+			player.clearReach();
 		}
 	}
 
@@ -89,11 +86,13 @@ public class Field {
 		kyoku++;
 		honba = 0;
 	}
+	
 	public Hai getHai(){
 		Hai hai = yama.get(rand.nextInt(yama.size()));
 		yama.remove(hai);
 		return hai;
 	}
+	
 	public int getReachStick(){
 		int reach_point = reach;
 		reach = 0;
@@ -103,6 +102,7 @@ public class Field {
 	public int getHonba(){
 		return honba;
 	}
+	
 	public Hai RinsyanTsumo(){
 		Hai hai = wanpai.get((doras.size() - 1) * 2);
 		wanpai.set(wanpai.indexOf(hai), null);
