@@ -63,6 +63,7 @@ public class Field {
 	public boolean isReach(){
 		return currentPlayer.isReach();
 	}
+
 	public void dahai(int index){
 		currentPlayer.dahai(index);
 		currentPlayer.sortTehai();
