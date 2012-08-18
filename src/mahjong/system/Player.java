@@ -15,7 +15,7 @@ public class Player {
 		return tehai.get(index);
 	}
 	
-	public List<Hai> makeTehai(Player player) {
+	public List<Hai> makeTehai() {
 		return new ArrayList<Hai>(tehai);
 	}
 

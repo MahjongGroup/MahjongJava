@@ -60,7 +60,7 @@ public enum HaiType {
 			return true;
 		return false;
 	}
-
+	
 	/**
 	 * このオブジェクトが索子ならtrueを返す。
 	 * 
@@ -93,13 +93,13 @@ public enum HaiType {
 	 * 
 	 * @return このオブジェクトが字牌ならtrue
 	 */
-	public boolean isTsuhai() {
-		if (isSangenhai() || isKazehai()) {
+	public boolean isTsuhai(int x){
+		if(x >= 27 && x <= 33){
 			return true;
-		}
+		}	
 		return false;
 	}
-
+	
 	/**
 	 * このオブジェクトが三元牌ならtrueを返す。
 	 * 
