@@ -11,6 +11,7 @@ public class Player {
 
 	private int score = 25000;
 	private boolean isReach = false;
+	private int KanCount = 0;
 	
 	public Hai getTehai(int index) {
 		return tehai.get(index);
@@ -68,10 +69,32 @@ public class Player {
 	}
 	
 	public boolean isReach(){
-		return this.isReach;
+		return isReach;
 	}
 	public void doReach(){
 		isReach = true;
 	}
-	
+	public void clearReach(){
+		isReach = false;
+	}
+	public boolean isAnkanable(){
+		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
+		for(HaiType type : singleList){
+			int size = Hais.getHaiSize(tehai, type);
+			if(size == 4) return true;
+		}
+		
+		return false;
+	}
+	public void doAnkan(int index){
+		Hai Kampai = tehai.get(index);
+		for(int i = 0;i<4;i++){
+			nakihai.add(Kampai);
+			tehai.remove(Kampai);
+		}
+		KanCount++;
+	}
+	public int getKanCount(){
+		return KanCount;
+	}
 }
