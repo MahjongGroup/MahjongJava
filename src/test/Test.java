@@ -22,4 +22,9 @@ public class Test {
 	public void testConflict() {
 		System.out.println("test");
 	}
+
+	public void printMoseshi() {
+		System.out.println("mosemosemoseshi");
+
+	}
 }
