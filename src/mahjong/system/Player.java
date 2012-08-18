@@ -94,6 +94,23 @@ public class Player {
 		}
 		KanCount++;
 	}
+	public boolean isPonable(){
+		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
+		for(HaiType type : singleList){
+			int size = Hais.getHaiSize(tehai, type);
+			if(size == 2) return true;
+		}
+		return false;
+	}
+	public boolean isMinkanable(){
+		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
+		for(HaiType type : singleList){
+			int size = Hais.getHaiSize(tehai, type);
+			if(size == 3) return true;
+		}
+		return false;
+	}
+	
 	public int getKanCount(){
 		return KanCount;
 	}
