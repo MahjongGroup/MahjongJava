@@ -15,7 +15,7 @@ public class Test {
 		System.out.println("uwaaaaaaaaaaaa");
 	}
 
-	public void printUoooooo(){
-		System.out.println("uooooooooooooo");
+	public void printHogehoge(){
+		System.out.println("hogehoge");
 	}
 }
