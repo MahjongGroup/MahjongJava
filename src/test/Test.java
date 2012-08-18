@@ -14,4 +14,9 @@ public class Test {
 	public void printUwaaaaa(){
 		System.out.println("uwaaaaaaaaaaaa");
 	}
+	@Override
+	public String toString() {
+		return "Test [pass=" + pass + "]";
+	}
+	
 }
