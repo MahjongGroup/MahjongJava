@@ -11,4 +11,7 @@ public class Test {
 	public void printTest(){
 		System.out.println(pass);
 	}
+	public void printUwaaaaa(){
+		System.out.println("uwaaaaaaaaaaaa");
+	}
 }
