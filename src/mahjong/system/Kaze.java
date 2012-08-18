@@ -9,12 +9,23 @@ public enum Kaze {
 		this.kaze = kaze;
 	}
 	
-	int getNextKaze(){
-		if(0 <= kaze && kaze <= 2){
-			return kaze+1;
+	public static Kaze valueOf(int kaz) {
+		for (Kaze kaze : values()) {
+			if (kaze.kaze == kaz)
+				return kaze;
 		}
-		return 0;
+		throw new IllegalArgumentException("kaze : " + kaz);
 	}
+
+	
+	
+	Kaze getNextKaze(){
+		if(0 <= kaze && kaze <= 2){
+			return Kaze.valueOf(kaze+1);
+		}
+		return Kaze.valueOf(0);
+	}
+	
 	
 	int getKazeType(){
 		return kaze;
