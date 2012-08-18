@@ -7,7 +7,7 @@ public class Field {
 	private ArrayList<Hai> wanpai = new ArrayList<Hai>();
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Hai> doras = new ArrayList<Hai>();
-	private HaiType fieldWind = HaiType.TON;
+	private Kaze fieldWind = Kaze.TON;
 	private int kyoku = 0;
 	private int honba = 0;
 	private Random rand;
@@ -45,7 +45,7 @@ public class Field {
 	}
 	public void ryukyoku(){
 		if(kyoku == 4)kyoku = 0;
-//		fieldWind.getNextKaze();
+		fieldWind.getNextKaze();
 		kyoku++;
 		honba = 0;
 	}
