@@ -15,7 +15,8 @@ public class Test {
 	public void printHogehoge(){
 		System.out.println("hogehoge");
 	}
-	public void testConflict(){
-		System.out.println("test");
+	public void printMoseshi(){
+		System.out.println("mosemosemoseshi");
+		
 	}
 }
