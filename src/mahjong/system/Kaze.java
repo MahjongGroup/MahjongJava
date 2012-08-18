@@ -4,7 +4,7 @@ public enum Kaze {
 	TON(0),NAN(1),SHA(2),PE(3);
 	
 	private final int kaze;
-	
+
 	Kaze(int kaze){
 		this.kaze = kaze;
 	}
