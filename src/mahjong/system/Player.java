@@ -75,16 +75,17 @@ public class Player {
 		isReach = true;
 	}
 	public boolean isAnkanable(){
-		
+		for(int i=0;i<10;i++){
+			Hai hai = tehai.get(i);
+			
+		}
 		return false;
 	}
-	public void doAnkan(Hai hai){
+	public void doAnkan(int index){
+		Hai Kampai = tehai.get(index);
 		for(int i = 0;i<4;i++){
-			if(hai == null){
-				throw new IllegalArgumentException();
-			}
-			nakihai.add(hai);
-			tehai.remove(hai);
+			nakihai.add(Kampai);
+			tehai.remove(Kampai);
 		}
 		KanCount++;
 	}
