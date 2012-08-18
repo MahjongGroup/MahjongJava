@@ -13,7 +13,6 @@ public class Field {
 	private int honba = 0;
 	private Random rand;
 	private int reach = 0;
-	private Kaze currentKaze;
 	private Player currentPlayer;
 
 	public Field(){
@@ -51,12 +50,39 @@ public class Field {
 	}
 	
 	public List<Hai> getTehai(){
-		return currentPlayer.makeTehai(currentPlayer);
+		return currentPlayer.makeTehai();
 	}
 	
 	public void renchan(){
 		honba++;
 	}
+	
+	public boolean isReach(){
+		return currentPlayer.isReach();
+	}
+	
+	public void dahai(int index){
+		currentPlayer.dahai(index);
+		reach++;
+	}
+
+	public void doReach(){
+		currentPlayer.doReach();
+		reach++;
+	}
+
+	public boolean isAnkanable(){
+		return currentPlayer.isAnkanable();
+	}
+	
+	public void doAnkan(){
+		Hai hai;
+		currentPlayer.doAnkan();
+		currentPlayer.tsumo(hai = wanpai.get(2 * (doras.size() - 1)));
+		wanpai.set(wanpai.indexOf(hai), null);
+		doras.add(wanpai.get(4 + 2 * doras.size()));
+	}
+	
 	public void ryukyoku(){
 		if(kyoku == 4)kyoku = 0;
 		fieldWind.getNextKaze();
@@ -73,6 +99,7 @@ public class Field {
 		reach = 0;
 		return reach_point;
 	}
+
 	public int getHonba(){
 		return honba;
 	}
@@ -81,6 +108,7 @@ public class Field {
 		wanpai.set(wanpai.indexOf(hai), null);
 		return hai;
 	}
+
 	public boolean isRyukyoku(){
 		return yama.size() + wanpai.size() == 14;
 	}
