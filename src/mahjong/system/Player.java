@@ -75,10 +75,12 @@ public class Player {
 		isReach = true;
 	}
 	public boolean isAnkanable(){
-		for(int i=0;i<10;i++){
-			Hai hai = tehai.get(i);
-			
+		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
+		for(HaiType type : singleList){
+			int size = Hais.getHaiSize(tehai, type);
+			if(size == 4) return true;
 		}
+		
 		return false;
 	}
 	public void doAnkan(int index){
