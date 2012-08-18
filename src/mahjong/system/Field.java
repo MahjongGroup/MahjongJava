@@ -13,12 +13,12 @@ public class Field {
 	private Random rand;
 	private int reach = 0;
 	
-	public Field(int number){
-		for(int i = 0;i < number;i++)
+	public Field(){
+		for(int i = 0;i < 4;i++)
 			players.add(new Player());
 	}
 	
-	public void chipai(int numberOfMembers){
+	public void chipai(){
 		for(HaiType haiType:HaiType.values()){
 			if(haiType == HaiType.UMAN || haiType == HaiType.UPIN || haiType == HaiType.USOU)
 				yama.add(new Hai(haiType,true));
