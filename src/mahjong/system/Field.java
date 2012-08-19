@@ -2,8 +2,10 @@ package mahjong.system;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Field {
+	static public Scanner stdIn = new Scanner(System.in);
 	private ArrayList<Hai> yama = new ArrayList<Hai>();
 	private ArrayList<Hai> wanpai = new ArrayList<Hai>();
 	private ArrayList<Player> players = new ArrayList<Player>();
@@ -16,8 +18,35 @@ public class Field {
 	private Player currentPlayer;
 
 	public Field(){
+		rand = new Random();
 		for(int i = 0;i < 4;i++)
 			players.add(new Player());
+		currentPlayer = players.get(0);
+	}
+	public static void main(String str[]){
+		Field field = new Field();
+		field.chipai();
+		field.sortTehai();
+		while(field.isRyukyoku()){
+			field.printField();
+			System.out.println(field.tsumo());
+			field.dahai(stdIn.nextInt());
+			field.nextPlayer();
+		}
+	}
+	
+	public void printField(){
+		for(Player player:players){
+			if(player == currentPlayer)System.out.print("*");
+			for(int i = 0;i < 13;i++){
+				System.out.print(" " + player.getTehai(i));
+			}
+			System.out.println();
+		}
+	}
+	
+	public void nextPlayer(){
+		currentPlayer = players.get((players.indexOf(currentPlayer) + 1)%4);
 	}
 	
 	public void chipai(){
@@ -63,6 +92,7 @@ public class Field {
 	public boolean isReach(){
 		return currentPlayer.isReach();
 	}
+
 	public void dahai(int index){
 		currentPlayer.dahai(index);
 		currentPlayer.sortTehai();
@@ -143,7 +173,7 @@ public class Field {
 	}
 
 	public boolean isRyukyoku(){
-		return yama.size() + wanpai.size() == 14;
+		return !(yama.size() + wanpai.size() == 14);
 	}
 
 //	public boolean isSyuukyoku(){
