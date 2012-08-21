@@ -145,4 +145,8 @@ public enum HaiType {
 		}
 		throw new IllegalArgumentException();
 	}
+	
+	public String toString(){
+		return notation;
+	}
 }
