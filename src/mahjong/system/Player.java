@@ -55,9 +55,11 @@ public class Player {
 		tehai.remove(index2);
 	}
 
-	public void dahai(int index) {
-		sutehai.add(getTehai(index));
+	public Hai dahai(int index) {
+		Hai hai = getTehai(index);
+		sutehai.add(hai);
 		tehai.remove(index);
+		return hai;
 	}
 	public void tehaiclear(){
 		tehai.clear();

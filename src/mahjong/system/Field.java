@@ -29,15 +29,31 @@ public class Field {
 		field.sortTehai();
 		while(field.isRyukyoku()){
 			field.printField();
-			Hai tsumoHai = field.tsumo();
-			System.out.println(tsumoHai);
-			if(AgariChecker.isAgari(field.currentPlayer.makeTehai() , tsumoHai)){
+			Hai tmpHai = field.tsumo();
+			System.out.println(tmpHai);
+			List<Hai> tmpTehai = field.getTehai();
+			tmpTehai.addAll(field.getSutehai());
+			if(AgariChecker.isAgari(tmpTehai , tmpHai)){
 				System.out.println("Agari!!");
 				break;
 			}
-			field.dahai(stdIn.nextInt());
+			tmpHai = field.dahai(stdIn.nextInt());
 			field.nextPlayer();
 		}
+	}
+
+	public Player isPonable(){
+		Player ponablePlayer = null;
+		for(Player player:players){
+			if(player.isPonable()){
+				
+			}
+		}
+		return ponablePlayer;
+	}
+	
+	public List<Hai> getSutehai(){
+		return currentPlayer.makeSutehai();
 	}
 	
 	public void printField(){
@@ -45,13 +61,15 @@ public class Field {
 			if(player == currentPlayer){
 				System.out.print("*");
 			}else{
-				System.out.print(" ");
+				System.out.print("+");
 			}
-			for(int i = 0;i < 13;i++){
-				System.out.print(" " + player.getTehai(i));
+
+			for(Hai hai:player.makeTehai()){
+				System.out.print(" " + hai);
 			}
-			for(int i = 0;i < 13;i++){
-				System.out.println();
+			System.out.print("//");			
+			for(Hai hai:player.makeSutehai()){
+				System.out.print(" " + hai);
 			}
 			System.out.println();
 		}
@@ -105,9 +123,10 @@ public class Field {
 		return currentPlayer.isReach();
 	}
 
-	public void dahai(int index){
-		currentPlayer.dahai(index);
+	public Hai dahai(int index){
+		Hai hai = currentPlayer.dahai(index);
 		currentPlayer.sortTehai();
+		return hai;
 	}
 
 	public void doReach(){
