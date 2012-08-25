@@ -7,19 +7,21 @@ package mahjong.system;
  * 
  */
 public enum HaiType {
-	ITIMAN(0), RYANMAN(1), SANMAN(2), SUMAN(3), UMAN(4), 
-	ROMAN(5),TIMAN(6), PAMAN(7), KUMAN(8), 
-	ITIPIN(9), RYANPIN(10), SANPIN(11), SUPIN(12), UPIN(13),
-	ROPIN(14), TIPIN(15), PAPIN(16), KUPIN(17),
-	ITISOU(18), RYANSOU(19), SANSOU(20), SUSOU(21), USOU(22),
-	ROSOU(23), TISOU(24), PASOU(25), KUSOU(26),
-	TON(27), NAN(28), SYA(29), PE(30),
-	HAKU(31), HATSU(32), TYUN(33);
+	ITIMAN(0,"一萬"), RYANMAN(1,"二萬"), SANMAN(2,"三萬"), SUMAN(3,"四萬"), UMAN(4,"五萬"), 
+	ROMAN(5,"六萬"),TIMAN(6,"七萬"), PAMAN(7,"八萬"), KUMAN(8,"九萬"), 
+	ITIPIN(9,"一筒"), RYANPIN(10,"二筒"), SANPIN(11,"三筒"), SUPIN(12,"四筒"), UPIN(13,"五筒"),
+	ROPIN(14,"六筒"), TIPIN(15,"七筒"), PAPIN(16,"八筒"), KUPIN(17,"九筒"),
+	ITISOU(18,"一索"), RYANSOU(19,"二索"), SANSOU(20,"三索"), SUSOU(21,"四索"), USOU(22,"五索"),
+	ROSOU(23,"六索"), TISOU(24,"七索"), PASOU(25,"八索"), KUSOU(26,"九索"),
+	TON(27,"東"), NAN(28,"南"), SYA(29,"西"), PE(30,"北"),
+	HAKU(31,"白"), HATSU(32,"發"), TYUN(33,"中");
 
 	private final int id;
+	private final String notation;
 
-	private HaiType(int id) {
+	private HaiType(int id,String notation) {
 		this.id = id;
+		this.notation = notation;
 	}
 
 	/**
@@ -142,5 +144,9 @@ public enum HaiType {
 				return result;
 		}
 		throw new IllegalArgumentException();
+	}
+	
+	public String toString(){
+		return notation;
 	}
 }
