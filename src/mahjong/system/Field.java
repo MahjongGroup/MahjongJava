@@ -29,7 +29,12 @@ public class Field {
 		field.sortTehai();
 		while(field.isRyukyoku()){
 			field.printField();
-			System.out.println(field.tsumo());
+			Hai tsumoHai = field.tsumo();
+			System.out.println(tsumoHai);
+			if(AgariChecker.isAgari(field.currentPlayer.makeTehai() , tsumoHai)){
+				System.out.println("Agari!!");
+				break;
+			}
 			field.dahai(stdIn.nextInt());
 			field.nextPlayer();
 		}
@@ -37,9 +42,16 @@ public class Field {
 	
 	public void printField(){
 		for(Player player:players){
-			if(player == currentPlayer)System.out.print("*");
+			if(player == currentPlayer){
+				System.out.print("*");
+			}else{
+				System.out.print(" ");
+			}
 			for(int i = 0;i < 13;i++){
 				System.out.print(" " + player.getTehai(i));
+			}
+			for(int i = 0;i < 13;i++){
+				System.out.println();
 			}
 			System.out.println();
 		}

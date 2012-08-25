@@ -21,6 +21,10 @@ public class Player {
 		return new ArrayList<Hai>(tehai);
 	}
 
+	public List<Hai> makeSutehai(){
+		return new ArrayList<Hai>(sutehai);
+	}
+	
 
 	public Hai getNakihai(int index) {
 		return nakihai.get(index);
