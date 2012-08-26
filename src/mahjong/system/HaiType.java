@@ -147,6 +147,6 @@ public enum HaiType {
 	}
 	
 	public String toString(){
-		return notation;
+		return notation + "\t";
 	}
 }	

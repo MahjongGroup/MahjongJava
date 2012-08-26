@@ -24,35 +24,66 @@ public class Field {
 		currentPlayer = players.get(0);
 	}
 	public static void main(String str[]){
+		boolean naki = false;
 		Field field = new Field();
 		field.chipai();
 		field.sortTehai();
+		System.out.println("dora:" + field.getDoras().get(0));
+		System.out.println("*:nakihai");
 		while(field.isRyukyoku()){
 			field.printField();
-			Hai tmpHai = field.tsumo();
-			System.out.println(tmpHai);
-			List<Hai> tmpTehai = field.getTehai();
-			tmpTehai.addAll(field.getSutehai());
-			if(AgariChecker.isAgari(tmpTehai , tmpHai)){
-				System.out.println("Agari!!");
-				break;
+			Hai tmpHai;
+			if(!naki){
+				tmpHai = field.tsumo();
+				System.out.println(tmpHai);
+				List<Hai> tmpTehai = field.getTehai();
+				tmpTehai.addAll(field.getNakihai());
+				if(AgariChecker.isAgari(tmpTehai , tmpHai)){
+					System.out.print("Agari? Yes:0 No:1\nYes or No?:");
+					if(stdIn.nextInt() == 0)System.out.println("Agari!!");
+					break;
+				}
 			}
+			naki = false;
+			/*
+			 * 鳴いたらここに戻る
+			 */
 			tmpHai = field.dahai(stdIn.nextInt());
-			if(field.canReach()){
-				System.out.print("Reach? Yes:0 No:1\nYes or No?:");
-				if(stdIn.nextInt() == 0)field.doReach();
-			}
 			if(field.isRon(tmpHai) != null){
 				System.out.println("Ron!!");
 				break;
 			}
-			if(field.isPonable() != null){
-				
+			if(field.canReach()){
+				System.out.print("Reach? Yes:0 No:1\nYes or No?:");
+				if(stdIn.nextInt() == 0)field.doReach();
 			}
-			field.nextPlayer();
+			Player tmpPlayer = null;
+			if((tmpPlayer = field.isPonable(tmpHai)) != null){
+				System.out.print("Pon? Yes:0 No:1\nYes or No?:");
+				if(stdIn.nextInt() == 0){
+					field.doPon(tmpPlayer,tmpHai);
+					naki = true;
+				}
+			}
+			if(!naki)field.nextPlayer();
 		}
 	}
 
+	public List<Hai> getNakihai(){
+		return currentPlayer.getNakihai();
+	}
+	
+	public List<Hai> getDoras(){
+		return new ArrayList<Hai>(doras);
+	}
+	
+	public void doPon(Player player,Hai hai){
+		List<Hai> nakihai = new ArrayList<Hai>(player.getTehai());
+		int index1 = nakihai.indexOf(hai);
+		player.naki(hai,index1,index1 + 1);
+		currentPlayer = player;
+	}
+	
 	public Player isRon(Hai suteHai){
 		Player ronPlayer = null;
 		for(Player player:players){
@@ -63,10 +94,10 @@ public class Field {
 	}
 	
 	
-	public Player isPonable(){
+	public Player isPonable(Hai hai){
 		Player ponablePlayer = null;
 		for(Player player:players){
-			if(player.getMatihaiOfPon() != null){
+			if(player.isPonable(hai)){
 				ponablePlayer = player;
 			}
 		}
@@ -82,15 +113,21 @@ public class Field {
 	}
 	
 	public void printField(){
+		System.out.print("\t");
+		for(int i = 0;i < 13;i++){
+			System.out.printf("%2d\t",i);
+		}
+		System.out.println();
 		for(Player player:players){
-			if(player == currentPlayer){
-				System.out.print("*");
-			}else{
-				System.out.print("+");
-			}
+			if(player == currentPlayer)
+				System.out.print("now:");
+			System.out.print("\t");
 
 			for(Hai hai:player.getTehai()){
-				System.out.print(" " + hai);
+				System.out.print(hai);
+			}
+			for(Hai hai:player.getNakihai()){
+				System.out.print("*" + hai);
 			}
 			System.out.print("//");			
 			for(Hai hai:player.getSutehai()){
@@ -158,11 +195,11 @@ public class Field {
 		currentPlayer.doReach();
 		reach++;
 	}
-
+/*
 	public boolean isAnkanable(){
 		return currentPlayer.isAnkanable();
 	}
-	
+	*/
 	public void doAnkan(int index){
 		Hai hai;
 		currentPlayer.doAnkan(index);
@@ -190,7 +227,7 @@ public class Field {
 		HaiType previous = null;
 		HaiType current = null;
 		for(Player player:players){
-			current = player.getSutehai(0).getType();
+			current = player.getSutehai().get(0).getType();
 			if(previous == null)previous = current;
 			if(previous != current)return false;
 			previous = current;
