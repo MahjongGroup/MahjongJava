@@ -8,6 +8,8 @@ public class Player {
 	private List<Hai> tehai = new ArrayList<Hai>();
 	private List<Hai> nakihai = new ArrayList<Hai>();
 	private List<Hai> sutehai = new ArrayList<Hai>();
+	private List<Hai> matihaiOfRon = new ArrayList<Hai>();
+	private List<Hai> matihaiOfPon = new ArrayList<Hai>();
 
 	private int score = 25000;
 	private boolean isReach = false;
@@ -17,11 +19,11 @@ public class Player {
 		return tehai.get(index);
 	}
 	
-	public List<Hai> makeTehai() {
+	public List<Hai> getTehai() {
 		return new ArrayList<Hai>(tehai);
 	}
 
-	public List<Hai> makeSutehai(){
+	public List<Hai> getSutehai(){
 		return new ArrayList<Hai>(sutehai);
 	}
 	
@@ -59,6 +61,8 @@ public class Player {
 		Hai hai = getTehai(index);
 		sutehai.add(hai);
 		tehai.remove(index);
+		canReach();
+		isPonable();
 		return hai;
 	}
 	public void tehaiclear(){
@@ -72,6 +76,30 @@ public class Player {
 	}
 	public void sortTehai(){
 		Collections.sort(tehai);
+	}
+	public boolean canReach(){
+		boolean result = false;
+		if(nakihai.size() == 0){
+			for(HaiType hai:HaiType.values()){
+				Hai tmp = new Hai(hai,false);
+				if(AgariChecker.isAgari(getTehai(), tmp)){
+					matihaiOfRon.add(tmp);
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public List<Hai> getMatihaiOfRon(){
+		return new ArrayList<Hai>(matihaiOfRon);
+	}
+	public List<Hai> getMatihaiOfPon(){
+		return new ArrayList<Hai>(matihaiOfPon);
+	}
+	
+	public List<Hai> getNakihai(){
+		return new ArrayList<Hai>(nakihai);
 	}
 	
 	public boolean isReach(){
@@ -101,12 +129,16 @@ public class Player {
 		KanCount++;
 	}
 	public boolean isPonable(){
+		boolean result = false;
 		List<HaiType> singleList = Hais.getSingleHaiList(tehai);
 		for(HaiType type : singleList){
 			int size = Hais.getHaiSize(tehai, type);
-			if(size == 2) return true;
+			if(size == 2){
+				matihaiOfPon.add(new Hai(type,false));
+				result = true;
+			}
 		}
-		return false;
+		return result;
 	}
 	public boolean isMinkanable(){
 		List<HaiType> singleList = Hais.getSingleHaiList(tehai);

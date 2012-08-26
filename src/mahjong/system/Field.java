@@ -38,22 +38,47 @@ public class Field {
 				break;
 			}
 			tmpHai = field.dahai(stdIn.nextInt());
+			if(field.canReach()){
+				System.out.print("Reach? Yes:0 No:1\nYes or No?:");
+				if(stdIn.nextInt() == 0)field.doReach();
+			}
+			if(field.isRon(tmpHai) != null){
+				System.out.println("Ron!!");
+				break;
+			}
+			if(field.isPonable() != null){
+				
+			}
 			field.nextPlayer();
 		}
 	}
 
+	public Player isRon(Hai suteHai){
+		Player ronPlayer = null;
+		for(Player player:players){
+			if(player.isReach() && AgariChecker.isAgari(player.getTehai(), suteHai))
+				ronPlayer = player;
+		}
+		return ronPlayer;
+	}
+	
+	
 	public Player isPonable(){
 		Player ponablePlayer = null;
 		for(Player player:players){
-			if(player.isPonable()){
-				
+			if(player.getMatihaiOfPon() != null){
+				ponablePlayer = player;
 			}
 		}
 		return ponablePlayer;
 	}
 	
+	public boolean canReach(){
+		return !(currentPlayer.isReach()) && currentPlayer.getNakihai() != null && currentPlayer.getMatihaiOfRon().size() != 0;
+	}
+	
 	public List<Hai> getSutehai(){
-		return currentPlayer.makeSutehai();
+		return currentPlayer.getSutehai();
 	}
 	
 	public void printField(){
@@ -64,11 +89,11 @@ public class Field {
 				System.out.print("+");
 			}
 
-			for(Hai hai:player.makeTehai()){
+			for(Hai hai:player.getTehai()){
 				System.out.print(" " + hai);
 			}
 			System.out.print("//");			
-			for(Hai hai:player.makeSutehai()){
+			for(Hai hai:player.getSutehai()){
 				System.out.print(" " + hai);
 			}
 			System.out.println();
@@ -112,7 +137,7 @@ public class Field {
 	}
 	
 	public List<Hai> getTehai(){
-		return currentPlayer.makeTehai();
+		return currentPlayer.getTehai();
 	}
 	
 	public void renchan(){
