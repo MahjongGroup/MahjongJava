@@ -1,5 +1,6 @@
 package debug;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import system.Hai;
 import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
+
 import system.Kyoku;
 import system.MajanHai;
 import system.Mentu;
@@ -213,6 +215,7 @@ public class Debugger {
 		assert(HaiType.TON.isYaotyuhai());
 		assert(!HaiType.TON.isTyuntyanhai());
 		
+
 				
 		System.out.println("assert complete!");
 		

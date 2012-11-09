@@ -42,7 +42,7 @@ public class Main {
 		param.setMentuList(mentuList);
 		param.setJanto(HaiType.NAN);
 		param.setAgariHai(MajanHai.NI_SOU);
-		
+
 		for (MatiType m : MatiType.values()) {
 			System.out.println(m + " : " + m.check(param));
 		}

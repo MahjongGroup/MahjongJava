@@ -880,6 +880,10 @@ public class Kyoku {
 	public Kaze getBakaze() {
 		return this.bakaze;
 	}
+	
+	public KyokuResult createKyokuResult() {
+		return new KyokuResult();
+	}
 
 	/**
 	 * 現在、表になっているドラのリストを返す。

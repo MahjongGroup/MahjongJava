@@ -44,4 +44,7 @@ public class Rule {
 	public Kaze getEndKaze () {
 		return Kaze.NAN;
 	}
+	public boolean isSyanyu(){
+		return false;
+	}
 }
