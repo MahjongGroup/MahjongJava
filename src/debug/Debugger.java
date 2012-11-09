@@ -253,7 +253,6 @@ public class Debugger {
 		List<Hai> uradoraList = kyoku.getUradoraList();
 		boolean result = kyoku.isSufontsuRenta();
 		
-		System.out.println(yakuSet);
 		
 		List<List<Integer>> ponList = tehai0.getPonableIndexList(HaiType.ITI_PIN);
 		asrt(ponList.get(0).contains(0) && ponList.get(0).contains(1));

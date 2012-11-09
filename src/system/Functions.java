@@ -13,7 +13,7 @@ import system.Mentu.Type;
 import debug.Debugger;
 
 
-class Functions {
+public class Functions {
 	
 	/**
 	 * 指定された牌コレクションを牌の種類リストに変換してそれを返す。
