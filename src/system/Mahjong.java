@@ -1,6 +1,7 @@
 package system;
 
 import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class Mahjong {
 		this.rule = rule;
 	}
 
+
 	/**
 	 * 初期化する.ここでいう初期化は点数などの初期化である.
 	 */
@@ -58,7 +60,6 @@ public class Mahjong {
 
 	/**
 	 * 次の局をスタートする.
-	 * 
 	 * @return 次の局を表すオブジェクト.
 	 */
 	public Kyoku startKyoku() {
@@ -182,7 +183,6 @@ public class Mahjong {
 
 	/**
 	 * このゲームに参加しているプレイヤーの配列を返す.この配列のインデックス0は立ち親.
-	 * 
 	 * @return プレイヤーの配列.
 	 */
 	public Player[] getPlayers() {
@@ -190,10 +190,9 @@ public class Mahjong {
 	}
 
 	/**
-	 * 指定されたインデックスのプレイヤーを返す.指定するインデックスは立ち親を0として、後は 順番に1,2,3とした値である.
-	 * 
-	 * @param index
-	 *            インデックス.立ち親の席を0とした席順の番号.
+	 * 指定されたインデックスのプレイヤーを返す.指定するインデックスは立ち親を0として、後は
+	 * 順番に1,2,3とした値である.
+	 * @param index インデックス.立ち親の席を0とした席順の番号.
 	 * @return 指定されたインデックスのプレイヤー.
 	 */
 	public Player getPlayer(int index) {
@@ -201,19 +200,18 @@ public class Mahjong {
 	}
 
 	/**
-	 * このゲームの現在のスコアの配列を返す.この配列の順番はgetPlayersで返されるプレイヤーの 配列の順番と対応している.
-	 * 
+	 * このゲームの現在のスコアの配列を返す.この配列の順番はgetPlayersで返されるプレイヤーの
+	 * 配列の順番と対応している.
 	 * @return 現在のスコアの配列.
 	 */
 	public int[] getScores() {
 		return scores.clone();
 	}
-
+	
 	/**
-	 * 指定されたインデックスのプレイヤーのスコアを返す.指定するインデックスは立ち親を0として、後は 順番に1,2,3とした値である.
-	 * 
-	 * @param index
-	 *            インデックス.立ち親の席を0とした席順の番号.
+	 * 指定されたインデックスのプレイヤーのスコアを返す.指定するインデックスは立ち親を0として、後は
+	 * 順番に1,2,3とした値である.
+	 * @param index インデックス.立ち親の席を0とした席順の番号.
 	 * @return 指定されたインデックスのプレイヤーのスコア.
 	 */
 	public int getScore(int index) {
@@ -222,7 +220,6 @@ public class Mahjong {
 
 	/**
 	 * このゲームで採用されているルールを返す.
-	 * 
 	 * @return このゲームで採用されているルール.
 	 */
 	public Rule getRule() {
@@ -231,7 +228,6 @@ public class Mahjong {
 
 	/**
 	 * 現在の場風を返す.
-	 * 
 	 * @return 現在の場風.
 	 */
 	public Kaze getBakaze() {
@@ -240,7 +236,6 @@ public class Mahjong {
 
 	/**
 	 * 現在の局数を返す.例えば現在、東2局の場合2を、南4局の場合4を返す.
-	 * 
 	 * @return 現在の局数.
 	 */
 	public int getKyokusu() {
@@ -249,7 +244,6 @@ public class Mahjong {
 
 	/**
 	 * 現在の積み棒の数を返す.
-	 * 
 	 * @return 現在の積み棒の数.
 	 */
 	public int getTsumibo() {
@@ -258,7 +252,6 @@ public class Mahjong {
 
 	/**
 	 * 現在の本場を返す.
-	 * 
 	 * @return 現在の本場.
 	 */
 	public int getHonba() {
@@ -272,5 +265,6 @@ public class Mahjong {
 		}
 		return false;
 	}
+
 
 }

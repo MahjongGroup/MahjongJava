@@ -1,16 +1,29 @@
 package debug;
 
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import ai.AI;
 
 import system.AgariFunctions;
+import system.AgariResult;
 import system.CheckerParam;
 import system.Hai;
 import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
+
+import system.Kyoku;
 import system.MajanHai;
+import system.Mentu;
+import system.Player;
 import system.Rule;
 import system.TehaiList;
 import system.Yaku;
@@ -202,6 +215,50 @@ public class Debugger {
 		assert(HaiType.TON.isYaotyuhai());
 		assert(!HaiType.TON.isTyuntyanhai());
 		
+
+				
 		System.out.println("assert complete!");
+		
+		Mentu m = new Mentu(MajanHai.SAN_PIN, MajanHai.GO_PIN, MajanHai.YO_PIN);
+		System.out.println(m);
+		Mentu m2 = new Mentu(MajanHai.ITI_MAN, Kaze.TON, MajanHai.SAN_MAN, MajanHai.NI_MAN);
+		System.out.println(m2);
+		
+		CheckerParam cp = new CheckerParam();
+		cp.setAgariHai(MajanHai.GO_SOU);
+		cp.setBakaze(Kaze.TON);
+		cp.setFlagCheckYakuSet(new HashSet<Yaku>(0));
+		cp.setJikaze(Kaze.NAN);
+		cp.setNaki(false);
+		cp.setTsumo(true);
+		cp.setRule(new Rule());
+		
+		Set<Yaku> yakuSet = AgariFunctions.checkYaku(tehai0, new HurohaiList(0), cp);
+		AgariResult re = AgariResult.createAgariResult(tehai0, new HurohaiList(0), cp, new ArrayList<HaiType>(0));
+		
+		Rule rule = new Rule();
+		Map<Kaze, Player> players = new HashMap<Kaze, Player>(4);
+		players.put(Kaze.TON, new Player(0, "A", true));
+		players.put(Kaze.NAN, new Player(1, "B", false));
+		players.put(Kaze.SYA, new Player(2, "C", false));
+		players.put(Kaze.PE, new Player(3, "D", false));
+
+		Map<Kaze, AI> ais = new HashMap<Kaze, AI>(4);
+
+		Kyoku kyoku = new Kyoku(rule, players, Kaze.TON);
+		kyoku.init();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String buf = null;
+		kyoku.doTsumo();
+		kyoku.sortTehaiList();
+
+		List<Hai> doraList = kyoku.getDoraList();
+		List<Hai> uradoraList = kyoku.getUradoraList();
+		boolean result = kyoku.isSufontsuRenta();
+		
+		System.out.println(yakuSet);
+		
+		List<List<Integer>> ponList = tehai0.getPonableIndexList(HaiType.ITI_PIN);
+		asrt(ponList.get(0).contains(0) && ponList.get(0).contains(1));
 	}
 }

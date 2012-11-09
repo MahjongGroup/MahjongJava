@@ -12,13 +12,13 @@ import system.Kaze;
 import system.MajanHai;
 import system.Player;
 import system.SuType;
+
 import system.TehaiList;
 
 public class AIType01 extends AbstractAI {
 	public AIType01(Player p) {
 		super(p);
 	}
-
 	@Override
 	public boolean isKyusyukyuhai() {
 		// TODO Auto-generated method stub
@@ -202,6 +202,7 @@ public class AIType01 extends AbstractAI {
 			}
 		}
 		return index;
+
 	}
 
 	@Override
