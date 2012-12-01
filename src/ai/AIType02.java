@@ -10,7 +10,14 @@ import system.HaiType;
 import system.Kaze;
 import system.Player;
 import system.TehaiList;
-
+/**
+ * 手牌評価型AI。
+ * 近くに牌があるかどうかで点数を決める。
+ * 聴牌にはたどり着かないかもしれない駄作。
+ * 
+ * @author shio
+ *
+ */
 public class AIType02 extends AbstractAI {
 	public AIType02(Player p) {
 		super(p);
@@ -29,15 +36,15 @@ public class AIType02 extends AbstractAI {
 	}
 
 	@Override
-	public int kakan() {
+	public int kakan(List<Integer> list) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public HaiType ankan() {
+	public int ankan(List<List<Integer>> list) {
 		// TODO Auto-generated method stub
-		return null;
+		return -1;
 	}
 
 	@Override
@@ -51,25 +58,34 @@ public class AIType02 extends AbstractAI {
 		// TODO Auto-generated method stub
 		Kaze kaze = kyoku.getKazeOf(super.player);
 		TehaiList tlist = new TehaiList(kyoku.getTehaiList(kaze));
-		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(tlist);
-		List<HaiType> haiTypeList = Functions
-				.toHaiTypeListFromHaiCollection(tlist);
+		List<HaiType> haiTypeList = tlist.toHaiTypeList();
 		List<HaiType> tempList = new ArrayList<HaiType>(haiTypeList);
 
 		int[] a = null;
-		a = new int[14];
+		a = new int[14];		
+		ArrayList<Integer> idList = new ArrayList<Integer>();
+		Hai hai;
+		HaiType haiType;
+		
 		for (int i = 0; i < 14; i++) {
-			Hai hai = tlist.get(i);
-			HaiType haiType = hai.type();
+			hai = tlist.get(i);
+			haiType = hai.type();
 			int x = haiType.id();
+			idList.add(x);
+		}
+		
+		for (int i = 0; i < 14; i++) {
+			int value = 0;
+			hai = tlist.get(i);
+			haiType = hai.type();
+			int x = idList.get(i);
 			if (30 <= x) {
-				x = Functions.sizeOfHaiTypeList(haiType, tempList);
-				a[i] = 4 ^ x;
-				i++;
+				value += Functions.sizeOfHaiTypeList(haiType, tempList);
+				a[i] += 4 ^ value;
 			} else if(3 <=(x % 10) && (x % 10) <= 7){
 				int n = haiType.number();
-				n = -Math.abs(n-5)+5;
-				//interrupted
+				value += -Math.abs(n-5)+5;
+				a[i] += value;
 			}
 		}
 		
@@ -80,19 +96,20 @@ public class AIType02 extends AbstractAI {
 	@Override
 	public boolean isRon() {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
-	public List<Integer> pon() {
+	public int pon(List<List<Integer>> ponnableHaiList) {
 		// TODO Auto-generated method stub
-		return null;
+		return -1;
 	}
 
 	@Override
-	public List<Integer> chi() {
+	public int chi(List<List<Integer>> ponnableHaiList) {
 		// TODO Auto-generated method stub
-		return null;
+		return -1;
 	}
 
 	@Override

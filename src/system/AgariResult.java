@@ -19,10 +19,12 @@ public class AgariResult {
 	private int doraSize;
 	private int score;
 	private ScoreType scoreType;
-	private CheckerParam chParam;
+	private Param chParam;
+	private Field field;
 
-	public AgariResult(CheckerParam param) {
+	public AgariResult(Param param, Field f) {
 		this.chParam = param;
+		this.field = f;
 		this.yakuman = false;
 		this.yakuSet = new HashSet<Yaku>();
 	}
@@ -51,7 +53,7 @@ public class AgariResult {
 	/**
 	 * @return the chParam
 	 */
-	public CheckerParam getChParam() {
+	public Param getChParam() {
 		return chParam;
 	}
 
@@ -99,8 +101,8 @@ public class AgariResult {
 	 * @return あがり結果。あがっていない場合はnull。
 	 */
 	public static AgariResult createAgariResult(TehaiList tehaiList, HurohaiList hurohaiList,
-			CheckerParam param, List<HaiType> doraList) {
-		AgariResult result = new AgariResult(param);
+			Param param,Field f, List<HaiType> doraList) {
+		AgariResult result = new AgariResult(param, f);
 		result.checkYaku(tehaiList, hurohaiList);
 		
 		// 役満の場合
@@ -122,7 +124,7 @@ public class AgariResult {
 		for (Yaku yaku : this.yakuSet) {
 			if (yaku instanceof Yakuman) {
 				Yakuman yakuman = (Yakuman) yaku;
-				if(yakuman.isDaburu(chParam.getRule())) {
+				if(yakuman.isDaburu(field.getRule())) {
 					this.yakumanSize += 2;
 				}else {
 					this.yakumanSize += 1;
@@ -159,6 +161,9 @@ public class AgariResult {
 		// 平和の場合は20符固定
 		if (yakuSet.contains(NormalYaku.PINHU)) {
 			this.hu = 20;
+			if(!chParam.isTsumo()){
+				this.hu += 10;
+			}
 		}
 		// 七対子の場合は25符固定
 		else if (yakuSet.contains(NormalYaku.CHITOI)) {
@@ -170,7 +175,7 @@ public class AgariResult {
 
 			if (chParam.isTsumo()) {
 				this.hu += 2;
-			} else if (chParam.isNaki()) {
+			} else if (!chParam.isNaki()) {
 				this.hu += 10;
 			}
 
@@ -182,7 +187,7 @@ public class AgariResult {
 			HaiType jantoType = chParam.getJanto();
 			if(jantoType.group3() == HaiGroup3.KAZE) {
 				Kaze jantoKaze = jantoType.kaze();
-				if (jantoKaze == chParam.getBakaze() || jantoKaze == chParam.getJikaze()) {
+				if (jantoKaze == field.getBakaze() || jantoKaze == chParam.getJikaze()) {
 					this.hu += 2;
 				}
 			}
@@ -203,6 +208,7 @@ public class AgariResult {
 		// 役満の場合
 		if (this.yakuman) {
 			this.score = this.yakumanSize * 8000;
+			this.scoreType = ScoreType.YAKUMAN;
 		}
 		// 通常役の場合
 		else {
@@ -247,10 +253,15 @@ public class AgariResult {
 		}
 		chParam.setHaiList(haiList);
 
+		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
+		tehaiPlusAgariHai.add(chParam.getAgariHai());
+		
 		// 4面子1雀頭である
-		if (AgariFunctions.isNMentu1Janto(chParam.getHaiList())) {
+		if (AgariFunctions.isNMentu1Janto(tehaiPlusAgariHai)) {
 			AgariFunctions.setMentuListAndJanto(tehaiList, chParam.getAgariHai(), hurohaiList,
 					chParam);
+			List<MatiType> matiTypeList = MatiType.getMatiTypeList(chParam);
+			chParam.setMatiType(matiTypeList.get(0));
 		} else {
 			chParam.setMentuList(null);
 			chParam.setJanto(null);
@@ -258,8 +269,15 @@ public class AgariResult {
 
 		// 役満をチェックする
 		for (Yakuman yaku : Yakuman.values()) {
-			if (yaku.check(chParam)) {
-				yakuSet.add(yaku);
+			if(chParam.getMentuList() != null) {
+				if (yaku.check(chParam, field)) {
+					yakuSet.add(yaku);
+				}
+			}
+			else {
+				if (!yaku.is4Mentu1Janto() && yaku.check(chParam, field)) {
+					yakuSet.add(yaku);
+				}
 			}
 		}
 
@@ -267,7 +285,7 @@ public class AgariResult {
 		if (yakuSet.size() > 0) {
 			
 			// かぶっている役満(国士無双と国士無双13面待ちなど)を削除する。
-			if(yakuSet.contains(Yakuman.KOKUSIMUSOU) && yakuSet.contains(Yakuman.KOKUSIMUSOU)){
+			if(yakuSet.contains(Yakuman.KOKUSIMUSOU) && yakuSet.contains(Yakuman.KOKUSIMUSOU_13MEN)){
 				yakuSet.remove(Yakuman.KOKUSIMUSOU);
 			}
 			if(yakuSet.contains(Yakuman.SUANKO) && yakuSet.contains(Yakuman.SUANKO_TANKI)){
@@ -276,6 +294,10 @@ public class AgariResult {
 			if(yakuSet.contains(Yakuman.SYOSUSHI) && yakuSet.contains(Yakuman.DAISUSHI)){
 				yakuSet.remove(Yakuman.SYOSUSHI);
 			}
+			if(yakuSet.contains(Yakuman.TYURENPOTO) && yakuSet.contains(Yakuman.JUNTYANTYUREN)){
+				yakuSet.remove(Yakuman.TYURENPOTO);
+			}
+		
 			
 			this.yakuman = true;
 			return true;
@@ -293,7 +315,7 @@ public class AgariResult {
 			if (matiTypeList.contains(MatiType.RYANMEN)) {
 				chParam.setMatiType(MatiType.RYANMEN);
 
-				if (NormalYaku.PINHU.check(chParam)) {
+				if (NormalYaku.PINHU.check(chParam, field)) {
 					yakuSet.add(NormalYaku.PINHU);
 					pinhu = true;
 
@@ -302,12 +324,12 @@ public class AgariResult {
 							continue;
 						if (yaku == NormalYaku.CHITOI)
 							continue;
-						if (yaku.check(chParam))
+						if (yaku.check(chParam, field))
 							yakuSet.add(yaku);
 					}
 
 				} else if (matiTypeList.size() > 1) {
-					if (!NormalYaku.PINHU.check(chParam)) {
+					if (!NormalYaku.PINHU.check(chParam, field)) {
 						matiTypeList.remove(MatiType.RYANMEN);
 					}
 				}
@@ -320,20 +342,20 @@ public class AgariResult {
 						continue;
 					if (yaku == NormalYaku.CHITOI)
 						continue;
-					if (yaku.check(chParam))
+					if (yaku.check(chParam, field))
 						yakuSet.add(yaku);
 				}
 			}
 		}
 		// 4面子1雀頭でない
 		else {
-			if (NormalYaku.CHITOI.check(chParam)) {
+			if (NormalYaku.CHITOI.check(chParam, field)) {
 				yakuSet.add(NormalYaku.CHITOI);
 
 				for (Yaku yaku : NormalYaku.values()) {
 					if (yaku == NormalYaku.CHITOI)
 						continue;
-					if (yaku.check(chParam))
+					if (!yaku.is4Mentu1Janto() && yaku.check(chParam, field))
 						yakuSet.add(yaku);
 				}
 			}
@@ -342,7 +364,7 @@ public class AgariResult {
 		if (yakuSet.size() == 0)
 			return false;
 
-		// かぶっている役満(混一色と清一色など)を削除する。
+		// かぶっている役(混一色と清一色など)を削除する。
 		if(yakuSet.contains(NormalYaku.HONNITSU) && yakuSet.contains(NormalYaku.CHINNITSU)){
 			yakuSet.remove(NormalYaku.HONNITSU);
 		}
@@ -352,10 +374,24 @@ public class AgariResult {
 		if(yakuSet.contains(NormalYaku.RICHI) && yakuSet.contains(NormalYaku.DABURURICHI)){
 			yakuSet.remove(NormalYaku.RICHI);
 		}
-		if(yakuSet.contains(NormalYaku.JUNTYAN) && yakuSet.contains(NormalYaku.JUNTYAN)){
-			yakuSet.remove(NormalYaku.JUNTYAN);
+		if(yakuSet.contains(NormalYaku.TYANTA) && yakuSet.contains(NormalYaku.JUNTYAN)){
+			yakuSet.remove(NormalYaku.TYANTA);
 		}
+		if(yakuSet.contains(NormalYaku.TYANTA) && yakuSet.contains(NormalYaku.HONROTO)){
+			yakuSet.remove(NormalYaku.TYANTA);
+		}
+
 		
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "AgariResult [yakuSet=" + yakuSet + ", han=" + han + ", hu="
+				+ hu + ", yakuman=" + yakuman + ", yakumanSize=" + yakumanSize
+				+ ", doraSize=" + doraSize + ", score=" + score
+				+ ", scoreType=" + scoreType + ", chParam=" + chParam + "]";
+	}
+	
+	
 }

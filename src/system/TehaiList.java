@@ -2,14 +2,16 @@ package system;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 /**
  * 手牌を表すリストクラス。
  */
-public class TehaiList implements List<Hai>{
+public class TehaiList implements List<Hai> {
 	private final List<Hai> list;
 
 	public TehaiList() {
@@ -29,7 +31,19 @@ public class TehaiList implements List<Hai>{
 	}
 	
 	/**
+	 * 
+	 * @param index
+	 * @param hai
+	 * @return
+	 */
+	public Hai swap(int index, Hai hai){
+		list.add(index, hai);
+		return list.remove(index + 1);
+	}
+
+	/**
 	 * 指定された牌でポンできる手牌の場合trueを返す。
+	 * 
 	 * @param suteHai ポンする牌
 	 * @return ポンできる手牌の場合true
 	 */
@@ -45,34 +59,34 @@ public class TehaiList implements List<Hai>{
 	 * @return　ポン可能な牌インデックスリストのリスト
 	 */
 	public List<List<Integer>> getPonableIndexList(HaiType ponHaiType) {
+		// TODO 実装変更する(4枚以上のときにも対応する)
 		assert isPonable(ponHaiType);
 		List<List<Integer>> result = new ArrayList<List<Integer>>(2);
 		int size = Functions.sizeOf(ponHaiType, this);
-		if(size == 2) {
+		if (size == 2) {
 			List<Integer> list = new ArrayList<Integer>(2);
 			for (int i = 0; i < size(); i++) {
 				Hai hai = get(i);
-				if(hai.type() == ponHaiType){
+				if (hai.type() == ponHaiType) {
 					list.add(i);
 				}
 			}
 			result.add(list);
-		}
-		else if(size == 3) {
+		} else if (size == 3) {
 			int haiArray[] = new int[3];
 			int index = 0;
 			for (int i = 0; i < size(); i++) {
 				Hai hai = get(i);
-				if(hai.type() == ponHaiType){
+				if (hai.type() == ponHaiType) {
 					haiArray[index++] = i;
 				}
 			}
-			
+
 			result.add(getList(haiArray[0], haiArray[1]));
 			result.add(getList(haiArray[0], haiArray[2]));
 			result.add(getList(haiArray[1], haiArray[2]));
 		}
-		
+
 		return result;
 	}
 
@@ -82,9 +96,10 @@ public class TehaiList implements List<Hai>{
 		result.add(hai1);
 		return result;
 	}
-	
+
 	/**
 	 * 指定された牌種で明槓できる場合trueを返す。
+	 * 
 	 * @param type 牌の種類
 	 * @return 指定された牌種で明槓できる場合true
 	 */
@@ -94,23 +109,46 @@ public class TehaiList implements List<Hai>{
 	}
 
 	/**
-	 * 指定された牌種で暗槓できる場合trueを返す。
-	 * @param type 暗槓できるか確かめたい牌の種類
-	 * @return　暗槓できる場合true
+	 * 指定された牌タイプで明槓できる牌のインデックスのリストを返す.
+	 * 
+	 * @param type 明槓する牌タイプ.
+	 * @return 明槓できる牌のインデックスのリスト.
+	 * @throws IllegalArgumentException 明槓できない牌タイプの場合.
 	 */
-	public boolean isAnkanable(HaiType type) {
-		int size = Functions.sizeOf(type, this);
+	public List<Integer> getMinkanableIndexList(HaiType type) {
+		List<Integer> ret = new ArrayList<Integer>(3);
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).type() == type) {
+				ret.add(i);
+			}
+		}
+		if (ret.size() != 3)
+			throw new IllegalArgumentException("明槓できない牌タイプに対してこのメソッドを呼び出せません:" + type);
+		return ret;
+	}
+
+	/**
+	 * 指定された牌種で暗槓できる場合trueを返す.指定されたツモ牌も考慮に入れる.
+	 * 
+	 * @param type 暗槓できるか確かめたい牌の種類.
+	 * @return　暗槓できる場合true.
+	 */
+	public boolean isAnkanable(Hai tsumohai, HaiType type) {
+		List<Hai> list = new ArrayList<Hai>(this);
+		list.add(tsumohai);
+		int size = Functions.sizeOf(type, list);
 		return size == 4;
 	}
-	
+
 	/**
-	 * 手牌に暗槓可能な牌があればtrueを返す。
+	 * 手牌に暗槓可能な牌があればtrueを返す.指定されたツモ牌も考慮に入れる.
 	 * 
+	 * @param tsumohai ツモ牌.
 	 * @return　手牌に暗槓可能な牌があればtrue
 	 */
-	public boolean isAnkanable() {
-		for (HaiType type : Functions.getHaiTypeSetFrom(this)) {
-			if(isAnkanable(type)){
+	public boolean isAnkanable(Hai tsumohai) {
+		for (HaiType type : toHaiTypeSet()) {
+			if (isAnkanable(tsumohai, type)) {
 				return true;
 			}
 		}
@@ -118,86 +156,90 @@ public class TehaiList implements List<Hai>{
 	}
 
 	/**
-	 * 暗槓可能な牌のインデックスリストを返す。
+	 * 暗槓可能な牌のインデックスリストを返す.ツモ牌も考慮に入れる.
 	 * 
-	 * @return 暗槓可能な牌のインデックスリスト
+	 * @param tsumohai ツモ牌.
+	 * @return 暗槓可能な牌のインデックスリスト(13はツモ牌を表す).
 	 */
-	public List<List<Integer>> getAnkanableIndexList() {
+	public List<List<Integer>> getAnkanableIndexList(Hai tsumohai) {
 		List<List<Integer>> result = new ArrayList<List<Integer>>();
-		
-		for (HaiType type : Functions.getHaiTypeSetFrom(this)) {
-			if(isAnkanable(type)){
+
+		for (HaiType type : toHaiTypeSet()) {
+			if (isAnkanable(tsumohai, type)) {
 				List<Integer> l = new ArrayList<Integer>(4);
 				for (int i = 0; i < size(); i++) {
-					if(get(i).type() == type) {
+					if (get(i).type() == type) {
 						l.add(i);
 					}
 				}
+				// ツモ牌の場合は13をaddする.
+				if (tsumohai.type() == type)
+					l.add(13);
 				result.add(l);
 			}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 指定された牌でチーできる牌のインデックスリストを返す。
+	 * 
 	 * @param haiType 牌の種類
 	 * @return　牌のインデックスリスト
 	 */
 	public List<List<Integer>> getChiableHaiList(HaiType haiType) {
 		// to be changed
-		
-		if(haiType.group2() != HaiGroup2.SU )
+
+		if (haiType.group2() != HaiGroup2.SU)
 			return null;
-		
+
 		SuType suType = haiType.suType();
 		List<Hai> list = Functions.extract(this, suType);
-		
+
 		int number = haiType.number();
-		
+
 		boolean bp1 = false;
 		boolean bp2 = false;
 		boolean bm1 = false;
 		boolean bm2 = false;
-	
+
 		Hai haiP1 = null;
 		Hai haiP2 = null;
 		Hai haiM1 = null;
 		Hai haiM2 = null;
-		
- 		for (Hai hai : list) {
+
+		for (Hai hai : list) {
 			int n = hai.type().number();
-			if(n + 2 == number)	{
+			if (n + 2 == number) {
 				bm2 = true;
 				haiM2 = hai;
-			}else if(n + 1 == number){
+			} else if (n + 1 == number) {
 				bm1 = true;
 				haiM1 = hai;
-			}else if(n - 1 == number){
+			} else if (n - 1 == number) {
 				bp1 = true;
 				haiP1 = hai;
-			}else if(n - 2 == number){
+			} else if (n - 2 == number) {
 				bp2 = true;
 				haiP2 = hai;
 			}
 		}
-		
-		List<List<Integer>> result = new ArrayList<List<Integer>>(3);
-		
 
-		if(bm2 && bm1){
+		List<List<Integer>> result = new ArrayList<List<Integer>>(3);
+
+		if (bm2 && bm1) {
 			List<Integer> l = new ArrayList<Integer>(2);
 			l.add(indexOf(haiM2));
 			l.add(indexOf(haiM1));
 			result.add(l);
 		}
-		if(bm1 && bp1){
+		if (bm1 && bp1) {
 			List<Integer> l = new ArrayList<Integer>(2);
 			l.add(indexOf(haiM1));
 			l.add(indexOf(haiP1));
 			result.add(l);
 		}
-		if(bp1 && bp2){
+		if (bp1 && bp2) {
 			List<Integer> l = new ArrayList<Integer>(2);
 			l.add(indexOf(haiP1));
 			l.add(indexOf(haiP2));
@@ -205,37 +247,37 @@ public class TehaiList implements List<Hai>{
 		}
 		return result;
 	}
-	
+
 	public boolean isChiable(HaiType haiType) {
-		if(haiType.group2() != HaiGroup2.SU )
+		if (haiType.group2() != HaiGroup2.SU)
 			return false;
-		
+
 		SuType suType = haiType.suType();
 		List<Hai> list = Functions.extract(this, suType);
-		
+
 		int number = haiType.number();
-		
+
 		boolean bp1 = false;
 		boolean bp2 = false;
 		boolean bm1 = false;
 		boolean bm2 = false;
-		
+
 		for (Hai hai : list) {
 			int n = hai.type().number();
-			if(n + 2 == number)	{
+			if (n + 2 == number) {
 				bm2 = true;
-			}else if(n + 1 == number){
+			} else if (n + 1 == number) {
 				bm1 = true;
-			}else if(n - 1 == number){
+			} else if (n - 1 == number) {
 				bp1 = true;
-			}else if(n - 2 == number){
+			} else if (n - 2 == number) {
 				bp2 = true;
 			}
 		}
-		
-		if(bm1 && (bm2 || bp1))
+
+		if (bm1 && (bm2 || bp1))
 			return true;
-		if(bp1 && bp2)
+		if (bp1 && bp2)
 			return true;
 		return false;
 	}
@@ -246,9 +288,9 @@ public class TehaiList implements List<Hai>{
 	 * @param type　削除する牌の種類
 	 * @return　削除された牌
 	 */
-	public Hai remove(HaiType type)	{
+	public Hai remove(HaiType type) {
 		for (Hai hai : this) {
-			if(hai.type() == type){
+			if (hai.type() == type) {
 				remove(hai);
 				return hai;
 			}
@@ -256,8 +298,52 @@ public class TehaiList implements List<Hai>{
 		return null;
 	}
 
+	/**
+	 * この手牌リストを牌タイプのリストに変換する.
+	 * 
+	 * @return 変換された牌タイプのリスト.
+	 */
+	public List<HaiType> toHaiTypeList() {
+		List<HaiType> result = new ArrayList<HaiType>(this.list.size());
+		for (Hai hai : this.list) {
+			result.add(hai.type());
+		}
+		return result;
+	}
+
+	/**
+	 * この手牌リストを牌タイプのセットに変換する.例えば [一萬、一萬、二萬、東、東、東、撥]というリストがあれば、[一萬、二萬、東、撥]という
+	 * セットが返ってくる.
+	 * 
+	 * @return 牌タイプのセット.
+	 */
+	public Set<HaiType> toHaiTypeSet() {
+		Set<HaiType> result = new HashSet<HaiType>();
+		for (Hai hai : this.list) {
+			result.add(hai.type());
+		}
+		return result;
+	}
+
+	/**
+	 * この手牌リストの中に含まれる指定された種類の牌の数を返す.
+	 * 
+	 * @param type 数が知りたい牌の種類
+	 * @return 指定された種類の牌の数
+	 */
+	public int sizeOf(HaiType type) {
+		int count = 0;
+
+		for (Hai h : this.list) {
+			HaiType t = h.type();
+			if (type == t)
+				count++;
+		}
+		return count;
+	}
+
 	// override method ----------------------------------------------------
-	
+
 	@Override
 	public boolean add(Hai hai) {
 		return list.add(hai);

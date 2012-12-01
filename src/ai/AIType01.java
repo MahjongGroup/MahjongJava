@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import system.Functions;
+import system.Hai;
 import system.HaiGroup2;
 import system.HaiType;
 import system.Kaze;
@@ -15,54 +16,76 @@ import system.SuType;
 
 import system.TehaiList;
 
+/**
+ * AI初号機。()
+ * 難しい計算はしないアホの子。
+ * 面子を確定させて浮いた牌を切ります。
+ * 聴牌即リー。 
+ * （鳴けたら鳴く）
+ * 防御はしない。
+ * 
+ * 打点：★★☆☆☆ 
+ * 速度：★★★☆☆ 
+ * 防御：☆☆☆☆☆
+ * 
+ * @author shio
+ */
 public class AIType01 extends AbstractAI {
 	public AIType01(Player p) {
 		super(p);
 	}
+
 	@Override
 	public boolean isKyusyukyuhai() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isTumoAgari() {
-		// TODO Auto-generated method stub
-		return false;
+		return kyoku.isTsumoAgari();
 	}
 
 	@Override
-	public int kakan() {
-		// TODO Auto-generated method stub
+	public int kakan(List<Integer> list) {
+		// if(kyoku.isKakanable()){
+		// List<Integer> kakanableHaiList = kyoku.getKakanableHaiList();
+		// return kakanableHaiList.get(0);
+		// }
+//		return -1;
 		return 0;
 	}
 
 	@Override
-	public HaiType ankan() {
-		// TODO Auto-generated method stub
-		return null;
+	public int ankan(List<List<Integer>> list) {
+//		return -1;
+		return 0;
 	}
 
 	@Override
 	public boolean isReach() {
-		// TODO Auto-generated method stub
-		return false;
+		return kyoku.isReachable();
 	}
 
 	@Override
 	public int discard() {
-		// TODO Auto-generated method stub
 		// 自風を取得。
 		Kaze kaze = kyoku.getKazeOf(super.player);
+		System.out.println(kaze);
 		// 手牌を生成。
 		TehaiList tlist = new TehaiList(kyoku.getTehaiList(kaze));
+		System.out.println(tlist);
+		Hai tsumohai = kyoku.getCurrentTsumoHai();
+		if (tsumohai != null)
+			tlist.add(kyoku.getCurrentTsumoHai());
 		// 牌種リストを生成。
-		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(tlist);
-		List<HaiType> haiTypeList = Functions
-				.toHaiTypeListFromHaiCollection(tlist);
+		Set<HaiType> haiTypeSet = tlist.toHaiTypeSet();
+		List<HaiType> haiTypeList = tlist.toHaiTypeList();
 
 		List<HaiType> tempList = new ArrayList<HaiType>(haiTypeList);
 
+//		リーチ可能なら聴牌状態に入る。
+		if(kyoku.isReachable())
+			return kyoku.getReachableHaiList().get(0);
 		// 刻子を抜く。
 		for (HaiType haiType : haiTypeSet) {
 			if (Functions.sizeOfHaiTypeList(haiType, tempList) >= 3) {
@@ -98,11 +121,27 @@ public class AIType01 extends AbstractAI {
 							throw new IllegalStateException();
 						}
 					}
+
+					if (index == tlist.size() - 1 && tsumohai != null)
+						return 13;
 					return index;
 				}
 			}
 		}
 		List<HaiType> templist2 = new ArrayList<HaiType>(tempList);
+		// 対子を1つ抜く。
+		int t = 0;
+		int toitsuArray[] = new int[7];
+		for (HaiType haiType : haiTypeSet) {
+			if (Functions.sizeOfHaiTypeList(haiType, tempList) == 2) {
+				tempList.remove(haiType);
+				tempList.remove(haiType);
+				toitsuArray[t] = tlist
+						.indexOf(MajanHai.valueOf(haiType, false));
+				t++;
+				break;
+			}
+		}
 		// 両面を抜く。
 		for (SuType suType : SuType.values()) {
 			for (int i = 2; i <= 6; i++) {
@@ -145,23 +184,23 @@ public class AIType01 extends AbstractAI {
 				tempList.remove(haiArray[1]);
 			}
 		}
-		// 対子を抜く。
-		int t = 0;
-		int toitsuArray[] = new int[7];
+		// 対子を抜く。（2回目以降）
 		for (HaiType haiType : haiTypeSet) {
 			if (Functions.sizeOfHaiTypeList(haiType, tempList) == 2) {
 				tempList.remove(haiType);
 				tempList.remove(haiType);
-				toitsuArray[t] = tlist.indexOf(haiType);
+				toitsuArray[t] = tlist
+						.indexOf(MajanHai.valueOf(haiType, false));
 				t++;
 			}
 		}
 		// 端に最も近い浮いた数牌を切る。
-		int n = 0;
+		int n = 6;
 		int index = 0;
-		for (HaiType haiType : haiTypeSet) {
-			if (-Math.abs(haiType.number() - 5) > n) {
-				n = haiType.number();
+		for (HaiType haiType : tempList) {
+			int x = (-(Math.abs(haiType.number() - 5)) + 5);
+			if (x < n) {
+				n = x;
 				if (Functions.sizeOfHaiTypeList(haiType, tempList) == 1) {
 					index = tlist.indexOf(MajanHai.valueOf(haiType, false));
 					if (index == -1) {
@@ -173,21 +212,30 @@ public class AIType01 extends AbstractAI {
 				}
 			}
 		}
-		if (n != 0)
+		if (n != 6) {
+			if (index == tlist.size() - 1 && tsumohai != null)
+				return 13;
 			return index;
+		}
 		// 対子が2つ以上なら、 1つを切る。
 		if (toitsuArray[1] != 0) {
-			return toitsuArray[0];
+			index =  toitsuArray[0];
+			if (index == tlist.size() - 1 && tsumohai != null) return 13;
+			return index;
 		}
 		// 端に近い牌を切る。
-		n = 0;
+		n = 6;
 		index = 0;
 		for (HaiType haiType : templist2) {
 			if (haiType.isYaotyuhai()) {
-				return tlist.indexOf(haiType);
+				index = tlist.indexOf(MajanHai.valueOf(haiType, false));
+				if (index == tlist.size() - 1 && tsumohai != null)
+					return 13;
+				return index;
 			} else {
-				if (-Math.abs(haiType.number() - 5) > n) {
-					n = haiType.number();
+				int x = (-(Math.abs(haiType.number() - 5)) + 5);
+				if (x < n) {
+					n = x;
 					if (Functions.sizeOfHaiTypeList(haiType, tempList) == 1) {
 						index = tlist.indexOf(MajanHai.valueOf(haiType, false));
 						if (index == -1) {
@@ -201,32 +249,32 @@ public class AIType01 extends AbstractAI {
 				}
 			}
 		}
+		if (index == tlist.size() - 1 && tsumohai != null)
+			return 13;
 		return index;
-
 	}
 
 	@Override
 	public boolean isRon() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public List<Integer> pon() {
-		// TODO Auto-generated method stub
-		return null;
+	public int pon(List<List<Integer>> ponnableHaiList) {
+		return 0;
+//		return -1;
 	}
 
 	@Override
-	public List<Integer> chi() {
-		// TODO Auto-generated method stub
-		return null;
+	public int chi(List<List<Integer>> chiableHaiList) {
+		return 0;
+//		return -1;
 	}
 
 	@Override
 	public boolean minkan() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+//		return false;
 	}
 
 }

@@ -1,6 +1,11 @@
 package system;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 牌の種類を表す列挙型.
@@ -193,6 +198,15 @@ public enum HaiType {
 		}
 		return null;
 	}
+	
+	public static HaiType valueOf(Kaze kaze) {
+		for (HaiType ht : values()) {
+			if(ht.group3() == HaiGroup3.KAZE && kaze == ht.kaze()) {
+				return ht;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public String toString() {
@@ -201,6 +215,50 @@ public enum HaiType {
 
 	public static final String UNSUPPORTED_ERROR_MESSAGE = "この牌に対してこのメソッドはサポートされてません";
 
+	/**
+	 * 指定された牌コレクションを牌の種類リストに変換してそれを返す。
+	 * 
+	 * @param c 変換したい牌コレクション
+	 * @return 変換した牌の種類リスト
+	 */
+	public static List<HaiType> toHaiTypeList(Collection<? extends Hai> c) {
+		List<HaiType> result = new ArrayList<HaiType>(c.size());
+		for (Hai hai : c) {
+			result.add(hai.type());
+		}
+		return result;
+	}
+
+	/**
+	 * 牌コレクションから牌の種類ごとに1牌だけを入れた牌の種類セットを返す。例えば
+	 * [一萬、一萬、二萬、東、東、東、撥]というリストがあれば、[一萬、二萬、東、撥]という
+	 * セットが返ってくる。
+	 * 
+	 * @param c 牌コレクション
+	 * @return 牌の種類セット
+	 */
+	public static Set<HaiType> toHaiTypeSet(Collection<? extends Hai> c) {
+		Set<HaiType> result = new HashSet<HaiType>();
+		for (Hai hai : c) {
+			result.add(hai.type());
+		}
+		return result;
+	}
+
+	/**
+	 * 指定された牌タイプのリストを牌タイプセットに変換する.
+	 * @param c
+	 * @return
+	 */
+	public static Set<HaiType> toHaiTypeSet(List<HaiType> c) {
+		Set<HaiType> result = new HashSet<HaiType>();
+		for (HaiType type : c) {
+			result.add(type);
+		}
+		return result;
+	}
+
+	
 	/**
 	 * 牌の種類をソートするためのコンパレーターオブジェクトの列挙型.
 	 */

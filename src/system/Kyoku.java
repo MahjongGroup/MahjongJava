@@ -1,83 +1,39 @@
 package system;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import static system.Kaze.PE;
+import static system.Kaze.TON;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import ai.AI;
-import ai.AIType01;
+import system.Hai.HaiComparator;
 
 /**
  * 1局を表すクラス。
- * 
- * @author kohei
- * 
  */
+// TODO　海底のときの嶺上ツモの問題修正
+// TODO　ワンパイからの嶺上ツモに変える？
 public class Kyoku {
-	// ルール(赤ありなど)
-	private final Rule rule;
+	Map<Kaze, KyokuPlayer> kyokuPlayerMap;
 
-	// 場風
-	private final Kaze bakaze;
-
-	// 各プレイヤーが持つ牌
-	private final Map<Kaze, TehaiList> tehaiMap;
-	private final Map<Kaze, HurohaiList> hurohaiMap;
-	private final Map<Kaze, SutehaiList> sutehaiMap;
-
-	// プレイヤー
-	private final Map<Kaze, Player> playerMap;
-
-	// 各プレイヤーが鳴いているかどうか
-	private final Map<Kaze, Boolean> nakiMap;
-
-	// 一発判定フラグ
-	private final Map<Kaze, Boolean> ippatuMap;
-
-	// 立直フラグ
-	private final Map<Kaze, Boolean> reachMap;
-
-	// ダブル立直フラグ
-	private final Map<Kaze, Boolean> daburuRitiMap;
-
-	// 山牌を表すリスト
-	private final List<Hai> yamahai;
-
-	// 王牌を表すリスト
-	private final List<Hai> wanpai;
-
-	// 総ツモ枚数。これが70に達したら局終了
-	private int tumoSize;
-
-	// 現在ターン
-	private Kaze currentTurn;
-
-	// 現在ツモ牌
-	private Hai currentTumohai;
-
-	// 現在捨て牌
-	private Hai currentSutehai;
-
-	// 搶槓フラグ
-	private boolean tyankanFlag;
+	private final Field field;
+	private final Map<Kaze, Player> playerMap; // プレイヤー
+	private final Map<Kaze, Boolean> ippatuMap; // 一発判定フラグ
+	private final List<Hai> yamahai; // 山牌を表すリスト
+	private final List<Hai> wanpai; // 王牌を表すリスト
+	private int tsumoSize; // 総ツモ枚数。これが70に達したら局終了
+	private Kaze currentTurn; // 現在ターン
+	private Hai currentTumohai; // 現在ツモ牌
+	private Hai currentSutehai; // 現在捨て牌
+	private boolean tyankanFlag; // 搶槓フラグ
 
 	// 嶺上ツモフラグ
 	private boolean rinsyanFlag;
-
-	// 天和フラグ
-	private boolean tenhoFlag;
-
-	// 地和フラグマップ
-	private Map<Kaze, Boolean> tihoMap;
 
 	// 新ドラ枚数
 	private int newDoraSize;
@@ -94,10 +50,17 @@ public class Kyoku {
 	// 初順フラグ 鳴かれてもfalseとなる
 	private boolean firstTurn;
 
-	// 槓リスト
-	private Map<Kaze, Boolean> kanMap;
-	
+	// 結果変数
+	/**
+	 * あがった人->上がり情報(役セット、基本点)
+	 */
+	private final Map<Player, AgariResult> agariMap;
+
+	private final Map<Player, Boolean> tenpaiMap;
+
 	private Random rand;
+	private KyokuResult result;
+	private KyokuRonAgariResult.Builder krbuilder;
 
 	/**
 	 * 局を生成するコンストラクタ
@@ -107,58 +70,40 @@ public class Kyoku {
 	 * @param bakaze 場風
 	 */
 	public Kyoku(Rule rule, Map<Kaze, Player> player, Kaze bakaze) {
-		this.rule = rule;
-		this.bakaze = bakaze;
+		this.field = new Field(rule, bakaze);
+		this.kyokuPlayerMap = new HashMap<Kaze, KyokuPlayer>(4);
 
-		this.ankanFlag = false;
-		this.atomekuriKanFlag = false;
+		this.agariMap = new HashMap<Player, AgariResult>(4);
+		this.tenpaiMap = new HashMap<Player, Boolean>(4);
 
-		this.reachMap = new HashMap<Kaze, Boolean>(4);
-		this.daburuRitiMap = new HashMap<Kaze, Boolean>(4);
 		this.ippatuMap = new HashMap<Kaze, Boolean>(4);
-		this.tihoMap = new HashMap<Kaze, Boolean>(4);
-
-		this.kanMap = new HashMap<Kaze, Boolean>();
-		
-		this.tehaiMap = new HashMap<Kaze, TehaiList>(4);
-		for (Kaze kaze : Kaze.values()) {
-			this.tehaiMap.put(kaze, new TehaiList(13));
-		}
-		this.hurohaiMap = new HashMap<Kaze, HurohaiList>(4);
-		for (Kaze kaze : Kaze.values()) {
-			this.hurohaiMap.put(kaze, new HurohaiList(14));
-		}
-		this.sutehaiMap = new HashMap<Kaze, SutehaiList>(4);
-		for (Kaze kaze : Kaze.values()) {
-			this.sutehaiMap.put(kaze, new SutehaiList(14));
-		}
 
 		this.playerMap = new HashMap<Kaze, Player>(player);
-		this.nakiMap = new HashMap<Kaze, Boolean>();
 
 		this.yamahai = new ArrayList<Hai>(136);
 		this.wanpai = new ArrayList<Hai>(14);
 		this.rand = new Random();
 	}
 
-	/**
-	 * 局を初期化する
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see system.KyokuIF#init()
 	 */
+
 	public void init() {
-		this.tumoSize = 0;
+		this.result = null;
+		this.tsumoSize = 0;
 		this.kanSize = 0;
 		this.newDoraSize = 0;
-		this.currentTurn = Kaze.TON;
+		this.currentTurn = TON;
 		this.firstTurn = true;
 
-		reachMap.clear();
-		for (Kaze kaze : Kaze.values()) {
-			reachMap.put(kaze, false);
-		}
+		this.krbuilder = null;
 
-		daburuRitiMap.clear();
+		this.kyokuPlayerMap.clear();
 		for (Kaze kaze : Kaze.values()) {
-			daburuRitiMap.put(kaze, false);
+			kyokuPlayerMap.put(kaze, new KyokuPlayer());
 		}
 
 		ippatuMap.clear();
@@ -166,25 +111,20 @@ public class Kyoku {
 			ippatuMap.put(kaze, false);
 		}
 
+		// 終局情報初期化
+		this.tenpaiMap.clear();
+		this.agariMap.clear();
+
+		this.ankanFlag = false;
+		this.atomekuriKanFlag = false;
 		this.tyankanFlag = false;
 		this.rinsyanFlag = false;
-		this.tenhoFlag = true;
-
-		this.tihoMap.clear();
-		for (Kaze kaze : Kaze.values()) {
-			this.tihoMap.put(kaze, true);
-		}
-
-		this.nakiMap.clear();
-		for (Kaze kaze : Kaze.values()) {
-			this.nakiMap.put(kaze, false);
-		}
 
 		this.yamahai.clear();
 
 		// [分岐]赤ありか？
 		// 赤ありルール
-		if (rule.isAkaAri()) {
+		if (field.getRule().isAkaAri()) {
 			for (HaiType type : HaiType.values()) {
 				// 数牌5は赤がある
 				if (type.group3() == HaiGroup3.SU && type.number() == 5) {
@@ -225,211 +165,186 @@ public class Kyoku {
 
 		// 各プレイヤーに13枚ずつ配る
 		for (Kaze kaze : Kaze.values()) {
-			List<Hai> tehaiList = tehaiMap.get(kaze);
-			tehaiList.clear();
+			KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 			for (int i = 0; i < 13; i++) {
-				tehaiList.add(fetchRandomHai(yamahai));
+				kp.distribute(fetchRandomHai(yamahai));
 			}
-		}
-
-		// 副露牌リストを初期化
-		for (Kaze kaze : Kaze.values()) {
-			List<Mentu> hurohaiList = hurohaiMap.get(kaze);
-			hurohaiList.clear();
-		}
-
-		// 副露牌リストを初期化
-		for (Kaze kaze : Kaze.values()) {
-			List<Sutehai> sutehaiList = sutehaiMap.get(kaze);
-			sutehaiList.clear();
 		}
 	}
 
 	/**
-	 * ランダムな牌を山からツモる。
+	 * 山牌からランダムに1牌をツモる.
 	 * 
-	 * @throws IllegalStateException 連続でこのメソッドを呼び出した場合
+	 * @throws IllegalArgumentException 総ツモサイズが70に達しているか、ツモメソッドを連続して2回呼び出した場合．
 	 */
 	public void doTsumo() {
+		if (isSyukyoku())
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
 		if (this.currentTumohai != null)
 			throw new IllegalStateException("不正なメソッド呼び出し");
 		this.currentTumohai = fetchRandomHai(this.yamahai);
-		this.tumoSize++;
+		this.tsumoSize++;
 	}
 
 	/**
-	 * 九種九牌ならtrueを返す。
+	 * 九種九牌の場合はtrueを返す.
 	 * 
-	 * @return 九種九牌ならtrue
+	 * @return 九種九牌の場合はtrue.
 	 */
+
 	public boolean isKyusyukyuhai() {
-		TehaiList tehai = tehaiMap.get(currentTurn);
-		Set<HaiType> set = Functions.getHaiTypeSetFrom(tehai);
-		int size = 0;
-		for (HaiType type : set) {
-			if (type.isYaotyuhai()) {
-				size++;
-			}
-			if (size >= 9) {
-				return true;
-			}
+		return kyokuPlayerMap.get(currentTurn).isKyusyukyuhai(currentTumohai);
+	}
+
+	public void doKyusyukyuhai() {
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
 		}
-		return false;
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.KYUSYUKYUHAI, playerMap.get(TON), map);
 	}
 
 	/**
-	 * 現在のツモ牌でツモ上がっているならtrueを返す。
+	 * ツモ上がり出来る場合trueを返す.
 	 * 
-	 * @return 現在のツモ牌でツモ上がっているならtrue
+	 * @return ツモ上がり出来る場合true.
 	 */
+
 	public boolean isTsumoAgari() {
+		// TODO check
 		Set<Yaku> yaku = this.getYakuSetByFlag(currentTurn, true);
 		return isAgari(true, this.currentTumohai, currentTurn, yaku);
 	}
 
 	/**
-	 * 現在ターンの人がツモ上がりする。
+	 * ツモ上がりする.
+	 * @throws 既に終局している場合．
 	 */
 	public void doTsumoAgari() {
-		// TODO insert
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Kaze kaze = currentTurn;
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		Param param = newCheckerParam(true, currentTumohai, kaze);
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, HaiType.toHaiTypeList(getDoraList()));
+		Player agarip = playerMap.get(currentTurn);
+		Player oya = playerMap.get(TON);
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+
+		this.result = new KyokuTsumoAgariResult(currentTumohai, agarip, ar, oya, map);
 	}
 
 	/**
-	 * 現在ターンの人が加槓できるならtrueを返す。
-	 * 
-	 * @return 加槓できるならtrue
+	 * 現在ターンの人が加槓可能の場合trueを返す.
 	 */
 	public boolean isKakanable() {
-		if(this.kanSize == 4) {
+		if (this.kanSize == 4) {
 			return false;
 		}
-		HurohaiList huro = this.hurohaiMap.get(currentTurn);
-		TehaiList tehai = this.tehaiMap.get(currentTurn);
-		for (Hai hai : tehai) {
-			if (huro.isKakan(hai.type())) {
-				return true;
-			}
-		}
-		return false;
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		return kp.isKakanable();
 	}
 
 	/**
-	 * 現在ターンの人が加槓する。
+	 * 加槓可能な手牌のインデックスリストを返す.
 	 * 
-	 * @param index 牌のインデックス。ツモ牌を指定する場合は13を渡す。
-	 * @return 加槓して出来た面子。
+	 * @return 加槓可能な手牌のインデックスリスト.
+	 */
+	public List<Integer> getKakanableHaiList() {
+		return kyokuPlayerMap.get(currentTurn).getKakanableHaiList();
+	}
+
+	/**
+	 * 指定された牌のインデックスで加槓する.ツモ牌を指定する場合13を入れる.
+	 * 
+	 * @param index 暗槓する牌のインデックス.13の場合、ツモ牌を表す.
+	 * @return 加槓して出来た面子.
 	 */
 	public Mentu doKakan(int index) {
-		TehaiList tehai = tehaiMap.get(currentTurn);
-		Hai hai = null;
-		if (index == 13) {
-			hai = currentTumohai;
-		} else {
-			hai = tehai.get(index);
-		}
-
-		HurohaiList huro = this.hurohaiMap.get(currentTurn);
-		assert huro.isKakan(hai.type());
-
-		Mentu m = huro.doKakan(hai);
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		Mentu mentu = null;
+		// ツモ牌を加槓する場合
 		if (index == 13) {
 			this.currentSutehai = this.currentTumohai;
-		} else {
-			this.currentSutehai = tehai.remove(index);
-			tehai.add(currentTumohai);
+			mentu = kp.doKakan(currentTumohai);
 		}
-		this.currentTumohai = null;
+		// 手牌の中の牌で加槓する場合
+		else {
+			this.currentSutehai = kp.getTehai(index);
+			mentu = kp.doKakan(index, currentTumohai);
+		}
 
+		this.currentTumohai = null;
 		this.tyankanFlag = true;
 		this.ippatuMap.put(currentTurn, false);
-
 		this.atomekuriKanFlag = true;
-		return m;
+		return mentu;
 	}
 
 	/**
-	 * 現在ターンの人が嶺上牌をツモる。
+	 * リンシャンツモする.
+	 * 
+	 * @throws IllegalArgumentException 総ツモサイズが70に達している場合．
 	 */
 	public void doRinsyanTsumo() {
+		if (isSyukyoku())
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
 		this.currentTumohai = this.wanpai.get(this.kanSize++);
 		this.currentSutehai = null;
 
-		this.tumoSize++;
+		this.tsumoSize++;
 		this.tyankanFlag = false;
 		this.rinsyanFlag = true;
 	}
 
 	/**
-	 * 現在ターンの人が加槓できる手牌リストの位置のリストを返す。
+	 * 暗槓可能の場合trueを返す.
 	 * 
-	 * @return ないならnullを返す。
+	 * @return 暗槓可能の場合true.
 	 */
-	public List<Integer> getKakanableHaiList() {
-		List<Integer> result = new ArrayList<Integer>();
 
-		HurohaiList huro = this.hurohaiMap.get(currentTurn);
-		TehaiList tehai = this.tehaiMap.get(currentTurn);
-
-		for (int i = 0; i < tehai.size(); i++) {
-			Hai hai = tehai.get(i);
-			if (huro.isKakan(hai.type())) {
-				result.add(i);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * 現在ターンの人が暗槓できるならtrueを返す。
-	 * 
-	 * @return　暗槓できるならtrue
-	 */
 	public boolean isAnkanable() {
-		if(this.kanSize == 4) {
+		if (isSyukyoku())
 			return false;
-		}
-		TehaiList haiList = tehaiMap.get(currentTurn);
-		return haiList.isAnkanable();
+		if (this.kanSize == 4)
+			return false;
+		if (currentTumohai == null)
+			return false;
+		return kyokuPlayerMap.get(currentTurn).isAnkanable(currentTumohai);
 	}
 
 	/**
-	 * 現在暗槓できる手牌リストの位置のリストのリストを返す。
+	 * 暗槓可能な手牌のインデックス(13はツモ牌を表す)のリストのリストを返す.
 	 * 
-	 * @return　ない場合はnullを返す。
+	 * @return 暗槓可能な手牌のインデックス(13はツモ牌を表す)のリストのリスト.暗槓可能な牌が ない場合は空のリストを返す.
 	 */
 	public List<List<Integer>> getAnkanableHaiList() {
-		TehaiList haiList = tehaiMap.get(currentTurn);
-		return haiList.getAnkanableIndexList();
+		if (currentTumohai == null) {
+			System.err.println("Kyoku : ツモ牌がnullのときにisAnkanable()メソッドを不正に呼び出し");
+			return new ArrayList<List<Integer>>(0);
+		}
+		return kyokuPlayerMap.get(currentTurn).getAnkanableHaiList(currentTumohai);
 	}
 
 	/**
-	 * 指定されたインデックスで暗槓する。indexが13のときはツモ牌
+	 * 指定されたインデックス(13はツモ牌を表す)の牌で暗槓する.
 	 * 
-	 * @param type 暗槓する牌のインデックス
-	 * @return 暗槓して出来た面子。
+	 * @param 暗槓する牌のインデックス(13はツモ牌を表す).
 	 */
-	public Mentu doAnkan(int index) {
-		TehaiList haiList = tehaiMap.get(currentTurn);
-		HaiType type = haiList.get(index).type();
+	public Mentu doAnkan(List<Integer> list) {
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		Mentu m = kp.doAnkan(currentTumohai, list);
 
-		assert haiList.isAnkanable(type);
-		HurohaiList huroList = hurohaiMap.get(currentTurn);
-
-		Hai haiArray[] = new Hai[4];
-		int i = 0;
-		for (Iterator<Hai> itr = haiList.iterator(); itr.hasNext();) {
-			Hai hai = itr.next();
-			if (hai.type() == type) {
-				itr.remove();
-				haiArray[i++] = hai;
-			}
-		}
-		Mentu m = new Mentu(haiArray);
-		huroList.add(m);
 		this.newDoraSize++;
-		this.tenhoFlag = false;
 		this.firstTurn = false;
-		this.tihoMap.put(currentTurn, false);
 		this.currentTumohai = null;
 		this.ankanFlag = true;
 
@@ -437,133 +352,114 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風の人がロン出来るならtrueを返す。
+	 * 指定された風の人が現在の捨牌に対してロンできる場合trueを返す.
 	 * 
-	 * @param kaze プレイヤーの風
-	 * @return　指定された風の人がロン出来るならtrue
+	 * @param kaze ロンできるか確かめる人の風.
+	 * @return 指定された風の人が現在の捨牌に対してロンできる場合true.
 	 */
 	public boolean isRonable(Kaze kaze) {
+		//TODO check
 		if (kaze == currentTurn)
 			return false;
+		if (currentSutehai == null) {
+			return false;
+		}
 
 		Set<Yaku> yaku = this.getYakuSetByFlag(kaze, false);
 		return isAgari(true, this.currentSutehai, kaze, yaku);
 	}
 
 	/**
-	 * 指定された風の人が指定された牌がフリテンとなるならtrueを返す。
-	 * 
-	 * @param kaze フリテンかどうか調べるプレイヤーの風
-	 * @param agariHai フリテンかどうか調べる牌
-	 * @return フリテンとなるならtrue
-	 */
-	public boolean isFuriten(Kaze kaze, HaiType type) {
-		for (Hai hai : sutehaiMap.get(kaze)) {
-			if (hai.type() == type) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * ロンする。
-	 * 
-	 * @param kaze
+	 * 指定された風のプレイヤーがロンあがりする．
+	 * @throws IllegalStateException 既に終局している場合．
 	 */
 	public void doRon(Kaze kaze) {
-		// TODO insert
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		Param param = newCheckerParam(false, currentSutehai, kaze);
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, HaiType.toHaiTypeList(getDoraList()));
+
+		if (this.krbuilder == null) {
+			this.krbuilder = new KyokuRonAgariResult.Builder();
+		}
+
+		this.krbuilder.put(playerMap.get(kaze), ar);
 	}
 
 	/**
-	 * 指定された風の人が立直しているならtrueを返す。
+	 * 指定された風の人がリーチしている場合はtrueを返す.
 	 * 
-	 * @param kaze 　立直しているか調べる人の風
-	 * @return　立直しているならtrue
+	 * @param kaze 風.
+	 * @return リーチしている場合true.
 	 */
 	public boolean isReach(Kaze kaze) {
-		return this.reachMap.get(kaze);
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		return kp.isReach() || kp.isDoubleReach();
 	}
 
 	/**
-	 * 立直時、不要牌の位置リストを返す。
+	 * 現在ターンの人がリーチ可能な場合trueを返す.
 	 * 
-	 * @return 不要牌の位置リスト
-	 */
-	public List<Integer> getReachableHaiList() {
-		Kaze kaze = getCurrentTurn();
-		CheckerParam param = new CheckerParam();
-
-		param.setNaki(this.nakiMap.get(kaze));
-		param.setBakaze(bakaze);
-		param.setJikaze(kaze);
-		param.setRule(rule);
-
-		TehaiList tehaiList = tehaiMap.get(kaze);
-		Hai tsumohai = currentTumohai;
-
-		return AgariFunctions.getReachableIndexList(tehaiList, tsumohai, param);
-	}
-
-	/**
-	 * 指定された風のプレイヤーがテンパイしているならtrueを返す。
-	 * 
-	 * @param kaze テンパイしているか確かめる
-	 * @return
-	 */
-	public boolean isTenpai(Kaze kaze) {
-		CheckerParam param = new CheckerParam();
-
-		param.setNaki(this.nakiMap.get(kaze));
-		param.setBakaze(bakaze);
-		param.setJikaze(kaze);
-		param.setRule(rule);
-
-		return AgariFunctions.isTenpai(tehaiMap.get(kaze), hurohaiMap.get(kaze), param);
-	}
-
-	/**
-	 * 立直できるならtrueを返す。
-	 * 
-	 * @return 立直できるならtrue
+	 * @return リーチ可能な場合true.
 	 */
 	public boolean isReachable() {
-		return !nakiMap.get(currentTurn) && isTenpai(currentTurn);
+		if (isReach(currentTurn)) {
+			return false;
+		}
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		if (kp.isNaki())
+			return false;
+		//TODO isTenpai
+		return isTenpai(currentTurn);
 	}
 
 	/**
-	 * 立直する。初順であった場合はダブル立直する。
+	 * リーチできる場合、その牌を切ってリーチ出来るもののインデックスリストを返す.
+	 * 
+	 * @return 不要牌インデックスリスト.
+	 */
+	public List<Integer> getReachableHaiList() {
+		//TODO check
+		Kaze kaze = getCurrentTurn();
+		Param param = new Param();
+
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		param.setNaki(kp.isNaki());
+		param.setJikaze(kaze);
+
+		TehaiList tehaiList = kp.getTehaiList();
+		return AgariFunctions.getReachableIndexList(tehaiList, currentTumohai, param, field);
+	}
+
+	/**
+	 * リーチする.初巡の場合はダブルリーチする.
 	 */
 	public void doReach() {
-		if (this.tihoMap.get(currentTurn)) {
-			this.daburuRitiMap.put(currentTurn, true);
-		} else {
-			this.reachMap.put(currentTurn, true);
-		}
+		ippatuMap.put(currentTurn, true);
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		kp.doReach(firstTurn);
 	}
 
 	/**
-	 * 手牌から指定されたインデックスの牌を切って、捨牌リストに加える。
+	 * 指定されたインデックス(13はツモ牌)の牌を切る.ツモ切りの場合はdiscardTsumoHaiメソッドを用いる.
 	 * 
-	 * @param index 手牌リストの切りたい牌のインデックス
-	 * @throws ArrayIndexOutOfBoundsException 指定されたインデックスが手牌リストの範囲を越えていた場合
+	 * @param index 手牌のインデックス(13はツモ牌).
 	 */
 	public void discard(int index) {
-		List<Hai> tehaiList = tehaiMap.get(currentTurn);
-
-		this.currentSutehai = tehaiList.remove(index);
-
-		if (currentTumohai != null)
-			tehaiList.add(currentTumohai);
-
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		this.currentSutehai = kp.discard(index, currentTumohai);
 		this.kiru();
 	}
 
 	/**
-	 * ツモ切りする。
+	 * ツモ切りする.
 	 */
 	public void discardTsumoHai() {
-		this.currentSutehai = currentTumohai;
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		this.currentSutehai = kp.discard(13, currentTumohai);
+		this.ippatuMap.put(currentTurn, false);
 		this.kiru();
 	}
 
@@ -572,25 +468,203 @@ public class Kyoku {
 	 */
 	private void kiru() {
 		this.currentTumohai = null;
-
-		List<Sutehai> sutehaiList = sutehaiMap.get(currentTurn);
-		sutehaiList.add(new Sutehai(this.currentSutehai));
-
-		if (this.tumoSize == 1)
-			this.tenhoFlag = false;
-
-		this.tihoMap.put(currentTurn, false);
-		this.ippatuMap.put(currentTurn, false);
-
 		this.rinsyanFlag = false;
 	}
 
 	/**
-	 * ドラをめくれる場合めくる。
+	 * 指定された風のプレイヤーが明槓できる場合trueを返す.
 	 * 
-	 * @return ドラをめくった枚数。
+	 * @param kaze プレイヤーの風.
+	 * @return 明槓できる場合true.
 	 */
+	public boolean isMinkanable(Kaze kaze) {
+		if (currentSutehai == null) {
+			return false;
+		}
+		if (kaze == currentTurn || this.kanSize == 4)
+			return false;
+		return kyokuPlayerMap.get(kaze).isMinkanable(currentSutehai.type());
+	}
+
+	/**
+	 * 指定された風のプレイヤーの明槓できる手牌のインデックスのリストを返す.
+	 * 
+	 * @return 明槓できる手牌のインデックスのリスト.
+	 */
+	public List<Integer> getMinkanableList(Kaze kaze) {
+		if (currentSutehai == null) {
+			System.err.println("Kyoku : currentSutehaiがnullのときにこのメソッドを呼び出してはならない.");
+			return new ArrayList<Integer>(0);
+		}
+		return kyokuPlayerMap.get(kaze).getMinkanableList(currentSutehai.type());
+	}
+
+	/**
+	 * 指定された風のプレイヤーが明槓をする.
+	 * 
+	 * @param kaze 風.
+	 * @return 明槓して出来た面子.
+	 */
+	public Mentu doMinkan(Kaze kaze) {
+		assert isMinkanable(kaze);
+
+		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
+		KyokuPlayer nkp = kyokuPlayerMap.get(kaze);
+
+		Mentu m = nkp.doMinkan(currentSutehai, currentTurn);
+		ckp.addSutehai(new Sutehai(currentSutehai, currentTurn));
+
+		this.naku();
+		this.currentTurn = kaze;
+		this.atomekuriKanFlag = true;
+		return m;
+	}
+
+	/**
+	 * 指定された風のプレイヤーがポンできる場合trueを返す.
+	 * 
+	 * @param kaze 風.
+	 * @return ポンできる場合true.
+	 */
+	public boolean isPonable(Kaze kaze) {
+		if (currentSutehai == null) {
+			return false;
+		}
+		if (kaze == currentTurn)
+			return false;
+		return kyokuPlayerMap.get(kaze).isPonable(currentSutehai.type());
+	}
+
+	/**
+	 * 指定された風のプレイヤーのポン出来る牌インデックスのリストのリストを返す.
+	 * 
+	 * @param kaze 風.
+	 * @return 牌インデックスのリストのリスト.
+	 */
+	public List<List<Integer>> getPonableHaiList(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).getPonableHaiList(currentSutehai.type());
+	}
+
+	/**
+	 * ポンする.
+	 * 
+	 * @param kaze 風.
+	 * @param ponList ポンするインデックスリスト.
+	 * @return ポンして出来た面子.
+	 */
+	public Mentu doPon(Kaze kaze, List<Integer> ponList) {
+		assert isPonable(kaze);
+		assert ponList.size() == 2;
+
+		KyokuPlayer nkp = kyokuPlayerMap.get(kaze);
+		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
+		Mentu m = nkp.doPon(ponList, currentSutehai, currentTurn);
+
+		ckp.addSutehai(new Sutehai(currentSutehai, kaze));
+
+		this.naku();
+		this.currentTurn = kaze;
+		return m;
+	}
+
+	/**
+	 * チーできる場合trueを返す.
+	 * 
+	 * @return チーできる場合true.
+	 */
+	public boolean isChiable() {
+		if (currentSutehai == null) {
+			return false;
+		}
+		if (currentSutehai == null)
+			return false;
+		return kyokuPlayerMap.get(currentTurn.simo()).isChiable(currentSutehai.type());
+	}
+
+	/**
+	 * チー出来る牌インデックスのリストのリストを返す.
+	 * 
+	 * @return チー出来る牌インデックスのリストのリスト.
+	 */
+	public List<List<Integer>> getChiableHaiList() {
+		return kyokuPlayerMap.get(currentTurn.simo()).getChiableHaiList(currentSutehai.type());
+	}
+
+	/**
+	 * チーする.
+	 * 
+	 * @param tiList チーする牌インデックスのリスト.
+	 * @return チーして出来た面子.
+	 */
+	public Mentu doChi(List<Integer> tiList) {
+		assert isChiable();
+		assert tiList.size() == 2;
+
+		Kaze next = currentTurn.simo();
+		KyokuPlayer nkp = kyokuPlayerMap.get(next);
+		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
+
+		Mentu m = nkp.doChi(tiList, currentSutehai, currentTurn);
+		ckp.addSutehai(new Sutehai(currentSutehai, next));
+
+		this.naku();
+		this.currentTurn = next;
+		return m;
+	}
+
+	/**
+	 * 鳴いたときの副作用。
+	 */
+	private void naku() {
+		this.currentSutehai = null;
+		this.firstTurn = false;
+		for (Kaze kaze : Kaze.values()) {
+			this.ippatuMap.put(kaze, false);
+		}
+	}
+
+	/**
+	 * 現在のターンを次のプレイヤーに移す.
+	 */
+	public void nextTurn() {
+		if (this.firstTurn) {
+			if (this.tsumoSize >= 4)
+				this.firstTurn = false;
+		}
+		kyokuPlayerMap.get(currentTurn).addSutehai(new Sutehai(currentSutehai));
+		this.currentSutehai = null;
+		this.currentTurn = this.currentTurn.simo();
+	}
+
+	/**
+	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
+	 * 
+	 * @param kaze 風.
+	 * @param type 牌タイプ.
+	 * @return フリテンの場合true.
+	 */
+	public boolean isFuriten(Kaze kaze, HaiType type) {
+		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
+	}
+
+	/**
+	 * 指定された風のプレイヤーがテンパイしている場合trueを返す.
+	 * 
+	 * @param kaze 風.
+	 * @return テンパイしている場合true.
+	 */
+	public boolean isTenpai(Kaze kaze) {
+		Param param = new Param();
+
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		param.setNaki(kp.isNaki());
+		param.setJikaze(kaze);
+
+		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
+	}
+
 	public int openDora() {
+		// TODO check
 		int result = 0;
 
 		if (atomekuriKanFlag) {
@@ -608,289 +682,218 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風のプレイヤーが明槓できるならtrueを返す。
-	 * 
-	 * @param kaze 明槓できるか調べるプレイヤーの風
-	 * @return　明槓できるならtrue
+	 * 三家和の場合trueを返す．
+	 * @return 三家和の場合はtrue．
 	 */
-	public boolean isMinkanable(Kaze kaze) {
-		if (kaze == currentTurn)
-			return false;
-		if(this.kanSize == 4) {
-			return false;
-		}
-		return tehaiMap.get(kaze).isMinkanable(currentSutehai.type());
-	}
-
-	public List<Integer> getMinkanableList() {
-		return new ArrayList<Integer>(0);
-	}
-
-	/**
-	 * 指定された風の人が明槓をする。
-	 * 
-	 * @param kaze 明槓をするプレイヤーの風
-	 * @return 明槓して出来た面子。
-	 */
-	public Mentu doMinkan(Kaze kaze) {
-		assert isMinkanable(kaze);
-
-		TehaiList tehai = this.tehaiMap.get(kaze);
-		HurohaiList huro = this.hurohaiMap.get(kaze);
-		HaiType type = this.currentSutehai.type();
-
-		Mentu m = new Mentu(this.currentSutehai, currentTurn, tehai.remove(type),
-				tehai.remove(type), tehai.remove(type));
-		huro.add(m);
-
-		SutehaiList sute = sutehaiMap.get(currentTurn);
-		Sutehai sh = sute.remove(sute.size() - 1);
-		sute.add(sh.naku(kaze));
-
-		this.naku();
-		this.currentTurn = kaze;
-		this.atomekuriKanFlag = true;
-
-		return m;
-	}
-
-	/**
-	 * 指定された風のプレイヤーがポンできるならtrueを返す。
-	 * 
-	 * @param kaze 　ポンできるか調べるプレイヤーの風
-	 * @return　ポンできるならtrue
-	 */
-	public boolean isPonable(Kaze kaze) {
-		if (kaze == currentTurn)
-			return false;
-		return tehaiMap.get(kaze).isPonable(currentSutehai.type());
-	}
-
-	/**
-	 * ポンする。
-	 * 
-	 * @param kaze
-	 * @param ponList
-	 * @return ポンして出来た面子。
-	 */
-	public Mentu doPon(Kaze kaze, List<Integer> ponList) {
-		assert isPonable(kaze);
-		assert ponList.size() == 2;
-
-		int index0 = ponList.get(0);
-		int index1 = ponList.get(1);
-
-		TehaiList tehai = this.tehaiMap.get(kaze);
-		HurohaiList huro = this.hurohaiMap.get(kaze);
-
-		Hai hai0 = tehai.get(index0);
-		Hai hai1 = tehai.get(index1);
-
-		Mentu m = new Mentu(this.currentSutehai, currentTurn, hai0, hai1);
-		huro.add(m);
-
-		tehai.remove(index0);
-		tehai.remove(index1);
-
-		SutehaiList sute = sutehaiMap.get(currentTurn);
-
-		Sutehai sh = sute.remove(sute.size() - 1);
-		sute.add(sh.naku(kaze));
-
-		this.naku();
-		this.currentTurn = kaze;
-		return m;
-	}
-
-	/**
-	 * 指定された風のプレイヤーがポンできる牌インデックスのリストを返す。
-	 * 
-	 * @param kaze ポンするプレイヤーの風
-	 * @return 牌インデックスのリスト
-	 */
-	public List<List<Integer>> getPonableHaiList(Kaze kaze) {
-		return tehaiMap.get(kaze).getPonableIndexList(currentSutehai.type());
-	}
-
-	/**
-	 * 下家がチーできるならtrueを返す。
-	 * 
-	 * @return　下家がチーできるならtrue
-	 */
-	public boolean isChiable() {
-		return tehaiMap.get(currentTurn.simo()).isChiable(currentSutehai.type());
-	}
-
-	/**
-	 * チーできる牌リストを返す。
-	 * 
-	 * @return　チーできる牌リスト
-	 */
-	public List<List<Integer>> getChiableHaiList() {
-		return tehaiMap.get(currentTurn.simo()).getChiableHaiList(currentSutehai.type());
-	}
-
-	/**
-	 * チーする。
-	 * 
-	 * @param tiList チーする牌インデックスのリスト
-	 * @return チーして出来た面子。
-	 */
-	public Mentu doChi(List<Integer> tiList) {
-		assert isChiable();
-		assert tiList.size() == 2;
-
-		Kaze nextTurn = currentTurn.simo();
-
-		TehaiList tehai = tehaiMap.get(nextTurn);
-		SutehaiList sute = sutehaiMap.get(currentTurn);
-
-		Sutehai sh = sute.remove(sute.size() - 1);
-		sute.add(sh.naku(nextTurn));
-
-		int index0 = tiList.get(0);
-		int index1 = tiList.get(1);
-
-		Mentu m = new Mentu(this.currentSutehai, currentTurn, tehai.get(index0), tehai.get(index1));
-
-		TehaiList tehaiList = tehaiMap.get(nextTurn);
-		tehaiList.remove(index0);
-		tehaiList.remove(index1);
-
-		HurohaiList hrList = hurohaiMap.get(nextTurn);
-		hrList.add(m);
-
-		this.naku();
-		this.currentTurn = nextTurn;
-
-		return m;
-	}
-
-	/**
-	 * 鳴いたときの副作用。
-	 * 
-	 */
-	private void naku() {
-		this.currentSutehai = null;
-		this.firstTurn = false;
-		for (Kaze kaze : Kaze.values()) {
-			this.ippatuMap.put(kaze, false);
-		}
-		for (Kaze kaze : Kaze.values()) {
-			this.tihoMap.put(kaze, false);
-		}
-	}
-
 	public boolean isSanchaho() {
-		// TODO insert
-		return false;
+		if (krbuilder == null)
+			return false;
+
+		return krbuilder.size() == 3;
 	}
 
 	/**
-	 * 四風連打の場合trueを返す。
-	 * @return 四風連打の場合true
+	 * 四風連打の場合trueを返す.
+	 * 
+	 * @return 四風連打の場合true.
 	 */
 	public boolean isSufontsuRenta() {
 		if (this.firstTurn == false)
 			return false;
-		if(this.tumoSize != 4)
+		if (this.tsumoSize != 4)
 			return false;
-		
+
 		HaiType haiType = null;
 		for (Kaze kaze : Kaze.values()) {
+			if (kaze == PE)
+				continue;
 			if (haiType == null) {
-				HaiType type = sutehaiMap.get(kaze).get(0).type();
+				HaiType type = kyokuPlayerMap.get(kaze).getSutehai(0).type();
 				if (type.group3() != HaiGroup3.KAZE)
 					return false;
 				haiType = type;
 			} else {
-				if (haiType != sutehaiMap.get(kaze).get(0).type()) {
+				if (haiType != kyokuPlayerMap.get(kaze).getSutehai(0).type()) {
 					return false;
 				}
 			}
 		}
-		return true;
-	}
-
-	/**
-	 * 四開槓の場合trueを返す。しかし、1人が4回槓をしている場合にはfalseを返す。
-	 * @return　四開槓の場合true
-	 */
-	public boolean isSukaikan() {
-		if(this.kanSize != 4) {
+		if (haiType != currentSutehai.type()) {
 			return false;
 		}
-		return false;
+		return true;
 	}
-	
+
 	/**
-	 * 四家立直の場合trueを返す。
-	 * @return 四家立直の場合true。
+	 * 四開槓の場合trueを返す.ただし一人のプレイヤーが4回槓している場合はfalseとなる.
+	 * 
+	 * @return 四開槓の場合true.
 	 */
-	public boolean isSuchaReach() {
-		for (Kaze kaze : Kaze.values()) {
-			if(!this.reachMap.get(kaze)) {
-				return false;
+	public boolean isSukaikan() {
+		if (this.kanSize != 4) {
+			for (Kaze kaze : kyokuPlayerMap.keySet()) {
+				if (kyokuPlayerMap.get(kaze).getKanSize() == 4)
+					return true;
 			}
+			return false;
 		}
 		return true;
 	}
 
+	/**
+	 * 四家リーチの場合trueを返す.
+	 * 
+	 * @return 四家リーチの場合true.
+	 */
+	public boolean isSuchaReach() {
+		for (Kaze kaze : kyokuPlayerMap.keySet()) {
+			KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+			if (!kp.isReach() && !kp.isDoubleReach())
+				return false;
+		}
+		return true;
+	}
+
+	public void doSuchaReach() {
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SUCHAREACH, playerMap.get(TON), map);
+	}
+
+	/**
+	 * リンシャン牌を合わした総ツモ枚数が70枚に達していたらtrueを返す．
+	 * 
+	 * @return 総ツモ枚数が70枚に達していたらtrue．
+	 */
 	public boolean isRyukyoku() {
-		// TODO inserted
-		return false;
+		return this.tsumoSize == 70;
 	}
 
+	/**
+	 * 流局する．ここでいう流局とは総ツモ枚数が70枚に達して、ツモれる牌がなくなったときの 流局を指す．
+	 * このメソッドを呼び出すことでKyokuResutlを取得できるようになる．
+	 */
 	public void doRyukyoku() {
-		// TODO inserted
-	}
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
 
-	public boolean isRenchan() {
-		// TODO inserted
-		return false;
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+		this.result = new KyokuRyukyokuResult(playerMap.get(TON), map);
 	}
 
 	public boolean isTotyuRyukyoku() {
-		// TODO inserted
-		return false;
+		if (this.result == null)
+			return false;
+
+		return result.isTotyuRyukyoku();
 	}
 
-	public void doTotyuRyukyoku() {
-		// TODO inserted
-		return;
+	/**
+	 * 途中流局(三家和)する．
+	 * @throw IllegalStateException 既に局が終わっている場合．
+	 */
+	public void doTotyuRyukyokuSanchaho() {
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SANCHAHO, playerMap.get(TON), map);
 	}
 
+	/**
+	 * この局が終局している場合falseを返す．
+	 * 
+	 * @return 終局している場合false．
+	 */
 	public boolean isSyukyoku() {
-		// TODO inserted
-		return false;
+		return result != null || krbuilder != null;
 	}
 
+	// TODO いらない？
 	public void doSyukyoku() {
 		// TODO inserted
 	}
 
+	/**
+	 * この局のルールを返す.
+	 * 
+	 * @return この局のルール.
+	 */
 	public Rule getRule() {
-		return this.rule;
-	}
-
-	public Map<Kaze, Player> getPlayerMap() {
-		return this.playerMap;
-	}
-
-	public Kaze getBakaze() {
-		return this.bakaze;
-	}
-	
-	public KyokuResult createKyokuResult() {
-		return new KyokuResult();
+		return field.getRule();
 	}
 
 	/**
-	 * 現在、表になっているドラのリストを返す。
+	 * 風->プレイヤーを表すマップを返す.
 	 * 
-	 * @return 現在、表になっているドラのリスト
+	 * @return 風->プレイヤーを表すマップ.
 	 */
-	public List<Hai> getDoraList() {
+	public Map<Kaze, Player> getPlayerMap() {
+		return new HashMap<Kaze, Player>(playerMap);
+	}
+
+	/**
+	 * 指定された風のプレイヤーを返す.
+	 * 
+	 * @param kaze 風.
+	 * @return プレイヤー.
+	 */
+	public Player getPlayer(Kaze kaze) {
+		return this.playerMap.get(kaze);
+	}
+
+	/**
+	 * この局の場風を返す.
+	 * 
+	 * @return この局場風．
+	 */
+	public Kaze getBakaze() {
+		return field.getBakaze();
+	}
+
+	/**
+	 * この局が終局している場合、その局結果オブジェクトを返す．終局していない場合はnullを返す．</br>
+	 * 局が終局するためには次の3つのうちのどれかを呼び出す必要がある．</br>
+	 * 　・doRyukoyku()</br>
+	 * 　・doTotyuRyukyoku()</br>
+	 * 　・doRonAgari()</br>
+	 * 　・doTsumoAgari()</br>
+	 * 
+	 * @return 局結果オブジェクト．
+	 * @throws IllegalStateException まだ終局していない場合．
+	 */
+	public KyokuResult createKyokuResult() {
+		if (result != null)
+			return result;
+		if (result == null && krbuilder != null) {
+			Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+			for (Player p : playerMap.values()) {
+				map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+			}
+			Player oya = playerMap.get(TON);
+			Player hoju = playerMap.get(currentTurn);
+			return result = krbuilder.build(currentSutehai, hoju, oya, map);
+		}
+		throw new IllegalStateException("KyokuResultはまだ生成されていない");
+	}
+
+	/**
+	 * この局の開かれているドラリストを返す.
+	 * 
+	 * @return ドラリスト.
+	 */
+	public List<Hai> getOpenDoraList() {
 		List<Hai> list = new ArrayList<Hai>();
 		for (int i = 0; i < this.kanSize + 1; i++) {
 			list.add(this.wanpai.get(4 + 2 * i));
@@ -899,9 +902,22 @@ public class Kyoku {
 	}
 
 	/**
-	 * 裏ドラのリストを返す。
+	 * この局のすべてのドラリストを返す.
 	 * 
-	 * @return 裏ドラのリスト。
+	 * @return ドラリスト.
+	 */
+	public List<Hai> getDoraList() {
+		List<Hai> list = new ArrayList<Hai>();
+		for (int i = 0; i < this.kanSize * 2 + 1; i++) {
+			list.add(this.wanpai.get(4 + i));
+		}
+		return list;
+	}
+
+	/**
+	 * 裏ドラリストを返す.
+	 * 
+	 * @return 裏ドラリスト.
 	 */
 	public List<Hai> getUradoraList() {
 		List<Hai> list = new ArrayList<Hai>();
@@ -911,123 +927,144 @@ public class Kyoku {
 		return list;
 	}
 
+	// TODO java doc
+	/**
+	 * 
+	 * @param kaze
+	 * @return
+	 */
 	public List<Mentu> getFuroHaiList(Kaze kaze) {
-		return this.hurohaiMap.get(kaze);
+		return kyokuPlayerMap.get(kaze).getHurohaiList();
 	}
 
-	public Map<Player, List<Yaku>> getYakuMap() {
-		// TODO changed
-		return new HashMap<Player, List<Yaku>>(0);
-	}
-
-	public List<Player> getTenpaiPlayerList() {
-		// TODO changed
-		return new ArrayList<Player>(0);
-	}
-
+	/**
+	 * 山牌からランダムに1牌とってくる.
+	 * 
+	 * @param list 山牌リスト.
+	 * @return 山牌からランダムに選ばれた牌.
+	 */
 	private Hai fetchRandomHai(List<Hai> list) {
 		return list.remove(rand.nextInt(list.size()));
 	}
 
+	/**
+	 * 各プレイヤーの手牌をソートする.
+	 */
 	public void sortTehaiList() {
+		HaiComparator comp = Hai.HaiComparator.ASCENDING_ORDER;
 		for (Kaze kaze : Kaze.values()) {
-			Collections.sort(tehaiMap.get(kaze));
+			kyokuPlayerMap.get(kaze).sortTehai(comp);
 		}
-	}
-
-	public void sortTehaiList(Kaze kaze) {
-		Collections.sort(tehaiMap.get(kaze));
 	}
 
 	/**
-	 * 現在のターンを終了して、次のプレイヤーのターンにする。
+	 * 指定されたプレイヤーの手牌をソートする.
 	 * 
+	 * @param kaze 風.
 	 */
-	public void nextTurn() {
-		if (this.firstTurn) {
-			if (this.tumoSize >= 4)
-				this.firstTurn = false;
-		}
-		this.currentSutehai = null;
-		this.currentTurn = this.currentTurn.simo();
+	public void sortTehaiList(Kaze kaze) {
+		HaiComparator comp = Hai.HaiComparator.ASCENDING_ORDER;
+		kyokuPlayerMap.get(kaze).sortTehai(comp);
 	}
 
+	/**
+	 * 現在ターンの風を返す．
+	 * @return 現在ターンの風．
+	 */
 	public Kaze getCurrentTurn() {
 		return this.currentTurn;
 	}
 
-	public List<Hai> getTehaiList(Kaze kaze) {
-		return new ArrayList<Hai>(this.tehaiMap.get(kaze));
-	}
-	
 	/**
-	 * 現在の捨て牌マップを返す。捨て牌マップとは
-	 * 	風->その風の人の捨て牌リスト
-	 * を表すマップである。
-	 * @return 現在の捨て牌マップ
+	 * 現在ターンのプレイヤーを返す．
+	 * @return 現在ターンのプレイヤー
 	 */
-	public Map<Kaze, SutehaiList> getSutehaiMap() {
-		return new HashMap<Kaze, SutehaiList>(this.sutehaiMap);
+	public Player getCurrentPlayer() {
+		return playerMap.get(currentTurn);
 	}
-	
-	/**
-	 * 現在の副露牌マップを返す。副露牌マップとは
-	 * 	風->その風の人の副露牌リスト
-	 * を表すマップである。
-	 * @return 現在の副露牌マップ
-	 */
-	public Map<Kaze, HurohaiList> getHurohaiMap() {
-		return new HashMap<Kaze,HurohaiList>(this.hurohaiMap);
-	}
-	
 
+	/**
+	 * 指定された風のプレイヤーの手牌リストを返す. 手牌リストは防御的コピーする．
+	 * 
+	 * @param kaze 風.
+	 * @return 手牌リスト.
+	 */
+	public TehaiList getTehaiList(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).getTehaiList();
+	}
+
+	/**
+	 * 指定された風のプレイヤーの捨て牌リストを返す． 手牌リストは防御的コピーする．
+	 * 
+	 * @param kaze プレイヤーの風．
+	 * @return 捨て牌リスト．
+	 */
+	public SutehaiList getSutehaiList(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).getSutehaiList();
+	}
+
+	/**
+	 * 指定された風のプレイヤーの副露牌リストを返す． 手牌リストは防御的コピーする．
+	 * 
+	 * @param kaze プレイヤーの風．
+	 * @return 副露牌リスト．
+	 */
+	public HurohaiList getHurohaiList(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).getHurohaiList();
+	}
+
+	public Map<Kaze, SutehaiList> getSutehaiMap() {
+		Map<Kaze, SutehaiList> ret = new HashMap<Kaze, SutehaiList>(4);
+		for (Kaze kaze : Kaze.values()) {
+			ret.put(kaze, kyokuPlayerMap.get(kaze).getSutehaiList());
+		}
+		return ret;
+	}
+
+	public Map<Kaze, HurohaiList> getHurohaiMap() {
+		Map<Kaze, HurohaiList> ret = new HashMap<Kaze, HurohaiList>(4);
+		for (Kaze kaze : Kaze.values()) {
+			ret.put(kaze, kyokuPlayerMap.get(kaze).getHurohaiList());
+		}
+		return ret;
+	}
+
+	/**
+	 * 指定されたプレイヤーの風を返す．
+	 * 
+	 * @param p プレイヤー．
+	 * @return 指定されたプレイヤーの風．
+	 */
 	public Kaze getKazeOf(Player p) {
 		for (Kaze kaze : playerMap.keySet()) {
+			if (playerMap.get(kaze).equals(p))
+				return kaze;
 		}
 		return null;
 	}
 
-	public void disp() {
-		System.out.println("場風：" + this.bakaze);
-		System.out.println(this.tumoSize + "順目");
-		System.out.println("");
-		System.out.println("山牌(" + this.yamahai.size() + ")：" + this.yamahai);
-		System.out.println("王牌(" + this.wanpai.size() + ")：" + this.wanpai);
-		System.out.println("");
-		for (Kaze kaze : Kaze.values()) {
-			List<Hai> tehaiList = this.tehaiMap.get(kaze);
-			List<Mentu> hurohaiList = this.hurohaiMap.get(kaze);
-			List<Sutehai> sutehaiList = this.sutehaiMap.get(kaze);
-			System.out.println(kaze + "の人：");
-			System.out.println("\t手牌(" + tehaiList.size() + ")：" + tehaiList);
-			System.out.println("\t副露牌(" + hurohaiList.size() + ")：" + hurohaiList);
-			System.out.println("\t捨牌(" + sutehaiList.size() + ")：" + sutehaiList);
-		}
-		System.out.println(String.format("現在ターン：%s, ツモ牌：%s", currentTurn, currentTumohai));
-	}
-
 	/**
-	 * 現在のツモ牌を返す。
+	 * 現在のツモ牌を返す.
 	 * 
-	 * @return 現在のツモ牌
+	 * @return 現在のツモ牌.
 	 */
 	public Hai getCurrentTsumoHai() {
 		return this.currentTumohai;
 	}
 
 	/**
-	 * 現在の捨て牌を返す。
+	 * 現在の捨牌を返す.
 	 * 
-	 * @return 今捨てられた捨て牌
+	 * @return 現在の捨牌.
 	 */
 	public Hai getCurrentSutehai() {
 		return this.currentSutehai;
 	}
 
 	/**
-	 * 現在の槓の回数を返す。
+	 * この局全員の槓の回数を返す.
 	 * 
-	 * @return　槓の回数
+	 * @return 槓の回数.
 	 */
 	public int getKanSize() {
 		return this.kanSize;
@@ -1043,360 +1080,122 @@ public class Kyoku {
 	 * @return あがれるならtrue
 	 */
 	private boolean isAgari(boolean tumo, Hai agariHai, Kaze kaze, Set<Yaku> flagCheckYakuSet) {
-		CheckerParam param = new CheckerParam();
+		Param param = new Param();
 		if (isFuriten(kaze, agariHai.type())) {
 			return false;
 		}
 
-		// フラグによる役セット
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		param.setFlagCheckYakuSet(flagCheckYakuSet);
-
-		// 　ツモかロンか
 		param.setTsumo(tumo);
-
-		// 鳴いているか
-		param.setNaki(this.nakiMap.get(kaze));
-
-		// あがり牌
+		param.setNaki(kyokuPlayerMap.get(kaze).isNaki());
 		param.setAgariHai(agariHai);
-
-		// 場風
-		param.setBakaze(bakaze);
-
-		// 自風
 		param.setJikaze(kaze);
-
-		param.setRule(rule);
-
-		return AgariFunctions.isAgari(tehaiMap.get(kaze), hurohaiMap.get(kaze), param);
+		return AgariFunctions.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
 	}
 
 	/**
-	 * フラグによりチェックする役セットを返す。
+	 * この局の現在のチェッカーパラムを生成して、それを返す.
 	 * 
-	 * @param kaze 風
-	 * @param tumo ツモの場合true
-	 * @return フラグによりチェックする役セット
+	 * @param tumo ツモかどうか.
+	 * @param agariHai 上がり牌.
+	 * @param kaze 自風.
+	 * @return チェッカーパラム.
+	 */
+	public Param newCheckerParam(boolean tumo, Hai agariHai, Kaze kaze) {
+		Param param = new Param();
+		param.setTsumo(tumo);
+		param.setAgariHai(agariHai);
+		param.setNaki(kyokuPlayerMap.get(kaze).isNaki());
+		param.setJikaze(kaze);
+		param.setFlagCheckYakuSet(getYakuSetByFlag(kaze, tumo));
+		return param;
+	}
+
+	/**
+	 * この局現在の役フラグセットを生成して、それを返す.
+	 * 
+	 * @param kaze 自風.
+	 * @param tumo ツモ.
+	 * @return 役フラグセット.
 	 */
 	public Set<Yaku> getYakuSetByFlag(Kaze kaze, boolean tumo) {
 		Set<Yaku> set = new HashSet<Yaku>();
 
-		// 立直
-		if (this.reachMap.get(kaze)) {
+		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
+		if (kp.isReach()) {
 			set.add(NormalYaku.RICHI);
 		}
-
-		// 門前自摸
-		if (tumo && !this.nakiMap.get(kaze)) {
+		if (tumo && !kp.isNaki()) {
 			set.add(NormalYaku.TSUMO);
 		}
-
-		// 一発
 		if (this.ippatuMap.get(kaze)) {
 			set.add(NormalYaku.IPPATSU);
 		}
-
-		// ほうてい
-		if (!tumo && this.tumoSize == 70) {
+		if (!tumo && this.tsumoSize == 70) {
 			set.add(NormalYaku.HOTEI);
 		}
-
-		// はいてい
-		if (tumo && tumoSize == 70) {
+		if (tumo && tsumoSize == 70) {
 			set.add(NormalYaku.HAITEI);
 		}
-
-		// 嶺上開花
 		if (tumo && rinsyanFlag) {
 			set.add(NormalYaku.RINSYANKAIHO);
 		}
-
-		// 搶槓
 		if (!tumo && tyankanFlag) {
 			set.add(NormalYaku.TYANKAN);
 		}
-
-		// ダブル立直
-		if (daburuRitiMap.get(kaze)) {
+		if (kp.isDoubleReach()) {
 			set.add(NormalYaku.DABURURICHI);
 		}
-
-		// 天和
-		if (tumo && tenhoFlag) {
+		if (tumo && firstTurn && kaze == TON) {
 			set.add(Yakuman.TENHO);
 		}
-
-		// 　地和
-		if (tumo && tihoMap.get(kaze)) {
+		if (tumo && firstTurn && kaze != TON) {
 			set.add(Yakuman.CHIHO);
 		}
-
 		return set;
 	}
 
-	public static void main(String[] args) throws IOException {
-		Rule rule = new Rule();
-		Map<Kaze, Player> players = new HashMap<Kaze, Player>(4);
-		players.put(Kaze.TON, new Player(0, "A", true));
-		players.put(Kaze.NAN, new Player(1, "B", true));
-		players.put(Kaze.SYA, new Player(2, "C", true));
-		players.put(Kaze.PE, new Player(3, "D", true));
-
-		Map<Kaze, AI> ais = new HashMap<Kaze, AI>(4);
-
-		Kyoku kyoku = new Kyoku(rule, players, Kaze.TON);
-		kyoku.init();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String buf = null;
-		kyoku.doTsumo();
-		kyoku.sortTehaiList();
-		kyoku.disp();
-
-		AIType01 ai0 = new AIType01(players.get(Kaze.NAN));
-		ai0.update(kyoku);
-		AIType01 ai1 = new AIType01(players.get(Kaze.SYA));
-		ai1.update(kyoku);
-		AIType01 ai2 = new AIType01(players.get(Kaze.PE));
-		ai2.update(kyoku);
-
-		ais.put(Kaze.NAN, ai0);
-		ais.put(Kaze.SYA, ai1);
-		ais.put(Kaze.PE, ai2);
-
-		Random rand = new Random();
-
-		while (true) {
-			boolean naki = false;
-			int num = -1;
-
-			// 人間の場合
-			if (players.get(kyoku.getCurrentTurn()).isMan()) {
-				buf = reader.readLine();
-				num = Integer.parseInt(buf);
-			}
-			// 　コンピューターの場合
-			else {
-				AI ai = ais.get(kyoku.getCurrentTurn());
-				num = ai.discard();
-			}
-			if (num == 13) {
-				if (kyoku.getCurrentTsumoHai() == null) {
-					System.exit(1);
-				}
-				kyoku.discardTsumoHai();
-			} else {
-				kyoku.discard(num);
-			}
-
-			for (Kaze kaze : Kaze.values()) {
-				if (kyoku.isRonable(kaze)) {
-					System.out.println(kaze + ":ロンだぜ！");
-				}
-			}
-
-			if (!naki) {
-				for (Kaze kaze : Kaze.values()) {
-					if (kyoku.isMinkanable(kaze)) {
-
-						int input = -1;
-
-						// 人間の場合
-						if (players.get(kaze).isMan()) {
-							System.out.println(kaze);
-							System.out.println(-1 + ":明槓しない");
-							System.out.println(0 + ":明槓する");
-							input = getIntFromIn(reader);
-						}
-						// 　コンピューターの場合
-						else {
-							AI ai = ais.get(kaze);
-							input = ai.minkan() ? 0 : -1;
-						}
-
-						if (input == 0) {
-							kyoku.doMinkan(kaze);
-							naki = true;
-							break;
-						}
-					}
-				}
-			}
-			if (!naki) {
-				for (Kaze kaze : Kaze.values()) {
-					if (kyoku.isPonable(kaze)) {
-						List<List<Integer>> list = kyoku.getPonableHaiList(kaze);
-						int i = 0;
-						int input = -1;
-						List<Integer> inputList = null;
-
-						// 人間の場合
-						if (players.get(kaze).isMan()) {
-							System.out.println(-1 + ":ポンしない");
-							for (List<Integer> list2 : list) {
-								System.out.println(i + ":" + list2);
-								i++;
-							}
-							System.out.println(kaze);
-							input = getIntFromIn(reader);
-							if (input != -1)
-								inputList = list.get(input);
-						}
-						// 　コンピューターの場合
-						else {
-							AI ai = ais.get(kaze);
-							inputList = ai.pon();
-							input = (inputList == null) ? -1 : 0;
-						}
-
-						if (input != -1) {
-							kyoku.doPon(kaze, inputList);
-							naki = true;
-							break;
-						}
-					}
-				}
-			}
-			if (!naki && kyoku.isChiable()) {
-				List<List<Integer>> list = kyoku.getChiableHaiList();
-				List<Integer> inputList = null;
-				int i = 0;
-				int input = -1;
-
-				// 人間の場合
-				if (players.get(kyoku.getCurrentTurn().simo()).isMan()) {
-					System.out.println(-1 + ":チーしない");
-					for (List<Integer> list2 : list) {
-						System.out.println(i + ":" + list2);
-						i++;
-					}
-
-					input = getIntFromIn(reader);
-					if (input != -1)
-						inputList = list.get(input);
-				}
-				// 　コンピューターの場合
-				else {
-					AI ai = ais.get(kyoku.getCurrentTurn().simo());
-					inputList = ai.chi();
-					input = (inputList == null) ? -1 : 0;
-				}
-
-				if (input != -1) {
-					kyoku.doChi(inputList);
-					naki = true;
-				}
-			}
-
-			if (!naki) {
-				System.out.println(kyoku.isSufontsuRenta());
-				
-				kyoku.nextTurn();
-				kyoku.doTsumo();
-
-				if (kyoku.isTsumoAgari()) {
-					System.out.println("つもあがりぃ！");
-				}
-
-				while (true) {
-					while (true) {
-						if (kyoku.isKakanable()) {
-							List<Integer> list = kyoku.getKakanableHaiList();
-							int i = 0;
-							System.out.println(-1 + ":加槓しない");
-							for (int j : list) {
-								System.out.println(i + ":" + j);
-								i++;
-							}
-							int input = -1;
-							if (kyoku.currentTurn == Kaze.TON) {
-								input = getIntFromIn(reader);
-							}
-							// 　コンピューターの場合
-							else {
-								input = rand.nextInt(list.size() + 1);
-								if (input == list.size()) {
-									input = -1;
-								}
-							}
-							if (input == 0) {
-								kyoku.doKakan(input);
-								for (Kaze kaze : Kaze.values()) {
-									if (kyoku.isRonable(kaze)) {
-										System.out.println(kaze + ":ロンだぜ！");
-									}
-								}
-								kyoku.doRinsyanTsumo();
-								kyoku.sortTehaiList();
-								kyoku.disp();
-								continue;
-							} else {
-								break;
-							}
-						} else {
-							break;
-						}
-					}
-					if (kyoku.isAnkanable()) {
-						List<List<Integer>> list = kyoku.getAnkanableHaiList();
-						List<Integer> inputList = null;
-						int i = 0;
-						int input = -1;
-
-						// 人間の場合
-						if (players.get(kyoku.getCurrentTurn()).isMan()) {
-							System.out.println(-1 + "：暗槓しない");
-							for (List<Integer> t : list) {
-								System.out.println(i + ":" + t);
-								i++;
-							}
-
-							input = getIntFromIn(reader);
-							if (input != -1)
-								inputList = list.get(input);
-						}
-						// 　コンピューターの場合
-						else {
-							AI ai = ais.get(kyoku.getCurrentTurn());
-							inputList = ai.chi();
-							input = (inputList == null) ? -1 : 0;
-						}
-
-						if (input != -1) {
-							kyoku.doAnkan(inputList.get(0));
-							kyoku.doRinsyanTsumo();
-							kyoku.sortTehaiList();
-							kyoku.disp();
-							continue;
-						} else {
-							break;
-						}
-					} else {
-						break;
-					}
-				}
-
-				if (kyoku.isReach(kyoku.getCurrentTurn())) {
-					kyoku.discardTsumoHai();
-				} else {
-					if (kyoku.isReachable()) {
-						System.out.println(-1 + ":立直しない");
-						System.out.println(0 + ":立直する");
-						int input = getIntFromIn(reader);
-						if (input == 0) {
-							kyoku.doReach();
-						}
-					}
-				}
-			}
-
-			kyoku.sortTehaiList();
-			kyoku.disp();
-			
-		}
+	/**
+	 * 指定された風のプレイヤーの手牌リストのサイズを返す.
+	 * 
+	 * @param kaze プレイヤーの風.
+	 * @return 手牌リストのサイズ.
+	 */
+	public int sizeOfTehai(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).sizeOfTehai();
 	}
 
-	public static int getIntFromIn(BufferedReader b) throws IOException {
-		String buf = b.readLine();
-		return Integer.parseInt(buf);
+	// DEBUG
+	public void disp() {
+		System.out.println("場風：" + field.getBakaze());
+		System.out.println(this.tsumoSize + "順目");
+		System.out.println("");
+		System.out.println("山牌(" + this.yamahai.size() + ")：" + this.yamahai);
+		System.out.println("王牌(" + this.wanpai.size() + ")：" + this.wanpai);
+		System.out.println("");
+		for (Kaze kaze : Kaze.values()) {
+			System.out.println("風：" + kaze);
+			kyokuPlayerMap.get(kaze).disp();
+		}
+		System.out.println(String.format("現在ターン：%s, ツモ牌：%s", currentTurn, currentTumohai));
+	}
+
+	// DEBUG
+	public void setKyokuPlayer(Kaze kaze, KyokuPlayer kp) {
+		this.kyokuPlayerMap.put(kaze, kp);
+	}
+
+	// DEBUG
+	public void doTsumo(Hai tsumohai) {
+		if (isSyukyoku())
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
+		if (this.currentTumohai != null)
+			throw new IllegalStateException("ツモ牌がnullでない場合にdoTsumoメソッドを呼び出せない");
+		if (!this.yamahai.remove(tsumohai)) {
+			throw new IllegalArgumentException("この牌は山に存在しない : " + tsumohai);
+		}
+		this.currentTumohai = tsumohai;
+		this.tsumoSize++;
 	}
 }

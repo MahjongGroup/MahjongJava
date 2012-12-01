@@ -18,10 +18,11 @@ public class AgariFunctions {
 	 * 
 	 * @param tehaiList 手牌リスト
 	 * @param param　チェッカーパラメータ(鳴き、場風、風、ルールだけをセットすれば良い)
+	 * @param f フィールド.
 	 * @return 牌インデックスリスト。リーチできない場合は空のリスト
 	 */
 	public static List<Integer> getReachableIndexList(TehaiList tehaiList, Hai tsumohai,
-			CheckerParam param) {
+			Param param, Field f) {
 		if (param.isNaki()) {
 			return new ArrayList<Integer>(0);
 		}
@@ -32,10 +33,15 @@ public class AgariFunctions {
 			TehaiList tempTehai = new TehaiList(tehaiList);
 			tempTehai.remove(i);
 			tempTehai.add(tsumohai);
-			if (isTenpai(tempTehai, new HurohaiList(0), param)) {
+			if (isTenpai(tempTehai, new HurohaiList(0), param.isNaki())) {
 				result.add(i);
 			}
 		}
+
+		if (isTenpai(new TehaiList(tehaiList), new HurohaiList(0), param.isNaki())) {
+			result.add(13);
+		}
+
 		return result;
 	}
 
@@ -44,17 +50,48 @@ public class AgariFunctions {
 	 * 
 	 * @param tehaiList　手牌リスト
 	 * @param hurohaiList　副露牌リスト
-	 * @param param　チェック用パラメータ(鳴き、場風、風、ルールだけをセットすれば良い)
+	 * @param naki 鳴いているかどうか
 	 * @return　テンパイしている場合true
 	 */
-	public static boolean isTenpai(TehaiList tehaiList, HurohaiList hurohaiList, CheckerParam param) {
+	public static boolean isTenpai(TehaiList tehaiList, HurohaiList hurohaiList, boolean naki) {
 		for (HaiType type : HaiType.values()) {
 			Hai hai = MajanHai.valueOf(type, false);
-			param.setAgariHai(hai);
-			if (isKeisikiAgari(tehaiList, hurohaiList, param)) {
+			if (isKeisikiAgari(tehaiList, hurohaiList, naki, hai)) {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	/**
+	 * 余分な牌を含めてテンパイしているかどうかを判定する.
+	 * 
+	 * @param tsumohai　ツモ牌.
+	 * @param tehaiList　手牌リスト
+	 * @param hurohaiList　副露牌リスト
+	 * @param param　チェック用パラメータ(鳴き、場風、風、ルールだけをセットすれば良い)
+	 * @param f フィールド.
+	 * @return　テンパイしている場合true
+	 */
+	public static boolean isTenpai(TehaiList tehaiList, HurohaiList hurohaiList, Hai tsumohai,
+			Param param, Field f) {
+		if (param.isNaki()) {
+			return false;
+		}
+
+		if (isTenpai(tehaiList, new HurohaiList(0), param.isNaki())) {
+			return true;
+		}
+		
+		for (int i = 0; i < tehaiList.size(); i++) {
+			TehaiList tempTehai = new TehaiList(tehaiList);
+			tempTehai.remove(i);
+			tempTehai.add(tsumohai);
+			if (isTenpai(tempTehai, new HurohaiList(0), param.isNaki())) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -64,34 +101,34 @@ public class AgariFunctions {
 	 * @param tehaiList 手牌リスト
 	 * @param hurohaiList 副露牌リスト
 	 * @param param チェッカーパラメータ(上がり牌は設定しなくてもよい)
+	 * @param f フィールド.
 	 * @return 牌種リスト
 	 */
 	public static List<HaiType> getAgariHaiTypeList(TehaiList tehaiList, HurohaiList hurohaiList,
-			CheckerParam param) {
+			Param param, Field f) {
 		List<HaiType> result = new ArrayList<HaiType>();
 		for (HaiType type : HaiType.values()) {
 			Hai hai = MajanHai.valueOf(type, false);
 			param.setAgariHai(hai);
-			if (isAgari(tehaiList, hurohaiList, param)) {
+			if (isAgari(tehaiList, hurohaiList, param, f)) {
 				result.add(type);
 			}
 		}
 		return result;
 	}
-
+	
 	/**
 	 * あがれる場合trueを返す。あがれない場合、役がない場合はfalse
 	 * 
 	 * @param tehaiList 手牌のリスト
 	 * @param hurohaiList 副露牌のリスト
 	 * @param param 役チェックパラメーター
+	 * @param f 場風、ルールなど.
 	 * @return　あがれる場合true
 	 */
-	public static boolean isAgari(TehaiList tehaiList, HurohaiList hurohaiList, CheckerParam param) {
-		assert param.getBakaze() != null;
+	public static boolean isAgari(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f) {
 		assert param.getFlagCheckYakuSet() != null;
 		assert param.getJikaze() != null;
-		assert param.getRule() != null;
 
 		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
 		haiList.add(param.getAgariHai());
@@ -100,8 +137,11 @@ public class AgariFunctions {
 		}
 		param.setHaiList(haiList);
 
+		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
+		tehaiPlusAgariHai.add(param.getAgariHai());
+		
 		// 4面子1雀頭である
-		if (isNMentu1Janto(param.getHaiList())) {
+		if (isNMentu1Janto(tehaiPlusAgariHai)) {
 			if (!setMentuListAndJanto(tehaiList, param.getAgariHai(), hurohaiList, param)) {
 				throw new IllegalStateException();
 			}
@@ -110,8 +150,7 @@ public class AgariFunctions {
 			if (MatiType.RYANMEN.check(param)) {
 				param.setMatiType(MatiType.RYANMEN);
 				for (Yaku yaku : NormalYaku.values()) {
-					System.out.println(yaku);
-					if (yaku.check(param)) {
+					if (yaku.check(param, f)) {
 						return true;
 					}
 				}
@@ -124,14 +163,14 @@ public class AgariFunctions {
 					if (yaku == NormalYaku.PINHU)
 						continue;
 
-					if (yaku.check(param)) {
+					if (yaku.check(param, f)) {
 						return true;
 					}
 				}
 			}
 
 			for (Yaku yaku : Yakuman.values()) {
-				if (yaku.check(param)) {
+				if (yaku.check(param, f)) {
 					return true;
 				}
 			}
@@ -143,15 +182,15 @@ public class AgariFunctions {
 				return false;
 			}
 
-			if (NormalYaku.CHITOI.check(param)) {
+			if (NormalYaku.CHITOI.check(param, f)) {
 				return true;
 			}
 
-			if (Yakuman.KOKUSIMUSOU.check(param)) {
+			if (Yakuman.KOKUSIMUSOU.check(param, f)) {
 				return true;
 			}
 
-			if (Yakuman.KOKUSIMUSOU_13MEN.check(param)) {
+			if (Yakuman.KOKUSIMUSOU_13MEN.check(param, f)) {
 				return true;
 			}
 		}
@@ -165,10 +204,11 @@ public class AgariFunctions {
 	 * @param tehaiList 手牌のリスト
 	 * @param hurohaiList 副露牌のリスト
 	 * @param param 役判定に必要な材料
+	 * @param f フィールド.
 	 * @return 判定した役一覧
 	 */
 	public static Set<Yaku> checkYaku(TehaiList tehaiList, HurohaiList hurohaiList,
-			CheckerParam param) {
+			Param param, Field f) {
 		Set<Yaku> yakuSet = new HashSet<Yaku>();
 
 		// チェックパラムに上がり牌、副露牌を含めた牌リストをセット
@@ -179,8 +219,11 @@ public class AgariFunctions {
 		}
 		param.setHaiList(haiList);
 
+		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
+		tehaiPlusAgariHai.add(param.getAgariHai());
+
 		// 4面子1雀頭である
-		if (isNMentu1Janto(param.getHaiList())) {
+		if (isNMentu1Janto(tehaiPlusAgariHai)) {
 			setMentuListAndJanto(tehaiList, param.getAgariHai(), hurohaiList, param);
 		} else {
 			param.setMentuList(null);
@@ -189,8 +232,15 @@ public class AgariFunctions {
 
 		// 役満をチェックする
 		for (Yakuman yaku : Yakuman.values()) {
-			if (yaku.check(param)) {
-				yakuSet.add(yaku);
+			if(param.getMentuList() != null) {
+				if (yaku.check(param, f)) {
+					yakuSet.add(yaku);
+				}
+			}
+			else {
+				if (!yaku.is4Mentu1Janto() && yaku.check(param, f)) {
+					yakuSet.add(yaku);
+				}
 			}
 		}
 
@@ -211,7 +261,7 @@ public class AgariFunctions {
 			if (matiTypeList.contains(MatiType.RYANMEN)) {
 				param.setMatiType(MatiType.RYANMEN);
 
-				if (NormalYaku.PINHU.check(param)) {
+				if (NormalYaku.PINHU.check(param, f)) {
 					yakuSet.add(NormalYaku.PINHU);
 					pinhu = true;
 
@@ -220,12 +270,12 @@ public class AgariFunctions {
 							continue;
 						if (yaku == NormalYaku.CHITOI)
 							continue;
-						if (yaku.check(param))
+						if (yaku.check(param, f))
 							yakuSet.add(yaku);
 					}
 
 				} else if (matiTypeList.size() > 1) {
-					if (!NormalYaku.PINHU.check(param)) {
+					if (!NormalYaku.PINHU.check(param, f)) {
 						matiTypeList.remove(MatiType.RYANMEN);
 					}
 				}
@@ -238,20 +288,20 @@ public class AgariFunctions {
 						continue;
 					if (yaku == NormalYaku.CHITOI)
 						continue;
-					if (yaku.check(param))
+					if (yaku.check(param, f))
 						yakuSet.add(yaku);
 				}
 			}
 		}
 		// 4面子1雀頭でない
 		else {
-			if (NormalYaku.CHITOI.check(param)) {
+			if (NormalYaku.CHITOI.check(param, f)) {
 				yakuSet.add(NormalYaku.CHITOI);
 
 				for (Yaku yaku : NormalYaku.values()) {
 					if (yaku == NormalYaku.CHITOI)
 						continue;
-					if (yaku.check(param))
+					if (!yaku.is4Mentu1Janto() && yaku.check(param, f))
 						yakuSet.add(yaku);
 				}
 			}
@@ -264,11 +314,16 @@ public class AgariFunctions {
 	 * 
 	 * @param tehaiList 手牌のリスト
 	 * @param hurohaiList 副露牌のリスト
-	 * @param param チェッカーパラメータ((鳴き、場風、風、ルールだけをセットすれば良い))
+	 * @param naki 鳴き
+	 * @param agariHai あがり牌
 	 * @return　あがれる場合true
 	 */
 	public static boolean isKeisikiAgari(TehaiList tehaiList, HurohaiList hurohaiList,
-			CheckerParam param) {
+			boolean naki, Hai agariHai) {
+		Param param = new Param();
+		param.setNaki(naki);
+		param.setAgariHai(agariHai);
+		
 		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
 		haiList.add(param.getAgariHai());
 		for (Mentu m : hurohaiList) {
@@ -276,8 +331,11 @@ public class AgariFunctions {
 		}
 		param.setHaiList(haiList);
 
+		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
+		tehaiPlusAgariHai.add(param.getAgariHai());
+		
 		// 4面子1雀頭である
-		if (isNMentu1Janto(param.getHaiList())) {
+		if (isNMentu1Janto(tehaiPlusAgariHai)) {
 			return true;
 		}
 		// 4面子1雀頭でない
@@ -286,15 +344,15 @@ public class AgariFunctions {
 				return false;
 			}
 
-			if (NormalYaku.CHITOI.check(param)) {
+			if (NormalYaku.CHITOI.check(param, null)) {
 				return true;
 			}
 
-			if (Yakuman.KOKUSIMUSOU.check(param)) {
+			if (Yakuman.KOKUSIMUSOU.check(param, null)) {
 				return true;
 			}
 
-			if (Yakuman.KOKUSIMUSOU_13MEN.check(param)) {
+			if (Yakuman.KOKUSIMUSOU_13MEN.check(param, null)) {
 				return true;
 			}
 		}
@@ -311,8 +369,10 @@ public class AgariFunctions {
 	public static boolean isNMentu1Janto(List<? extends Hai> haiList) {
 		if (haiList.size() % 3 != 2)
 			return false;
-		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
-		List<HaiType> haiTypeList = Functions.toHaiTypeListFromHaiCollection(haiList);
+//		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
+		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
+//		List<HaiType> haiTypeList = Functions.toHaiTypeListFromHaiCollection(haiList);
+		List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
 
 		for (HaiType haiType : haiTypeSet) {
 			List<HaiType> tempList = new ArrayList<HaiType>(haiTypeList);
@@ -363,11 +423,12 @@ public class AgariFunctions {
 	 * @return 面子リストの設定に成功した場合true
 	 */
 	public static boolean setMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai,
-			HurohaiList huroList, CheckerParam chParam) {
+			HurohaiList huroList, Param chParam) {
 		if ((haiList.size() + 1) % 3 != 2)
 			return false;
 
-		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
+//		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
+		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
 		List<HaiType> haiListCopy = new ArrayList<HaiType>();
 		for (Hai hai : haiList) {
 			haiListCopy.add(hai.type());

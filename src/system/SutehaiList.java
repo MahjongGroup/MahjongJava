@@ -12,9 +12,9 @@ import java.util.ListIterator;
  * @author kohei
  *
  */
-public class SutehaiList implements List<Sutehai>{
+public class SutehaiList implements List<Sutehai> {
 	private final List<Sutehai> list;
-	
+
 	public SutehaiList() {
 		this.list = new ArrayList<Sutehai>();
 	}
@@ -22,9 +22,22 @@ public class SutehaiList implements List<Sutehai>{
 	public SutehaiList(int cap) {
 		this.list = new ArrayList<Sutehai>(cap);
 	}
-	
+
 	public SutehaiList(SutehaiList list) {
 		this.list = new ArrayList<Sutehai>(list);
+	}
+
+	/**
+	 * この捨て牌リストを鳴かれた牌を除いた牌リストに変換して、それを返す．
+	 * @return 鳴かれた牌を除いた牌リスト．
+	 */
+	public List<Hai> toNakiExcludedHaiList() {
+		List<Hai> ret = new ArrayList<Hai>();
+		for (Sutehai hai : list) {
+			if (!hai.isNaki())
+				ret.add(MajanHai.valueOf(hai.type(), hai.aka()));
+		}
+		return ret;
 	}
 
 	@Override

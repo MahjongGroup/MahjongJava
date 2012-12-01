@@ -3,49 +3,14 @@ package system;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import system.Mentu.Type;
-
-import debug.Debugger;
 
 
 public class Functions {
 	
-	/**
-	 * 指定された牌コレクションを牌の種類リストに変換してそれを返す。
-	 * 
-	 * @param c 変換したい牌コレクション
-	 * @return 変換した牌の種類リスト
-	 */
-	public static List<HaiType> toHaiTypeListFromHaiCollection(Collection<? extends Hai> c) {
-		List<HaiType> result = new ArrayList<HaiType>(c.size());
-		for (Hai hai : c) {
-			result.add(hai.type());
-		}
-		return result;
-	}
-	
-	
-	/**
-	 * 牌コレクションから牌の種類ごとに1牌だけを入れた牌の種類セットを返す。例えば
-	 * [一萬、一萬、二萬、東、東、東、撥]というリストがあれば、[一萬、二萬、東、撥]という
-	 * セットが返ってくる。
-	 * 
-	 * @param c 牌コレクション
-	 * @return 牌の種類セット
-	 */
-	public static Set<HaiType> getHaiTypeSetFrom(Collection<? extends Hai> c) {
-		Set<HaiType> result = new HashSet<HaiType>();
-		for (Hai hai : c) {
-			result.add(hai.type());
-		}
-		return result;
-	}
-
 	public static int max(int a, int ...array) {
 		int max = a;
 		
@@ -66,19 +31,6 @@ public class Functions {
 		return min;
 	}
 
-	/**
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public static Set<HaiType> getHaiTypeSetFromHaiType(Collection<HaiType> c) {
-		Set<HaiType> result = new HashSet<HaiType>();
-		for (HaiType type : c) {
-			result.add(type);
-		}
-		return result;
-	}
-	
 	/**
 	 * 指定された牌コレクションの中に含まれる指定された種類の牌の数を返す。
 	 * 

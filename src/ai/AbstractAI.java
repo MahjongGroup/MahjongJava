@@ -17,12 +17,7 @@ public abstract class AbstractAI implements AI{
 		this.player = p;
 	}
 	
-	/**
-	 * 局オブジェクトを更新する。
-	 * 局ごとに呼び出されて更新される。
-	 * 
-	 * @param kyoku 更新する局
-	 */
+	@Override
 	public void update(Kyoku kyoku) {
 		this.kyoku = kyoku;
 	}

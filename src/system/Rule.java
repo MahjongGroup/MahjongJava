@@ -30,6 +30,15 @@ public class Rule {
 	}
 
 	/**
+	 * 純正九蓮宝燈がダブル役満の場合trueを返す。
+	 * @return
+	 */
+	public boolean isJuntyanDaburu() {
+		return true;
+	}
+
+	
+	/**
 	 * 大四喜がダブル役満の場合trueを返す。
 	 * @return
 	 */
@@ -47,4 +56,8 @@ public class Rule {
 	public boolean isSyanyu(){
 		return false;
 	}
+	public boolean isHakoAri(){
+		return true;
+	}
+	
 }

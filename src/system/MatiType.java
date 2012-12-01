@@ -12,7 +12,7 @@ import system.Mentu.Type;
 public enum MatiType {
 	TANKI(2) {
 		@Override
-		public boolean check(CheckerParam param) {
+		public boolean check(Param param) {
 			if(param.getJanto() == param.getAgariHai().type())
 				return true;
 			return false;
@@ -20,7 +20,7 @@ public enum MatiType {
 	},
 	RYANMEN(0) {
 		@Override
-		public boolean check(CheckerParam param) {
+		public boolean check(Param param) {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
@@ -49,7 +49,7 @@ public enum MatiType {
 	},
 	KANTYAN(2) {
 		@Override
-		public boolean check(CheckerParam param) {
+		public boolean check(Param param) {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
@@ -76,7 +76,7 @@ public enum MatiType {
 	},
 	PENTYAN(2) {
 		@Override
-		public boolean check(CheckerParam param) {
+		public boolean check(Param param) {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
@@ -110,7 +110,7 @@ public enum MatiType {
 	},
 	SYABO(0) {
 		@Override
-		public boolean check(CheckerParam param) {
+		public boolean check(Param param) {
 			for (Mentu m : param.getMentuList()) {
 				if(m.isNaki())
 					continue;
@@ -139,7 +139,7 @@ public enum MatiType {
 		return this.hu;
 	}
 	
-	public abstract boolean check(CheckerParam param);
+	public abstract boolean check(Param param);
 	
 	/**
 	 * 上がり形から考えられる全ての待ちタイプのリストを返す。
@@ -147,7 +147,7 @@ public enum MatiType {
 	 * @param param　チェッカーパラム
 	 * @return　考えられる全ての待ちタイプのリスト
 	 */
-	public static List<MatiType> getMatiTypeList(CheckerParam param) {
+	public static List<MatiType> getMatiTypeList(Param param) {
 		List<MatiType> result = new ArrayList<MatiType>();
 		
 		for (MatiType mt : values()) {
