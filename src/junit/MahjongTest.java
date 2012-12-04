@@ -1,8 +1,10 @@
-package test;
+package junit;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import test.Main;
 
 public class MahjongTest {
 

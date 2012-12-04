@@ -13,6 +13,38 @@ import system.Player;
  * サーバーとの通信を行うメソッドを実装するインターフェース。
  */
 public interface Client {
+
+	// ゲーム開始時
+	
+	/**
+	 * サーバーに対局を希望する．自分のIDを送る．
+	 * 
+	 * @param id 自分のID．
+	 */
+	public void requestGame(int id);
+	
+	/**
+	 * 対局が開始したことをサーバーから受け取る．引数のプレイヤーリストは
+	 * 自分を含めた対局するプレイヤーのリストである．0には東(起親)が入る．
+	 * 
+	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
+	 */
+	public void onGameStartReceived(List<Player> playerList);
+
+	// 局開始前
+	
+	/**
+	 * 局が開始したことをサーバーから受け取る．引数はその局の場風、局数である．
+	 * 例えば「南場3局目」のときはKaze.NANと3を渡す．
+	 * 
+	 * @param bakaze その局の場風．
+	 * @param kyokusu その局の局数．
+	 */
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu);
+	
+	
+	// 局
+
 	/**
 	 * サーバーから九種九牌するかの問い合わせを受け取る。
 	 */
@@ -186,4 +218,8 @@ public interface Client {
 	 */
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex);
 
+	
+	
+	
+	
 }

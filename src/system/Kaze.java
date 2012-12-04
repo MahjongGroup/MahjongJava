@@ -102,6 +102,11 @@ public enum Kaze {
 		return KAZE_LIST.get(id);
 	}
 
+	/**
+	 * 型ID
+	 */
+	public static int TYPE_ID = 2;
+
 	public static void main(String[] args) {
 		for (int i = 0; i < KAZE_LIST.size(); i++) {
 			System.out.println(KAZE_LIST.get(i));

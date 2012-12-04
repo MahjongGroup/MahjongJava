@@ -218,4 +218,22 @@ public class ClientOperator implements Client{
 		// TODO Auto-generated method stub		
 	}
 
+	@Override
+	public void requestGame(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameStartReceived(List<Player> playerList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

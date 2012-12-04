@@ -10,6 +10,7 @@ import system.KyokuResult;
 import system.Mahjong;
 import system.Player;
 import system.Rule;
+import test.Console;
 
 /**
  * 1半荘(東風)を実行するクラス．
@@ -34,10 +35,14 @@ public class MahjongGame {
 		while (!mahjong.isEnd()) {
 			Kyoku kyoku = mahjong.startKyoku();
 			mahjong.disp();
+			Console.wairEnter();
+			
 			KyokuRunner runner = new KyokuRunner(kyoku, transMap);
 			runner.run();
+
 			mahjong.endKyoku();
 			mahjong.disp2();
+			
 			KyokuResult kr = kyoku.createKyokuResult();
 			if(kr.isRonAgari()) {
 				for (Player player : playerList) {
@@ -47,6 +52,7 @@ public class MahjongGame {
 			}else if(kr.isTsumoAgari()) {
 				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
 			}
+			Console.wairEnter();
 		}
 		
 	}

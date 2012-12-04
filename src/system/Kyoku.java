@@ -1173,9 +1173,15 @@ public class Kyoku {
 		System.out.println("");
 		System.out.println("山牌(" + this.yamahai.size() + ")：" + this.yamahai);
 		System.out.println("王牌(" + this.wanpai.size() + ")：" + this.wanpai);
+		System.out.println("ドラ：" + getDoraList());
 		System.out.println("");
 		for (Kaze kaze : Kaze.values()) {
-			System.out.println("風：" + kaze);
+			if(currentTurn == kaze) {
+				System.out.println("→風：" + kaze);
+				System.out.println("\tツモ牌：" + currentTumohai);
+			} else {
+				System.out.println("　風：" + kaze);
+			}
 			kyokuPlayerMap.get(kaze).disp();
 		}
 		System.out.println(String.format("現在ターン：%s, ツモ牌：%s", currentTurn, currentTumohai));

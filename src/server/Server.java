@@ -8,12 +8,46 @@ import system.HurohaiList;
 import system.Kaze;
 import system.Mentu;
 import system.Player;
-import system.SutehaiList;
 
 /**
  * クライアントとの通信を行うメソッドを実装するインターフェース。
  */
 public interface Server {
+	
+	// ゲーム開始時
+	
+	/**
+	 * クライアントから対局を希望しているということを受け取る．引数は
+	 * そのプレイヤー(クライアント)のID．
+	 * 
+	 * @param id プレイヤーのID．
+	 */
+	public void onGameRequested(int id);
+
+	/**
+	 * 対局が開始したことをクライアントに知らせる．引数のプレイヤーリストは
+	 * 自分を含めた対局するプレイヤーのリストである．0には東(起親)が入る．
+	 * 
+	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
+	 */
+	public void sendGameStart(List<Player> playerList);
+	
+
+	// 局開始前
+
+	/**
+	 * 局が開始したことをプレイヤーに知らせる．引数はその局の場風、局数である．
+	 * 例えば「南場3局目」のときはKaze.NANと3を渡す．
+	 * 
+	 * @param bakaze その局の場風．
+	 * @param kyokusu その局の局数．
+	 */
+	public void notifyStartKyoku(Kaze bakaze, int kyokusu);
+
+	
+	
+	// 局
+	
 	/**
 	 * クライアントに九種九牌するか問い合わせる。
 	 */

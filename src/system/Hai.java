@@ -55,4 +55,10 @@ public interface Hai extends Comparable<Hai> {
 			}
 		}
 	}
+	
+	/**
+	 * 型ID
+	 */
+	public static int TYPE_ID = 1;
+
 }
