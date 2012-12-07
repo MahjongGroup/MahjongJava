@@ -74,7 +74,6 @@ public class AIType01 extends AbstractAI {
 		// 牌種リストを生成。
 		Set<HaiType> haiTypeSet = tlist.toHaiTypeSet();
 		List<HaiType> haiTypeList = tlist.toHaiTypeList();
-
 		List<HaiType> tempList = new ArrayList<HaiType>(haiTypeList);
 
 //		リーチ可能なら聴牌状態に入る。
