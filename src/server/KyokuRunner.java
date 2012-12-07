@@ -11,6 +11,7 @@ import system.Kaze;
 import system.Kyoku;
 import system.Mentu;
 import system.Player;
+import system.Sutehai;
 import system.SutehaiList;
 import system.TehaiList;
 import test.Console;
@@ -171,12 +172,12 @@ public class KyokuRunner {
 			SutehaiList sutehailist = kyoku.getSutehaiList(kaze);
 			sutehai.put(kaze, sutehailist.toNakiExcludedHaiList());
 		}
-
+	
 		for (Kaze kaze : transporterMap.keySet()) {
 			TehaiList tehai = kyoku.getTehaiList(kaze);
 			Server tr = transporterMap.get(kaze);
 
-			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn());
+			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(),kyoku.getCurrentSutehai());
 		}
 	}
 

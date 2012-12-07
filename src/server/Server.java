@@ -202,9 +202,10 @@ public interface Server {
 	 * @param nakihai 鳴き牌マップ.
 	 * @param sutehai 捨て牌マップ(鳴かれた牌は除く).
 	 * @param currentTurn 現在ターンの風.
+	 * @param hai 
 	 */
 	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
-			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn);
+			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai hai);
 
 	/**
 	 * 指定された風の人がリーチしたことを各プレイヤーに伝える.

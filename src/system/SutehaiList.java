@@ -167,4 +167,5 @@ public class SutehaiList implements List<Sutehai> {
 	public String toString() {
 		return list.toString();
 	}
+
 }
