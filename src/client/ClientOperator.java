@@ -199,7 +199,7 @@ public class ClientOperator implements Client{
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		for(Integer i:hais){
-			List<Integer> tmp = new ArrayList();
+			List<Integer> tmp = new ArrayList<Integer>();
 			tmp.add(i);
 			tmpList.add(tmp);
 		}
@@ -241,12 +241,12 @@ public class ClientOperator implements Client{
 		hideFocus();
 		canvas.refreshStateCodes();
 		canvas.refreshButtonList();
-		int i = -1;
-		if(mentu.getKaze() != null) {
-			i = canvas.getInfo().kaze.get(mentu.getKaze());
-		}else {
-			i = 0;
-		}
+//		int i = -1;
+//		if(mentu.getKaze() != null) {
+//			i = canvas.getInfo().kaze.get(mentu.getKaze());
+//		}else {
+//			i = 0;
+//		}
 //		List<Sutehai> tmp = canvas.getInfo().sutehaiMap.get(i);
 //		tmp.remove(tmp.size() - 1);
 //		ClientInfo info = canvas.getInfo();
@@ -342,11 +342,12 @@ public class ClientOperator implements Client{
 		ClientInfo tmpInfo = new ClientInfo(index);
 		tmpInfo.number = index;
 		tmpInfo.players = players;
-		frame.setInfo(tmpInfo);
 		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
 			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], i);
 		}
+		tmpInfo.setIndex(index);
+		frame.setInfo(tmpInfo);
 		// TODO current
 	}
 	@Override

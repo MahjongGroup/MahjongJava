@@ -1,6 +1,19 @@
 package client;
 
-import static client.Constant.*;
+import static client.Constant.BUTTON_CURVE;
+import static client.Constant.BUTTON_HEIGHT;
+import static client.Constant.BUTTON_WIDTH;
+import static client.Constant.HAI_HEIGHT;
+import static client.Constant.HAI_WIDTH;
+import static client.Constant.PLAYER_BLOCK1_X;
+import static client.Constant.PLAYER_BLOCK1_Y;
+import static client.Constant.PLAYER_BLOCK2_X;
+import static client.Constant.PLAYER_BLOCK2_Y;
+import static client.Constant.SCALED_HAI_HEIGHT;
+import static client.Constant.SCALED_HAI_WIDTH;
+import static client.Constant.SECONDS_PER_FRAME;
+import static client.Constant.WINDOW_HEIGHT;
+import static client.Constant.WINDOW_WIDTH;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -32,7 +45,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private OperatorThread opthread;
 	private EnumSet<StateCode> stateCodes;
 	private Map<Hai, Image> haiImageMap;
+	private Map<Hai, Image> scaledHaiImageMap;
 	private Image haiBackImage;
+	private Image scaledHaiBackImage;
 	// system?
 	private Client operator;
 	private List<StateCode> buttonList;
@@ -107,11 +122,17 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public MajanCanvas(MajanFrame frame) {
 		setFrame(frame);
 		this.info = frame.getInfo();
+		info.resetBeforeKyoku();
 		this.haiImageMap = new HashMap<Hai, Image>();
 		for (Hai hai : MajanHai.values()) {
 			haiImageMap.put(hai, ImageLoader.load(MajanHaiIDMapper.getID(hai)));
 		}
+		this.scaledHaiImageMap = new HashMap<Hai, Image>();
+		for (Hai hai : MajanHai.values()) {
+			scaledHaiImageMap.put(hai, ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai)));
+		}
 		this.haiBackImage = ImageLoader.load(ImageID.hai_back);
+		this.scaledHaiBackImage = ImageLoader.loadScaled(ImageID.hai_back);
 		this.stateCodes = EnumSet.of(StateCode.WAIT);
 
 //		this.operator = new ClientOperator(this);
@@ -219,8 +240,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int dx = 0;
 		for (int i = 0; i < tehaiSize; i++) {
 			if (player != 0) {
-				g2.drawImage(haiBackImage.getScaledInstance(SCALED_HAI_WIDTH,
-						SCALED_HAI_HEIGHT, Image.SCALE_DEFAULT), ix + dx,
+				g2.drawImage(scaledHaiBackImage, ix + dx,
 						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 				dx += SCALED_HAI_WIDTH;
 			} else {
@@ -242,8 +262,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				drawColoredFrame(g2, 13, ix + dx, iy + selectedMargin + 270);
 			} else {
 				dx += SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH;
-				g2.drawImage(haiBackImage.getScaledInstance(SCALED_HAI_WIDTH,
-						SCALED_HAI_HEIGHT, Image.SCALE_DEFAULT), ix + dx,
+				g2.drawImage(scaledHaiBackImage, ix + dx,
 						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 			}
 		}
@@ -288,7 +307,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				for (j = 0; j < mentuSize; j++) {
 					Hai tmpHai = MajanHai.valueOf(hurohaiArray[j].type(),
 							hurohaiArray[j].aka());
-					Image image = haiImageMap.get(tmpHai);
+					Image image = scaledHaiImageMap.get(tmpHai);
 					// TODO
 					if (j == fromKaze) {
 						g2.rotate(Math.PI / 2.0);
@@ -319,9 +338,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					Hai tmpHai = MajanHai.valueOf(mh.type(), mh.aka());
 					Image image;
 					if (count == 0 || count == 3)
-						image = haiBackImage;
+						image = scaledHaiBackImage;
 					else
-						image = haiImageMap.get(tmpHai);
+						image = scaledHaiImageMap.get(tmpHai);
 					// TODO
 					g2.drawImage(image, dx, dy, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 					dx -= SCALED_HAI_WIDTH;
@@ -339,7 +358,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		for (int j = 0; j < 4; j++) {
 			dx = 170 - SCALED_HAI_WIDTH;
 			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
-				Image image = haiImageMap.get(suteHaiList.get(j * 6 + i));
+				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
 				if (info.reachPosMap.get(player) == null
 						|| info.reachPosMap.get(player) != j * 6 + i) {
 					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
@@ -623,6 +642,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			}
 			if(!tmpFlag){
 				refreshNakiListExclude(null);
+				for(StateCode subSc:StateCode.values()){
+					if(subSc.name().compareTo(sc.name().replaceAll("_HAI", "")) == 0){
+						sc = subSc;
+						break;
+					}
+				}
 				dispatch(sc);
 				return;
 			}

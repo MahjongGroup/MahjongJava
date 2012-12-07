@@ -45,7 +45,7 @@ public class ClientInfo {
 	int kyokusu;
 	Map<Kaze, Integer> kaze;
 
-	private void resetBeforeKyoku(){
+	public void resetBeforeKyoku(){
 		this.tehai = Collections.synchronizedList(new ArrayList<Hai>());
 		this.sutehaiMap = Collections
 				.synchronizedMap(new HashMap<Integer, List<Hai>>());
@@ -62,7 +62,6 @@ public class ClientInfo {
 		this.ponableIndexLists = new ArrayList<List<Integer>>();
 		this.ankanableIndexList = new ArrayList<List<Integer>>();
 		this.kakanableIndexList = new ArrayList<List<Integer>>();
-		this.kaze = Collections.synchronizedMap(new HashMap<Kaze, Integer>());
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 
@@ -110,6 +109,7 @@ public class ClientInfo {
 	
 	public ClientInfo(){
 		resetBeforeKyoku();
+		this.kaze = Collections.synchronizedMap(new HashMap<Kaze, Integer>());
 		this.scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
 		this.nameMap = Collections.synchronizedMap(new HashMap<Integer, String>());
 		this.IDMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
@@ -132,10 +132,10 @@ public class ClientInfo {
 	
 	public void setIndex(int index){
 		this.currentTurn = (4 - index) % 4;
-		this.kaze.put(Kaze.TON, (-index + 4) % 4);
-		this.kaze.put(Kaze.NAN, (-index + 5) % 4);
-		this.kaze.put(Kaze.SYA, (-index + 6) % 4);
-		this.kaze.put(Kaze.PE, (-index + 7) % 4);
+		this.kaze.put(Kaze.TON, (4 - index) % 4);
+		this.kaze.put(Kaze.NAN, (5 - index) % 4);
+		this.kaze.put(Kaze.SYA, (6 - index) % 4);
+		this.kaze.put(Kaze.PE, (7 - index) % 4);
 	}
 	
 	public void setID(int key,int id){
