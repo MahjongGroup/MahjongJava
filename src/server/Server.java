@@ -11,6 +11,7 @@ import system.Player;
 
 /**
  * クライアントとの通信を行うメソッドを実装するインターフェース。
+ * @mori
  */
 public interface Server {
 	
