@@ -3,8 +3,7 @@ package system;
 /**
  * 捨て牌。鳴かれた牌の場合,どこから鳴かれたかの情報も持つ。
  */
-public class Sutehai implements Hai {
-	private final Hai hai;
+public class Sutehai extends AbstractMajanHai {
 	private final boolean naki;
 	private final Kaze nakiKaze;
 
@@ -14,8 +13,7 @@ public class Sutehai implements Hai {
 	 * @param hai
 	 */
 	public Sutehai(Hai hai) {
-		// TODO change
-		this.hai = MajanHai.valueOf(hai.type(), hai.aka());
+		super(hai);
 		this.naki = false;
 		this.nakiKaze = null;
 	}
@@ -28,8 +26,7 @@ public class Sutehai implements Hai {
 	 * 
 	 */
 	public Sutehai(Hai hai, Kaze kaze) {
-		// TODO change
-		this.hai = MajanHai.valueOf(hai.type(), hai.aka());
+		super(hai);
 		this.naki = true;
 		this.nakiKaze = kaze;
 	}
@@ -62,31 +59,6 @@ public class Sutehai implements Hai {
 		return new Sutehai(this.hai, kaze);
 	}
 	
-	@Override
-	public String notation() {
-		return hai.notation();
-	}
-
-	@Override
-	public boolean aka() {
-		return hai.aka();
-	}
-
-	@Override
-	public HaiType type() {
-		return hai.type();
-	}
-
-	@Override
-	public int compareTo(Hai hai) {
-		return hai.compareTo(hai);
-	}
-
-	@Override
-	public int ordinal() {
-		return hai.ordinal();
-	}
-
 	@Override
 	public String toString() {
 		if(this.isNaki()) {

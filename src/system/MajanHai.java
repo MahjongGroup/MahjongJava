@@ -171,4 +171,59 @@ public class MajanHai implements Hai {
 	public int ordinal() {
 		return ordinary;
 	}
+
+	@Override
+	public boolean isYaotyuhai() {
+		return type.isYaotyuhai();
+	}
+
+	@Override
+	public boolean isTyuntyanhai() {
+		return type.isTyuntyanhai();
+	}
+
+	@Override
+	public HaiGroup2 group2() {
+		return type.group2();
+	}
+
+	@Override
+	public boolean isSuhai() {
+		return type.isSuhai();
+	}
+
+	@Override
+	public boolean isTsuhai() {
+		return type.isTsuhai();
+	}
+
+	@Override
+	public boolean isSangenhai() {
+		return type.isSangenhai();
+	}
+
+	@Override
+	public HaiGroup3 group3() {
+		return type.group3();
+	}
+
+	@Override
+	public int number() {
+		return type.number();
+	}
+
+	@Override
+	public Kaze kaze() {
+		return type.kaze();
+	}
+
+	@Override
+	public SangenType sangenType() {
+		return type.sangenType();
+	}
+
+	@Override
+	public SuType suType() {
+		return type.suType();
+	}
 }
