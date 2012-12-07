@@ -205,7 +205,8 @@ public interface Server {
 	 * @param hai 
 	 */
 	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
-			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai hai);
+			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
+			List<Integer> tehaiSize, int yamaSize,int intwanpaiSize, List<Hai> doraList);
 
 	/**
 	 * 指定された風の人がリーチしたことを各プレイヤーに伝える.
@@ -224,5 +225,6 @@ public interface Server {
 
 	public void notifyKyokuResult(KyokuResult kr);
 
+	
 	
 }

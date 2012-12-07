@@ -291,11 +291,10 @@ public class ClientOperator implements Client{
 		canvas.refreshStateCodes();
 	}
 
-	@Override
 	public void onFieldReceived(List<Hai> tehai,
 			Map<Kaze, HurohaiList> nakihaiMap,
 			Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn) {
+			Kaze currentTurn,Hai currentSutehai) {
 		if(canvas == null)
 			return;
 		ClientInfo info = canvas.getInfo();
@@ -305,6 +304,10 @@ public class ClientOperator implements Client{
 			int i = info.kaze.get(k);
 			synchronized (info.sutehaiMap) {
 				info.sutehaiMap.put(i, sutehaiMap.get(k));
+			}
+			if(k == currentTurn){
+				info.sutehaiMap.get(i).add(currentSutehai);
+				
 			}
 			info.hurohaiMap.put(i, nakihaiMap.get(k));
 		}

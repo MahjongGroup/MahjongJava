@@ -313,11 +313,6 @@ public class ConsoleClient implements Client {
 		// 何もしない
 	}
 
-	@Override
-	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
-			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn) {
-		// 何もしない
-	}
 
 	@Override
 	public void onTsumoGiriReceived() {
@@ -368,6 +363,14 @@ public class ConsoleClient implements Client {
 
 	@Override
 	public void onKyokuResultReceived(KyokuResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihaiMap, Map<Kaze, List<Hai>> sutehaiMap,
+			Kaze currentTurn, Hai currentSutehai) {
 		// TODO Auto-generated method stub
 		
 	}

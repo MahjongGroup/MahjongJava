@@ -325,7 +325,7 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void sendField(List<Hai> tehai,Map<Kaze,HurohaiList> nakihai,Map<Kaze, List<Hai>> sutehai,Kaze currentTurn,Hai currentSutehai) {
+	public void sendField(List<Hai> tehai,Map<Kaze,HurohaiList> nakihai,Map<Kaze, List<Hai>> sutehai,Kaze currentTurn,Hai currentSutehai,List<Integer> tehaiSize,int Yamasize,int wanpaisize,List<Hai> doraList) {
 		client.onFieldReceived(tehai,nakihai,sutehai,currentTurn,currentSutehai);
 	}
 
