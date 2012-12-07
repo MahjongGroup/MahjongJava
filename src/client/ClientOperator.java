@@ -291,24 +291,23 @@ public class ClientOperator implements Client{
 		canvas.refreshStateCodes();
 	}
 
-	@Override
-	public void onFieldReceived(List<Hai> tehai,
-			Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn) {
-		if(canvas == null)
-			return;
-		ClientInfo info = canvas.getInfo();
-		info.tehai = tehai;
-		info.currentTurn = info.kaze.get(currentTurn);
-		for (Kaze k : Kaze.values()) {
-			int i = info.kaze.get(k);
-			synchronized (info.sutehaiMap) {
-				info.sutehaiMap.put(i, sutehaiMap.get(k));
-			}
-			info.hurohaiMap.put(i, nakihaiMap.get(k));
-		}
-	}
+//	public void onFieldReceived(List<Hai> tehai,
+//			Map<Kaze, HurohaiList> nakihaiMap,
+//			Map<Kaze, List<Hai>> sutehaiMap,
+//			Kaze currentTurn) {
+//		if(canvas == null)
+//			return;
+//		ClientInfo info = canvas.getInfo();
+//		info.tehai = tehai;
+//		info.currentTurn = info.kaze.get(currentTurn);
+//		for (Kaze k : Kaze.values()) {
+//			int i = info.kaze.get(k);
+//			synchronized (info.sutehaiMap) {
+//				info.sutehaiMap.put(i, sutehaiMap.get(k));
+//			}
+//			info.hurohaiMap.put(i, nakihaiMap.get(k));
+//		}
+//	}
 
 	@Override
 	public void onTsumoAgariReceived() {
@@ -364,5 +363,25 @@ public class ClientOperator implements Client{
 		page.movePage("result");
 		((ResultPage)page).setResult(result);
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihaiMap, Map<Kaze, List<Hai>> sutehaiMap,
+			Kaze currentTurn, Hai currentSutehai) {
+		if (canvas == null)
+			return;
+		ClientInfo info = canvas.getInfo();
+		info.tehai = tehai;
+		info.currentTurn = info.kaze.get(currentTurn);
+		for (Kaze k : Kaze.values()) {
+			int i = info.kaze.get(k);
+			synchronized (info.sutehaiMap) {
+				info.sutehaiMap.put(i, sutehaiMap.get(k));
+			}
+			if(k == currentTurn)
+				info.sutehaiMap.get(i).add(currentSutehai);
+			info.hurohaiMap.put(i, nakihaiMap.get(k));
+		}
 	}
 }
