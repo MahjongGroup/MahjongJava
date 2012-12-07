@@ -233,7 +233,7 @@ public class Kyoku {
 		Kaze kaze = currentTurn;
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(true, currentTumohai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, HaiType.toHaiTypeList(getDoraList()));
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealAllDoraList());
 		Player agarip = playerMap.get(currentTurn);
 		Player oya = playerMap.get(TON);
 
@@ -382,7 +382,7 @@ public class Kyoku {
 
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(false, currentSutehai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, HaiType.toHaiTypeList(getDoraList()));
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealAllDoraList());
 
 		if (this.krbuilder == null) {
 			this.krbuilder = new KyokuRonAgariResult.Builder();
@@ -902,40 +902,66 @@ public class Kyoku {
 	}
 
 	/**
-	 * この局の開かれているドラリストを返す.
+	 * この局の開かれているドラ表示牌リストを返す.
 	 * 
-	 * @return ドラリスト.
+	 * @return ドラ表示牌リスト.
 	 */
 	public List<Hai> getOpenDoraList() {
 		List<Hai> list = new ArrayList<Hai>();
-		for (int i = 0; i < this.kanSize + 1; i++) {
+		for (int i = 0; i < this.newDoraSize + 1; i++) {
 			list.add(this.wanpai.get(4 + 2 * i));
 		}
 		return list;
 	}
 
 	/**
-	 * この局のすべてのドラリストを返す.
+	 * この局の開かれている実際のドラの牌種リストを返す.
 	 * 
-	 * @return ドラリスト.
+	 * @return ドラの牌種リスト.
 	 */
-	public List<Hai> getDoraList() {
-		List<Hai> list = new ArrayList<Hai>();
-		for (int i = 0; i < this.kanSize * 2 + 1; i++) {
-			list.add(this.wanpai.get(4 + i));
+	public List<HaiType> getRealOpenDoraList() {
+		List<HaiType> list = new ArrayList<HaiType>();
+		for (int i = 0; i < this.newDoraSize + 1; i++) {
+			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i).type()));
 		}
 		return list;
 	}
 
 	/**
-	 * 裏ドラリストを返す.
+	 * この局の裏ドラ表示牌リストを返す.
 	 * 
-	 * @return 裏ドラリスト.
+	 * @return 裏ドラ表示牌リスト.
 	 */
-	public List<Hai> getUradoraList() {
+	public List<Hai> getUraDoraList() {
 		List<Hai> list = new ArrayList<Hai>();
-		for (int i = 0; i < this.kanSize + 1; i++) {
+		for (int i = 0; i < this.newDoraSize + 1; i++) {
 			list.add(this.wanpai.get(4 + 2 * i + 1));
+		}
+		return list;
+	}
+
+	/**
+	 * この局の実際の裏ドラの牌種リストを返す.
+	 * 
+	 * @return 裏ドラの牌種リスト.
+	 */
+	public List<HaiType> getRealUraDoraList() {
+		List<HaiType> list = new ArrayList<HaiType>();
+		for (int i = 0; i < this.newDoraSize + 1; i++) {
+			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i + 1).type()));
+		}
+		return list;
+	}
+	
+	/**
+	 * この局の実際のドラ(表と裏)リストを返す．
+	 * @return この局の実際のドラ(表と裏)リスト.
+	 */
+	public List<HaiType> getRealAllDoraList() {
+		List<HaiType> list = new ArrayList<HaiType>();
+		for (int i = 0; i < this.newDoraSize + 1; i++) {
+			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i).type()));
+			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i + 1).type()));
 		}
 		return list;
 	}
@@ -1191,7 +1217,7 @@ public class Kyoku {
 		System.out.println("");
 		System.out.println("山牌(" + this.yamahai.size() + ")：" + this.yamahai);
 		System.out.println("王牌(" + this.wanpai.size() + ")：" + this.wanpai);
-		System.out.println("ドラ：" + getDoraList());
+		System.out.println("ドラ：" + getRealAllDoraList());
 		System.out.println("");
 		for (Kaze kaze : Kaze.values()) {
 			if(currentTurn == kaze) {
