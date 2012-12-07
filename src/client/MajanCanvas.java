@@ -128,12 +128,14 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 //		this.operator = new ClientOperator(this);
 
 		// 結合テスト
-		this.number = (objSize++)%4;
-		this.info = new ClientInfo(number);
-		info.sekiMap = new HashMap<Player, Integer>(4);
-		for (int i = 0; i < 4; i++) {
-			info.sekiMap.put(GlobalVar.players[(number + i) % 4], i);
-		}
+//		this.info = new ClientInfo(0);
+//		this.number = (objSize++)%4;
+		this.number = -1;
+//		info.sekiMap = new HashMap<Player, Integer>(4);
+		//TODO to be repair
+//		for (int i = 0; i < 4; i++) {
+//			info.sekiMap.put(info.players[(4 - number)%4], i);
+//		}
 		System.out.println("add operator");
 		
 		this.buttonList = new ArrayList<StateCode>();
@@ -156,6 +158,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	@Override
 	public void paint(Graphics g) {
+		if(number == -1)
+			return;
 		if (imgBuffer == null)
 			imgBuffer = createImage(getWidth(), getHeight());
 		if (gg == null)
@@ -487,20 +491,27 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int my = e.getY();
 		hideFocus();
 		if (stateCodes.contains(StateCode.WAIT)){
-			refreshNakiListExclude(null);
-			refreshStateCodes();
-			refreshButtonList();
+//			refreshNakiListExclude(null);
+//			refreshStateCodes();
+//			refreshButtonList();
 			return;
 		}
-		System.out.println(number);
 		boolean hasOnlyElem = false;
+		boolean isButtonSelected = false;
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			int width = getWidth() / 2;
 			int height = getHeight() / 2;
 			int i = buttonList.size() + 1;
+			boolean flag = false;
+			StateCode sc = null;
 			//クリック個所がボタンのある範囲にあるかどうか(y方向のみ判定)
+			System.out.println(buttonList.size());
+			System.out.println("before check");
 			if (my <= height + BUTTON_HEIGHT / 2 - 10
 					&& my >= height - BUTTON_HEIGHT / 2 - 10) {
+				System.out.println("in button height");
+				//TODO current
+				
 				int half = buttonList.size() / 2;
 				//クリック個所がボタンのある範囲にあるかどうか(x方向)
 				for (int j = 0; j < buttonList.size(); j++) {
@@ -512,94 +523,97 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						break;
 					}
 				}
+				System.out.println(i);
+				if(i < buttonList.size()){
+					sc = getSelectHaiFromSelect(buttonList.get(i));
+					isButtonSelected = true;
+				}
+					
+
+				refreshStateCodes();
+				addStateCode(sc);
+				refreshNakiListExclude(sc);
+				
+				if(sc == null)
+					for(StateCode subSc:buttonList){
+						dispatch(subSc);
+					}
+				refreshButtonList();
+				if (!(getInfo().ableIndexList.containsKey(sc) && getInfo().ableIndexList
+						.get(sc).size() == 1))
+					return;
 			} else {
 				//行動の選択肢が1つしかない場合は牌を直接選ぶことを許す
 				//ここではそれ以外を除外し,ここで処理を終了している
 				if(buttonList.size() != 1){
 					refreshStateCodes();
 					refreshNakiListExclude(null);
-					for(StateCode sc:buttonList){
-						dispatch(sc);
-					}
-					refreshButtonList();
-					return;
-				}
-			}
-			//クリック個所がボタンのある範囲にあったか
-			StateCode sc;
-			boolean tmpFlag = false;
-			if (i < buttonList.size()
-			// 選択肢が1つで
-					|| (buttonList.size() == 1
-					// クリック個所が手牌のある範囲にあり(y方向の判定)
-							&& (my <= PLAYER_BLOCK1_Y + HAI_HEIGHT + 270
-							&& my >= PLAYER_BLOCK1_Y + 270)
-					// ツモ牌以外の牌がある範囲にあるか(x方向の判定)
-					&& ((mx <= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH 
-					&& mx >= PLAYER_BLOCK1_X)
-					// ツモ牌のある範囲にある(x方向の判定)
-					|| (mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1) * HAI_WIDTH + 20 
-					&& mx >= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH + 20)))) {
-				//複数の選択肢から1つを選んだか
-				//もしくは1つの選択肢の指定した箇所をクリックしたか
-				if(my <= height + BUTTON_HEIGHT / 2 - 10
-						&& my >= height - BUTTON_HEIGHT / 2 - 10){
-					sc = getSelectHaiFromSelect(buttonList.get(i));
-
-					refreshStateCodes();
-					refreshNakiListExclude(sc);
 					for(StateCode subSc:buttonList){
 						dispatch(subSc);
 					}
 					refreshButtonList();
 					return;
-				}
-				else{
-					sc = getSelectHaiFromSelect(buttonList.get(0));
-					List<List<Integer>> tmpList = getInfo().ableIndexList.get(sc);
-					if(tmpList != null){
-						for(List<Integer> tmpSubList:tmpList){
-							if(tmpSubList == null)
-								break;
-							for(Integer integer:tmpSubList){
-								if(mx <= PLAYER_BLOCK1_X + (integer + 1) * HAI_WIDTH
-										&& mx >= PLAYER_BLOCK1_X + integer * HAI_WIDTH){
-											tmpFlag = true;
-											break;
-								}
-							}
-							if(tmpSubList.contains(13) 
-									&& mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1) * HAI_WIDTH + 20
-									&& mx >= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH + 20){
-								tmpFlag = true;
-							}
-							if(tmpFlag)
-								break;
+				}else{
+					if ((!(my <= PLAYER_BLOCK1_Y + HAI_HEIGHT + 270 && my >= PLAYER_BLOCK1_Y + 270)
+					// クリック個所が手牌のある範囲にあり(y方向の判定)
+					&& ((mx <= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH && mx >= PLAYER_BLOCK1_X)
+					// ツモ牌以外の牌がある範囲にあるか(x方向の判定)
+					|| (info.tsumoHai != null && (mx <= PLAYER_BLOCK1_X
+							+ (info.tehai.size() + 1) * HAI_WIDTH + 20 && mx >= PLAYER_BLOCK1_X
+							+ info.tehai.size() * HAI_WIDTH + 20))
+					// ツモ牌のある範囲にある(x方向の判定)
+					))) {
+						refreshStateCodes();
+						refreshNakiListExclude(null);
+						for (StateCode subSc : buttonList) {
+							dispatch(subSc);
 						}
+						refreshButtonList();
+						return;
 					}
 				}
 			}
-			else{
-				refreshStateCodes();
-				refreshNakiListExclude(null);
-				for(StateCode subSc:buttonList){
-					dispatch(subSc);
+			boolean tmpFlag = false;
+			if(!isButtonSelected){
+				sc = getSelectHaiFromSelect(buttonList.get(0));
+				List<List<Integer>> tmpList = getInfo().ableIndexList.get(sc);
+				if(tmpList != null){
+					for(List<Integer> tmpSubList:tmpList){
+						if(tmpSubList == null)
+							break;
+						for(Integer integer:tmpSubList){
+							if(mx <= PLAYER_BLOCK1_X + (integer + 1) * HAI_WIDTH
+									&& mx >= PLAYER_BLOCK1_X + integer * HAI_WIDTH){
+										tmpFlag = true;
+										break;
+							}
+						}
+						if(tmpSubList.contains(13) 
+								&& mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1) * HAI_WIDTH + 20
+								&& mx >= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH + 20){
+							tmpFlag = true;
+						}
+						if(tmpFlag)
+							break;
+					}
 				}
+				refreshStateCodes();
+				refreshNakiListExclude(sc);
 				refreshButtonList();
-				return;				
+			}else{
+				tmpFlag = true;
 			}
-			//今回選択された動作以外に関係するデータは消去
-
-			refreshStateCodes();
-			refreshNakiListExclude(sc);
-			refreshButtonList();
-				
-			// 今回選択された動作に対する動作
 			if(!tmpFlag){
 				refreshNakiListExclude(null);
 				dispatch(sc);
 				return;
 			}
+			//クリック個所がボタンのある範囲にあったか
+			//複数の選択肢から1つを選んだか
+			//もしくは1つの選択肢の指定した箇所をクリックしたか
+			//今回選択された動作以外に関係するデータは消去
+				
+			// 今回選択された動作に対する動作
 			switch (sc) {
 			case SELECT_CHI_HAI:
 				if (info.ableIndexList.get(sc).size() != 1) {
@@ -672,9 +686,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				break;
 			case SELECT_TSUMO:
 				operator.sendTsumoAgari();
-				break;
+				return;
 			case SELECT_RON:
 				operator.sendRon(true);
+				return;
 			default:
 				break;
 			}
@@ -727,11 +742,16 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void mousePressed(java.awt.event.MouseEvent e) {}
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {}
+	
 
 	public void addStateCode(StateCode stateCode) {
 		while (stateCodes.contains(StateCode.WAIT))
 			stateCodes.remove(StateCode.WAIT);
-		stateCodes.add(stateCode);
+		if(stateCode != null){
+			stateCodes.add(stateCode);
+		}else if(stateCodes.size() == 0){
+			stateCodes.add(StateCode.WAIT);
+		}
 	}
 	public void refreshStateCodes() {
 		stateCodes.clear();
@@ -915,5 +935,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void hideFocus(){
 		frame.setAlwaysOnTop(false);
 	}
-
+	public void setPlayers(Player[] players,int index){
+		number = index;
+		this.info = new ClientInfo(number);
+		info.sekiMap = new HashMap<Player, Integer>(4);
+		for (int i = 0; i < 4; i++) {
+			info.sekiMap.put(info.players[(4 - number)%4], i);
+		}
+	}
 }

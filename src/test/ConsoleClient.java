@@ -355,7 +355,7 @@ public class ConsoleClient implements Client {
 	}
 
 	@Override
-	public void onGameStartReceived(List<Player> playerList) {
+	public void onGameStartReceived(List<Player> playerList,int index) {
 		// TODO Auto-generated method stub
 		
 	}

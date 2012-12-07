@@ -51,9 +51,9 @@ public class ClientOperator implements Client{
 		if(canvas == null)
 			return;
 		hideFocus();
+		tr.onDiscardIndexReceived(index);
 		canvas.getInfo().tsumoHai = null;
 		canvas.refreshStateCodes();
-		tr.onDiscardIndexReceived(index);
 	}
 	
 	public void onTsumoGiriReceived(){
@@ -71,52 +71,52 @@ public class ClientOperator implements Client{
 	public void sendChiIndexList(List<Integer> hais) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onChiIndexListReceived(hais!=null?new ArrayList<Integer>(hais):null);
+		canvas.refreshStateCodes();
 	}
 
 	public void sendPonIndexList(List<Integer> hais) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onPonIndexListReceived(hais!=null?new ArrayList<Integer>(hais):null);
+		canvas.refreshStateCodes();
 	}
 
 	public void sendAnkanIndexList(List<Integer> hais) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onAnkanIndexListReceived(hais!=null?new ArrayList<Integer>(hais):null);
+		canvas.refreshStateCodes();
 	}
 
 	public void sendMinkan(boolean answer) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onMinkanableIndexReceived(answer);
+		canvas.refreshStateCodes();
 	}
 
 	public void sendKakanIndex(int index) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onKakanableIndexReceived(index);
+		canvas.refreshStateCodes();
 	}
 
 	public void sendReachIndex(int index) {
 		if(canvas == null)
 			return;
+		tr.onReachIndexReceived(index);
 		canvas.refreshStateCodes();
 		if(index != -1)
 			canvas.getInfo().tsumoHai = null;
-		tr.onReachIndexReceived(index);
 	}
 
 	public void sendRon(boolean answer) {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onRonReceived(answer);
+		canvas.refreshStateCodes();
 	}
 	
 	public void sendKyusyukyuhai(boolean flag){
@@ -128,18 +128,18 @@ public class ClientOperator implements Client{
 		if(canvas == null)
 			return;
 		setFocus();
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_CHI_HAI, hais);
 		canvas.addButtonList(StateCode.SELECT_CHI);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_CHI_HAI, hais);
 	}
 
 	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
 		if(canvas == null)
 			return;
 		setFocus();
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_PON_HAI, hais);
 		canvas.addButtonList(StateCode.SELECT_PON);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_PON_HAI, hais);
 	}
 
 	public void onMinkanableIndexListReceived(List<Integer> hais) {
@@ -148,9 +148,9 @@ public class ClientOperator implements Client{
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		tmpList.add(hais);
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_MINKAN, tmpList);
 		canvas.addButtonList(StateCode.SELECT_MINKAN);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_MINKAN, tmpList);
 	}
 
 	public void onKyusyukyuhaiRequested() {
@@ -165,9 +165,9 @@ public class ClientOperator implements Client{
 		if(canvas == null)
 			return;
 		setFocus();
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_ANKAN_HAI, hais);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_ANKAN);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_ANKAN_HAI, hais);
 	}
 
 	public void onKakanableIndexListReceived(List<Integer> hais) {
@@ -176,9 +176,9 @@ public class ClientOperator implements Client{
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		tmpList.add(hais);
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_KAKAN_HAI, tmpList);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_KAKAN);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_KAKAN_HAI, tmpList);
 	}
 
 	public void onReachableIndexListReceived(List<Integer> hais) {
@@ -191,9 +191,9 @@ public class ClientOperator implements Client{
 			tmp.add(i);
 			tmpList.add(tmp);
 		}
-		canvas.getInfo().ableIndexList.put(StateCode.SELECT_REACH_HAI, tmpList);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_REACH);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_REACH_HAI, tmpList);
 	}
 
 	public void onReachReceived(Kaze currentTurn,int sutehaiIndex){
@@ -225,14 +225,14 @@ public class ClientOperator implements Client{
 		if(canvas == null)
 			return;
 		hideFocus();
+		canvas.refreshStateCodes();
+		canvas.refreshButtonList();
 		int i = -1;
 		if(mentu.getKaze() != null) {
 			i = canvas.getInfo().kaze.get(mentu.getKaze());
 		}else {
 			i = 0;
 		}
-		canvas.refreshStateCodes();
-		canvas.refreshButtonList();
 //		List<Sutehai> tmp = canvas.getInfo().sutehaiMap.get(i);
 //		tmp.remove(tmp.size() - 1);
 //		ClientInfo info = canvas.getInfo();
@@ -273,8 +273,8 @@ public class ClientOperator implements Client{
 	public void sendTsumoAgari() {
 		if(canvas == null)
 			return;
-		canvas.refreshStateCodes();
 		tr.onTsumoAgariReceived();
+		canvas.refreshStateCodes();
 	}
 
 	@Override
@@ -321,12 +321,13 @@ public class ClientOperator implements Client{
 		// TODO Auto-generated method stub
 	}
 	@Override
-	public void onGameStartReceived(List<Player> playerList) {
-		GlobalVar.players = new Player[playerList.size()];
-		for(int i = 0;i <GlobalVar.players.length;i++)
-			GlobalVar.players[i] = playerList.get(i);
+	public void onGameStartReceived(List<Player> playerList,int index) {
+		Player[] players = new Player[playerList.size()];
+		for(int i = 0;i < playerList.size();i++)
+			players[i] = playerList.get(i);
 		page.movePage("game");
-		// TODO Auto-generated method stubx
+		((MajanCanvas)page).setPlayers(players,index);
+		// TODO current
 	}
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
@@ -339,5 +340,4 @@ public class ClientOperator implements Client{
 		// TODO Auto-generated method stub
 		
 	}
-
 }

@@ -1,6 +1,7 @@
 package ai;
 
 import system.Kyoku;
+import system.Player;
 
 /**
  * AIが牌をdiscardをするときに用いられる戦略のインターフェース．
@@ -13,5 +14,5 @@ public interface DiscardStrategy {
 	 * 
 	 * @return 切る牌の手牌のインデックス.ツモ切りの場合は13.
 	 */
-	public int discard(Kyoku kyoku);
+	public int discard(Kyoku kyoku,Player player);
 }

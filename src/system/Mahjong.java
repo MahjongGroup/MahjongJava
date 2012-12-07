@@ -253,7 +253,7 @@ public class Mahjong {
 		if (lastKyoku
 				&& !(rule.isSyanyu() && isSyanyuScore())
 				&& ((getOyaIndex() == getMaxScorePlayerIndex())
-						|| !(!isOyaTenpai() || !isOyaAgari()))) {
+						|| !(isOyaTenpai() || isOyaAgari()))) {
 			endFlag = true;
 		}
 		if (kyokusu == 5) {

@@ -19,6 +19,7 @@ public class MajanFrame extends JFrame{
 	private JPanel mainPanel;
 	private Page page;
 	private Server server;
+	private ClientInfo info;
 	
 	public void setServer(Server server){
 		this.server = server;
@@ -47,12 +48,14 @@ public class MajanFrame extends JFrame{
 		page.setPreferredSize(getSize());
 		mainPanel.add((Component)page);
 		mainPanel.updateUI();
-	}	
+	}
 
 	public void setPage(String order,Image image){
 		setPage(order);
-		if(order.toLowerCase().compareTo("result") == 0)
-			((ResultPage)mainPanel.getComponent(0)).setImage(image);
+		if(order.toLowerCase().compareTo("result") == 0){
+			((ResultPage)page).setImage(image);
+//			((ResultPage)page).
+		}
 		mainPanel.updateUI();
 	}
 	

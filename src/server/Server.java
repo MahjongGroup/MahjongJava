@@ -31,7 +31,7 @@ public interface Server {
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
 	 */
-	public void sendGameStart(List<Player> playerList);
+	public void sendGameStart(List<Player> playerList,int index);
 	
 
 	// 局開始前
@@ -222,5 +222,6 @@ public interface Server {
 
 
 	public void notifyKyokuResult(KyokuResult kr);
+
 	
 }

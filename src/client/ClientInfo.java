@@ -33,6 +33,7 @@ public class ClientInfo {
 	List<Integer> reachableIndexList;
 	List<Integer> selectedIndexes;
 	Hai sutehai;
+	Player[] players;
 
 	List<Hai> doraList;
 	int honba;
@@ -42,8 +43,7 @@ public class ClientInfo {
 	int currentTurn;
 	Map<Kaze, Integer> kaze;
 
-	public ClientInfo(int index) {
-		this.currentTurn = (4 - index) % 4;
+	private void resetBeforeKyoku(){
 		this.tehai = Collections.synchronizedList(new ArrayList<Hai>());
 		this.sutehaiMap = Collections
 				.synchronizedMap(new HashMap<Integer, List<Hai>>());
@@ -68,16 +68,6 @@ public class ClientInfo {
 		reachPosMap.put(1, null);
 		reachPosMap.put(2, null);
 		reachPosMap.put(3, null);
-
-		for(int i = 0;i < 4;i++){
-			scoreMap.put(i, 0);
-		}
-		for(int i = 0;i < 4;i++){
-			nameMap.put(i, "");
-		}
-		for(int i = 0;i < 4;i++){
-			IDMap.put(i, 0);
-		}
 		
 		ableIndexList = Collections
 				.synchronizedMap(new HashMap<StateCode, List<List<Integer>>>());
@@ -114,17 +104,36 @@ public class ClientInfo {
 		this.tehaiSizeMap.put(3, 13);
 		for (int i = 0; i < 4; i++)
 			this.sutehaiMap.put(i, new ArrayList<Hai>());
-
+	}
+	
+	public ClientInfo(){
+		resetBeforeKyoku();
+		this.scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
+		this.nameMap = Collections.synchronizedMap(new HashMap<Integer, String>());
+		this.IDMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
+		this.players = new Player[4];
+		for(int i = 0;i < 4;i++){
+			scoreMap.put(i, 0);
+		}
+		for(int i = 0;i < 4;i++){
+			nameMap.put(i, "");
+		}
+		for(int i = 0;i < 4;i++){
+			IDMap.put(i, 0);
+		}
+	}
+	
+	public ClientInfo(int index) {
+		this();
+		setIndex(index);
+	}
+	
+	public void setIndex(int index){
+		this.currentTurn = (4 - index) % 4;
 		this.kaze.put(Kaze.TON, (-index + 4) % 4);
 		this.kaze.put(Kaze.NAN, (-index + 5) % 4);
 		this.kaze.put(Kaze.SYA, (-index + 6) % 4);
 		this.kaze.put(Kaze.PE, (-index + 7) % 4);
-
-		// this.kaze.put(Kaze.TON,0);
-		// this.kaze.put(Kaze.NAN,1);
-		// this.kaze.put(Kaze.SYA,2);
-		// this.kaze.put(Kaze.PE,3);
-
 	}
 	
 	public void setID(int key,int id){
