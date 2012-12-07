@@ -46,7 +46,7 @@ public class AgariFunctions {
 	}
 
 	/**
-	 * テンパイしている場合,trueを返す。
+	 * (余分な牌を含めずに)テンパイしている場合,trueを返す。
 	 * 
 	 * @param tehaiList　手牌リスト
 	 * @param hurohaiList　副露牌リスト
