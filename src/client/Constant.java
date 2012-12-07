@@ -18,6 +18,9 @@ public class Constant {
 	
 	public static final int HAI_WIDTH = 40;
 	public static final int HAI_HEIGHT = 60;
+
+	public static final int SCALED_HAI_WIDTH = 30;
+	public static final int SCALED_HAI_HEIGHT = 45;
 	
 	public static final int BUTTON_WIDTH = 100;
 	public static final int BUTTON_HEIGHT = 50;

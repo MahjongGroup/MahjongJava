@@ -1,17 +1,6 @@
 package client;
 
-import static client.Constant.BUTTON_CURVE;
-import static client.Constant.BUTTON_HEIGHT;
-import static client.Constant.BUTTON_WIDTH;
-import static client.Constant.HAI_HEIGHT;
-import static client.Constant.HAI_WIDTH;
-import static client.Constant.PLAYER_BLOCK1_X;
-import static client.Constant.PLAYER_BLOCK1_Y;
-import static client.Constant.PLAYER_BLOCK2_X;
-import static client.Constant.PLAYER_BLOCK2_Y;
-import static client.Constant.SECONDS_PER_FRAME;
-import static client.Constant.WINDOW_HEIGHT;
-import static client.Constant.WINDOW_WIDTH;
+import static client.Constant.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -230,29 +219,32 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int dx = 0;
 		for (int i = 0; i < tehaiSize; i++) {
 			if (player != 0) {
-				g2.drawImage(haiBackImage, ix + dx, iy + 270, HAI_WIDTH,
-						HAI_HEIGHT, null);
+				g2.drawImage(haiBackImage.getScaledInstance(SCALED_HAI_WIDTH,
+						SCALED_HAI_HEIGHT, Image.SCALE_DEFAULT), ix + dx,
+						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				dx += SCALED_HAI_WIDTH;
 			} else {
 				Image image = haiImageMap.get(info.tehai.get(i));
-				int selectedMargin = selectedIndexes.contains((Integer) i) ? -20
-						: 0;
+				int selectedMargin 
+				= selectedIndexes.contains((Integer) i) ? -20: 0;
 				g2.drawImage(image, ix + dx, iy + 270 + selectedMargin,
 						HAI_WIDTH, HAI_HEIGHT, null);
 				drawColoredFrame(g2, i, ix + dx, iy + selectedMargin + 270);
+				dx += HAI_WIDTH;
 			}
-			dx += HAI_WIDTH;
 		}
 		if (info.currentTurn == player && info.tsumoHai != null) {
 			if (player == 0) {
-				dx += 20;
+				dx += HAI_HEIGHT - HAI_WIDTH;
 				int selectedMargin = selectedIndexes.contains(13) ? -20 : 0;
 				g2.drawImage(haiImageMap.get(info.tsumoHai), ix + dx, iy + 270
 						+ selectedMargin, HAI_WIDTH, HAI_HEIGHT, null);
 				drawColoredFrame(g2, 13, ix + dx, iy + selectedMargin + 270);
 			} else {
-				dx += 20;
-				g2.drawImage(haiBackImage, ix + dx, iy + 270, HAI_WIDTH,
-						HAI_HEIGHT, null);
+				dx += SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH;
+				g2.drawImage(haiBackImage.getScaledInstance(SCALED_HAI_WIDTH,
+						SCALED_HAI_HEIGHT, Image.SCALE_DEFAULT), ix + dx,
+						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 			}
 		}
 
@@ -277,7 +269,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			// 右から順番に格納
 			MentuHai[] hurohaiArray = new MentuHai[mentu.isKakan() ? mentuSize + 1
 					: mentuSize];
-			dx = screenWidth - HAI_HEIGHT * 2;
+			dx = screenWidth - SCALED_HAI_HEIGHT * 2;
 			if (mentu.isNaki()) {
 				int fromKaze = (info.kaze.get(hurohaiList.get(i).getKaze()) + 4 - player) % 4;
 				fromKaze = (fromKaze - 1) * (fromKaze - 2) / 2
@@ -301,24 +293,24 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					if (j == fromKaze) {
 						g2.rotate(Math.PI / 2.0);
 						g2.translate(0, -screenHeight);
-						g2.drawImage(image, dy + (HAI_HEIGHT - HAI_WIDTH),
-								screenHeight - dx - HAI_WIDTH, HAI_WIDTH,
-								HAI_HEIGHT, null);
+						g2.drawImage(image, dy + (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH),
+								screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH,
+								SCALED_HAI_HEIGHT, null);
 						if (mentu.isKakan()) {
 							tmpHai = MajanHai.valueOf(hurohaiArray[3].type(),
 									hurohaiArray[3].aka());
 							image = haiImageMap.get(tmpHai);
 							g2.drawImage(image, dy
-									+ (HAI_HEIGHT - HAI_WIDTH * 2),
-									screenHeight - dx - HAI_WIDTH, HAI_WIDTH,
-									HAI_HEIGHT, null);
+									+ (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH * 2),
+									screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH,
+									SCALED_HAI_HEIGHT, null);
 						}
 						g2.translate(0, screenHeight);
 						g2.rotate(-Math.PI / 2.0);
-						dx -= HAI_HEIGHT;
+						dx -= SCALED_HAI_HEIGHT;
 					} else {
-						g2.drawImage(image, dx, dy, HAI_WIDTH, HAI_HEIGHT, null);
-						dx -= HAI_WIDTH;
+						g2.drawImage(image, dx, dy, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+						dx -= SCALED_HAI_WIDTH;
 					}
 				}
 			} else {
@@ -331,12 +323,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					else
 						image = haiImageMap.get(tmpHai);
 					// TODO
-					g2.drawImage(image, dx, dy, HAI_WIDTH, HAI_HEIGHT, null);
-					dx -= HAI_WIDTH;
+					g2.drawImage(image, dx, dy, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					dx -= SCALED_HAI_WIDTH;
 					count++;
 				}
 			}
-			dy -= HAI_HEIGHT;
+			dy -= SCALED_HAI_HEIGHT;
 		}
 
 		List<Hai> suteHaiList = null;
@@ -345,25 +337,25 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 		dy = 0;
 		for (int j = 0; j < 4; j++) {
-			dx = 170 - HAI_WIDTH;
+			dx = 170 - SCALED_HAI_WIDTH;
 			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
 				Image image = haiImageMap.get(suteHaiList.get(j * 6 + i));
 				if (info.reachPosMap.get(player) == null
 						|| info.reachPosMap.get(player) != j * 6 + i) {
-					g2.drawImage(image, ix + HAI_WIDTH + dx, iy + dy,
-							HAI_WIDTH, HAI_HEIGHT, null);
-					dx += HAI_WIDTH;
+					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
+							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					dx += SCALED_HAI_WIDTH;
 				} else {
 					g2.rotate(Math.PI / 2.0);
 					g2.translate(0, -screenHeight);
-					g2.drawImage(image, iy + dy, screenHeight - dx - HAI_HEIGHT - HAI_WIDTH
-							- ix, HAI_WIDTH, HAI_HEIGHT, null);
+					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
+							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 					g2.translate(0, screenHeight);
 					g2.rotate(-Math.PI / 2.0);
-					dx += HAI_HEIGHT;
+					dx += SCALED_HAI_HEIGHT;
 				}
 			}
-			dy += HAI_HEIGHT;
+			dy += SCALED_HAI_HEIGHT;
 		}
 	}
 
