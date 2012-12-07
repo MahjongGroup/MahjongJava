@@ -184,7 +184,7 @@ public class KyokuRunner {
 
 			
 			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(),kyoku.getCurrentSutehai(),
-					tehaiSize,kyoku.getYamahaiList().size(),kyoku.getWanpaiList().size(),kyoku.getRealOpenDoraList());
+					tehaiSize,kyoku.getYamahaiList().size(),kyoku.getWanpaiList().size(),kyoku.getOpenDoraList());
 		}
 	}
 
