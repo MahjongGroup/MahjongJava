@@ -383,6 +383,6 @@ public class Transporter implements Server {
 	
 	@Override
 	public void notifyKyokuResult(KyokuResult result) {
-		client.onResultReceived(result);
+		client.onKyokuResultReceived(result);
 	}
 }

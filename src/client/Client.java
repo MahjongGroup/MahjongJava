@@ -226,7 +226,5 @@ public interface Client {
 	 */
 	public void onKyokuResultReceived(KyokuResult result);
 
-	public void onResultReceived(KyokuResult kr);
-	
 	
 }
