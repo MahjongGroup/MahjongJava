@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	private List<Config> configs;
 	private boolean isFinish;
 	private MajanFrame frame;
+	private Image imgBuffer;
+	private Graphics g2;
 
 	private class PaintThread extends Thread{
 		public void run(){
@@ -89,12 +92,16 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	}
 	
 	public void paint(Graphics g){
-		g.clearRect(0, 0, getWidth(), getHeight());
+		if(imgBuffer == null)
+			imgBuffer = createImage(getWidth(),getHeight());
+		if(g2 == null)
+			g2 = imgBuffer.getGraphics();
+		g2.clearRect(0, 0, getWidth(), getHeight());
 		int x = getWidth() * 2 / 5;
 		int y = getHeight()/5;
 
-		g.setFont(new Font("",Font.BOLD,40));
-		g.drawString("C O N F I G", x, y - BUTTON_HEIGHT * 3 / 2);
+		g2.setFont(new Font("",Font.BOLD,40));
+		g2.drawString("C O N F I G", x, y - BUTTON_HEIGHT * 3 / 2);
 		
 		int maxLength = 0;
 		for(Config c:configs){
@@ -103,22 +110,23 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 				maxLength = tmp;
 		}
 		for(Config c:configs){
-			g.setFont(new Font("",Font.BOLD,20));
+			g2.setFont(new Font("",Font.BOLD,20));
 			if(c.flag)
-				g.setColor(Color.RED);
+				g2.setColor(Color.RED);
 			else
-				g.setColor(Color.BLUE);
-			g.fillRect(x + maxLength * 22 + 14, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-			g.setColor(Color.BLACK);
-			g.drawString(c.getSwitch(), x + maxLength * 22 + 45, y + BUTTON_HEIGHT/2 + 7);
-			g.setColor(Color.BLACK);
-			g.drawString(c.getExplain(), x, y + BUTTON_HEIGHT/2 + 7);
+				g2.setColor(Color.BLUE);
+			g2.fillRect(x + maxLength * 22 + 14, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+			g2.setColor(Color.BLACK);
+			g2.drawString(c.getSwitch(), x + maxLength * 22 + 45, y + BUTTON_HEIGHT/2 + 7);
+			g2.setColor(Color.BLACK);
+			g2.drawString(c.getExplain(), x, y + BUTTON_HEIGHT/2 + 7);
 			y += BUTTON_HEIGHT + 20;
 		}
-		g.setColor(Color.GRAY);
-		g.fillRect((getWidth() - BUTTON_WIDTH)/2, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-		g.setColor(Color.BLACK);
-		g.drawString("SAVE", (getWidth() - BUTTON_WIDTH)/2 + 20, y + BUTTON_HEIGHT/2);
+		g2.setColor(Color.GRAY);
+		g2.fillRect((getWidth() - BUTTON_WIDTH)/2, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+		g2.setColor(Color.BLACK);
+		g2.drawString("SAVE", (getWidth() - BUTTON_WIDTH)/2 + 20, y + BUTTON_HEIGHT/2);
+		g.drawImage(imgBuffer, 0, 0, getWidth(), getHeight(), this);
 	}
 
 	private boolean isInArea(int targetX,int targetY,int x,int y,int width,int height){

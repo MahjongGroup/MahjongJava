@@ -1,22 +1,25 @@
 package pages;
 
-import java.awt.Canvas;
+import static client.Constant.BUTTON_CURVE;
+import static client.Constant.BUTTON_HEIGHT;
+import static client.Constant.BUTTON_WIDTH;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import client.Client;
 import client.ClientOperator;
 import client.MajanFrame;
-import static client.Constant.BUTTON_WIDTH;
-import static client.Constant.BUTTON_HEIGHT;
-import static client.Constant.BUTTON_CURVE;
 
 public class StartPage extends GraphicalPage implements MouseListener{
 	private boolean isFinish;
 	private MajanFrame frame;
+	private Image imgBuffer;
+	private Graphics g2;
 	{
 		isFinish = false;
 	}
@@ -46,18 +49,23 @@ public class StartPage extends GraphicalPage implements MouseListener{
 //		new PaintThread().start();
 	}
 	public void paint(Graphics g){
+		if(imgBuffer == null)
+			imgBuffer = createImage(getWidth(),getHeight());
+		if(g2 == null)
+			g2 = imgBuffer.getGraphics();
 		int x = (getWidth() - BUTTON_WIDTH) / 2;
 		int y = (getHeight() - BUTTON_HEIGHT) / 2;
 		for (State st : State.values()) {
-			g.setColor(Color.ORANGE);
-			g.fillRoundRect(x,
+			g2.setColor(Color.ORANGE);
+			g2.fillRoundRect(x,
 					y, BUTTON_WIDTH * 2,
 					BUTTON_HEIGHT * 2, BUTTON_CURVE, BUTTON_CURVE);
-			g.setColor(Color.BLACK);
-			g.setFont(new Font("", Font.BOLD, 50));
-			g.drawString(st.name(), x, y + BUTTON_HEIGHT);
+			g2.setColor(Color.BLACK);
+			g2.setFont(new Font("", Font.BOLD, 50));
+			g2.drawString(st.name(), x, y + BUTTON_HEIGHT);
 			y += BUTTON_HEIGHT * 2 + 20;
 		}
+		g.drawImage(imgBuffer, 0, 0, getWidth(), getHeight(), this);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {

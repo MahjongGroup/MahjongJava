@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import pages.Page;
+import pages.ResultPage;
 import server.Server;
 import system.Hai;
 import system.HurohaiList;
@@ -12,7 +13,6 @@ import system.Kaze;
 import system.KyokuResult;
 import system.Mentu;
 import system.Player;
-import test.GlobalVar;
 
 public class ClientOperator implements Client{
 	private MajanCanvas canvas;
@@ -325,19 +325,24 @@ public class ClientOperator implements Client{
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
-		page.movePage("game");
+		while(!(page instanceof MajanCanvas)){
+			
+		}
 		((MajanCanvas)page).setPlayers(players,index);
 		// TODO current
 	}
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
 		// TODO Auto-generated method stub
-		
+		page.movePage("game");
+		((MajanCanvas)page).setKyokusu(kyokusu);
+		((MajanCanvas)page).setBakaze(bakaze);
 	}
 
 	@Override
 	public void onKyokuResultReceived(KyokuResult result) {
+		page.movePage("result");
+		((ResultPage)page).setResult(result);
 		// TODO Auto-generated method stub
-		
 	}
 }

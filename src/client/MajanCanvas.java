@@ -30,11 +30,11 @@ import java.util.Map;
 import pages.GraphicalPage;
 import pages.Page;
 import system.Hai;
+import system.Kaze;
 import system.MajanHai;
 import system.Mentu;
 import system.Mentu.MentuHai;
 import system.Player;
-import test.GlobalVar;
 
 public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMotionListener, Page{
 	private ClientInfo info;
@@ -941,6 +941,20 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		info.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
 			info.sekiMap.put(info.players[(4 - number)%4], i);
+		}
+	}
+	public void setBakaze(Kaze kaze){
+		info.bakaze = kaze;
+	}
+	public void setKyokusu(int kyokusu){
+		if(info.kyokusu != kyokusu)
+			moveKaze();
+		info.kyokusu = kyokusu;
+	}
+	private void moveKaze(){
+		Map<Kaze,Integer> kaze = info.kaze;
+		for(Kaze k:kaze.keySet()){
+			kaze.put(k, (kaze.get(k) + 1)%4);
 		}
 	}
 }
