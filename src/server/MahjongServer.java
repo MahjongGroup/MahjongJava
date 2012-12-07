@@ -9,6 +9,8 @@ import system.Player;
 import system.Rule;
 import test.ConsoleClient;
 import client.Client;
+import client.ClientOperator;
+import client.MajanFrame;
 
 /**
  * 麻雀サーバーを表すクラス.
@@ -31,9 +33,48 @@ public class MahjongServer {
 //		transMap.put(plist.get(3), new Transporter());
 		
 		// 結合用
+		int count = 0;
 		for (Transporter tr : transMap.values()) {
-			Client client = new ConsoleClient(tr);
-			tr.setClient(client);
+			if(count == 0){
+				(new Runnable(){
+					private Server tr;
+					
+					public Runnable setTransporter(Server tr){
+						this.tr = tr;
+						return this;
+					}
+					
+					@Override
+					public void run() {
+						MajanFrame frame = new MajanFrame();
+						frame.setServer(tr);
+					}
+				}).setTransporter(tr).run();
+			}else{
+				Client client = new ConsoleClient(tr);
+				tr.setClient(client);
+				tr.setWait(false);
+			}
+			count++;
+		}
+		boolean isWait = true;
+		System.out.println("before wait");
+		while(isWait){
+			isWait = false;
+			for(Transporter tr:transMap.values()){
+				if(tr.isWait()){
+					isWait = true;
+					break;
+				}
+			}
+		}
+
+		try{
+			Thread.sleep(3000);
+		}catch(InterruptedException e){}
+
+		for(Transporter tr:transMap.values()){
+			tr.sendGameStart(plist);
 		}
 		
 		Rule rule = new Rule();

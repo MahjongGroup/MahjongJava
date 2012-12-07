@@ -13,14 +13,18 @@ import pages.Page;
 import pages.ResultPage;
 import pages.StartPage;
 import pages.WaitPage;
+import server.Server;
 
 public class MajanFrame extends JFrame{
 	private JPanel mainPanel;
+	private Page page;
+	private Server server;
 	
-	
+	public void setServer(Server server){
+		this.server = server;
+	}
 	public static void main(String[] args) {
 		MajanFrame frame = new MajanFrame();
-		frame.setVisible(true);
 		frame.setPage("start");
 	}
 	public MajanFrame() {
@@ -37,11 +41,11 @@ public class MajanFrame extends JFrame{
 	
 	public void setPage(String order){
 		mainPanel.removeAll();
-		Page tmp = getPageFromString(order);
-		if(tmp == null)
+		page = getPageFromString(order);
+		if(page == null)
 			return;
-		tmp.setPreferredSize(getSize());
-		mainPanel.add((Component)tmp);
+		page.setPreferredSize(getSize());
+		mainPanel.add((Component)page);
 		mainPanel.updateUI();
 	}	
 
@@ -49,22 +53,28 @@ public class MajanFrame extends JFrame{
 		setPage(order);
 		if(order.toLowerCase().compareTo("result") == 0)
 			((ResultPage)mainPanel.getComponent(0)).setImage(image);
+		mainPanel.updateUI();
 	}
 	
 	private Page getPageFromString(String str){
 		str = str.toLowerCase();
 		if(str.compareTo("config") == 0)
-			return new ConfigPage(this);
+			return new ConfigPage(this,page.getOperator());
 		if(str.compareTo("enter") == 0)
-			return new EnterPage(this);
+			return new EnterPage(this,server);
 		if(str.compareTo("start") == 0)
-			return new StartPage(this);
+		{
+			if(page != null)
+				return new StartPage(this,page.getOperator());
+			else
+				return new StartPage(this);
+		}
 		if(str.compareTo("wait") == 0)
-			return new WaitPage(this);
+			return new WaitPage(this,page.getOperator());
 		if(str.compareTo("game") == 0)
-			return new MajanCanvas(this);
+			return new MajanCanvas(this,page.getOperator());
 		if(str.compareTo("result") == 0)
-			return new ResultPage(this);
+			return new ResultPage(this,page.getOperator());
 		return null;
 	}
 

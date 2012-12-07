@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import client.Client;
+import client.ClientOperator;
 import client.MajanFrame;
 import static client.Constant.BUTTON_WIDTH;
 import static client.Constant.BUTTON_HEIGHT;
@@ -31,6 +33,13 @@ public class StartPage extends GraphicalPage implements MouseListener{
 			}
 		}
 	}
+	public StartPage(MajanFrame frame,Client operator){
+		this(frame);
+		setOperator(operator);
+		if(operator != null)
+			((ClientOperator)getOperator()).setPage(this);
+	}
+	
 	public StartPage(MajanFrame frame){
 		this.frame = frame;
 		addMouseListener(this);
@@ -104,4 +113,13 @@ public class StartPage extends GraphicalPage implements MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void movePage(String order) {
+		frame.setPage(order);
+	}
+	@Override
+	public String getPageName(){
+		return "Start";
+	}
+	
 }

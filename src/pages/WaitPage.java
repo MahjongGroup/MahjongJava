@@ -5,8 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import javax.swing.ImageIcon;
-
+import client.Client;
+import client.ClientOperator;
 import client.MajanFrame;
 
 public class WaitPage extends GraphicalPage implements Page{
@@ -33,8 +33,19 @@ public class WaitPage extends GraphicalPage implements Page{
 	{
 		count = 0;
 	}
+		
 	public WaitPage(MajanFrame frame){
 		this.frame = frame;
+	}
+	public WaitPage(MajanFrame frame,Client operator){
+		this(frame);
+		setOperator(operator);
+		if(operator != null)
+			((ClientOperator)getOperator()).setPage(this);
+	}
+	@Override
+	public String getPageName(){
+		return "Wait";
 	}
 	
 	public void moveGame(){
@@ -80,5 +91,9 @@ public class WaitPage extends GraphicalPage implements Page{
 				getHeight()/2 - 40);
 		count++;
 		g.drawImage(imgBuffer, 0, 0, this);
+	}
+	@Override
+	public void movePage(String order) {
+		frame.setPage(order);
 	}
 }

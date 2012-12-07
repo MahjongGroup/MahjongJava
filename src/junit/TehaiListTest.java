@@ -10,12 +10,15 @@ import static system.MajanHai.ROKU_MAN;
 import static system.MajanHai.SAN_MAN;
 import static system.MajanHai.TON;
 import static system.MajanHai.YO_MAN;
+import static system.MajanHai.NAN;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
+import system.Hai;
 import system.HaiType;
 import system.MajanHai;
 import system.TehaiList;
@@ -23,24 +26,20 @@ import system.TehaiList;
 public class TehaiListTest {
 
 	/**
-	 * 2,3,3,3,4,5,6,東,東,東,東というサンプルリストを生成して返す.
+	 * 2,3,3,3,4,5,6,東,東,東,東,南,南というサンプルリストを生成して返す.
 	 * 
 	 * @return サンプルリスト.
 	 */
 	public TehaiList getSampleTehaiList() {
-		TehaiList tlist = new TehaiList();
-		tlist.add(NI_MAN);
-		tlist.add(SAN_MAN);
-		tlist.add(SAN_MAN);
-		tlist.add(SAN_MAN);
-		tlist.add(YO_MAN);
-		tlist.add(GO_MAN);
-		tlist.add(ROKU_MAN);
-		tlist.add(TON);
-		tlist.add(TON);
-		tlist.add(TON);
-		tlist.add(TON);
+		TehaiList tlist = new TehaiList(Arrays.asList(new Hai[] { NI_MAN, SAN_MAN, SAN_MAN, SAN_MAN, YO_MAN, GO_MAN, ROKU_MAN, TON, TON, TON, TON, NAN, NAN }));
 		return tlist;
+	}
+
+	@Test
+	public void testTehaiList() {
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
+		TehaiList tlist = getSampleTehaiList();
+		assertEquals(tlist.size(), 13);
 	}
 
 	@Test
@@ -59,7 +58,7 @@ public class TehaiListTest {
 
 	@Test
 	public void testIsPonable() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
 		assertEquals(tlist.isPonable(HaiType.ITI_MAN), false);
 		assertEquals(tlist.isPonable(HaiType.NI_MAN), false);
@@ -69,13 +68,13 @@ public class TehaiListTest {
 
 	@Test
 	public void testGetPonableIndexList() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
 		for (HaiType haiType : HaiType.values()) {
 			List<List<Integer>> ponList = tlist.getPonableIndexList(haiType);
 			int trueSize = 0;
-			switch (haiType) {
-			case SAN_MAN:
+			if (haiType == HaiType.SAN_MAN) {
+				assertTrue(tlist.isPonable(haiType));
 				assertEquals(ponList.size(), 3);
 				for (int i = 0; i < ponList.size(); i++) {
 					assertEquals(ponList.get(i).size(), 2);
@@ -95,56 +94,51 @@ public class TehaiListTest {
 					}
 				}
 				assertEquals(trueSize, 3);
-				break;
-			case TON:
-				assertEquals(ponList.size(), 6);
-				for (int i = 0; i < ponList.size(); i++) {
-					assertEquals(ponList.get(i).size(), 2);
-					if (ponList.get(i).contains(7)) {
-						if (ponList.get(i).contains(8))
-							trueSize++;
-						if (ponList.get(i).contains(9))
-							trueSize++;
-						if (ponList.get(i).contains(10))
-							trueSize++;
-					} else if(ponList.get(i).contains(8)) {
-						if (ponList.get(i).contains(9))
-							trueSize++;
-						if (ponList.get(i).contains(10))
-							trueSize++;
-					} else if(ponList.get(i).contains(9)) {
-						if (ponList.get(i).contains(10))
-							trueSize++;
-					}
-				}
-				assertEquals(trueSize, 6);
-				break;
-			default:
+			} else if (haiType == HaiType.SAN_MAN) {
+
+			} else {
+				assertFalse(tlist.isPonable(haiType));
 				assertEquals(ponList.size(), 0);
-				break;
 			}
 		}
 	}
 
 	@Test
+	/**
+	 * 明槓できるためには指定された牌種を３枚持つ
+	 */
 	public void testIsMinkanable() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
 		assertTrue(tlist.isMinkanable(HaiType.SAN_MAN));
-		assertTrue(tlist.isMinkanable(HaiType.TON));
+		assertFalse(tlist.isMinkanable(HaiType.TON));
 		assertFalse(tlist.isMinkanable(HaiType.NI_MAN));
 	}
 
 	@Test
+	/**
+	 * 3萬以外の牌では明槓できない
+	 * 3萬で明槓した場合、[1,2,3]のリストが返ってくる．
+	 */
 	public void testGetMinkanableIndexList() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		// 2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
-		fail("Not yet implemented");
+		for (HaiType type : HaiType.values()) {
+			if (type == HaiType.SAN_MAN) {
+				assertTrue(tlist.isMinkanable(type));
+				List<Integer> list = tlist.getMinkanableIndexList(type);
+				assertTrue(list.contains(1));
+				assertTrue(list.contains(2));
+				assertTrue(list.contains(3));
+			} else {
+				assertFalse(tlist.isMinkanable(type));
+			}
+		}
 	}
 
 	@Test
 	public void testIsAnkanableHaiHaiType() {
-		fail("Not yet implemented");
+
 	}
 
 	@Test
@@ -174,7 +168,7 @@ public class TehaiListTest {
 
 	@Test
 	public void testToHaiTypeSet() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
 		Set<HaiType> set = tlist.toHaiTypeSet();
 		assertEquals(set.size(), 6);
@@ -197,7 +191,7 @@ public class TehaiListTest {
 
 	@Test
 	public void testSizeOf() {
-		//2,3,3,3,4,5,6,東,東,東,東
+		//2,3,3,3,4,5,6,東,東,東,東,南,南
 		TehaiList tlist = getSampleTehaiList();
 		for (HaiType haiType : HaiType.values()) {
 			int size = tlist.sizeOf(haiType);

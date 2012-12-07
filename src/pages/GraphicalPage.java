@@ -7,14 +7,29 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import client.Client;
+import client.ClientOperator;
+
 public abstract class GraphicalPage extends Canvas implements Page{
 	private Image image;
 	private boolean isFinish;
+	private Client operator;
 	{
 		image = new ImageIcon("image/background.jpg").getImage();
 		isFinish = false;
 		startThread();
 	}
+	
+	public Client getOperator(){
+		return operator;
+	}
+	public void setPage(Page page){
+		((ClientOperator)operator).setPage(page);
+	}
+	protected void setOperator(Client operator){
+		this.operator = operator;
+	}
+	
 	private class PaintThread extends Thread{
 		public void run(){
 			while(!isFinish){

@@ -35,6 +35,7 @@ public class Transporter implements Server {
 	private boolean ronReceivedFlag = false;
 	private boolean ronReceivedResult = false;
 	private boolean tsumoagariReceivedResult = false;
+	private boolean isWait = true;
 
 	// DEBUG 結合用
 	private Client client;
@@ -349,12 +350,14 @@ public class Transporter implements Server {
 
 	@Override
 	public void onGameRequested(int id) {
-		// TODO Auto-generated method stub
-		
+		// TODO to be changed
+		//for debug
+		isWait = false;
 	}
 
 	@Override
 	public void sendGameStart(List<Player> playerList) {
+		client.onGameStartReceived(playerList);
 		// TODO Auto-generated method stub
 		
 	}
@@ -364,5 +367,15 @@ public class Transporter implements Server {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	//TODO to be removed
+	//for debug	
+	public boolean isWait(){
+		return isWait;
+	}
+	//TODO to be removed
+	//for debug	
+	public void setWait(boolean flag){
+		isWait = flag;
+	}
 }

@@ -19,6 +19,9 @@ public class ClientInfo {
 	// 　自分->0, 上家->1,,,,
 	Map<Player, Integer> sekiMap;
 	Map<Integer, List<Hai>> sutehaiMap;
+	Map<Integer,Integer> scoreMap;
+	Map<Integer,Integer> IDMap;
+	Map<Integer,String> nameMap;
 	Map<Integer, List<Mentu>> hurohaiMap;
 	Map<Integer, Integer> tehaiSizeMap;
 	Map<StateCode, List<List<Integer>>> ableIndexList;
@@ -48,6 +51,9 @@ public class ClientInfo {
 				.synchronizedMap(new HashMap<Integer, List<Mentu>>());
 		this.tehaiSizeMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
+		this.scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
+		this.nameMap = Collections.synchronizedMap(new HashMap<Integer, String>());
+		this.IDMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
 		this.tsumoHai = MajanHai.ITI_MAN;
 		this.selectedIndexes = new ArrayList<Integer>();
 		this.chiableIndexLists = new ArrayList<List<Integer>>();
@@ -63,6 +69,16 @@ public class ClientInfo {
 		reachPosMap.put(2, null);
 		reachPosMap.put(3, null);
 
+		for(int i = 0;i < 4;i++){
+			scoreMap.put(i, 0);
+		}
+		for(int i = 0;i < 4;i++){
+			nameMap.put(i, "");
+		}
+		for(int i = 0;i < 4;i++){
+			IDMap.put(i, 0);
+		}
+		
 		ableIndexList = Collections
 				.synchronizedMap(new HashMap<StateCode, List<List<Integer>>>());
 		ableIndexList.put(StateCode.SELECT_PON_HAI, ponableIndexLists);
@@ -109,5 +125,24 @@ public class ClientInfo {
 		// this.kaze.put(Kaze.SYA,2);
 		// this.kaze.put(Kaze.PE,3);
 
+	}
+	
+	public void setID(int key,int id){
+		IDMap.put(key,id);
+	}
+	public void setID(Kaze kaze,int id){
+		IDMap.put(this.kaze.get(kaze),id);
+	}
+	public void setName(int key,String accountName){
+		nameMap.put(key,accountName);
+	}
+	public void setName(Kaze kaze,String accountName){
+		nameMap.put(this.kaze.get(kaze),accountName);
+	}
+	public void setScore(int key,int score){
+		scoreMap.put(key,score);
+	}
+	public void setScore(Kaze kaze,int score){
+		scoreMap.put(this.kaze.get(kaze),score);
 	}
 }

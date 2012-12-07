@@ -11,10 +11,13 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import server.Server;
+import server.Transporter;
+import client.Client;
+import client.ClientOperator;
 import client.MajanFrame;
 
 public class EnterPage extends InputPage implements Page{
@@ -22,6 +25,7 @@ public class EnterPage extends InputPage implements Page{
 	private boolean isFinish;
 	private MajanFrame frame;
 	private JButton enter;
+	private Client operator;
 
 	private class PaintThread extends Thread{
 		public void run(){
@@ -102,17 +106,35 @@ public class EnterPage extends InputPage implements Page{
 		});
 		new PaintThread().start();
 	}
-	private void movePage(String order){
-		try{
+	@Override
+	public void movePage(String order){
+//		try{
 //			GlobalGame.setPlayer(Integer.parseInt(informations.get(0).getContent()), informations.get(1).getContent());
-		}catch(NumberFormatException e){
-			JOptionPane.showMessageDialog(frame, "IDは半角数字のみで入力してください!!");
-			informations.get(0).setContent("IDを入力してください");
-			return;
-		}
+//		}catch(NumberFormatException e){
+//			JOptionPane.showMessageDialog(frame, "IDは半角数字のみで入力してください!!");
+//			informations.get(0).setContent("IDを入力してください");
+//			return;
+//		}
+		frame.setTitle("No." + informations.get(0).getContent() + ":"
+				+ informations.get(1).getContent());
+		operator.requestGame(Integer.parseInt(informations.get(0).getContent()));
 		frame.setPage(order);
 	}
 	public EnterPage(MajanFrame frame){
 		this.frame = frame;
 	}
+	public EnterPage(MajanFrame frame,Server tr){
+		this(frame);
+		operator = new ClientOperator(tr);
+		((Transporter)tr).setClient(operator);
+		setOperator(operator);
+		if(operator != null)
+			((ClientOperator)getOperator()).setPage(this);
+	}
+	@Override
+	public String getPageName() {
+		// TODO Auto-generated method stub
+		return "Enter";
+	}
+	
 }

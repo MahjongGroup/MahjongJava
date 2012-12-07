@@ -8,10 +8,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class InputPage extends JPanel implements Page{
+import client.Client;
+import client.ClientOperator;
+import client.MajanCanvas;
+import client.MajanFrame;
+
+public abstract class InputPage extends JPanel implements Page{
 	private JLabel back;
 	private Image image;
 	private boolean isFinish;
+	private MajanFrame frame;
+	private Page page;
+	private Client operator;
+	
 	{
 //		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		ImageIcon tmpIcon = new ImageIcon("image/background.jpg");
@@ -37,6 +46,11 @@ class InputPage extends JPanel implements Page{
 		}
 	}
 
+	@Override
+	public void movePage(String order) {
+		frame.setPage(order);
+	}
+
 	protected JLabel getBack(){
 		return back;
 	}
@@ -49,5 +63,14 @@ class InputPage extends JPanel implements Page{
 	public void setImage(Image image){
 		this.image = image;
 	}
-	
+	@Override
+	public Client getOperator() {
+		return operator;
+	}
+	public void setPage(Page page){
+		((ClientOperator)operator).setPage(page);
+	}
+	protected void setOperator(Client operator){
+		this.operator = operator;
+	}
 }

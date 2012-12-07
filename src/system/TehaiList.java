@@ -53,10 +53,10 @@ public class TehaiList implements List<Hai> {
 	}
 
 	/**
-	 * ポン可能な牌インデックスリストのリストを返す。
+	 * ポン可能な牌インデックスリストのリストを返す。ポンできない場合は空のリストを返す．
 	 * 
 	 * @param ponHaiType ポンする牌の種類
-	 * @return　ポン可能な牌インデックスリストのリスト
+	 * @return　ポン可能な牌インデックスリストのリスト．ポンできない場合は空のリスト．
 	 */
 	public List<List<Integer>> getPonableIndexList(HaiType ponHaiType) {
 		// TODO 実装変更する(4枚以上のときにも対応する)
@@ -99,13 +99,14 @@ public class TehaiList implements List<Hai> {
 
 	/**
 	 * 指定された牌種で明槓できる場合trueを返す。
+	 * ここで明槓できるとは指定された牌種をちょうど3枚もっていることを指す．
 	 * 
 	 * @param type 牌の種類
 	 * @return 指定された牌種で明槓できる場合true
 	 */
 	public boolean isMinkanable(HaiType type) {
 		int size = Functions.sizeOf(type, this);
-		return size >= 3;
+		return size == 3;
 	}
 
 	/**

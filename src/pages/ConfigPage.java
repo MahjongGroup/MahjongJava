@@ -3,7 +3,6 @@ package pages;
 import static client.Constant.BUTTON_HEIGHT;
 import static client.Constant.BUTTON_WIDTH;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,11 +12,12 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import system.Rule;
+import client.Client;
+import client.ClientOperator;
 import client.MajanFrame;
 
-import system.Rule;
-
-public class ConfigPage extends Canvas implements MouseListener, Page{
+public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	private Rule rule;
 	private List<Config> configs;
 	private boolean isFinish;
@@ -81,6 +81,12 @@ public class ConfigPage extends Canvas implements MouseListener, Page{
 		addMouseListener(this);
 		new PaintThread().start();
 	}
+	public ConfigPage(MajanFrame frame,Client operator){
+		this(frame);
+		setOperator(operator);
+		if(operator != null)
+			((ClientOperator)getOperator()).setPage(this);
+	}
 	
 	public void paint(Graphics g){
 		g.clearRect(0, 0, getWidth(), getHeight());
@@ -96,8 +102,6 @@ public class ConfigPage extends Canvas implements MouseListener, Page{
 			if(tmp > maxLength)
 				maxLength = tmp;
 		}
-		
-		
 		for(Config c:configs){
 			g.setFont(new Font("",Font.BOLD,20));
 			if(c.flag)
@@ -115,7 +119,6 @@ public class ConfigPage extends Canvas implements MouseListener, Page{
 		g.fillRect((getWidth() - BUTTON_WIDTH)/2, y, BUTTON_WIDTH, BUTTON_HEIGHT);
 		g.setColor(Color.BLACK);
 		g.drawString("SAVE", (getWidth() - BUTTON_WIDTH)/2 + 20, y + BUTTON_HEIGHT/2);
-		
 	}
 
 	private boolean isInArea(int targetX,int targetY,int x,int y,int width,int height){
@@ -151,31 +154,31 @@ public class ConfigPage extends Canvas implements MouseListener, Page{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mousePressed(MouseEvent e) {}
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseReleased(MouseEvent e) {}
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseEntered(MouseEvent e) {}
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 	private void saveConfig(){}
 	@Override
 	public void setPreferredSize(Dimension d) {
 		super.setPreferredSize(d);
+	}
+
+	@Override
+	public void movePage(String order) {
+		frame.setPage(order);
+	}
+
+	@Override
+	public Client getOperator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getPageName(){
+		return "Config";
 	}
 }

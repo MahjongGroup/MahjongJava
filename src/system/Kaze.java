@@ -1,16 +1,17 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * 風を表す列挙体。東,南,西,北の4つのオブジェクトを持つ。それぞれ0,1,2,3のIDを持つ。
- * 
- * @author kohei
- * 
  */
 public enum Kaze {
-	TON("東", 0), NAN("南", 1), SYA("西", 2), PE("北", 3);
+	TON("東", 0),
+	NAN("南", 1),
+	SYA("西", 2),
+	PE("北", 3);
 
 	private final String notation;
 	private final int id;
@@ -70,14 +71,15 @@ public enum Kaze {
 		return notation;
 	}
 
-
-	private static final List<Kaze> KAZE_LIST = new ArrayList<Kaze>(4);
+	private static final List<Kaze> KAZE_LIST;
 
 	static {
-		KAZE_LIST.add(0, TON);
-		KAZE_LIST.add(1, NAN);
-		KAZE_LIST.add(2, SYA);
-		KAZE_LIST.add(3, PE);
+		List<Kaze> list = new ArrayList<Kaze>(4);
+		list.add(0, TON);
+		list.add(1, NAN);
+		list.add(2, SYA);
+		list.add(3, PE);
+		KAZE_LIST = Collections.unmodifiableList(list);
 	}
 
 	/**
@@ -106,5 +108,4 @@ public enum Kaze {
 	 * 型ID
 	 */
 	public static int TYPE_ID = 2;
-
 }
