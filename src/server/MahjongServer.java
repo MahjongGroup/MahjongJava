@@ -74,7 +74,7 @@ public class MahjongServer {
 
 		int index = 0;
 		for(Transporter tr:transMap.values()){
-			tr.sendGameStart(plist,(5 + index) % 4);
+			tr.sendGameStart(plist,(index+5)%4);
 			index++;
 		}
 		

@@ -656,11 +656,8 @@ public class Kyoku {
 	 * @return テンパイしている場合true.
 	 */
 	public boolean isTenpai() {
-		Param param = new Param();
-
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
-		param.setNaki(kp.isNaki());
-		param.setJikaze(currentTurn);
+		Param param = newTenpaiCheckerParam(kp.isNaki(), currentTurn);
 
 		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
 	}
@@ -1132,7 +1129,20 @@ public class Kyoku {
 		param.setJikaze(kaze);
 		return AgariFunctions.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
 	}
-
+	
+	/**
+	 * テンパイ判定用のチェックパラムを生成して返す．
+	 * @param naki 鳴いているか．
+	 * @param jikaze 自風．
+	 * @return テンパイ判定用のチェックパラム. 
+	 */
+	public Param newTenpaiCheckerParam(boolean naki, Kaze jikaze) {
+		Param ret = new Param();
+		ret.setNaki(naki);
+		ret.setJikaze(jikaze);
+		return ret;
+	}
+	
 	/**
 	 * この局の現在のチェッカーパラムを生成して,それを返す.
 	 * 

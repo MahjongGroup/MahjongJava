@@ -1,8 +1,40 @@
 package junit;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static system.MajanHai.GO_MAN;
+import static system.MajanHai.GO_PIN;
+import static system.MajanHai.GO_SOU;
+import static system.MajanHai.HAKU;
+import static system.MajanHai.HATI_MAN;
+import static system.MajanHai.HATI_PIN;
+import static system.MajanHai.HATU;
+import static system.MajanHai.ITI_MAN;
+import static system.MajanHai.ITI_PIN;
+import static system.MajanHai.ITI_SOU;
+import static system.MajanHai.KYU_MAN;
+import static system.MajanHai.KYU_PIN;
+import static system.MajanHai.KYU_SOU;
+import static system.MajanHai.NAN;
+import static system.MajanHai.NANA_MAN;
+import static system.MajanHai.NANA_PIN;
+import static system.MajanHai.NI_MAN;
+import static system.MajanHai.NI_PIN;
+import static system.MajanHai.NI_SOU;
+import static system.MajanHai.PE;
+import static system.MajanHai.ROKU_MAN;
+import static system.MajanHai.ROKU_PIN;
+import static system.MajanHai.SAN_MAN;
+import static system.MajanHai.SAN_PIN;
+import static system.MajanHai.SAN_SOU;
+import static system.MajanHai.SYA;
+import static system.MajanHai.TON;
+import static system.MajanHai.TYUN;
+import static system.MajanHai.YO_MAN;
+import static system.MajanHai.YO_PIN;
+import static system.MajanHai.YO_SOU;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,11 +50,8 @@ import system.Kaze;
 import system.Kyoku;
 import system.KyokuPlayer;
 import system.KyokuResult;
-import system.MajanHai;
 import system.Player;
 import system.Rule;
-
-import static system.MajanHai.*;
 
 public class KyokuTest {
 
@@ -157,13 +186,14 @@ public class KyokuTest {
 		kp.setTehai(list);
 		kyoku.setKyokuPlayer(Kaze.TON, kp);
 		kyoku.doTsumo(KYU_PIN);
-		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+":"+kyoku.getCurrentTsumoHai());
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+":"+kyoku.getCurrentTsumoHai());
 		assertTrue(kyoku.isReachable());
-		System.out.println(kyoku.getReachableHaiList());
+		//System.out.println(kyoku.getReachableHaiList());
 		kyoku.doReach();
-		kyoku.discard(kyoku.getReachableHaiList().get(2));//東切り
-		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
+		kyoku.discard(kyoku.getReachableHaiList().get(1));//東切り
 		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
 		assertTrue(kyoku.isTsumoAgari());
 		kyoku.doTsumoAgari();
 	}
@@ -259,6 +289,35 @@ public class KyokuTest {
 		kyoku.doRinsyanTsumo();
 		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
 	
+	}
+	
+	
+	@Test
+	public void testFuritenJudge(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		KyokuPlayer kp2 = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,ITI_MAN,ITI_MAN,KYU_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,KYU_MAN}));
+		List<Hai> list2 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_PIN,ITI_PIN,ITI_PIN,KYU_PIN,NI_PIN,SAN_PIN,YO_PIN,GO_PIN,ROKU_PIN,NANA_PIN,HATI_PIN,KYU_PIN,KYU_PIN}));
+		kyoku.removeYamahai(list);
+		kyoku.removeWanpai(list);
+		kyoku.removeYamahai(list2);
+		kyoku.removeWanpai(list2);
+		
+		assertEquals(list.size(),13);
+		assertEquals(list2.size(),13);
+		kp.setTehai(list);
+		kp.setTehai(list2);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
+		kyoku.doTsumo(GO_MAN);
+		assertTrue(kyoku.isTsumoAgari());
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(ROKU_MAN);
+		kyoku.discard(13);
+		assertTrue(kyoku.isTenpai(Kaze.TON));
+		assertFalse(kyoku.isRonable(Kaze.TON));
 	}
 
 	@Test
