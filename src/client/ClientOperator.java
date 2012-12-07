@@ -9,6 +9,7 @@ import server.Server;
 import system.Hai;
 import system.HurohaiList;
 import system.Kaze;
+import system.KyokuResult;
 import system.Mentu;
 import system.Player;
 import test.GlobalVar;
@@ -332,4 +333,11 @@ public class ClientOperator implements Client{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onKyokuResultReceived(KyokuResult result) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
