@@ -7,33 +7,35 @@ import java.util.Set;
 
 import system.Functions;
 import system.Hai;
-import system.HaiGroup2;
 import system.HaiType;
 import system.Kaze;
 import system.MajanHai;
 import system.Player;
 import system.SuType;
-
 import system.TehaiList;
-
 /**
- * AI初号機。
- * 名前：ユイ　（命名：もせし）
- * 難しい計算はしないアホの子。
- * 面子を確定させて浮いた牌を切ります。
- * 鳴きません←new!!
- * 聴牌即リー全ツッパ。 
- * 防御はしない。
- * 
- * 打点：★★☆☆☆ 
- * 速度：★★★☆☆ 
- * 防御：★☆☆☆☆
- * 
+ * デバッグ用AI。
+ * 鳴きフラグと和了フラグを用いて様々なケースに対応します。
+ * 他のAIを余りいじらないように。
+ * 基本的にはAIType01（ユイちゃん（命名：もせし））と同じです。
+ * というかfalse,trueしたものがユイちゃん（命名：もせし）。
  * @author shio
+ *
  */
-public class AIType01 extends AbstractAI {
-	public AIType01(Player p) {
+public class AIType_Debug extends AbstractAI{
+	private boolean nakiFlag;
+	private boolean agariFlag;
+
+	/**
+	 * コンストラクタ。
+	 * @param p　割り当てるプレイヤー
+	 * @param naki　trueなら鳴く
+	 * @param agari　trueなら和了る
+	 */
+	public AIType_Debug(Player p,boolean naki,boolean agari) {
 		super(p);
+		nakiFlag = naki;
+		agariFlag = agari;
 	}
 
 	@Override
@@ -43,16 +45,18 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public boolean isTumoAgari() {
-		return true;
+		return agariFlag;
 	}
 
 	@Override
 	public int kakan(List<Integer> list) {
+		if(nakiFlag)
+			return 0;
 		return -1;
 	}
 
 	@Override
-	public int ankan(List<List<Integer>> list) {
+	public int ankan(List<List<Integer>> lists) {
 		return 0;
 	}
 
@@ -63,6 +67,7 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public int discard() {
+		//AIType01と同じ。
 		int index = 0;
 		// 自風を取得。
 		Kaze kaze = kyoku.getKazeOf(super.player);
@@ -250,22 +255,27 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public boolean isRon() {
-		return true;
+		return agariFlag;
 	}
 
 	@Override
-	public int pon(List<List<Integer>> ponnableHaiList) {
+	public int pon(List<List<Integer>> list) {
+		if(nakiFlag)
+			return 0;
 		return -1;
 	}
 
 	@Override
-	public int chi(List<List<Integer>> chiableHaiList) {
+	public int chi(List<List<Integer>> list) {
+		if(nakiFlag)
+			return 0;
 		return -1;
 	}
 
 	@Override
 	public boolean minkan() {
+		if(nakiFlag)
+			return true;
 		return false;
 	}
-
 }

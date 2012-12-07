@@ -44,6 +44,9 @@ public class MahjongGame {
 			mahjong.disp2();
 			
 			KyokuResult kr = kyoku.createKyokuResult();
+			for(Server server:transMap.values()){
+				server.notifyKyokuResult(kr);
+			}
 			if(kr.isRonAgari()) {
 				for (Player player : playerList) {
 					if(kr.isAgari(player)) 
