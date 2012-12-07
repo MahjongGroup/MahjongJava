@@ -47,7 +47,7 @@ public class MajanFrame extends JFrame{
 		page.setPreferredSize(getSize());
 		mainPanel.add((Component)page);
 		mainPanel.updateUI();
-	}	
+	}
 
 	public void setPage(String order,Image image){
 		setPage(order);

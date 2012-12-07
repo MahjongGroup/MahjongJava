@@ -33,6 +33,7 @@ public class ClientInfo {
 	List<Integer> reachableIndexList;
 	List<Integer> selectedIndexes;
 	Hai sutehai;
+	Player[] players;
 
 	List<Hai> doraList;
 	int honba;
@@ -61,6 +62,7 @@ public class ClientInfo {
 		this.ankanableIndexList = new ArrayList<List<Integer>>();
 		this.kakanableIndexList = new ArrayList<List<Integer>>();
 		this.kaze = Collections.synchronizedMap(new HashMap<Kaze, Integer>());
+		this.players = new Player[4];
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 
