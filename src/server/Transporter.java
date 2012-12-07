@@ -6,6 +6,8 @@ import java.util.Map;
 import system.Hai;
 import system.HurohaiList;
 import system.Kaze;
+import system.KyokuResult;
+import system.Mahjong;
 import system.Mentu;
 import system.Player;
 import client.Client;
@@ -377,5 +379,10 @@ public class Transporter implements Server {
 	//for debug	
 	public void setWait(boolean flag){
 		isWait = flag;
+	}
+	
+	@Override
+	public void notifyKyokuResult(KyokuResult result) {
+		client.onResultReceived(result);
 	}
 }
