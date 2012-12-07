@@ -9,6 +9,12 @@ import java.util.Set;
 
 /**
  * 牌の種類を表す列挙型.
+ * 牌の種類には数牌、字牌の２タイプが存在する．
+ * 数牌はさらに萬子、筒子、索子の３タイプに分かれる．各３つのタイプの数牌は属性として1～9の数値を持つ．
+ * 字牌は風牌、三元牌の２タイプに分かれる．
+ * 風牌は東、南、西、北の４つに分かれる．
+ * 三元牌は白、撥、中の３つに分かれる．
+ * それぞれはIDを持つ．IDは固定されており変更されることはないものとする．
  */
 public enum HaiType{
 	ITI_MAN("一萬", 1),
@@ -179,6 +185,8 @@ public enum HaiType{
 			return Kaze.SYA;
 		case PE:
 			return Kaze.PE;
+		default:
+			break;
 		}
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR_MESSAGE);
 	}
@@ -196,6 +204,8 @@ public enum HaiType{
 			return SangenType.HATU;
 		case TYUN:
 			return SangenType.TYUN;
+		default:
+			break;
 		}
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR_MESSAGE);
 	}
@@ -213,6 +223,30 @@ public enum HaiType{
 		if (id < 30)
 			return SuType.SOU;
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR_MESSAGE);
+	}
+	
+	/**
+	 * この牌タイプのドラの牌タイプを表す．
+	 * @return この牌タイプのドラの牌タイプを表す．
+	 */
+	public HaiType nextOfDora() {
+		if(isSuhai()) {
+			int num = this.number();
+			num = (++num == 10 ? num - 9 : num);
+			return valueOf(this.suType(), num);
+		}
+		if(isSangenhai()) {
+			switch(sangenType()) {
+			case HAKU:
+				return HATU;
+			case HATU:
+				return TYUN;
+			case TYUN:
+				return HAKU;
+			}
+			throw new IllegalStateException();
+		}
+		return valueOf(kaze().simo());
 	}
 
 	/**

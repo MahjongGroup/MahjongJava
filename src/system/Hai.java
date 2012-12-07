@@ -130,6 +130,12 @@ public interface Hai extends Comparable<Hai> {
 	public SuType suType();
 	
 	/**
+	 * この牌タイプのドラの牌タイプを表す．
+	 * @return この牌タイプのドラの牌タイプを表す．
+	 */
+	public HaiType nextOfDora();
+
+	/**
 	 * 牌の種類を返す.
 	 * @return 牌の種類.
 	 */

@@ -97,11 +97,17 @@ public class MajanHai implements Hai {
 	private final boolean aka;
 	private final int ordinary;
 
+	/**
+	 * @throws NullPointerException typeがnullの場合．
+	 */
 	private MajanHai(String notation, HaiType type, boolean aka, int ordinary) {
 		this.notation = notation;
 		this.type = type;
 		this.aka = aka;
 		this.ordinary = ordinary;
+		if(this.type == null) {
+			throw new NullPointerException();
+		}
 	}
 
 	@Override
@@ -138,7 +144,7 @@ public class MajanHai implements Hai {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (aka ? 1231 : 1237);
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + type.hashCode();
 		return result;
 	}
 
@@ -148,12 +154,12 @@ public class MajanHai implements Hai {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof MajanHai))
+		if (!(obj instanceof Hai))
 			return false;
-		MajanHai other = (MajanHai) obj;
-		if (aka != other.aka)
+		Hai other = (Hai) obj;
+		if (aka != other.aka())
 			return false;
-		if (type != other.type)
+		if (type != other.type())
 			return false;
 		return true;
 	}
@@ -226,4 +232,10 @@ public class MajanHai implements Hai {
 	public SuType suType() {
 		return type.suType();
 	}
+	
+	@Override
+	public HaiType nextOfDora() {
+		return type.nextOfDora();
+	}
+
 }

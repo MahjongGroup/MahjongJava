@@ -13,11 +13,112 @@ import java.util.ListIterator;
  * 　暗順子,暗刻,暗槓子
  * 上記のように,このオブジェクトは鳴き面子以外にも用いられる(上がり判定時などに使用).
  */
-public class Mentu{
+public class Mentu {
+	/**
+	 * 面子を構成する面子牌クラス.この牌が鳴かれたのかどうか,という情報を持つ.例えば
+	 * 1萬,2萬という形から3萬を鳴いた場合,[1萬,2萬,3萬]という面子オブジェクトを生成できるが
+	 * 3萬が鳴かれてこの面子が出来たので,3萬は鳴かれたという情報を持つことになる. 
+	 */
+	public static class MentuHai extends AbstractMajanHai {
+		private final boolean naki;
+
+		/**
+		 * 面子牌を生成するコンストラクタ.
+		 * @param hai 牌.
+		 * @param naki 鳴いている場合true.
+		 */
+		public MentuHai(Hai hai, boolean naki) {
+			super(hai);
+			this.naki = naki;
+		}
+
+		/**
+		 * 鳴かれた牌の場合trueを返す.
+		 * @return 鳴かれた牌の場合true.
+		 */
+		public boolean isNaki() {
+			return naki;
+		}
+
+		@Override
+		public String toString() {
+			if (naki) {
+				return hai + "(鳴き)";
+			}
+			return hai.notation();
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + (naki ? 1231 : 1237);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!super.equals(obj))
+				return false;
+			if (this == obj)
+				return true;
+			if (!super.equals(obj))
+				return false;
+			if (!(obj instanceof MentuHai))
+				return false;
+			MentuHai other = (MentuHai) obj;
+			if (naki != other.naki)
+				return false;
+			return true;
+		}
+		
+
+	}
+
+	/**
+	 * 面子の種類を表す列挙体.順子,刻子,槓子の3種類が存在する.
+	 */
+	public static enum Type {
+		SYUNTU("順子", 0),
+		KOTU("刻子", 2),
+		KANTU("樌子", 8);
+
+		private final String notation;
+		private final int hu;
+
+		private Type(String n, int hu) {
+			this.notation = n;
+			this.hu = hu;
+		}
+
+		/**
+		 * この面子タイプの基本符を返す.
+		 * @return 基本符.
+		 */
+		public int hu() {
+			return hu;
+		}
+
+		/**
+		 * この面子タイプを表す日本語文字列("順子","刻子","槓子")を返す.
+		 * @return この面子タイプを表す日本語文字列.
+		 */
+		public String notation() {
+			return notation;
+		}
+
+		@Override
+		public String toString() {
+			return notation;
+		}
+	}
+
 	private final List<MentuHai> haiList;
 	private final Kaze kaze;
 	private final boolean naki;
+
 	private final Type type;
+
 	private final boolean kakanFlag;
 
 	/**
@@ -93,55 +194,8 @@ public class Mentu{
 		this.kakanFlag = true;
 	}
 
-	/**
-	 * 鳴き面子の場合trueを返す.
-	 * 
-	 * @return 鳴き面子の場合true. 
-	 */
-	public boolean isNaki() {
-		return naki;
-	}
-
-	/**
-	 * 面子の種類(順子,刻子,槓子)を返す.
-	 * 
-	 * @return 面子の種類.
-	 */
-	public Type type() {
-		return type;
-	}
-
-	/**
-	 * この面子が鳴き面子の場合鳴いた風を返す.この面子が鳴き面子でない場合はnullを返す.
-	 * 
-	 * @return 鳴いた風.この面子が鳴き面子でない場合はnull.
-	 */
-	public Kaze getKaze() {
-		return this.kaze;
-	}
-
-	/**
-	 * 加槓している場合trueを返す.
-	 * @return 加槓している場合true.
-	 */
-	public boolean isKakan() {
-		return this.kakanFlag;
-	}
-	
-	/**
-	 * 加樌して出来た面子を返す.
-	 * 
-	 * @param hai 加樌する牌
-	 * @return 加樌して出来た面子
-	 * @throws IllegalStateException 刻子以外の面子に対してこのメソッドを呼び出した場合.
-	 * @throws IllegalArgumentException 指定された牌で加槓できない場合.
-	 */
-	public Mentu doKakan(Hai hai) {
-		if (type != Type.KOTU)
-			throw new IllegalStateException("この種類の面子に対して加樌は出来ない");
-		if (hai.type() != haiList.get(0).type())
-			throw new IllegalArgumentException("この牌では加樌できない");
-		return new Mentu(this, hai);
+	public List<MentuHai> asList() {
+		return new ArrayList<MentuHai>(haiList);
 	}
 
 	/**
@@ -164,8 +218,33 @@ public class Mentu{
 		return haiList.containsAll(c);
 	}
 
+	/**
+	 * 加樌して出来た面子を返す.
+	 * 
+	 * @param hai 加樌する牌
+	 * @return 加樌して出来た面子
+	 * @throws IllegalStateException 刻子以外の面子に対してこのメソッドを呼び出した場合.
+	 * @throws IllegalArgumentException 指定された牌で加槓できない場合.
+	 */
+	public Mentu doKakan(Hai hai) {
+		if (type != Type.KOTU)
+			throw new IllegalStateException("この種類の面子に対して加樌は出来ない");
+		if (hai.type() != haiList.get(0).type())
+			throw new IllegalArgumentException("この牌では加樌できない");
+		return new Mentu(this, hai);
+	}
+
 	public MentuHai get(int index) {
 		return haiList.get(index);
+	}
+
+	/**
+	 * この面子が鳴き面子の場合鳴いた風を返す.この面子が鳴き面子でない場合はnullを返す.
+	 * 
+	 * @return 鳴いた風.この面子が鳴き面子でない場合はnull.
+	 */
+	public Kaze getKaze() {
+		return this.kaze;
 	}
 
 	public int indexOf(Object hai) {
@@ -174,6 +253,23 @@ public class Mentu{
 
 	public boolean isEmpty() {
 		return haiList.isEmpty();
+	}
+
+	/**
+	 * 加槓している場合trueを返す.
+	 * @return 加槓している場合true.
+	 */
+	public boolean isKakan() {
+		return this.kakanFlag;
+	}
+
+	/**
+	 * 鳴き面子の場合trueを返す.
+	 * 
+	 * @return 鳴き面子の場合true. 
+	 */
+	public boolean isNaki() {
+		return naki;
 	}
 
 	public Iterator<MentuHai> iterator() {
@@ -192,7 +288,6 @@ public class Mentu{
 		return haiList.listIterator(index);
 	}
 
-	// TODO check to delete
 	public boolean retainAll(Collection<?> c) {
 		return haiList.retainAll(c);
 	}
@@ -212,10 +307,6 @@ public class Mentu{
 	public <T> T[] toArray(T[] array) {
 		return haiList.toArray(array);
 	}
-	
-	public List<MentuHai> asList() {
-		return new ArrayList<MentuHai>(haiList);
-	}
 
 	@Override
 	public String toString() {
@@ -226,75 +317,49 @@ public class Mentu{
 	}
 
 	/**
-	 * 面子を構成する面子牌クラス.この牌が鳴かれたのかどうか,という情報を持つ.例えば
-	 * 1萬,2萬という形から3萬を鳴いた場合,[1萬,2萬,3萬]という面子オブジェクトを生成できるが
-	 * 3萬が鳴かれてこの面子が出来たので,3萬は鳴かれたという情報を持つことになる. 
+	 * 面子の種類(順子,刻子,槓子)を返す.
+	 * 
+	 * @return 面子の種類.
 	 */
-	public static class MentuHai extends AbstractMajanHai {
-		private final boolean naki;
-
-		/**
-		 * 面子牌を生成するコンストラクタ.
-		 * @param hai 牌.
-		 * @param naki 鳴いている場合true.
-		 */
-		public MentuHai(Hai hai, boolean naki) {
-			super(hai);
-			this.naki = naki;
-		}
-
-		/**
-		 * 鳴かれた牌の場合trueを返す.
-		 * @return 鳴かれた牌の場合true.
-		 */
-		public boolean isNaki() {
-			return naki;
-		}
-
-		@Override
-		public String toString() {
-			if (naki) {
-				return hai + "(鳴き)";
-			}
-			return hai.notation();
-		}
-
+	public Type type() {
+		return type;
 	}
 
-	/**
-	 * 面子の種類を表す列挙体.順子,刻子,槓子の3種類が存在する.
-	 */
-	public static enum Type {
-		SYUNTU("順子", 0), KOTU("刻子", 2), KANTU("樌子", 8);
-
-		private final String notation;
-		private final int hu;
-
-		private Type(String n, int hu) {
-			this.notation = n;
-			this.hu = hu;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		int sum = 0;
+		for (Hai hai : haiList) {
+			sum += hai.hashCode();
 		}
-
-		/**
-		 * この面子タイプの基本符を返す.
-		 * @return 基本符.
-		 */
-		public int hu() {
-			return hu;
-		}
-
-		/**
-		 * この面子タイプを表す日本語文字列("順子","刻子","槓子")を返す.
-		 * @return この面子タイプを表す日本語文字列.
-		 */
-		public String notation() {
-			return notation;
-		}
-
-		@Override
-		public String toString() {
-			return notation;
-		}
+		result = prime * result + sum;
+		result = prime * result + (kakanFlag ? 1231 : 1237);
+		result = prime * result + ((kaze == null) ? 0 : kaze.hashCode());
+		result = prime * result + (naki ? 1231 : 1237);
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Mentu))
+			return false;
+		Mentu other = (Mentu) obj;
+		if (kakanFlag != other.kakanFlag)
+			return false;
+		if (kaze != other.kaze)
+			return false;
+		if (naki != other.naki)
+			return false;
+		if (type != other.type)
+			return false;
+		List<Hai> temp = new ArrayList<Hai>(haiList);
+		return !temp.retainAll(other.haiList);
+	}
+	
 }
