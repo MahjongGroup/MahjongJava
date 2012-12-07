@@ -17,7 +17,6 @@ import client.MajanFrame;
 
 public class StartPage extends GraphicalPage implements MouseListener{
 	private boolean isFinish;
-	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
 	{
@@ -44,7 +43,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	}
 	
 	public StartPage(MajanFrame frame){
-		this.frame = frame;
+		setFrame(frame);
 		addMouseListener(this);
 //		new PaintThread().start();
 	}
@@ -90,7 +89,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	
 	private void dispatch(State st){
 		isFinish = true;
-		frame.setPage(st.name());
+		getFrame().setPage(st.name());
 //		switch(st){
 //		case CONFIG:
 //			frame.setPage("Config");
@@ -123,7 +122,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	}
 	@Override
 	public void movePage(String order) {
-		frame.setPage(order);
+		getFrame().setPage(order);
 	}
 	@Override
 	public String getPageName(){

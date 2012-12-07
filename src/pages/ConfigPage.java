@@ -22,7 +22,6 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	private Rule rule;
 	private List<Config> configs;
 	private boolean isFinish;
-	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
 
@@ -80,7 +79,7 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	}
 	
 	public ConfigPage(MajanFrame frame){
-		this.frame = frame;
+		setFrame(frame);
 		addMouseListener(this);
 		new PaintThread().start();
 	}
@@ -158,7 +157,7 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 		}
 		if(isInArea(mx,my,(getWidth() - BUTTON_WIDTH)/2,y,
 				BUTTON_WIDTH,BUTTON_HEIGHT))
-			frame.setPage("start");
+			getFrame().setPage("start");
 	}
 
 	@Override
@@ -177,7 +176,7 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 
 	@Override
 	public void movePage(String order) {
-		frame.setPage(order);
+		getFrame().setPage(order);
 	}
 
 	@Override

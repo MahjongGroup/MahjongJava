@@ -13,7 +13,6 @@ import client.ClientOperator;
 import client.MajanFrame;
 
 public class ResultPage extends InputPage implements Page{
-	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
 	private KyokuResult result;
@@ -25,7 +24,7 @@ public class ResultPage extends InputPage implements Page{
 	}
 	
 	public ResultPage(MajanFrame frame){
-		this.frame = frame;
+		setFrame(frame);
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {}

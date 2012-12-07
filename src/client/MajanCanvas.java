@@ -38,7 +38,6 @@ import system.Player;
 
 public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMotionListener, Page{
 	private ClientInfo info;
-	private MajanFrame frame;
 	private boolean existTsumo;
 	private GameThread gthread;
 	private OperatorThread opthread;
@@ -117,7 +116,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 
 	public MajanCanvas(MajanFrame frame) {
-		this.frame = frame;
+		setFrame(frame);
 		this.info = frame.getInfo();
 		this.haiImageMap = new HashMap<Hai, Image>();
 		for (Hai hai : MajanHai.values()) {
@@ -539,6 +538,26 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					for(StateCode subSc:buttonList){
 						dispatch(subSc);
 					}
+				else{
+					refreshStateCodes();
+					refreshButtonList();
+					switch(sc){
+					case SELECT_RON:
+						operator.sendRon(true);
+						return;
+					case KYUSYUKYUHAI:
+						operator.sendKyusyukyuhai(true);
+						return;
+					case SELECT_TSUMO:
+						operator.sendTsumoAgari();
+						return;
+					case SELECT_MINKAN:
+						operator.sendMinkan(true);
+						return;
+					default:
+						break;
+					}
+				}
 				refreshButtonList();
 				if (!(getInfo().ableIndexList.containsKey(sc) && getInfo().ableIndexList
 						.get(sc).size() == 1))
@@ -555,7 +574,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					refreshButtonList();
 					return;
 				}else{
-					if ((!(my <= PLAYER_BLOCK1_Y + HAI_HEIGHT + 270 && my >= PLAYER_BLOCK1_Y + 270)
+					if (!((my <= PLAYER_BLOCK1_Y + HAI_HEIGHT + 270 && my >= PLAYER_BLOCK1_Y + 270)
 					// クリック個所が手牌のある範囲にあり(y方向の判定)
 					&& ((mx <= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH && mx >= PLAYER_BLOCK1_X)
 					// ツモ牌以外の牌がある範囲にあるか(x方向の判定)
@@ -663,7 +682,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						.get(sc).get(0).size() == 1)) {
 					addStateCode(sc);
 				} else {
-					frame.setTitle(frame.getTitle() + "*");
+					getFrame().setTitle(getFrame().getTitle() + "*");
 					operator.sendReachIndex(info.ableIndexList.get(sc).get(0)
 							.get(0));
 					refreshButtonList();
@@ -926,19 +945,19 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		isAlive = false;
 	}
 	public void movePage(String order){
-		frame.setPage(order,imgBuffer);
+		getFrame().setPage(order,imgBuffer);
 		kill();
 	}
 	public void setFocus(){
-		frame.setLocation(0, 0);
-		frame.setAlwaysOnTop(true);
+		getFrame().setLocation(0, 0);
+		getFrame().setAlwaysOnTop(true);
 	}
 	public void hideFocus(){
-		frame.setAlwaysOnTop(false);
+		getFrame().setAlwaysOnTop(false);
 	}
 	public void setPlayers(Player[] players,int index){
 		number = index;
-		ClientInfo info = frame.getInfo();
+		ClientInfo info = getFrame().getInfo();
 		if(info != null)
 			info = new ClientInfo(number);
 		this.info = info;

@@ -46,6 +46,10 @@ public abstract class InputPage extends JPanel implements Page{
 		}
 	}
 
+	protected void setFrame(MajanFrame frame){
+		this.frame = frame;
+	}
+	
 	@Override
 	public void movePage(String order) {
 		frame.setPage(order);
@@ -72,5 +76,9 @@ public abstract class InputPage extends JPanel implements Page{
 	}
 	protected void setOperator(Client operator){
 		this.operator = operator;
+	}
+	
+	protected MajanFrame getFrame(){
+		return frame;
 	}
 }
