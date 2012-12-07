@@ -17,6 +17,8 @@ import system.Player;
 import system.Rule;
 import ai.AI;
 import ai.AIType01;
+import ai.AIType_Debug;
+import ai.AIType_Ex1;
 import ai.AbstractAI;
 
 // DEBUG class
@@ -37,7 +39,7 @@ public class Main {
 		
 		Map<Player, AI> aiMap = new HashMap<Player, AI>(4);
 		for (Player p : playerList) {
-			aiMap.put(p, new AIType01(p));
+			aiMap.put(p, new AIType_Debug(p,false,true));
 		}
 
 		Mahjong mahjong = new Mahjong(playerList, new Rule());
