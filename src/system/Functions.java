@@ -35,7 +35,7 @@ public class Functions {
 	 * 指定されたドラ表示牌から実際のドラ牌の種類を取得する.
 	 * @return 実際のドラ牌の種類．
 	 */
-	public HaiType getDora(HaiType dora) {
+	public static HaiType getDora(HaiType dora) {
 		return null;
 	}
 
