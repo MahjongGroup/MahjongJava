@@ -339,7 +339,7 @@ public class ClientOperator implements Client{
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
 		ClientInfo tmpInfo = new ClientInfo(index);
-		tmpInfo.number = index;
+		tmpInfo.playerNumber = index;
 		tmpInfo.players = players;
 		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
@@ -353,7 +353,7 @@ public class ClientOperator implements Client{
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
 		// TODO Auto-generated method stub
 		page.movePage("game");
-		((MajanCanvas)page).number = frame.getInfo().number;
+		((MajanCanvas)page).number = frame.getInfo().playerNumber;
 		((MajanCanvas)page).setKyokusu(kyokusu);
 		((MajanCanvas)page).setBakaze(bakaze);
 	}

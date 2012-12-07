@@ -38,7 +38,10 @@ public class ClientInfo {
 	List<Hai> doraList;
 	int honba;
 	Kaze bakaze;
-	int number;
+	int playerNumber;
+	
+	int yamaSize;
+	int wanpaiSize;
 
 	Hai tsumoHai;
 	int currentTurn;
