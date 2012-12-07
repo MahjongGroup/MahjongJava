@@ -362,7 +362,7 @@ public class ClientOperator implements Client{
 	public void onKyokuResultReceived(KyokuResult result) {
 		page.movePage("result");
 		((ResultPage)page).setResult(result);
-		// TODO Auto-generated method stub
+		// TODO ok?
 	}
 
 	@Override

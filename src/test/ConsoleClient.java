@@ -375,8 +375,7 @@ public class ConsoleClient implements Client {
 	public void onFieldReceived(List<Hai> tehai,
 			Map<Kaze, HurohaiList> nakihaiMap, Map<Kaze, List<Hai>> sutehaiMap,
 			Kaze currentTurn, Hai currentSutehai) {
-		// TODO Auto-generated method stub
-		
+		//TODO to be changed
 	}
 
 
