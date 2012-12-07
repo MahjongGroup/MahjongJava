@@ -539,20 +539,26 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						dispatch(subSc);
 					}
 				else{
-					refreshStateCodes();
-					refreshButtonList();
 					switch(sc){
 					case SELECT_RON:
 						operator.sendRon(true);
+						refreshStateCodes();
+						refreshButtonList();
 						return;
 					case KYUSYUKYUHAI:
 						operator.sendKyusyukyuhai(true);
+						refreshStateCodes();
+						refreshButtonList();
 						return;
 					case SELECT_TSUMO:
 						operator.sendTsumoAgari();
+						refreshStateCodes();
+						refreshButtonList();
 						return;
 					case SELECT_MINKAN:
 						operator.sendMinkan(true);
+						refreshStateCodes();
+						refreshButtonList();
 						return;
 					default:
 						break;
