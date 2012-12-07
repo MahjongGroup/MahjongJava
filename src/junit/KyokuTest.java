@@ -131,16 +131,16 @@ public class KyokuTest {
 	public void test_chinitsu_tamenchan2(){
 		kyoku.init();
 		KyokuPlayer kp = new KyokuPlayer();
-		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { NI_PIN,NI_MAN,NI_PIN,SAN_PIN,YO_PIN,GO_PIN,ROKU_PIN,NANA_PIN,NANA_PIN,NANA_PIN,HATI_PIN,HATI_PIN,TON }));
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { NI_PIN,NI_PIN,NI_PIN,SAN_PIN,YO_PIN,GO_PIN,ROKU_PIN,NANA_PIN,NANA_PIN,NANA_PIN,HATI_PIN,HATI_PIN,TON }));
 		assertEquals(list.size(), 13);
 		kp.setTehai(list);
 		kyoku.setKyokuPlayer(Kaze.TON, kp);
 		kyoku.doTsumo(HATI_PIN);
-		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+":"+kyoku.getCurrentTsumoHai());
 		assertTrue(kyoku.isReachable());
 		System.out.println(kyoku.getReachableHaiList());
 		kyoku.doReach();
-		kyoku.discard(kyoku.getReachableHaiList().get(0));
+		kyoku.discard(kyoku.getReachableHaiList().get(2));
 		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
 		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
 		assertTrue(kyoku.isTsumoAgari());
