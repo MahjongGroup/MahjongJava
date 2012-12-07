@@ -191,9 +191,10 @@ public class KyokuTest {
 		//System.out.println(kyoku.getReachableHaiList());
 		kyoku.doReach();
 		kyoku.discard(kyoku.getReachableHaiList().get(1));//東切り
-		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
-		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
 		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		kyoku.doTsumo(HATI_PIN);//4~8筒でアガリ
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+" : "+kyoku.getCurrentTsumoHai());
+		//System.out.println(kyoku.isTsumoAgari());
 		assertTrue(kyoku.isTsumoAgari());
 		kyoku.doTsumoAgari();
 	}
@@ -252,7 +253,11 @@ public class KyokuTest {
 		kyoku.nextTurn();
 		kyoku.discard(0);
 		kyoku.nextTurn();
+		kyoku.doTsumo();
 		assertTrue(kyoku.isKakanable());
+		//System.out.println(kyoku.getCurrentTurn()+" : "+kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		//System.out.println(kyoku.getFuroHaiList(kyoku.getCurrentTurn()));
+		//System.out.println(kyoku.getKakanableHaiList());
 		assertTrue(kyoku.getKakanableHaiList().size() == 2);
 		kyoku.doKakan(1);
 		kyoku.doRinsyanTsumo();
@@ -307,16 +312,19 @@ public class KyokuTest {
 		assertEquals(list.size(),13);
 		assertEquals(list2.size(),13);
 		kp.setTehai(list);
-		kp.setTehai(list2);
+		kp2.setTehai(list2);
 		kyoku.setKyokuPlayer(Kaze.TON, kp);
 		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
 		kyoku.doTsumo(GO_MAN);
+		//System.out.println(kyoku.getCurrentTurn());
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+" : "+kyoku.getCurrentTsumoHai());
 		assertTrue(kyoku.isTsumoAgari());
 		kyoku.discard(13);
 		kyoku.nextTurn();
 		kyoku.doTsumo(ROKU_MAN);
 		kyoku.discard(13);
 		assertTrue(kyoku.isTenpai(Kaze.TON));
+		//System.out.println(kyoku.getSutehaiList(Kaze.TON));
 		assertFalse(kyoku.isRonable(Kaze.TON));
 	}
 
