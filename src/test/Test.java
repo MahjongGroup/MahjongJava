@@ -5,6 +5,11 @@ import java.util.Set;
 import system.HaiType;
 import system.Yakuman;
 
+/**
+ * a
+ * @author shio
+ *
+ */
 public class Test {
 	public static void main(String[] args) {
 		Set<HaiType> set = Yakuman.getKokusiSet();
