@@ -558,9 +558,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					// クリック個所が手牌のある範囲にあり(y方向の判定)
 					&& ((mx <= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH && mx >= PLAYER_BLOCK1_X)
 					// ツモ牌以外の牌がある範囲にあるか(x方向の判定)
-					|| (mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1)
-							* HAI_WIDTH + 20 && mx >= PLAYER_BLOCK1_X
-							+ info.tehai.size() * HAI_WIDTH + 20)
+					|| (info.tsumoHai != null && (mx <= PLAYER_BLOCK1_X
+							+ (info.tehai.size() + 1) * HAI_WIDTH + 20 && mx >= PLAYER_BLOCK1_X
+							+ info.tehai.size() * HAI_WIDTH + 20))
 					// ツモ牌のある範囲にある(x方向の判定)
 					))) {
 						refreshStateCodes();

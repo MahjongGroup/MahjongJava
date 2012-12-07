@@ -84,8 +84,6 @@ public class MahjongServer {
 		MahjongGame game = new MahjongGame(plist, rule, transMap);
 		game.run();
 	}
-
 	public MahjongServer() {
 	}
-
 }
