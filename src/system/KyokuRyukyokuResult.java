@@ -3,14 +3,14 @@ package system;
 import java.util.Map;
 
 /**
- * 途中流局を表す結果．
+ * 途中流局を表す結果.
  */
 public class KyokuRyukyokuResult extends AbstractKyokuResult implements KyokuResult{
 	/**
-	 * コンストラクタ．
+	 * コンストラクタ.
 	 * 
-	 * @param oya 親．
-	 * @param map プレイヤー->そのプレイヤー局．
+	 * @param oya 親.
+	 * @param map プレイヤー->そのプレイヤー局.
 	 */
 	public KyokuRyukyokuResult(Player oya, Map<Player, KyokuPlayer> map) {
 		super(oya, map);

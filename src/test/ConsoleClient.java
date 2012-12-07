@@ -18,7 +18,7 @@ import system.Mentu;
 import system.Player;
 
 /**
- * コンソール入力を受け付けるクライアント．
+ * コンソール入力を受け付けるクライアント.
  */
 public class ConsoleClient implements Client {
 
@@ -28,8 +28,8 @@ public class ConsoleClient implements Client {
 	private Server server;
 
 	/**
-	 * 指定されたサーバーを持つコンソールクライアントを生成する．
-	 * サーバーはnullで、あとからsetしてもよい．
+	 * 指定されたサーバーを持つコンソールクライアントを生成する.
+	 * サーバーはnullで,あとからsetしてもよい.
 	 * @param server サーバ
 	 */
 	public ConsoleClient(Server server) {
@@ -65,7 +65,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに0を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに0を代入.");
 			index = 0;
 		}
 		sendDiscardIndex(index);
@@ -90,7 +90,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -116,7 +116,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -142,7 +142,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -169,7 +169,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -195,7 +195,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -221,7 +221,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -245,7 +245,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 
@@ -269,7 +269,7 @@ public class ConsoleClient implements Client {
 			index = getInt(reader);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入．");
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに-1を代入.");
 			index = -1;
 		}
 

@@ -217,7 +217,7 @@ public class AIType01 extends AbstractAI {
 				return 13;
 			return index;
 		}
-		// 対子が2つ以上なら、 1つを切る。
+		// 対子が2つ以上なら, 1つを切る。
 		if (toitsuArray[1] != 0) {
 			index =  toitsuArray[0];
 			if (index == tlist.size() - 1 && tsumohai != null) return 13;

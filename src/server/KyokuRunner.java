@@ -18,7 +18,7 @@ import ai.AI;
 import ai.AIType01;
 
 /**
- * 1回の局を走らせるクラス．
+ * 1回の局を走らせるクラス.
  */
 public class KyokuRunner {
 	private final Kyoku kyoku;
@@ -30,8 +30,8 @@ public class KyokuRunner {
 	private int stateCode;
 
 	/**
-	 * 指定された局を動かす局ランナーのコンストラクタ．
-	 * @param kyoku 局オブジェクト．
+	 * 指定された局を動かす局ランナーのコンストラクタ.
+	 * @param kyoku 局オブジェクト.
 	 */
 	public KyokuRunner(Kyoku kyoku, Map<Player, Transporter> trMap) {
 		this.kyoku = kyoku;
@@ -52,7 +52,7 @@ public class KyokuRunner {
 	}
 
 	/**
-	 * 局を開始する．
+	 * 局を開始する.
 	 */
 	public void run() {
 		kyoku.init();
@@ -161,7 +161,7 @@ public class KyokuRunner {
 	}
 
 	/**
-	 * 各クライアントに場(捨て牌、副露牌、手牌など)の情報を送る．
+	 * 各クライアントに場(捨て牌,副露牌,手牌など)の情報を送る.
 	 */
 	private void sendNeededInformation() {
 		Map<Kaze, HurohaiList> nakihai = kyoku.getHurohaiMap();
@@ -181,7 +181,7 @@ public class KyokuRunner {
 	}
 
 	/**
-	 * ツモを行い、ツモを行ったことをクライアントに知らせる．
+	 * ツモを行い,ツモを行ったことをクライアントに知らせる.
 	 */
 	private void doTsumo() {
 		kyoku.doTsumo();
@@ -204,7 +204,7 @@ public class KyokuRunner {
 	}
 
 	/**
-	 * 九種九牌、ツモ上がり、暗槓、加槓、リーチができるときに、それを送信する．
+	 * 九種九牌,ツモ上がり,暗槓,加槓,リーチができるときに,それを送信する.
 	 */
 	private void sendBeforeDiscard() {
 		Player p = kyoku.getCurrentPlayer();
@@ -225,7 +225,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// ロン、チー、ポン、明槓を送る
+	// ロン,チー,ポン,明槓を送る
 	private void sendAfterDiscard() {
 		sendRonAgari();
 		sendMinkan();
@@ -234,7 +234,7 @@ public class KyokuRunner {
 	}
 
 	/**
-	 * 九種九牌ができるとき、waitを呼び出す
+	 * 九種九牌ができるとき,waitを呼び出す
 	 */
 	private void doKyusyuKyuhai() {
 		if (kyoku.isKyusyukyuhai()) {
@@ -260,7 +260,7 @@ public class KyokuRunner {
 		stateCode = STATE_CODE_TSUMOAGARI;
 	}
 
-	// ツモあがりができるとき、waitを呼び出す
+	// ツモあがりができるとき,waitを呼び出す
 	private void doTsumoAgari() {
 		if (kyoku.isTsumoAgari()) {
 			Player p = kyoku.getCurrentPlayer();
@@ -290,7 +290,7 @@ public class KyokuRunner {
 		stateCode = STATE_CODE_KAKAN;
 	}
 
-	// 加槓できるとき、waitを呼び出す
+	// 加槓できるとき,waitを呼び出す
 	private void doKakan() {
 		if (kyoku.isKakanable()) {
 			Player p = kyoku.getCurrentPlayer();
@@ -356,7 +356,7 @@ public class KyokuRunner {
 		// to be defined
 	}
 
-	// リーチしているときはツモ切り、リーチできるときはwaitを呼び出す。
+	// リーチしているときはツモ切り,リーチできるときはwaitを呼び出す。
 	private void reach() {
 		Player p = kyoku.getCurrentPlayer();
 		Transporter tr = transporterMap.get(kyoku.getCurrentTurn());
@@ -436,7 +436,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// 捨てる牌がクライアントから送られてくるのを待つwaitを呼び出し、ツモ切りか手出しかを区別して捨てる。
+	// 捨てる牌がクライアントから送られてくるのを待つwaitを呼び出し,ツモ切りか手出しかを区別して捨てる。
 	private void discard() {
 		Player p = kyoku.getCurrentPlayer();
 		if (p.isMan()) {
@@ -483,7 +483,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// ロン上がりできると送った後、その回答が送られてくるのを待つ
+	// ロン上がりできると送った後,その回答が送られてくるのを待つ
 	private void doRon(List<Player> doRonPlayer) {
 
 		for (Kaze kaze : Kaze.values()) {
@@ -566,7 +566,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// 四家立直、四家連打、四開槓の判定
+	// 四家立直,四家連打,四開槓の判定
 	private void isSucha(Kyoku k) {
 		if (kyoku.isSuchaReach() || kyoku.isSufontsuRenta() || kyoku.isSukaikan()) {
 			kyoku.doSuchaReach();
@@ -576,7 +576,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// 明槓できるときに、そのプレイヤーに明槓できるということを伝える。
+	// 明槓できるときに,そのプレイヤーに明槓できるということを伝える。
 	private void sendMinkan() {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isMinkanable(kaze)) {
@@ -641,7 +641,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// ポンすると返ってきたら、ポンする。
+	// ポンすると返ってきたら,ポンする。
 	private void doPon() {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isPonable(kaze)) {
@@ -692,7 +692,7 @@ public class KyokuRunner {
 		}
 	}
 
-	// チーすると返ってきたとき、チーする
+	// チーすると返ってきたとき,チーする
 	private void doChi() {
 		if (kyoku.isChiable()) {
 			Player p = playerMap.get(kyoku.getCurrentTurn().simo());
@@ -743,7 +743,7 @@ public class KyokuRunner {
 	 * **********************A()******************************
 	 */
 
-	// requestKyusyukyuhai()が送られたとき、その返答が返ってくるまで待つ
+	// requestKyusyukyuhai()が送られたとき,その返答が返ってくるまで待つ
 	private boolean waitKyusyukyuhai(Transporter tr) {
 		// tr.requestKyusyukyuhai();
 		while (!tr.isKyusyukyuhaiReceived() && !tr.getGrandFlag() && !tr.isDiscardedReceived()) {
@@ -757,12 +757,12 @@ public class KyokuRunner {
 		return tr.getKyusyukyuhaiResult();
 	}
 
-	// ツモしてから牌が切られるのか、ツモせずに牌が切られる(ポン、チー)のか
+	// ツモしてから牌が切られるのか,ツモせずに牌が切られる(ポン,チー)のか
 	private boolean isThereTsumohai(Transporter tr) {
 		return tr.isThereTsumohai();
 	}
 
-	// 捨て牌を選べという命令を送って、待つ
+	// 捨て牌を選べという命令を送って,待つ
 	private int waitDiscarded(Transporter tr, boolean tumoari) {
 		tr.sendDiscard(tumoari);
 		while (!tr.isDiscardedReceived()) {
@@ -785,7 +785,7 @@ public class KyokuRunner {
 		tr.sendChiableIndexLists(list);
 	}
 
-	// チーできると送った後、その回答が返ってくるまで待つ。
+	// チーできると送った後,その回答が返ってくるまで待つ。
 	private List<Integer> waitChi(Transporter tr, List<List<Integer>> sendlist) {
 		while (!tr.isChiReceived() && !tr.isPonReceived() && !tr.isMinkanReceived()) {
 			try {
@@ -797,7 +797,7 @@ public class KyokuRunner {
 		return tr.getChiIndexList();
 	}
 
-	// ポンできると送った後、その回答が返ってくるまで待つ。
+	// ポンできると送った後,その回答が返ってくるまで待つ。
 	private List<Integer> waitPon(Transporter tr) {
 		while (!tr.isPonReceived() && !tr.isChiReceived() && !tr.isMinkanReceived()) {
 			try {
@@ -809,12 +809,12 @@ public class KyokuRunner {
 		return tr.getPonIndexList();
 	}
 
-	// ポンできるとき、そのポンできる牌のリストを送る
+	// ポンできるとき,そのポンできる牌のリストを送る
 	private void sendPonanbleIndexLists(Server tr, List<List<Integer>> list) {
 		tr.sendPonableIndexLists(list);
 	}
 
-	// 暗槓できるということを送った後、その回答を待つ
+	// 暗槓できるということを送った後,その回答を待つ
 	private List<Integer> waitAnkan(Transporter tr, List<List<Integer>> sendlist) {
 		while (!tr.isAnkanReceived() && !tr.getGrandFlag() && !tr.isDiscardedReceived()) {
 			try {
@@ -827,7 +827,7 @@ public class KyokuRunner {
 
 	}
 
-	// 明槓できると送ったあと、その回答を待つ
+	// 明槓できると送ったあと,その回答を待つ
 	private boolean waitMinkan(Transporter tr, List<Integer> sendIndexList) {
 		while (!tr.isMinkanReceived() && !tr.isChiReceived() && !tr.isPonReceived()) {
 			try {
@@ -844,7 +844,7 @@ public class KyokuRunner {
 		tr.sendMinkanableIndexList(sendIndexList);
 	}
 
-	// 加槓できると送った後、その回答が返ってくるのを待つ。
+	// 加槓できると送った後,その回答が返ってくるのを待つ。
 	private int waitKakan(Transporter tr, List<Integer> sendKakanList) {
 		while (!tr.isKakanReceived() && !tr.getGrandFlag() && !tr.isDiscardedReceived()) {
 			try {
@@ -856,7 +856,7 @@ public class KyokuRunner {
 		return tr.getKakanindex();
 	}
 
-	// リーチできるとき、リーチするかどうかの回答が返ってくるまで待つ。
+	// リーチできるとき,リーチするかどうかの回答が返ってくるまで待つ。
 	private int waitReach(Transporter tr, List<Integer> sendReachableList) {
 		while (!tr.isReachReceived() && !tr.getGrandFlag() && !tr.isDiscardedReceived()) {
 			try {
@@ -868,7 +868,7 @@ public class KyokuRunner {
 		return tr.getReachHaiIndex();
 	}
 
-	// ロン上がりできると送った後、その回答が返ってくるのを待つ
+	// ロン上がりできると送った後,その回答が返ってくるのを待つ
 	private boolean waitRon(Transporter tr) {
 		while (!tr.isRonReceived()) {
 			try {
@@ -880,7 +880,7 @@ public class KyokuRunner {
 		return tr.isRonDo();
 	}
 
-	// ツモ上がりできると送った後、その回答が返ってくるのを待つ
+	// ツモ上がりできると送った後,その回答が返ってくるのを待つ
 	private boolean waitTsumoagari(Transporter tr) {
 		while (!tr.isTsumoagariDo() && !tr.isDiscardedReceived() && !tr.getGrandFlag()) {
 			try {

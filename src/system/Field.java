@@ -2,7 +2,7 @@ package system;
 
 
 /**
- * ルール、場風を持つクラス
+ * ルール,場風を持つクラス
  */
 public class Field {
 	private final Rule rule;

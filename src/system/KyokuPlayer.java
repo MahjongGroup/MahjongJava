@@ -10,7 +10,7 @@ import java.util.Set;
 import system.Hai.HaiComparator;
 
 /**
- * ある一つの局の中のプレイヤーを表す.手牌、捨牌、副露牌などを持つ.
+ * ある一つの局の中のプレイヤーを表す.手牌,捨牌,副露牌などを持つ.
  */
 public class KyokuPlayer {
 	private final TehaiList tehaiList;
@@ -79,7 +79,7 @@ public class KyokuPlayer {
 	}
 
 	/**
-	 * このプレイヤーの手牌が指定された牌(ツモ牌)を含めて九種九牌となっている場合、 trueを返す.
+	 * このプレイヤーの手牌が指定された牌(ツモ牌)を含めて九種九牌となっている場合, trueを返す.
 	 * 
 	 * @return 九種九牌の場合true.
 	 */
@@ -136,8 +136,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌(ツモ牌)で加槓する.
 	 * 
-	 * @param hai
-	 *            加槓する牌.
+	 * @param hai 加槓する牌.
 	 * @return 加槓して出来た面子.
 	 * @throws IllegalArgumentException
 	 *             指定された牌で加槓出来ない場合.
@@ -152,10 +151,8 @@ public class KyokuPlayer {
 	/**
 	 * 指定された手牌のインデックスで加槓する.
 	 * 
-	 * @param index
-	 *            手牌インデックス.
-	 * @param tsumohai
-	 *            現在のツモ牌.
+	 * @param index 手牌インデックス.
+	 * @param tsumohai 現在のツモ牌.
 	 * @return 加槓して出来た面子.
 	 * @throws IllegalArgumentException
 	 *             指定された牌で加槓出来ない場合.
@@ -173,8 +170,7 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーが暗槓可能な場合はtrueを返す.
 	 * 
-	 * @param tsumohai
-	 *            ツモ牌.
+	 * @param tsumohai ツモ牌.
 	 * @return このプレイヤーが暗槓可能な場合はtrue.
 	 */
 	public boolean isAnkanable(Hai tsumohai) {
@@ -187,8 +183,7 @@ public class KyokuPlayer {
 	/**
 	 * 暗槓できる牌のインデックスのリストのリストを返す.
 	 * 
-	 * @param tsumohai
-	 *            ツモ牌.
+	 * @param tsumohai ツモ牌.
 	 * @return 暗槓できる牌のインデックスのリストのリスト.
 	 */
 	public List<List<Integer>> getAnkanableHaiList(Hai tsumohai) {
@@ -198,10 +193,8 @@ public class KyokuPlayer {
 	/**
 	 * 指定されたインデックス(13はツモ牌)のリストの牌で暗槓する.
 	 * 
-	 * @param tsumohai
-	 *            ツモ牌.
-	 * @param index
-	 *            暗槓する手牌のインデックス(13はツモ牌)のリスト.
+	 * @param tsumohai ツモ牌.
+	 * @param index 暗槓する手牌のインデックス(13はツモ牌)のリスト.
 	 * @return 暗槓して出来た暗槓の面子.
 	 * @throws IllegalArgumentException
 	 *             指定された牌で暗槓できない場合.
@@ -243,7 +236,7 @@ public class KyokuPlayer {
 	}
 
 	/**
-	 * リーチしている場合trueを返す.ダブルリーチしていても、このメソッドはfalseを返すことに注意しなければならない.
+	 * リーチしている場合trueを返す.ダブルリーチしていても,このメソッドはfalseを返すことに注意しなければならない.
 	 * 
 	 * @return　リーチしている場合true.
 	 */
@@ -254,19 +247,17 @@ public class KyokuPlayer {
 	/**
 	 * ダブルリーチしている場合trueを返す.
 	 * 
-	 * @return　ダブルリーチしている場合true.
+	 * @return ダブルリーチしている場合true.
 	 */
 	public boolean isDoubleReach() {
 		return dreachFlag;
 	}
 
 	/**
-	 * リーチフラグをtrueにする。指定されたフラグがtrueの場合、ダブルリーチする.
+	 * リーチフラグをtrueにする。指定されたフラグがtrueの場合,ダブルリーチする.
 	 * 
-	 * @param db
-	 *            trueの場合、ダブルリーチする.
-	 * @throws IllegalStateException
-	 *             既にリーチまたはダブルリーチしている場合.
+	 * @param db trueの場合,ダブルリーチする.
+	 * @throws IllegalStateException 既にリーチまたはダブルリーチしている場合.
 	 */
 	public void doReach(boolean db) {
 		if (reachFlag || dreachFlag)
@@ -281,10 +272,8 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーの手牌の指定されたインデックス(13はツモ牌)の牌を削除する.
 	 * 
-	 * @param tsumohai
-	 *            ツモ牌.
-	 * @param index
-	 *            削除する手牌の牌のインデックス(13はツモ牌).
+	 * @param tsumohai ツモ牌.
+	 * @param index 削除する手牌の牌のインデックス(13はツモ牌).
 	 * @return 削除された牌.
 	 * @throws IndexOutOfBoundsException
 	 *             指定されたインデックスが範囲外の場合.
@@ -305,8 +294,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌で明槓を出来る場合trueを返す.
 	 * 
-	 * @param hai
-	 *            明槓できるか確かめる牌タイプ.
+	 * @param hai 明槓できるか確かめる牌タイプ.
 	 * @return 明槓を出来る場合true.
 	 */
 	public boolean isMinkanable(HaiType type) {
@@ -318,8 +306,7 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーの明槓できる手牌のインデックスのリストを返す.
 	 * 
-	 * @param type
-	 *            牌タイプ.
+	 * @param type 牌タイプ.
 	 * @return 明槓できる手牌のインデックスのリスト.
 	 */
 	public List<Integer> getMinkanableList(HaiType type) {
@@ -329,17 +316,14 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌で明槓をする.
 	 * 
-	 * @param minkanhai
-	 *            明槓する牌.
-	 * @param kaze
-	 *            鳴かれたプレイヤーの風.
+	 * @param minkanhai 明槓する牌.
+	 * @param kaze 鳴かれたプレイヤーの風.
 	 * @return 明槓して出来た面子.
 	 */
 	public Mentu doMinkan(Hai minkanhai, Kaze kaze) {
 		HaiType type = minkanhai.type();
 
-		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type),
-				tehaiList.remove(type), tehaiList.remove(type));
+		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
 		hurohaiList.add(m);
 		nakiFlag = true;
 		return m;
@@ -348,8 +332,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌でポンできる場合trueを返す.
 	 * 
-	 * @param hai
-	 *            牌タイプ.
+	 * @param hai 牌タイプ.
 	 * @return ポンできる場合true.
 	 */
 	public boolean isPonable(HaiType type) {
@@ -362,8 +345,7 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーのポン出来る牌インデックスのリストのリストを返す.
 	 * 
-	 * @param type
-	 *            牌タイプ.
+	 * @param type 牌タイプ.
 	 * @return 牌インデックスのリストのリスト.
 	 */
 	public List<List<Integer>> getPonableHaiList(HaiType type) {
@@ -373,12 +355,9 @@ public class KyokuPlayer {
 	/**
 	 * ポンする.
 	 * 
-	 * @param ponList
-	 *            ポンするインデックスリスト.
-	 * @param sutehai
-	 *            捨て牌
-	 * @param kaze
-	 *            鳴かれた人の風.
+	 * @param ponList ポンするインデックスリスト.
+	 * @param sutehai 捨て牌
+	 * @param kaze 鳴かれた人の風.
 	 * @return ポンして出来た面子.
 	 */
 	public Mentu doPon(List<Integer> ponList, Hai sutehai, Kaze kaze) {
@@ -406,8 +385,7 @@ public class KyokuPlayer {
 	/**
 	 * チーできる場合trueを返す.
 	 * 
-	 * @param type
-	 *            牌タイプ.
+	 * @param type 牌タイプ.
 	 * @return チーできる場合true.
 	 */
 	public boolean isChiable(HaiType type) {
@@ -420,8 +398,7 @@ public class KyokuPlayer {
 	/**
 	 * チー出来る牌インデックスのリストのリストを返す.
 	 * 
-	 * @param type
-	 *            牌タイプ.
+	 * @param type 牌タイプ.
 	 * @return チー出来る牌インデックスのリストのリスト.
 	 */
 	public List<List<Integer>> getChiableHaiList(HaiType type) {
@@ -431,20 +408,16 @@ public class KyokuPlayer {
 	/**
 	 * チーする.
 	 * 
-	 * @param tiList
-	 *            チーする牌インデックスのリスト.
-	 * @param chihai
-	 *            チーする牌.
-	 * @param kaze
-	 *            鳴かれた人の風.
+	 * @param tiList チーする牌インデックスのリスト.
+	 * @param chihai チーする牌.
+	 * @param kaze 鳴かれた人の風.
 	 * @return チーして出来た面子.
 	 */
 	public Mentu doChi(List<Integer> tiList, Hai chihai, Kaze kaze) {
 		int index0 = tiList.get(0);
 		int index1 = tiList.get(1);
 
-		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0),
-				tehaiList.get(index1));
+		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0), tehaiList.get(index1));
 		if (index0 < index1) {
 			tehaiList.remove(index1);
 			tehaiList.remove(index0);
@@ -483,7 +456,7 @@ public class KyokuPlayer {
 	}
 
 	/**
-	 * テンパイしている場合trueを返す．
+	 * テンパイしている場合trueを返す.
 	 * 
 	 * @return テンパイしている場合true.
 	 */
@@ -622,33 +595,4 @@ public class KyokuPlayer {
 		this.tehaiList.addAll(list);
 	}
 
-	// DEBUG
-	public static void main(String[] args) {
-		KyokuPlayer p = new KyokuPlayer();
-		List<Hai> list = new ArrayList<Hai>();
-		HashMap<Kaze, Player> pm = new HashMap<Kaze, Player>(4);
-		pm.put(Kaze.TON, new Player(0, "A", false));
-		pm.put(Kaze.NAN, new Player(1, "B", false));
-		pm.put(Kaze.SYA, new Player(2, "C", false));
-		pm.put(Kaze.PE, new Player(3, "D", false));
-		Kyoku kyoku = new Kyoku(new Rule(), pm, Kaze.TON);
-		kyoku.init();
-		kyoku.disp();
-		list.add(MajanHai.ITI_MAN);
-		list.add(MajanHai.NI_MAN);
-		list.add(MajanHai.SAN_MAN);
-		list.add(MajanHai.TON);
-		list.add(MajanHai.TON);
-		list.add(MajanHai.TON);
-		p.setTehai(list);
-
-		kyoku.setKyokuPlayer(Kaze.TON, p);
-		kyoku.doTsumo(MajanHai.TON);
-		boolean flag = kyoku.isAnkanable();
-		if (flag) {
-			List<List<Integer>> ankan = kyoku.getAnkanableHaiList();
-			kyoku.doAnkan(ankan.get(0));
-		}
-		kyoku.disp();
-	}
 }

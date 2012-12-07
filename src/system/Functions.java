@@ -97,7 +97,7 @@ public class Functions {
 	public static List<Hai> extract(List<? extends Hai> list, SuType suType) {
 		List<Hai> result = new ArrayList<Hai>();
 		for (Hai hai : list) {
-			if(hai.type().group2() == HaiGroup2.SU){
+			if(hai.type().isSuhai()){
 				if(hai.type().suType() == suType) {
 					result.add(hai);
 				}
@@ -132,7 +132,7 @@ public class Functions {
 	
 	public static boolean isAllSuHai(Hai ...hais) {
 		for (Hai hai : hais) {
-			if (hai.type().group2() != HaiGroup2.SU)
+			if (hai.type().isTsuhai())
 				return false;
 		}
 		return true;
@@ -140,7 +140,7 @@ public class Functions {
 
 	public static boolean isAllTuHai(Hai ...hais) {
 		for (Hai hai : hais) {
-			if (hai.type().group2() != HaiGroup2.TU)
+			if (hai.type().isSuhai())
 				return false;
 		}
 		return true;

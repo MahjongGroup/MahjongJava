@@ -1,7 +1,7 @@
 package system;
 
 /**
- * 点数のタイプの列挙型。満貫、跳満などがある。
+ * 点数のタイプの列挙型。満貫,跳満などがある。
  */
 public enum ScoreType {
 	NORMAL("通常点数"),

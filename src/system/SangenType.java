@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 三元牌の種類を表す列挙型。白、撥、中の3種類がある。それぞれ0,1,2のIDを持つ。
+ * 三元牌の種類を表す列挙型。白,撥,中の3種類がある。それぞれ0,1,2のIDを持つ。
  * 
  * @author kohei
  * 

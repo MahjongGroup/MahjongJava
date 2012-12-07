@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 四人麻雀用、赤ありの麻雀牌を表すクラス。
- * @author kohei
- *
+ * 四人麻雀用,赤ありの麻雀牌を表すクラス。
  */
 public class MajanHai implements Hai {
 	public static Hai ITI_MAN = new MajanHai("一萬", HaiType.ITI_MAN, false, 0);

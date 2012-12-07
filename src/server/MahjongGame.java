@@ -13,7 +13,7 @@ import system.Rule;
 import test.Console;
 
 /**
- * 1半荘(東風)を実行するクラス．
+ * 1半荘(東風)を実行するクラス.
  */
 public class MahjongGame {
 	private final Mahjong mahjong;
@@ -27,7 +27,7 @@ public class MahjongGame {
 	}
 	
 	/**
-	 * 麻雀ゲームを実行する．
+	 * 麻雀ゲームを実行する.
 	 */
 	public void run() {
 		mahjong.init();

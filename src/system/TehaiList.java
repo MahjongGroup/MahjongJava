@@ -190,7 +190,7 @@ public class TehaiList implements List<Hai> {
 	public List<List<Integer>> getChiableHaiList(HaiType haiType) {
 		// to be changed
 
-		if (haiType.group2() != HaiGroup2.SU)
+		if (haiType.isTsuhai())
 			return null;
 
 		SuType suType = haiType.suType();
@@ -249,7 +249,7 @@ public class TehaiList implements List<Hai> {
 	}
 
 	public boolean isChiable(HaiType haiType) {
-		if (haiType.group2() != HaiGroup2.SU)
+		if (haiType.isTsuhai())
 			return false;
 
 		SuType suType = haiType.suType();
@@ -312,7 +312,7 @@ public class TehaiList implements List<Hai> {
 	}
 
 	/**
-	 * この手牌リストを牌タイプのセットに変換する.例えば [一萬、一萬、二萬、東、東、東、撥]というリストがあれば、[一萬、二萬、東、撥]という
+	 * この手牌リストを牌タイプのセットに変換する.例えば [一萬,一萬,二萬,東,東,東,撥]というリストがあれば,[一萬,二萬,東,撥]という
 	 * セットが返ってくる.
 	 * 
 	 * @return 牌タイプのセット.

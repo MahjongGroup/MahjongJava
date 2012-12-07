@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 1回(1東風、1半荘)の麻雀を表すクラス。
+ * 1回(1東風,1半荘)の麻雀を表すクラス。
  */
 public class Mahjong {
 	private final Player players[];
@@ -64,7 +64,7 @@ public class Mahjong {
 	 * @return 次の局を表すオブジェクト.
 	 */
 	public Kyoku startKyoku() {
-		// オーラスの場合、フラグを立てる.
+		// オーラスの場合,フラグを立てる.
 		if (kyokusu == 4 && rule.getEndKaze() == bakaze) {
 			lastKyoku = true;
 		}
@@ -87,7 +87,7 @@ public class Mahjong {
 	}
 
 	/**
-	 * 終局後の処理を行う．
+	 * 終局後の処理を行う.
 	 */
 	public void endKyoku() {
 		this.kyokuResult = kyoku.createKyokuResult();
@@ -222,7 +222,7 @@ public class Mahjong {
 						if (p.equals(tsumoPlayer))
 							continue;
 						int tmpScore = 0;
-						// 　親の場合、子の２倍支払う．
+						// 　親の場合,子の２倍支払う.
 						if (p.equals(oya)) {
 							tmpScore = getCeilScore(
 									kyokuResult.getAgariResult(tsumoPlayer)
@@ -297,7 +297,7 @@ public class Mahjong {
 	}
 
 	/**
-	 * 指定されたインデックスのプレイヤーを返す.指定するインデックスは立ち親を0として、後は 順番に1,2,3とした値である.
+	 * 指定されたインデックスのプレイヤーを返す.指定するインデックスは立ち親を0として,後は 順番に1,2,3とした値である.
 	 * 
 	 * @param index
 	 *            インデックス.立ち親の席を0とした席順の番号.
@@ -317,7 +317,7 @@ public class Mahjong {
 	}
 
 	/**
-	 * 指定されたインデックスのプレイヤーのスコアを返す.指定するインデックスは立ち親を0として、後は 順番に1,2,3とした値である.
+	 * 指定されたインデックスのプレイヤーのスコアを返す.指定するインデックスは立ち親を0として,後は 順番に1,2,3とした値である.
 	 * 
 	 * @param index
 	 *            インデックス.立ち親の席を0とした席順の番号.
@@ -346,7 +346,7 @@ public class Mahjong {
 	}
 
 	/**
-	 * 現在の局数を返す.例えば現在、東2局の場合2を、南4局の場合4を返す.
+	 * 現在の局数を返す.例えば現在,東2局の場合2を,南4局の場合4を返す.
 	 * 
 	 * @return 現在の局数.
 	 */

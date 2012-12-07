@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 風を表す列挙体。東、南、西、北の4つのオブジェクトを持つ。それぞれ0,1,2,3のIDを持つ。
+ * 風を表す列挙体。東,南,西,北の4つのオブジェクトを持つ。それぞれ0,1,2,3のIDを持つ。
  * 
  * @author kohei
  * 
@@ -39,7 +39,7 @@ public enum Kaze {
 	}
 
 	/**
-	 * この風の上風を返す。例えば、南の場合は東を返す。
+	 * この風の上風を返す。例えば,南の場合は東を返す。
 	 * 
 	 * @return この風の上風
 	 */
@@ -48,7 +48,7 @@ public enum Kaze {
 	}
 
 	/**
-	 * この風の対面の風を返す。例えば、東の場合は西を返す。
+	 * この風の対面の風を返す。例えば,東の場合は西を返す。
 	 * 
 	 * @return この風の対面の風
 	 */
@@ -57,7 +57,7 @@ public enum Kaze {
 	}
 
 	/**
-	 * この風の下風を返す。例えば、南の場合は西を返す。
+	 * この風の下風を返す。例えば,南の場合は西を返す。
 	 * 
 	 * @return この風の下風
 	 */
@@ -107,9 +107,4 @@ public enum Kaze {
 	 */
 	public static int TYPE_ID = 2;
 
-	public static void main(String[] args) {
-		for (int i = 0; i < KAZE_LIST.size(); i++) {
-			System.out.println(KAZE_LIST.get(i));
-		}
-	}
 }

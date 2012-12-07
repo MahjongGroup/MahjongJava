@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 局結果の抽象クラス．
+ * 局結果の抽象クラス.
  */
 public abstract class AbstractKyokuResult implements KyokuResult {
 	private final Map<Player, KyokuPlayer> playerMap;
 	private final Player oya;
 
 	/**
-	 * コンストラクタ．
-	 * @param oya 親．
-	 * @param map プレイヤー->そのプレイヤー局．
+	 * コンストラクタ.
+	 * @param oya 親.
+	 * @param map プレイヤー->そのプレイヤー局.
 	 * @throws NullPointerException
 	 */
 	public AbstractKyokuResult(Player oya, Map<Player, KyokuPlayer> map) {

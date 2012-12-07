@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ロンあがりの場合の局の結果を表すクラス．不変クラスである．
+ * ロンあがりの場合の局の結果を表すクラス.不変クラスである.
  */
 public class KyokuRonAgariResult extends AbstractKyokuResult implements KyokuResult {
 	private final Map<Player, AgariResult> agariMap;
@@ -12,7 +12,7 @@ public class KyokuRonAgariResult extends AbstractKyokuResult implements KyokuRes
 	private final Hai agariHai;
 	
 	/**
-	 * このオブジェクトのコンストラクタ．
+	 * このオブジェクトのコンストラクタ.
 	 * @param agariHai 
 	 * @param hoju
 	 * @param agariMap

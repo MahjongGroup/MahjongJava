@@ -63,7 +63,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private ClientOperator operator;
 
 	/**
-	 * サーバーとの通信を確認するスレッド。何か通信があれば、データを受け取ったり、メソッドを実行したりする。
+	 * サーバーとの通信を確認するスレッド。何か通信があれば,データを受け取ったり,メソッドを実行したりする。
 	 */
 
 	{

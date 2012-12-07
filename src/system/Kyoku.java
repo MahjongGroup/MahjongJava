@@ -52,7 +52,7 @@ public class Kyoku {
 
 	// 結果変数
 	/**
-	 * あがった人->上がり情報(役セット、基本点)
+	 * あがった人->上がり情報(役セット,基本点)
 	 */
 	private final Map<Player, AgariResult> agariMap;
 
@@ -175,11 +175,11 @@ public class Kyoku {
 	/**
 	 * 山牌からランダムに1牌をツモる.
 	 * 
-	 * @throws IllegalArgumentException 総ツモサイズが70に達しているか、ツモメソッドを連続して2回呼び出した場合．
+	 * @throws IllegalArgumentException 総ツモサイズが70に達しているか,ツモメソッドを連続して2回呼び出した場合.
 	 */
 	public void doTsumo() {
 		if (isSyukyoku())
-			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました.");
 		if (this.currentTumohai != null)
 			throw new IllegalStateException("不正なメソッド呼び出し");
 		this.currentTumohai = fetchRandomHai(this.yamahai);
@@ -221,7 +221,7 @@ public class Kyoku {
 
 	/**
 	 * ツモ上がりする.
-	 * @throws 既に終局している場合．
+	 * @throws 既に終局している場合.
 	 */
 	public void doTsumoAgari() {
 		if (this.result != null)
@@ -265,7 +265,7 @@ public class Kyoku {
 	/**
 	 * 指定された牌のインデックスで加槓する.ツモ牌を指定する場合13を入れる.
 	 * 
-	 * @param index 暗槓する牌のインデックス.13の場合、ツモ牌を表す.
+	 * @param index 暗槓する牌のインデックス.13の場合,ツモ牌を表す.
 	 * @return 加槓して出来た面子.
 	 */
 	public Mentu doKakan(int index) {
@@ -292,11 +292,11 @@ public class Kyoku {
 	/**
 	 * リンシャンツモする.
 	 * 
-	 * @throws IllegalArgumentException 総ツモサイズが70に達している場合．
+	 * @throws IllegalArgumentException 総ツモサイズが70に達している場合.
 	 */
 	public void doRinsyanTsumo() {
 		if (isSyukyoku())
-			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました.");
 		this.currentTumohai = this.wanpai.get(this.kanSize++);
 		this.currentSutehai = null;
 
@@ -370,8 +370,8 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風のプレイヤーがロンあがりする．
-	 * @throws IllegalStateException 既に終局している場合．
+	 * 指定された風のプレイヤーがロンあがりする.
+	 * @throws IllegalStateException 既に終局している場合.
 	 */
 	public void doRon(Kaze kaze) {
 		if (this.result != null)
@@ -412,11 +412,11 @@ public class Kyoku {
 		if (kp.isNaki())
 			return false;
 		//TODO isTenpai
-		return isTenpai(currentTurn);
+		return isTenpai();
 	}
 
 	/**
-	 * リーチできる場合、その牌を切ってリーチ出来るもののインデックスリストを返す.
+	 * リーチできる場合,その牌を切ってリーチ出来るもののインデックスリストを返す.
 	 * 
 	 * @return 不要牌インデックスリスト.
 	 */
@@ -648,19 +648,29 @@ public class Kyoku {
 	}
 
 	/**
+	 * 現在ターンのプレイヤーがツモ牌をいれてテンパイしている場合trueを返す.
+	 * 
+	 * @return テンパイしている場合true.
+	 */
+	public boolean isTenpai() {
+		Param param = new Param();
+
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		param.setNaki(kp.isNaki());
+		param.setJikaze(currentTurn);
+
+		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
+	}
+
+	/**
 	 * 指定された風のプレイヤーがテンパイしている場合trueを返す.
 	 * 
 	 * @param kaze 風.
 	 * @return テンパイしている場合true.
 	 */
 	public boolean isTenpai(Kaze kaze) {
-		Param param = new Param();
-
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		param.setNaki(kp.isNaki());
-		param.setJikaze(kaze);
-
-		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
+		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), kp.isNaki());
 	}
 
 	public int openDora() {
@@ -682,8 +692,8 @@ public class Kyoku {
 	}
 
 	/**
-	 * 三家和の場合trueを返す．
-	 * @return 三家和の場合はtrue．
+	 * 三家和の場合trueを返す.
+	 * @return 三家和の場合はtrue.
 	 */
 	public boolean isSanchaho() {
 		if (krbuilder == null)
@@ -766,17 +776,17 @@ public class Kyoku {
 	}
 
 	/**
-	 * リンシャン牌を合わした総ツモ枚数が70枚に達していたらtrueを返す．
+	 * リンシャン牌を合わした総ツモ枚数が70枚に達していたらtrueを返す.
 	 * 
-	 * @return 総ツモ枚数が70枚に達していたらtrue．
+	 * @return 総ツモ枚数が70枚に達していたらtrue.
 	 */
 	public boolean isRyukyoku() {
 		return this.tsumoSize == 70;
 	}
 
 	/**
-	 * 流局する．ここでいう流局とは総ツモ枚数が70枚に達して、ツモれる牌がなくなったときの 流局を指す．
-	 * このメソッドを呼び出すことでKyokuResutlを取得できるようになる．
+	 * 流局する.ここでいう流局とは総ツモ枚数が70枚に達して,ツモれる牌がなくなったときの 流局を指す.
+	 * このメソッドを呼び出すことでKyokuResutlを取得できるようになる.
 	 */
 	public void doRyukyoku() {
 		if (this.result != null)
@@ -797,8 +807,8 @@ public class Kyoku {
 	}
 
 	/**
-	 * 途中流局(三家和)する．
-	 * @throw IllegalStateException 既に局が終わっている場合．
+	 * 途中流局(三家和)する.
+	 * @throw IllegalStateException 既に局が終わっている場合.
 	 */
 	public void doTotyuRyukyokuSanchaho() {
 		if (this.result != null)
@@ -812,9 +822,9 @@ public class Kyoku {
 	}
 
 	/**
-	 * この局が終局している場合falseを返す．
+	 * この局が終局している場合falseを返す.
 	 * 
-	 * @return 終局している場合false．
+	 * @return 終局している場合false.
 	 */
 	public boolean isSyukyoku() {
 		return result != null || krbuilder != null;
@@ -856,22 +866,22 @@ public class Kyoku {
 	/**
 	 * この局の場風を返す.
 	 * 
-	 * @return この局場風．
+	 * @return この局場風.
 	 */
 	public Kaze getBakaze() {
 		return field.getBakaze();
 	}
 
 	/**
-	 * この局が終局している場合、その局結果オブジェクトを返す．終局していない場合はnullを返す．</br>
-	 * 局が終局するためには次の3つのうちのどれかを呼び出す必要がある．</br>
+	 * この局が終局している場合,その局結果オブジェクトを返す.終局していない場合はnullを返す.</br>
+	 * 局が終局するためには次の3つのうちのどれかを呼び出す必要がある.</br>
 	 * 　・doRyukoyku()</br>
 	 * 　・doTotyuRyukyoku()</br>
 	 * 　・doRonAgari()</br>
 	 * 　・doTsumoAgari()</br>
 	 * 
-	 * @return 局結果オブジェクト．
-	 * @throws IllegalStateException まだ終局していない場合．
+	 * @return 局結果オブジェクト.
+	 * @throws IllegalStateException まだ終局していない場合.
 	 */
 	public KyokuResult createKyokuResult() {
 		if (result != null)
@@ -968,15 +978,15 @@ public class Kyoku {
 	}
 
 	/**
-	 * 現在ターンの風を返す．
-	 * @return 現在ターンの風．
+	 * 現在ターンの風を返す.
+	 * @return 現在ターンの風.
 	 */
 	public Kaze getCurrentTurn() {
 		return this.currentTurn;
 	}
 
 	/**
-	 * 現在ターンのプレイヤーを返す．
+	 * 現在ターンのプレイヤーを返す.
 	 * @return 現在ターンのプレイヤー
 	 */
 	public Player getCurrentPlayer() {
@@ -984,7 +994,7 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風のプレイヤーの手牌リストを返す. 手牌リストは防御的コピーする．
+	 * 指定された風のプレイヤーの手牌リストを返す. 手牌リストは防御的コピーする.
 	 * 
 	 * @param kaze 風.
 	 * @return 手牌リスト.
@@ -994,20 +1004,20 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風のプレイヤーの捨て牌リストを返す． 手牌リストは防御的コピーする．
+	 * 指定された風のプレイヤーの捨て牌リストを返す. 手牌リストは防御的コピーする.
 	 * 
-	 * @param kaze プレイヤーの風．
-	 * @return 捨て牌リスト．
+	 * @param kaze プレイヤーの風.
+	 * @return 捨て牌リスト.
 	 */
 	public SutehaiList getSutehaiList(Kaze kaze) {
 		return kyokuPlayerMap.get(kaze).getSutehaiList();
 	}
 
 	/**
-	 * 指定された風のプレイヤーの副露牌リストを返す． 手牌リストは防御的コピーする．
+	 * 指定された風のプレイヤーの副露牌リストを返す. 手牌リストは防御的コピーする.
 	 * 
-	 * @param kaze プレイヤーの風．
-	 * @return 副露牌リスト．
+	 * @param kaze プレイヤーの風.
+	 * @return 副露牌リスト.
 	 */
 	public HurohaiList getHurohaiList(Kaze kaze) {
 		return kyokuPlayerMap.get(kaze).getHurohaiList();
@@ -1030,10 +1040,10 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定されたプレイヤーの風を返す．
+	 * 指定されたプレイヤーの風を返す.
 	 * 
-	 * @param p プレイヤー．
-	 * @return 指定されたプレイヤーの風．
+	 * @param p プレイヤー.
+	 * @return 指定されたプレイヤーの風.
 	 */
 	public Kaze getKazeOf(Player p) {
 		for (Kaze kaze : playerMap.keySet()) {
@@ -1095,7 +1105,7 @@ public class Kyoku {
 	}
 
 	/**
-	 * この局の現在のチェッカーパラムを生成して、それを返す.
+	 * この局の現在のチェッカーパラムを生成して,それを返す.
 	 * 
 	 * @param tumo ツモかどうか.
 	 * @param agariHai 上がり牌.
@@ -1113,7 +1123,7 @@ public class Kyoku {
 	}
 
 	/**
-	 * この局現在の役フラグセットを生成して、それを返す.
+	 * この局現在の役フラグセットを生成して,それを返す.
 	 * 
 	 * @param kaze 自風.
 	 * @param tumo ツモ.
@@ -1155,6 +1165,10 @@ public class Kyoku {
 		}
 		return set;
 	}
+	
+	public int sizeOfYamahai() {
+		return yamahai.size();
+	}
 
 	/**
 	 * 指定された風のプレイヤーの手牌リストのサイズを返す.
@@ -1195,7 +1209,7 @@ public class Kyoku {
 	// DEBUG
 	public void doTsumo(Hai tsumohai) {
 		if (isSyukyoku())
-			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました．");
+			throw new IllegalStateException("終局条件を満たしているのにdoTsumoメソッドが呼び出されました.");
 		if (this.currentTumohai != null)
 			throw new IllegalStateException("ツモ牌がnullでない場合にdoTsumoメソッドを呼び出せない");
 		if (!this.yamahai.remove(tsumohai)) {

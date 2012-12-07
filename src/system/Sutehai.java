@@ -1,10 +1,7 @@
 package system;
 
 /**
- * 捨て牌。鳴かれた牌の場合、どこから鳴かれたかの情報も持つ。
- * 
- * @author kohei
- * 
+ * 捨て牌。鳴かれた牌の場合,どこから鳴かれたかの情報も持つ。
  */
 public class Sutehai implements Hai {
 	private final Hai hai;
@@ -37,14 +34,30 @@ public class Sutehai implements Hai {
 		this.nakiKaze = kaze;
 	}
 
+	/**
+	 * この捨て牌が鳴かれている場合trueを返す.
+	 * @return この捨て牌が鳴かれている場合はtrue.
+	 */
 	public boolean isNaki() {
 		return naki;
 	}
 
+	/**
+	 * この捨て牌が鳴かれている場合,どこの鳴かれたプレイヤーの風を返す.この捨て牌が鳴かれていない場合は
+	 * nullを返す.
+	 * @return この牌が鳴かれた風.鳴かれていない場合はnull.
+	 */
 	public Kaze getNakiKaze() {
 		return nakiKaze;
 	}
 
+	/**
+	 * この捨て牌を指定された風のプレイヤーから鳴かれた牌とし,そのオブジェクトを返す.
+	 * この捨て牌オブジェクト自体は不変クラスなので内部状態は変化しない.
+	 * 
+	 * @param kaze 鳴いたプレイヤーの風.
+	 * @return 新しく生成された捨て牌.
+	 */
 	public Sutehai naku(Kaze kaze) {
 		return new Sutehai(this.hai, kaze);
 	}

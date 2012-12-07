@@ -69,29 +69,29 @@ public enum HaiType {
 	public int id() {
 		return id;
 	}
-	
+
 	/**
 	 * ヤオチュー牌の場合trueを返す.
 	 * @return ヤオチュー牌の場合true.
 	 */
 	public boolean isYaotyuhai() {
-		if(group2() == HaiGroup2.TU )
+		if (isTsuhai())
 			return true;
-		if(number() == 1 || number() == 9)
+		if (number() == 1 || number() == 9)
 			return true;
 		return false;
 	}
-	
+
 	/**
 	 * チュンチャン牌の場合falseを返す.
 	 * @return チュンチャン牌の場合false.
 	 */
 	public boolean isTyuntyanhai() {
-		if(this.group2() != HaiGroup2.SU)
+		if (this.isTsuhai())
 			return false;
-		
+
 		int num = number();
-		if(group2() == HaiGroup2.SU && 2 <= num && num <= 8)
+		if (isSuhai() && 2 <= num && num <= 8)
 			return true;
 		return false;
 	}
@@ -107,6 +107,38 @@ public enum HaiType {
 	}
 
 	/**
+	 * この牌タイプが数牌の場合trueを返す.
+	 * このメソッドとisTsuhai()メソッドは対称なものであり,isTsuhai() == !isSuhai() が常に成り立つ.
+	 * 
+	 * @return 数牌の場合true.
+	 */
+	public boolean isSuhai() {
+		if (id < 30)
+			return true;
+		return false;
+	}
+
+	/**
+	 * この牌タイプが字牌の場合trueを返す.
+	 * このメソッドとisSuhai()メソッドは対称なものであり,isTsuhai() == !isSuhai() が常に成り立つ.
+	 * 
+	 * @return 字牌の場合true.
+	 */
+	public boolean isTsuhai() {
+		if (id < 30)
+			return false;
+		return true;
+	}
+
+	/**
+	 * この牌タイプが三元牌の場合trueを返す.
+	 * @return 三元牌の場合true.
+	 */
+	public boolean isSangenhai() {
+		return id == 34 || id == 35 || id == 36;
+	}
+
+	/**
 	 * HaiGroup3の値を返す.
 	 * @return HaiGroup3の値.
 	 */
@@ -119,7 +151,7 @@ public enum HaiType {
 	}
 
 	/**
-	 * この牌タイプが数牌の場合、その数字を返す.数牌でない場合は例外を投げる.
+	 * この牌タイプが数牌の場合,その数字を返す.数牌でない場合は例外を投げる.
 	 * @return この数牌の数字.
 	 * @throws UnsupportedOperationException 数牌ではない牌タイプに対してこのメソッドを呼び出した場合.
 	 */
@@ -133,7 +165,7 @@ public enum HaiType {
 	}
 
 	/**
-	 * この牌タイプが風牌の場合、その風を返す.風牌でない場合は例外を投げる.
+	 * この牌タイプが風牌の場合,その風を返す.風牌でない場合は例外を投げる.
 	 * @return この風牌の風.
 	 * @throws UnsupportedOperationException 風牌でない牌タイプに対してこのメソッドを呼び出した場合.
 	 */
@@ -152,8 +184,8 @@ public enum HaiType {
 	}
 
 	/**
-	 * この牌タイプが三元牌の場合、三元牌の種類(白、撥、中)を返す.三元牌でない場合は例外を投げる.
-	 * @return 三元牌の種類(白、撥、中).
+	 * この牌タイプが三元牌の場合,三元牌の種類(白,撥,中)を返す.三元牌でない場合は例外を投げる.
+	 * @return 三元牌の種類(白,撥,中).
 	 * @throws 三元牌でない牌タイプに対してこのメソッドを呼び出した場合.
 	 */
 	public SangenType sangenType() {
@@ -167,41 +199,41 @@ public enum HaiType {
 		}
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR_MESSAGE);
 	}
-	
+
 	/**
-	 * この牌タイプが数牌の場合、その種類(萬子、筒子、索子)を返す.この牌タイプが数牌でない場合は例外を投げる.
-	 * @return 数牌の種類(萬子、筒子、索子).
+	 * この牌タイプが数牌の場合,その種類(萬子,筒子,索子)を返す.この牌タイプが数牌でない場合は例外を投げる.
+	 * @return 数牌の種類(萬子,筒子,索子).
 	 * @throws UnsupportedOperationException この牌タイプが数牌でない場合.
 	 */
 	public SuType suType() {
-		if(id < 10)
+		if (id < 10)
 			return SuType.MAN;
-		if(id < 20)
+		if (id < 20)
 			return SuType.PIN;
-		if(id < 30)
+		if (id < 30)
 			return SuType.SOU;
 		throw new UnsupportedOperationException(UNSUPPORTED_ERROR_MESSAGE);
 	}
-	
+
 	/**
-	 * 指定された数牌の種類と数字を持つ、数牌の牌タイプを返す.もし、そのような牌タイプが存在しない場合は
+	 * 指定された数牌の種類と数字を持つ,数牌の牌タイプを返す.もし,そのような牌タイプが存在しない場合は
 	 * nullを返す.
-	 * @param suType 数牌の種類(萬子，筒子、索子).
+	 * @param suType 数牌の種類(萬子，筒子,索子).
 	 * @param number 数牌の数字.
 	 * @return 指定された数牌の牌タイプ.そのような牌タイプが存在しない場合はnull.
 	 */
 	public static HaiType valueOf(SuType suType, int number) {
 		for (HaiType ht : values()) {
-			if(ht.group2() == HaiGroup2.SU && ht.suType() == suType && ht.number() == number) {
+			if (ht.isSuhai() && ht.suType() == suType && ht.number() == number) {
 				return ht;
 			}
 		}
 		return null;
 	}
-	
+
 	public static HaiType valueOf(Kaze kaze) {
 		for (HaiType ht : values()) {
-			if(ht.group3() == HaiGroup3.KAZE && kaze == ht.kaze()) {
+			if (ht.group3() == HaiGroup3.KAZE && kaze == ht.kaze()) {
 				return ht;
 			}
 		}
@@ -231,7 +263,7 @@ public enum HaiType {
 
 	/**
 	 * 牌コレクションから牌の種類ごとに1牌だけを入れた牌の種類セットを返す。例えば
-	 * [一萬、一萬、二萬、東、東、東、撥]というリストがあれば、[一萬、二萬、東、撥]という
+	 * [一萬,一萬,二萬,東,東,東,撥]というリストがあれば,[一萬,二萬,東,撥]という
 	 * セットが返ってくる。
 	 * 
 	 * @param c 牌コレクション
@@ -258,7 +290,6 @@ public enum HaiType {
 		return result;
 	}
 
-	
 	/**
 	 * 牌の種類をソートするためのコンパレーターオブジェクトの列挙型.
 	 */

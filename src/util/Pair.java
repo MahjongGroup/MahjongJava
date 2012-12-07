@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * 2つオブジェクトの対を表す.2つのオブジェクトの順番はない.つまり、例えば整数(Integer)の
- * ペアの場合、(1,2)と(2,1)は同じものを指す.ここでいう同じものとは、equalsメソッドで比較して trueを返すという意味である.
+ * 2つオブジェクトの対を表す.2つのオブジェクトの順番はない.つまり,例えば整数(Integer)の
+ * ペアの場合,(1,2)と(2,1)は同じものを指す.ここでいう同じものとは,equalsメソッドで比較して trueを返すという意味である.
  * 要素となるオブジェクトはnullであってはならない.
  */
 public class Pair<E> implements Iterable<E> {

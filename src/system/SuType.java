@@ -1,13 +1,11 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * 数牌の種類を表す列挙型。萬子、筒子、索子の3種類がある。それぞれ0,1,2のIDを持つ。
- * 
- * @author kohei
- * 
+ * 数牌の種類を表す列挙型。萬子,筒子,索子の3種類がある。それぞれ0,1,2のIDを持つ。
  */
 public enum SuType {
 	MAN("萬子", 0), PIN("筒子", 1), SOU("索子", 2);
@@ -43,12 +41,14 @@ public enum SuType {
 		return notation;
 	}
 
-	private static final List<SuType> SUHAI_LIST = new ArrayList<SuType>(3);
+	private static final List<SuType> SUHAI_LIST;
 
 	static {
-		SUHAI_LIST.add(0, MAN);
-		SUHAI_LIST.add(1, PIN);
-		SUHAI_LIST.add(2, SOU);
+		List<SuType> list = new ArrayList<SuType>(3);
+		list.add(0, MAN);
+		list.add(1, PIN);
+		list.add(2, SOU);
+		SUHAI_LIST = Collections.unmodifiableList(list);
 	}
 
 	/**

@@ -11,8 +11,8 @@ import test.ConsoleClient;
 import client.Client;
 
 /**
- * 麻雀サーバーを表すクラス．
- * とりあえずテスト用にメイン関数のみ実装．
+ * 麻雀サーバーを表すクラス.
+ * とりあえずテスト用にメイン関数のみ実装.
  */
 public class MahjongServer {
 

@@ -3,7 +3,7 @@ package system;
 import java.util.Comparator;
 
 /**
- * 牌を表すインターフェース.すべての牌(通常牌、捨牌、面子構成牌など)がこのインターフェースを実装する. 
+ * 牌を表すインターフェース.すべての牌(通常牌,捨牌,面子構成牌など)がこのインターフェースを実装する. 
  */
 public interface Hai extends Comparable<Hai> {
 	

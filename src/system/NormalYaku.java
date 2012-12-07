@@ -403,7 +403,7 @@ public enum NormalYaku implements Yaku {
 		public boolean check(Param param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			HaiType janto = param.getJanto();
-			if (janto.isTyuntyanhai() || janto.group2() == HaiGroup2.TU)
+			if (janto.isTyuntyanhai() || janto.isTsuhai())
 				return false;
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.SYUNTU) {
@@ -413,7 +413,7 @@ public enum NormalYaku implements Yaku {
 						return false;
 				} else {
 					if (mentu.get(0).type().isTyuntyanhai()
-							|| mentu.get(0).type().group2() == HaiGroup2.TU)
+							|| mentu.get(0).type().isTsuhai())
 						return false;
 				}
 			}
@@ -427,7 +427,7 @@ public enum NormalYaku implements Yaku {
 			SuType suType = null;
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();
-				if (haiType.group2() == HaiGroup2.TU)
+				if (haiType.isTsuhai())
 					continue;
 				if (suType == null)
 					suType = haiType.suType();
@@ -481,7 +481,7 @@ public enum NormalYaku implements Yaku {
 			SuType suType = null;
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();
-				if (haiType.group2() == HaiGroup2.TU)
+				if (haiType.isTsuhai())
 					return false;
 				if (suType == null)
 					suType = haiType.suType();

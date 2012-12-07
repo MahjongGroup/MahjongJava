@@ -7,7 +7,7 @@ import java.util.List;
 import system.Mentu.Type;
 
 /**
- * 待ちの種類を表す。例えば、両面待ち、単騎待ちなどがある。
+ * 待ちの種類を表す。例えば,両面待ち,単騎待ちなどがある。
  */
 public enum MatiType {
 	TANKI(2) {
@@ -24,7 +24,7 @@ public enum MatiType {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
-			if(agariType.group2() != HaiGroup2.SU)
+			if(agariType.isTsuhai())
 				return false;
 			
 			for (Mentu mentu : param.getMentuList()) {
@@ -53,7 +53,7 @@ public enum MatiType {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
-			if(agariType.group2() != HaiGroup2.SU)
+			if(agariType.isTsuhai())
 				return false;
 			
 			for (Mentu mentu : param.getMentuList()) {
@@ -80,7 +80,7 @@ public enum MatiType {
 			HaiType agariType = param.getAgariHai().type();
 			
 			// あがり牌が数牌でない場合
-			if(agariType.group2() != HaiGroup2.SU)
+			if(agariType.isTsuhai())
 				return false;
 			
 			int number = agariType.number();

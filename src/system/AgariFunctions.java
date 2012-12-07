@@ -17,7 +17,7 @@ public class AgariFunctions {
 	 * 切ってテンパイとなる牌インデックスリストを返す。どの牌を切ってもテンパイにならない場合は空のリストを返す。
 	 * 
 	 * @param tehaiList 手牌リスト
-	 * @param param　チェッカーパラメータ(鳴き、場風、風、ルールだけをセットすれば良い)
+	 * @param param　チェッカーパラメータ(鳴き,場風,風,ルールだけをセットすれば良い)
 	 * @param f フィールド.
 	 * @return 牌インデックスリスト。リーチできない場合は空のリスト
 	 */
@@ -46,7 +46,7 @@ public class AgariFunctions {
 	}
 
 	/**
-	 * テンパイしている場合、trueを返す。
+	 * テンパイしている場合,trueを返す。
 	 * 
 	 * @param tehaiList　手牌リスト
 	 * @param hurohaiList　副露牌リスト
@@ -69,7 +69,7 @@ public class AgariFunctions {
 	 * @param tsumohai　ツモ牌.
 	 * @param tehaiList　手牌リスト
 	 * @param hurohaiList　副露牌リスト
-	 * @param param　チェック用パラメータ(鳴き、場風、風、ルールだけをセットすれば良い)
+	 * @param param　チェック用パラメータ(鳴き,場風,風,ルールだけをセットすれば良い)
 	 * @param f フィールド.
 	 * @return　テンパイしている場合true
 	 */
@@ -118,12 +118,12 @@ public class AgariFunctions {
 	}
 	
 	/**
-	 * あがれる場合trueを返す。あがれない場合、役がない場合はfalse
+	 * あがれる場合trueを返す。あがれない場合,役がない場合はfalse
 	 * 
 	 * @param tehaiList 手牌のリスト
 	 * @param hurohaiList 副露牌のリスト
 	 * @param param 役チェックパラメーター
-	 * @param f 場風、ルールなど.
+	 * @param f 場風,ルールなど.
 	 * @return　あがれる場合true
 	 */
 	public static boolean isAgari(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f) {
@@ -199,7 +199,7 @@ public class AgariFunctions {
 	}
 
 	/**
-	 * 指定された牌リストなどから役を判定し、役セットを返す。役がない場合は空のセットを返す。
+	 * 指定された牌リストなどから役を判定し,役セットを返す。役がない場合は空のセットを返す。
 	 * 
 	 * @param tehaiList 手牌のリスト
 	 * @param hurohaiList 副露牌のリスト
@@ -211,7 +211,7 @@ public class AgariFunctions {
 			Param param, Field f) {
 		Set<Yaku> yakuSet = new HashSet<Yaku>();
 
-		// チェックパラムに上がり牌、副露牌を含めた牌リストをセット
+		// チェックパラムに上がり牌,副露牌を含めた牌リストをセット
 		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
 		haiList.add(param.getAgariHai());
 		for (Mentu m : hurohaiList) {
@@ -369,9 +369,7 @@ public class AgariFunctions {
 	public static boolean isNMentu1Janto(List<? extends Hai> haiList) {
 		if (haiList.size() % 3 != 2)
 			return false;
-//		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
 		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
-//		List<HaiType> haiTypeList = Functions.toHaiTypeListFromHaiCollection(haiList);
 		List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
 
 		for (HaiType haiType : haiTypeSet) {
@@ -414,7 +412,7 @@ public class AgariFunctions {
 	}
 
 	/**
-	 * チェッカーパラメータの面子リスト、雀頭を設定する。
+	 * チェッカーパラメータの面子リスト,雀頭を設定する。
 	 * 
 	 * @param haiList 手牌リスト
 	 * @param agariHai 上がり牌
@@ -424,10 +422,6 @@ public class AgariFunctions {
 	 */
 	public static boolean setMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai,
 			HurohaiList huroList, Param chParam) {
-		if ((haiList.size() + 1) % 3 != 2)
-			return false;
-
-//		Set<HaiType> haiTypeSet = Functions.getHaiTypeSetFrom(haiList);
 		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
 		List<HaiType> haiListCopy = new ArrayList<HaiType>();
 		for (Hai hai : haiList) {

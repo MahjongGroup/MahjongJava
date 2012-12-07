@@ -93,7 +93,7 @@ public class AgariResult {
 	}
 
 	/**
-	 * あがり結果オブジェクトを生成し、それを返す。あがっていないときはnullを返す。
+	 * あがり結果オブジェクトを生成し,それを返す。あがっていないときはnullを返す。
 	 * 
 	 * @param tehaiList 手牌リスト
 	 * @param hurohaiList 副露牌リスト
@@ -245,7 +245,7 @@ public class AgariResult {
 	 * @return　成功した場合true。
 	 */
 	public boolean checkYaku(TehaiList tehaiList, HurohaiList hurohaiList) {
-		// チェックパラムに上がり牌、副露牌を含めた牌リストをセット
+		// チェックパラムに上がり牌,副露牌を含めた牌リストをセット
 		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
 		haiList.add(chParam.getAgariHai());
 		for (Mentu m : hurohaiList) {

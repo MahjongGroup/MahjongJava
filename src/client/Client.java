@@ -17,15 +17,15 @@ public interface Client {
 	// ゲーム開始時
 	
 	/**
-	 * サーバーに対局を希望する．自分のIDを送る．
+	 * サーバーに対局を希望する.自分のIDを送る.
 	 * 
-	 * @param id 自分のID．
+	 * @param id 自分のID.
 	 */
 	public void requestGame(int id);
 	
 	/**
-	 * 対局が開始したことをサーバーから受け取る．引数のプレイヤーリストは
-	 * 自分を含めた対局するプレイヤーのリストである．0には東(起親)が入る．
+	 * 対局が開始したことをサーバーから受け取る.引数のプレイヤーリストは
+	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
 	 */
@@ -34,11 +34,11 @@ public interface Client {
 	// 局開始前
 	
 	/**
-	 * 局が開始したことをサーバーから受け取る．引数はその局の場風、局数である．
-	 * 例えば「南場3局目」のときはKaze.NANと3を渡す．
+	 * 局が開始したことをサーバーから受け取る.引数はその局の場風,局数である.
+	 * 例えば「南場3局目」のときはKaze.NANと3を渡す.
 	 * 
-	 * @param bakaze その局の場風．
-	 * @param kyokusu その局の局数．
+	 * @param bakaze その局の場風.
+	 * @param kyokusu その局の局数.
 	 */
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu);
 	
@@ -189,30 +189,30 @@ public interface Client {
 	public void onRonReceived(Map<Player, List<Hai>> map);
 
 	/**
-	 * ツモあがったことをサーバーから受信する．
+	 * ツモあがったことをサーバーから受信する.
 	 */
 	public void onTsumoAgariReceived();
 
 	/**
-	 * サーバーから場の情報(手牌リスト、鳴き牌マップ、捨て牌マップ)を受け取る．
-	 * @param tehai クライアントの手牌リスト．
-	 * @param nakihaiMap 場の鳴き牌マップ．
-	 * @param sutehaiMap 場の捨て牌マップ(鳴かれた牌は除く)．
-	 * @param currentTurn 現在の誰の番か．
+	 * サーバーから場の情報(手牌リスト,鳴き牌マップ,捨て牌マップ)を受け取る.
+	 * @param tehai クライアントの手牌リスト.
+	 * @param nakihaiMap 場の鳴き牌マップ.
+	 * @param sutehaiMap 場の捨て牌マップ(鳴かれた牌は除く).
+	 * @param currentTurn 現在の誰の番か.
 	 */
 	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihaiMap,
 			Map<Kaze, List<Hai>> sutehaiMap,Kaze currentTurn);
 	
 	/**
-	 * サーバーから立直後のツモ切りしたことを受け取る．
-	 * これを受け取ったクライアントは牌を強制的に切ることになる．
+	 * サーバーから立直後のツモ切りしたことを受け取る.
+	 * これを受け取ったクライアントは牌を強制的に切ることになる.
 	 */
 	// TODO これ必要？
 	public void onTsumoGiriReceived();
 	
 	// TODO 引数currentTurn確認.
 	/**
-	 * サーバーから立直したことを受信する．
+	 * サーバーから立直したことを受信する.
 	 * @param currentTurn
 	 * @param sutehaiIndex
 	 */

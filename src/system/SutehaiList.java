@@ -8,28 +8,36 @@ import java.util.ListIterator;
 
 /**
  * 捨牌を表すリストクラス。
- * 
- * @author kohei
- *
  */
 public class SutehaiList implements List<Sutehai> {
 	private final List<Sutehai> list;
 
+	/**
+	 * コンストラクタ.空の捨て牌リストを作る.
+	 */
 	public SutehaiList() {
 		this.list = new ArrayList<Sutehai>();
 	}
 
+	/**
+	 * 指定された初期容量で空の捨て牌リストを作る．
+	 * @param cap 初期容量．
+	 */
 	public SutehaiList(int cap) {
 		this.list = new ArrayList<Sutehai>(cap);
 	}
 
-	public SutehaiList(SutehaiList list) {
+	/**
+	 * コピーコンストラクタ．
+	 * @param list コピーする捨て牌のリスト．
+	 */
+	public SutehaiList(List<Sutehai> list) {
 		this.list = new ArrayList<Sutehai>(list);
 	}
 
 	/**
-	 * この捨て牌リストを鳴かれた牌を除いた牌リストに変換して、それを返す．
-	 * @return 鳴かれた牌を除いた牌リスト．
+	 * この捨て牌リストを鳴かれた牌を除いた牌リストに変換して,それを返す.
+	 * @return 鳴かれた牌を除いた牌リスト.
 	 */
 	public List<Hai> toNakiExcludedHaiList() {
 		List<Hai> ret = new ArrayList<Hai>();

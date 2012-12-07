@@ -11,7 +11,7 @@ import system.Player;
 import client.Client;
 
 /**
- * クライアントと通信を行う、サーバー-クライアント間のインターフェースとなるクラス．
+ * クライアントと通信を行う,サーバー-クライアント間のインターフェースとなるクラス.
  */
 public class Transporter implements Server {
 	private boolean grandFlag = false;
@@ -41,8 +41,8 @@ public class Transporter implements Server {
 	
 	// DEBUG 結合用
 	/**
-	 * 指定されたクライアントで生成するコンストラクタ．
-	 * clientはnullで、後からsetしてもよい．
+	 * 指定されたクライアントで生成するコンストラクタ.
+	 * clientはnullで,後からsetしてもよい.
 	 * 
 	 * @param client
 	 */
@@ -51,7 +51,7 @@ public class Transporter implements Server {
 	}
 	
 	/**
-	 * コンストラクタ．
+	 * コンストラクタ.
 	 */
 	public Transporter() {
 	}
@@ -210,14 +210,14 @@ public class Transporter implements Server {
 	}
 	
 
-	// チーできるときにチーするかどうか聞く、手牌の中でチーできる2枚を渡す
+	// チーできるときにチーするかどうか聞く,手牌の中でチーできる2枚を渡す
 	@Override
 	public void sendChiableIndexLists(List<List<Integer>> list) {
 		client.onChiableIndexListsReceived(list);
 	}
 	
 
-	// チーすると返ってきたら、チーした牌のリストが返ってくるのを待つ
+	// チーすると返ってきたら,チーした牌のリストが返ってくるのを待つ
 	@Override
 	public void onChiIndexListReceived(List<Integer> list) {
 		chiIndexList = list;
@@ -227,13 +227,13 @@ public class Transporter implements Server {
 		
 	}
 
-	// ポンできるときにポンするかどうかを聞く、手牌の中でポンできる2枚を渡す
+	// ポンできるときにポンするかどうかを聞く,手牌の中でポンできる2枚を渡す
 	@Override
 	public void sendPonableIndexLists(List<List<Integer>> list) {
 		client.onPonableIndexListsReceived(list);
 	}
 
-	// ポンすると返ってきたら、ポンした牌のリストが返ってくるのを待つ
+	// ポンすると返ってきたら,ポンした牌のリストが返ってくるのを待つ
 	@Override
 	public void onPonIndexListReceived(List<Integer> list) {
 		ponIndexList = list;
@@ -241,13 +241,13 @@ public class Transporter implements Server {
 		tumoari = false;
 	}
 
-	// 暗槓できるときに暗槓するかどうかを聞く、手牌の中で槓できる牌リストを渡す
+	// 暗槓できるときに暗槓するかどうかを聞く,手牌の中で槓できる牌リストを渡す
 	@Override
 	public void sendAnkanableIndexLists(List<List<Integer>> list) {
 		client.onAnkanableIndexListsReceived(list);
 	}
 
-	// 暗槓すると返ってきたら、槓した牌のタイプが返ってくるのを待つ
+	// 暗槓すると返ってきたら,槓した牌のタイプが返ってくるのを待つ
 	@Override
 	public void onAnkanIndexListReceived(List<Integer> list) {
 		grandFlag = true;
@@ -255,26 +255,26 @@ public class Transporter implements Server {
 		ankanIndexList = list;
 	}
 
-	// 明槓できるときに明槓するかどうかを聞く、手牌の中で槓できる牌リストを渡す
+	// 明槓できるときに明槓するかどうかを聞く,手牌の中で槓できる牌リストを渡す
 	@Override
 	public void sendMinkanableIndexList(List<Integer> indexList) {
 		client.onMinkanableIndexListReceived(indexList);
 	}
 
-	// 明槓すると返ってきたら、明槓するかしないかの返答が返ってくるのを待つ
+	// 明槓すると返ってきたら,明槓するかしないかの返答が返ってくるのを待つ
 	@Override
 	public void onMinkanableIndexReceived(boolean answer) {
 		minkanReceivedFlag = true;
 		isMinkanResult = answer;
 	}
 
-	// 加槓できるときに加槓するかどうかを聞く、手牌の中で槓できる牌リストを渡す
+	// 加槓できるときに加槓するかどうかを聞く,手牌の中で槓できる牌リストを渡す
 	@Override
 	public void sendKakanableIndexList(List<Integer> list) {
 		client.onKakanableIndexListReceived(list);
 	}
 
-	// 加槓すると返ってきたら、槓した牌のタイプが返ってくるのを待つ
+	// 加槓すると返ってきたら,槓した牌のタイプが返ってくるのを待つ
 	@Override
 	public void onKakanableIndexReceived(int index) {
 		grandFlag = true;
@@ -288,7 +288,7 @@ public class Transporter implements Server {
 		client.onReachableIndexListReceived(list);
 	}
 
-	// リーチしたとき、そのリーチした牌のインデックスを返す
+	// リーチしたとき,そのリーチした牌のインデックスを返す
 	@Override
 	public void onReachIndexReceived(int index) {
 		grandFlag = true;
@@ -345,6 +345,24 @@ public class Transporter implements Server {
 	@Override
 	public void notifyReach(Kaze currentTurn,int sutehaiIndex){
 		client.onReachReceived(currentTurn,sutehaiIndex);
+	}
+
+	@Override
+	public void onGameRequested(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendGameStart(List<Player> playerList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyStartKyoku(Kaze bakaze, int kyokusu) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

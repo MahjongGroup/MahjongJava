@@ -1,5 +1,6 @@
 package system;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -127,7 +128,7 @@ public enum Yakuman implements Yaku {
 		public boolean check(Param param, Field field) {
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();
-				if (haiType.group2() != HaiGroup2.TU)
+				if (!haiType.isTsuhai())
 					return false;
 			}
 			return true;
@@ -142,13 +143,11 @@ public enum Yakuman implements Yaku {
 		@Override
 		public boolean check(Param param, Field field) {
 			HaiType janto = param.getJanto();
-			if (janto.isTyuntyanhai() || janto.group2() == HaiGroup2.TU)
+			if (janto.isTyuntyanhai() || janto.isTsuhai())
 				return false;
 			List<Mentu> mlist = param.getMentuList();
 			for (Mentu mentu : mlist) {
-				if (mentu.type() == Mentu.Type.SYUNTU
-						|| mentu.get(0).type().isTyuntyanhai()
-						|| mentu.get(0).type().group2() == HaiGroup2.TU)
+				if (mentu.type() == Mentu.Type.SYUNTU || mentu.get(0).type().isTyuntyanhai() || mentu.get(0).type().isTsuhai())
 					return false;
 			}
 			return true;
@@ -183,7 +182,7 @@ public enum Yakuman implements Yaku {
 		@Override
 		public boolean check(Param param, Field field) {
 			Hai hai = param.getAgariHai();
-			if (hai.type().group2() == HaiGroup2.TU)
+			if (hai.type().isTsuhai())
 				return false;
 			SuType suType = hai.type().suType();
 			List<Hai> haiList = param.getHaiList();
@@ -215,7 +214,7 @@ public enum Yakuman implements Yaku {
 		@Override
 		public boolean check(Param param, Field field) {
 			Hai hai = param.getAgariHai();
-			if (hai.type().group2() == HaiGroup2.TU)
+			if (hai.type().isTsuhai())
 				return false;
 			SuType suType = hai.type().suType();
 			List<Hai> haiList = param.getHaiList();
@@ -379,43 +378,55 @@ public enum Yakuman implements Yaku {
 	/**
 	 * 国士無双に必要な牌セット
 	 */
-	private static final Set<HaiType> KOKUSI_SET = new HashSet<HaiType>(13);
+	private static final Set<HaiType> KOKUSI_SET;
 
 	static {
-		KOKUSI_SET.add(HaiType.ITI_MAN);
-		KOKUSI_SET.add(HaiType.KYU_MAN);
-		KOKUSI_SET.add(HaiType.ITI_PIN);
-		KOKUSI_SET.add(HaiType.KYU_PIN);
-		KOKUSI_SET.add(HaiType.ITI_SOU);
-		KOKUSI_SET.add(HaiType.KYU_SOU);
-		KOKUSI_SET.add(HaiType.TON);
-		KOKUSI_SET.add(HaiType.NAN);
-		KOKUSI_SET.add(HaiType.SYA);
-		KOKUSI_SET.add(HaiType.PE);
-		KOKUSI_SET.add(HaiType.HAKU);
-		KOKUSI_SET.add(HaiType.HATU);
-		KOKUSI_SET.add(HaiType.TYUN);
+		Set<HaiType> set = new HashSet<HaiType>(6);
+		set.add(HaiType.ITI_MAN);
+		set.add(HaiType.KYU_MAN);
+		set.add(HaiType.ITI_PIN);
+		set.add(HaiType.KYU_PIN);
+		set.add(HaiType.ITI_SOU);
+		set.add(HaiType.KYU_SOU);
+		set.add(HaiType.TON);
+		set.add(HaiType.NAN);
+		set.add(HaiType.SYA);
+		set.add(HaiType.PE);
+		set.add(HaiType.HAKU);
+		set.add(HaiType.HATU);
+		set.add(HaiType.TYUN);
+		KOKUSI_SET = Collections.unmodifiableSet(set);
 	}
 
+	/**
+	 * 国士無双の牌セットを返す．この牌セットは変更することが出来ない．
+	 * @return 国士無双の牌セット.
+	 */
 	public static final Set<HaiType> getKokusiSet() {
-		return new HashSet<HaiType>(KOKUSI_SET);
+		return KOKUSI_SET;
 	}
 
 	/**
 	 * 緑一色に必要な牌セット
 	 */
-	private static final Set<HaiType> RYUISO_SET = new HashSet<HaiType>(13);
+	private static final Set<HaiType> RYUISO_SET;
 
 	static {
-		RYUISO_SET.add(HaiType.NI_SOU);
-		RYUISO_SET.add(HaiType.SAN_SOU);
-		RYUISO_SET.add(HaiType.YO_SOU);
-		RYUISO_SET.add(HaiType.ROKU_SOU);
-		RYUISO_SET.add(HaiType.HATI_SOU);
-		RYUISO_SET.add(HaiType.HATU);
+		Set<HaiType> set = new HashSet<HaiType>(6);
+		set.add(HaiType.NI_SOU);
+		set.add(HaiType.SAN_SOU);
+		set.add(HaiType.YO_SOU);
+		set.add(HaiType.ROKU_SOU);
+		set.add(HaiType.HATI_SOU);
+		set.add(HaiType.HATU);
+		RYUISO_SET = Collections.unmodifiableSet(set);
 	}
 
+	/**
+	 * 緑一色の牌セットを返す．この牌セットは変更することが出来ない．
+	 * @return 緑一色の牌セット.
+	 */
 	public static final Set<HaiType> getRyuisoSet() {
-		return new HashSet<HaiType>(RYUISO_SET);
+		return RYUISO_SET;
 	}
 }

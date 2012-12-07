@@ -2,16 +2,10 @@ package system;
 
 /**
  * 役であることを表すインターフェース。
- * 
- * @author kohei
- *
  */
 public interface Yaku {
 	/**
 	 * 役のタイプ。通常役と役満に分類される。
-	 * 
-	 * @author kohei
-	 *
 	 */
 	enum Type{
 		NORMAL, YAKUMAN;
@@ -24,9 +18,10 @@ public interface Yaku {
 	public Type type();
 	
 	/**
-	 * 4面子1雀頭で構成されている必要がある場合はtrueを返す.ただし、このメソッドがfalseを
+	 * 4面子1雀頭で構成されている必要がある場合はtrueを返す.ただし,このメソッドがfalseを
 	 * 返すからといって4面子1雀頭で構成されていないとは限らない.
-	 * @return
+	 * 
+	 * @return 4面子1雀頭で構成されている必要がある場合はtrue.
 	 */
 	public boolean is4Mentu1Janto();
 	
@@ -48,7 +43,7 @@ public interface Yaku {
 	 * 指定された牌がこの役をあがっている場合trueを返す。
 	 * 
 	 * @param param 役判定に必要な材料.
-	 * @param field 局のルール、場風など.
+	 * @param field 局のルール,場風など.
 	 * @return この役をあがっている場合true
 	 */
 	public boolean check(Param param, Field field);

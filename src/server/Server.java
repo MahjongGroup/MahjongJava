@@ -17,16 +17,16 @@ public interface Server {
 	// ゲーム開始時
 	
 	/**
-	 * クライアントから対局を希望しているということを受け取る．引数は
-	 * そのプレイヤー(クライアント)のID．
+	 * クライアントから対局を希望しているということを受け取る.引数は
+	 * そのプレイヤー(クライアント)のID.
 	 * 
-	 * @param id プレイヤーのID．
+	 * @param id プレイヤーのID.
 	 */
 	public void onGameRequested(int id);
 
 	/**
-	 * 対局が開始したことをクライアントに知らせる．引数のプレイヤーリストは
-	 * 自分を含めた対局するプレイヤーのリストである．0には東(起親)が入る．
+	 * 対局が開始したことをクライアントに知らせる.引数のプレイヤーリストは
+	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
 	 */
@@ -36,11 +36,11 @@ public interface Server {
 	// 局開始前
 
 	/**
-	 * 局が開始したことをプレイヤーに知らせる．引数はその局の場風、局数である．
-	 * 例えば「南場3局目」のときはKaze.NANと3を渡す．
+	 * 局が開始したことをプレイヤーに知らせる.引数はその局の場風,局数である.
+	 * 例えば「南場3局目」のときはKaze.NANと3を渡す.
 	 * 
-	 * @param bakaze その局の場風．
-	 * @param kyokusu その局の局数．
+	 * @param bakaze その局の場風.
+	 * @param kyokusu その局の局数.
 	 */
 	public void notifyStartKyoku(Kaze bakaze, int kyokusu);
 
@@ -54,9 +54,9 @@ public interface Server {
 	public void requestKyusyukyuhai();
 
 	/**
-	 * クライアントから九種九牌するかどうかの結果を受け取る．
+	 * クライアントから九種九牌するかどうかの結果を受け取る.
 	 * 
-	 * @param answer 九種九牌する場合true．
+	 * @param answer 九種九牌する場合true.
 	 */
 	public void onKyusyukyuhaiReceived(boolean answer);
 
@@ -67,7 +67,7 @@ public interface Server {
 	public void sendTsumoHai(Hai hai);
 
 	/**
-	 * ツモ切りしたことを送信する．
+	 * ツモ切りしたことを送信する.
 	 */
 	public void sendTsumoGiri();
 
@@ -129,7 +129,7 @@ public interface Server {
 	// TODO 名前がおかしいのを結合後にリファクタリングで修正
 	/**
 	 * クライアントから明槓するかどうかの結果を受け取る。
-	 * @param answer 明槓するならtrue．
+	 * @param answer 明槓するならtrue.
 	 */
 	public void onMinkanableIndexReceived(boolean answer);
 
@@ -200,19 +200,19 @@ public interface Server {
 	public void notifyRon(Map<Player, List<Hai>> map);
 
 	/**
-	 * 局の場の情報(手牌リスト，鳴き牌マップ、捨て牌マップなど)を送る．
-	 * @param tehai そのクライアントの手牌リスト．
-	 * @param nakihai 鳴き牌マップ．
-	 * @param sutehai 捨て牌マップ(鳴かれた牌は除く)．
-	 * @param currentTurn 現在ターンの風．
+	 * 局の場の情報(手牌リスト，鳴き牌マップ,捨て牌マップなど)を送る.
+	 * @param tehai そのクライアントの手牌リスト.
+	 * @param nakihai 鳴き牌マップ.
+	 * @param sutehai 捨て牌マップ(鳴かれた牌は除く).
+	 * @param currentTurn 現在ターンの風.
 	 */
 	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn);
 
 	/**
-	 * 指定された風の人がリーチしたことを各プレイヤーに伝える．
-	 * @param currentTurn リーチした人の風．
-	 * @param sutehaiIndex 捨て牌インデックス．
+	 * 指定された風の人がリーチしたことを各プレイヤーに伝える.
+	 * @param currentTurn リーチした人の風.
+	 * @param sutehaiIndex 捨て牌インデックス.
 	 */
 	public void notifyReach(Kaze currentTurn, int sutehaiIndex);
 

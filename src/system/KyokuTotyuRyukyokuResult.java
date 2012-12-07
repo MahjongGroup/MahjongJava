@@ -10,10 +10,10 @@ public class KyokuTotyuRyukyokuResult extends AbstractKyokuResult implements Kyo
 	private final TotyuRyukyokuType type;
 	
 	/**
-	 * コンストラクタ．
-	 * @param type 途中流局の種類．
-	 * @param oya 親．
-	 * @param map プレイヤー->そのプレイヤー局．
+	 * コンストラクタ.
+	 * @param type 途中流局の種類.
+	 * @param oya 親.
+	 * @param map プレイヤー->そのプレイヤー局.
 	 * @throws NullPointerException
 	 */
 	public KyokuTotyuRyukyokuResult(TotyuRyukyokuType type, Player oya, Map<Player, KyokuPlayer> map) {

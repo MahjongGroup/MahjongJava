@@ -3,7 +3,7 @@ package system;
 import java.util.Map;
 
 /**
- * ツモ上がった場合の局の結果を表すクラス．不変クラス．
+ * ツモ上がった場合の局の結果を表すクラス.不変クラス.
  */
 public class KyokuTsumoAgariResult extends AbstractKyokuResult implements KyokuResult {
 	private final Player agariPlayer;
@@ -11,7 +11,7 @@ public class KyokuTsumoAgariResult extends AbstractKyokuResult implements KyokuR
 	private final Hai agariHai;
 	
 	/**
-	 * コンストラクタ．
+	 * コンストラクタ.
 	 * @param agariHai
 	 * @param agariPlayer
 	 * @param result

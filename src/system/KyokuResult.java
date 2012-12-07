@@ -13,9 +13,9 @@ public interface KyokuResult {
 	public abstract boolean isTotyuRyukyoku();
 
 	/**
-	 * 途中流局の種類を返す．
-	 * @return 途中流局の種類．
-	 * @throws UnsupportedOperationException 途中流局でないオブジェクトの場合．
+	 * 途中流局の種類を返す.
+	 * @return 途中流局の種類.
+	 * @throws UnsupportedOperationException 途中流局でないオブジェクトの場合.
 	 */
 	public abstract TotyuRyukyokuType getTotyuryukyokuType();
 
@@ -38,34 +38,34 @@ public interface KyokuResult {
 	public abstract boolean isRonAgari();
 
 	/**
-	 * この局の親を返す．
-	 * @return この局の親．
+	 * この局の親を返す.
+	 * @return この局の親.
 	 */
 	public abstract Player getOya();
 
 	/**
-	 * テンパイしている人の人数を返す．
+	 * テンパイしている人の人数を返す.
 	 * @return テンパイしている人の人数.
 	 */
 	public abstract int getTenpaiSize();
 
 	/**
-	 * 指定されたプレイヤーがテンパイしている場合trueを返す．
-	 * @param p テンパイしているかどうか確かめるプレイヤー．
-	 * @return テンパイしている場合true．
+	 * 指定されたプレイヤーがテンパイしている場合trueを返す.
+	 * @param p テンパイしているかどうか確かめるプレイヤー.
+	 * @return テンパイしている場合true.
 	 */
 	public abstract boolean isTenpai(Player p);
 
 	/**
-	 * あがっている人の人数を返す．
-	 * @return あがっている人の人数．
+	 * あがっている人の人数を返す.
+	 * @return あがっている人の人数.
 	 */
 	public abstract int getAgariSize();
 
 	/**
-	 * 指定されたプレイヤーがあがっている場合trueを返す．
-	 * @param p あがっているかどうか確かめるプレイヤー．
-	 * @return あがっている場合はtrue．
+	 * 指定されたプレイヤーがあがっている場合trueを返す.
+	 * @param p あがっているかどうか確かめるプレイヤー.
+	 * @return あがっている場合はtrue.
 	 */
 	public abstract boolean isAgari(Player p);
 
@@ -84,8 +84,8 @@ public interface KyokuResult {
 	/**
 	 * 指定されたプレイヤーの上がり結果を返す.
 	 * @param p 上がったプレイヤー.
-	 * @return 上がり結果(基本点、役など).
-	 * @throws UnsupportedOperationException ツモあがりでない局Resultがこのメソッドを呼び出した場合．
+	 * @return 上がり結果(基本点,役など).
+	 * @throws UnsupportedOperationException ツモあがりでない局Resultがこのメソッドを呼び出した場合.
 	 */
 	public abstract AgariResult getAgariResult(Player p);
 
@@ -96,17 +96,17 @@ public interface KyokuResult {
 	public abstract Hai getAgariHai();
 
 	/**
-	 * 指定されたプレイヤーの局情報(手牌、副露牌、捨て牌など)を返す.指定されたプレイヤーが存在しない
+	 * 指定されたプレイヤーの局情報(手牌,副露牌,捨て牌など)を返す.指定されたプレイヤーが存在しない
 	 * 場合はnullを返す.
 	 * @param p プレイヤー.
-	 * @return 局情報(手牌、副露牌、捨て牌など).
+	 * @return 局情報(手牌,副露牌,捨て牌など).
 	 */
 	public abstract KyokuPlayer getKyokuPlayer(Player p);
 
 	/**
-	 * ツモあがったプレイヤーを返す．
-	 * @return ツモあがったプレイヤー．
-	 * @throws UnsupportedOperationException ツモあがりでない局Resultがこのメソッドを呼び出した場合．
+	 * ツモあがったプレイヤーを返す.
+	 * @return ツモあがったプレイヤー.
+	 * @throws UnsupportedOperationException ツモあがりでない局Resultがこのメソッドを呼び出した場合.
 	 */
 	public abstract Player getTsumoAgariPlayer();
 	
