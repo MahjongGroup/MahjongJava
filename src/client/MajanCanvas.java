@@ -937,6 +937,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 	public void setPlayers(Player[] players,int index){
 		number = index;
+		ClientInfo info = frame.getInfo();
+		info = new ClientInfo(number);
 		this.info = new ClientInfo(number);
 		info.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
