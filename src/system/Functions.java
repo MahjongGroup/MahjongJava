@@ -30,6 +30,14 @@ public class Functions {
 		}
 		return min;
 	}
+	
+	/**
+	 * 指定されたドラ表示牌から実際のドラ牌の種類を取得する.
+	 * @return 実際のドラ牌の種類．
+	 */
+	public HaiType getDora(HaiType dora) {
+		return null;
+	}
 
 	/**
 	 * 指定された牌コレクションの中に含まれる指定された種類の牌の数を返す。
