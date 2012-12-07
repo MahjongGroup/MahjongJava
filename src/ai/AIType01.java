@@ -42,7 +42,8 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public boolean isTumoAgari() {
-		return kyoku.isTsumoAgari();
+//		return true;
+		return false;
 	}
 
 	@Override
@@ -51,8 +52,8 @@ public class AIType01 extends AbstractAI {
 		// List<Integer> kakanableHaiList = kyoku.getKakanableHaiList();
 		// return kakanableHaiList.get(0);
 		// }
-//		return -1;
-		return 0;
+		return -1;
+//		return 0;
 	}
 
 	@Override
@@ -63,17 +64,17 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public boolean isReach() {
-		return kyoku.isReachable();
+//		return true;
+		return false;
 	}
 
 	@Override
 	public int discard() {
+		int index = 0;
 		// 自風を取得。
 		Kaze kaze = kyoku.getKazeOf(super.player);
-		System.out.println(kaze);
 		// 手牌を生成。
 		TehaiList tlist = new TehaiList(kyoku.getTehaiList(kaze));
-		System.out.println(tlist);
 		Hai tsumohai = kyoku.getCurrentTsumoHai();
 		if (tsumohai != null)
 			tlist.add(kyoku.getCurrentTsumoHai());
@@ -112,9 +113,9 @@ public class AIType01 extends AbstractAI {
 		}
 		// 孤立した字牌を切る。
 		for (HaiType haiType : haiTypeSet) {
-			if (haiType.group2() == HaiGroup2.TU) {
+			if (haiType.isTsuhai()) {
 				if (Functions.sizeOfHaiTypeList(haiType, tempList) == 1) {
-					int index = tlist.indexOf(MajanHai.valueOf(haiType, false));
+					 index = tlist.indexOf(MajanHai.valueOf(haiType, false));
 					if (index == -1) {
 						index = tlist.indexOf(MajanHai.valueOf(haiType, true));
 						if (index == -1) {
@@ -196,7 +197,7 @@ public class AIType01 extends AbstractAI {
 		}
 		// 端に最も近い浮いた数牌を切る。
 		int n = 6;
-		int index = 0;
+		index = 0;
 		for (HaiType haiType : tempList) {
 			int x = (-(Math.abs(haiType.number() - 5)) + 5);
 			if (x < n) {
@@ -256,25 +257,26 @@ public class AIType01 extends AbstractAI {
 
 	@Override
 	public boolean isRon() {
-		return true;
+//		return true;
+		return false;
 	}
 
 	@Override
 	public int pon(List<List<Integer>> ponnableHaiList) {
-		return 0;
-//		return -1;
+//		return 0;
+		return -1;
 	}
 
 	@Override
 	public int chi(List<List<Integer>> chiableHaiList) {
-		return 0;
-//		return -1;
+//		return 0;
+		return -1;
 	}
 
 	@Override
 	public boolean minkan() {
-		return true;
-//		return false;
+//		return true;
+		return false;
 	}
 
 }
