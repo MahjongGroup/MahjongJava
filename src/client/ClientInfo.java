@@ -38,7 +38,11 @@ public class ClientInfo {
 	List<Hai> doraList;
 	int honba;
 	Kaze bakaze;
-	int number;
+	int playerNumber;
+	int finish;
+	
+	int yamaSize;
+	int wanpaiSize;
 
 	Hai tsumoHai;
 	int currentTurn;
@@ -62,6 +66,8 @@ public class ClientInfo {
 		this.ponableIndexLists = new ArrayList<List<Integer>>();
 		this.ankanableIndexList = new ArrayList<List<Integer>>();
 		this.kakanableIndexList = new ArrayList<List<Integer>>();
+		int dice = 2 + (int)(Math.random() * 10);
+		finish = dice;
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 

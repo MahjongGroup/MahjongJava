@@ -39,6 +39,10 @@ import system.Mentu.MentuHai;
 import system.Player;
 
 public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMotionListener, Page{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ClientInfo info;
 	private boolean existTsumo;
 	private GameThread gthread;
