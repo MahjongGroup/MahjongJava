@@ -25,6 +25,8 @@ public interface Server {
 	 */
 	public void onGameRequested(int id);
 
+	public void kohei();
+	
 	/**
 	 * 対局が開始したことをクライアントに知らせる.引数のプレイヤーリストは
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
