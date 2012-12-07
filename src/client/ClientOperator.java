@@ -320,6 +320,9 @@ public class ClientOperator implements Client{
 		tr.onGameRequested(id);
 		// TODO Auto-generated method stub
 	}
+	
+	
+	
 	public void onGameStartReceived(List<Player> playerList) {
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
