@@ -109,6 +109,46 @@ public class KyokuTest {
 	}
 
 	@Test
+	public void test_chinitsu_tamenchan1(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { NI_PIN,SAN_MAN,SAN_PIN,YO_PIN,YO_PIN,GO_PIN,GO_PIN,ROKU_PIN,ROKU_PIN,NANA_PIN,NANA_PIN,HATI_PIN,HATI_PIN }));
+		assertEquals(list.size(), 13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(SAN_PIN);
+		assertTrue(kyoku.isReachable());
+		//System.out.println(kyoku.getReachableHaiList());
+		kyoku.doReach();
+		kyoku.discard(kyoku.getReachableHaiList().get(1));
+		kyoku.doTsumo(HATI_PIN);//2筒、5筒、8筒でアガリ
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		assertTrue(kyoku.isTsumoAgari());
+		kyoku.doTsumoAgari();
+	}
+	
+	@Test
+	public void test_chinitsu_tamenchan2(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { NI_PIN,NI_PIN,NI_PIN,SAN_PIN,YO_PIN,GO_PIN,ROKU_PIN,NANA_PIN,NANA_PIN,NANA_PIN,HATI_PIN,HATI_PIN,TON }));
+		assertEquals(list.size(), 13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(HATI_PIN);
+		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+":"+kyoku.getCurrentTsumoHai());
+		assertTrue(kyoku.isReachable());
+		System.out.println(kyoku.getReachableHaiList());
+		kyoku.doReach();
+		kyoku.discard(kyoku.getReachableHaiList().get(2));
+		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
+		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		assertTrue(kyoku.isTsumoAgari());
+		kyoku.doTsumoAgari();
+	}
+	
+	
+	@Test
 	public void testIsKakanable() {
 		kyoku.init();
 		kyoku.doTsumo();

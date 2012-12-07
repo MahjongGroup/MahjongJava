@@ -358,8 +358,8 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void sendGameStart(List<Player> playerList) {
-		client.onGameStartReceived(playerList);
+	public void sendGameStart(List<Player> playerList,int index) {
+		client.onGameStartReceived(playerList,index);
 		// TODO Auto-generated method stub
 		
 	}

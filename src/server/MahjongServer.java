@@ -73,8 +73,10 @@ public class MahjongServer {
 			Thread.sleep(3000);
 		}catch(InterruptedException e){}
 
+		int index = 0;
 		for(Transporter tr:transMap.values()){
-			tr.sendGameStart(plist);
+			tr.sendGameStart(plist,index);
+			index++;
 		}
 		
 		Rule rule = new Rule();
