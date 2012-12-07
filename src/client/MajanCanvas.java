@@ -128,10 +128,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 //		this.operator = new ClientOperator(this);
 
 		// 結合テスト
-		this.info = new ClientInfo(0);
+//		this.info = new ClientInfo(0);
 //		this.number = (objSize++)%4;
 		this.number = -1;
-		info.sekiMap = new HashMap<Player, Integer>(4);
+//		info.sekiMap = new HashMap<Player, Integer>(4);
 		//TODO to be repair
 //		for (int i = 0; i < 4; i++) {
 //			info.sekiMap.put(info.players[(4 - number)%4], i);
@@ -936,9 +936,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		frame.setAlwaysOnTop(false);
 	}
 	public void setPlayers(Player[] players,int index){
-		for (int i = 0; i < 4; i++) {
-			info.sekiMap.put(info.players[(4 - index)%4], i);
-		}
 		number = index;
+		this.info = new ClientInfo(number);
+		info.sekiMap = new HashMap<Player, Integer>(4);
+		for (int i = 0; i < 4; i++) {
+			info.sekiMap.put(info.players[(4 - number)%4], i);
+		}
 	}
 }

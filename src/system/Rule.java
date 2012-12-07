@@ -54,7 +54,7 @@ public class Rule {
 		return Kaze.NAN;
 	}
 	public boolean isSyanyu(){
-		return false;
+		return true;
 	}
 	public boolean isHakoAri(){
 		return true;
