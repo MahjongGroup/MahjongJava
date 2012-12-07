@@ -4,6 +4,7 @@ import static system.Kaze.PE;
 import static system.Kaze.TON;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1197,6 +1198,7 @@ public class Kyoku {
 	public int sizeOfYamahai() {
 		return yamahai.size();
 	}
+	
 
 	/**
 	 * 指定された風のプレイヤーの手牌リストのサイズを返す.
@@ -1229,6 +1231,20 @@ public class Kyoku {
 		System.out.println(String.format("現在ターン：%s, ツモ牌：%s", currentTurn, currentTumohai));
 	}
 
+	// DEBUG
+	public void removeYamahai(Collection<Hai> c) {
+		for (Hai hai : c) {
+			this.yamahai.remove(hai);
+		}
+	}
+	
+	//DEBUG
+	public void removeWanpai(Collection<Hai> c){
+		for(Hai hai : c){
+			this.wanpai.remove(hai);
+		}
+	}
+	
 	// DEBUG
 	public void setKyokuPlayer(Kaze kaze, KyokuPlayer kp) {
 		this.kyokuPlayerMap.put(kaze, kp);
