@@ -133,6 +133,8 @@ public class ClientOperator implements Client{
 	public void onChiableIndexListsReceived(List<List<Integer>> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addButtonList(StateCode.SELECT_CHI);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
@@ -142,6 +144,8 @@ public class ClientOperator implements Client{
 	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addButtonList(StateCode.SELECT_PON);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
@@ -151,6 +155,8 @@ public class ClientOperator implements Client{
 	public void onMinkanableIndexListReceived(List<Integer> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		tmpList.add(hais);
@@ -221,6 +227,8 @@ public class ClientOperator implements Client{
 	public void onRonRequested() {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_RON);
@@ -331,12 +339,13 @@ public class ClientOperator implements Client{
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
-		ClientInfo tmp = new ClientInfo(index);
-		tmp.players = players;
-		frame.setInfo(tmp);
-		tmp.sekiMap = new HashMap<Player, Integer>(4);
+		ClientInfo tmpInfo = new ClientInfo(index);
+		tmpInfo.number = index;
+		tmpInfo.players = players;
+		frame.setInfo(tmpInfo);
+		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
-			tmp.sekiMap.put(tmp.players[(4 - index)%4], i);
+			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], i);
 		}
 		// TODO current
 	}
@@ -344,6 +353,7 @@ public class ClientOperator implements Client{
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
 		// TODO Auto-generated method stub
 		page.movePage("game");
+		((MajanCanvas)page).number = frame.getInfo().number;
 		((MajanCanvas)page).setKyokusu(kyokusu);
 		((MajanCanvas)page).setBakaze(bakaze);
 	}

@@ -118,6 +118,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	public MajanCanvas(MajanFrame frame) {
 		this.frame = frame;
+		this.info = frame.getInfo();
 		this.haiImageMap = new HashMap<Hai, Image>();
 		for (Hai hai : MajanHai.values()) {
 			haiImageMap.put(hai, ImageLoader.load(MajanHaiIDMapper.getID(hai)));
@@ -938,8 +939,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void setPlayers(Player[] players,int index){
 		number = index;
 		ClientInfo info = frame.getInfo();
-		info = new ClientInfo(number);
-		this.info = new ClientInfo(number);
+		if(info != null)
+			info = new ClientInfo(number);
+		this.info = info;
 		info.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
 			info.sekiMap.put(info.players[(4 - number)%4], i);

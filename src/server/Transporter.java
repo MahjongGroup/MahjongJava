@@ -227,7 +227,6 @@ public class Transporter implements Server {
 		chiReceivedFlag = true;
 		tumoari = false;
 		System.out.println("onChiIndexReceived");
-		
 	}
 
 	// ポンできるときにポンするかどうかを聞く,手牌の中でポンできる2枚を渡す
