@@ -102,9 +102,10 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーが加槓可能の場合trueを返す.
 	 * 
+	 * @param ツモ牌．ない場合はnull．
 	 * @return このプレイヤーが加槓可能の場合true.
 	 */
-	public boolean isKakanable() {
+	public boolean isKakanable(Hai tsumo) {
 		if (this.kanSize >= 4) {
 			return false;
 		}
@@ -113,15 +114,20 @@ public class KyokuPlayer {
 				return true;
 			}
 		}
+		
+		if (tsumo != null && hurohaiList.isKakan(tsumo.type())) {
+			return true;
+		}
 		return false;
 	}
 
 	/**
 	 * 加槓可能な手牌のインデックスリストを返す.
 	 * 
+	 * @param ツモ牌．
 	 * @return 加槓可能な手牌のインデックスリスト.加槓できる牌がない場合は空のリストを返す.
 	 */
-	public List<Integer> getKakanableHaiList() {
+	public List<Integer> getKakanableHaiList(Hai tsumo) {
 		List<Integer> result = new ArrayList<Integer>();
 
 		for (int i = 0; i < tehaiList.size(); i++) {
@@ -129,6 +135,9 @@ public class KyokuPlayer {
 			if (hurohaiList.isKakan(hai.type())) {
 				result.add(i);
 			}
+		}
+		if (hurohaiList.isKakan(tsumo.type())) {
+			result.add(13);
 		}
 		return result;
 	}

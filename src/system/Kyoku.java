@@ -233,7 +233,7 @@ public class Kyoku {
 		Kaze kaze = currentTurn;
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(true, currentTumohai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealAllDoraList());
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealOpenDoraList(), getRealUraDoraList());
 		Player agarip = playerMap.get(currentTurn);
 		Player oya = playerMap.get(TON);
 
@@ -253,7 +253,7 @@ public class Kyoku {
 			return false;
 		}
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
-		return kp.isKakanable();
+		return kp.isKakanable(this.currentTumohai);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class Kyoku {
 	 * @return 加槓可能な手牌のインデックスリスト.
 	 */
 	public List<Integer> getKakanableHaiList() {
-		return kyokuPlayerMap.get(currentTurn).getKakanableHaiList();
+		return kyokuPlayerMap.get(currentTurn).getKakanableHaiList(currentTumohai);
 	}
 
 	/**
@@ -382,7 +382,7 @@ public class Kyoku {
 
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(false, currentSutehai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealAllDoraList());
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealOpenDoraList(), getRealUraDoraList());
 
 		if (this.krbuilder == null) {
 			this.krbuilder = new KyokuRonAgariResult.Builder();

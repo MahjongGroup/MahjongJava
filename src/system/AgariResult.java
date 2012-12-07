@@ -100,7 +100,7 @@ public class AgariResult {
 	 * @param param チェッカーパラム
 	 * @return あがり結果。あがっていない場合はnull。
 	 */
-	public static AgariResult createAgariResult(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f, List<HaiType> doraList) {
+	public static AgariResult createAgariResult(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f, List<HaiType> doraList, List<HaiType> uraDoraList) {
 		AgariResult result = new AgariResult(param, f);
 		result.checkYaku(tehaiList, hurohaiList);
 
@@ -110,7 +110,7 @@ public class AgariResult {
 		}
 		// 通常役の場合
 		else {
-			result.calcHanAndHu(doraList);
+			result.calcHanAndHu(doraList, uraDoraList);
 		}
 		result.calcScore();
 		return result;
@@ -136,7 +136,7 @@ public class AgariResult {
 	/**
 	 * 翻数と符数を計算する。
 	 */
-	public void calcHanAndHu(List<HaiType> doraList) {
+	public void calcHanAndHu(List<HaiType> doraList, List<HaiType> uraDoraList) {
 		for (Yaku yaku : this.yakuSet) {
 			if (yaku instanceof NormalYaku) {
 				NormalYaku nYaku = (NormalYaku) yaku;
@@ -151,10 +151,22 @@ public class AgariResult {
 		}
 
 		List<Hai> haiList = chParam.getHaiList();
+		
+		// 表ドラ確認
 		for (Hai hai : haiList) {
 			for (HaiType haiType : doraList) {
 				if (hai.type() == haiType)
 					this.doraSize += 1;
+			}
+		}
+		
+		// 立直している場合は裏ドラ確認
+		if (yakuSet.contains(NormalYaku.RICHI)) {
+			for (Hai hai : haiList) {
+				for (HaiType haiType : uraDoraList) {
+					if (hai.type() == haiType)
+						this.doraSize += 1;
+				}
 			}
 		}
 
