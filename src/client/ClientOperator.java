@@ -9,6 +9,7 @@ import server.Server;
 import system.Hai;
 import system.HurohaiList;
 import system.Kaze;
+import system.KyokuResult;
 import system.Mentu;
 import system.Player;
 import test.GlobalVar;
@@ -319,7 +320,6 @@ public class ClientOperator implements Client{
 		tr.onGameRequested(id);
 		// TODO Auto-generated method stub
 	}
-	@Override
 	public void onGameStartReceived(List<Player> playerList) {
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
@@ -328,6 +328,8 @@ public class ClientOperator implements Client{
 //		((MajanCanvas)page).setPlayers(players);
 		// TODO current
 	}
+	
+	@Override
 	public void onGameStartReceived(List<Player> playerList,int index) {
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
@@ -338,6 +340,12 @@ public class ClientOperator implements Client{
 	}
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKyokuResultReceived(KyokuResult result) {
 		// TODO Auto-generated method stub
 		
 	}
