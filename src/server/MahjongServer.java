@@ -58,7 +58,6 @@ public class MahjongServer {
 			count++;
 		}
 		boolean isWait = true;
-		System.out.println("before wait");
 		while(isWait){
 			isWait = false;
 			for(Transporter tr:transMap.values()){
@@ -75,7 +74,7 @@ public class MahjongServer {
 
 		int index = 0;
 		for(Transporter tr:transMap.values()){
-			tr.sendGameStart(plist,index);
+			tr.sendGameStart(plist,(5 + index) % 4);
 			index++;
 		}
 		
