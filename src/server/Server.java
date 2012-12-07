@@ -11,7 +11,6 @@ import system.Player;
 
 /**
  * クライアントとの通信を行うメソッドを実装するインターフェース。
- * @author mori, kohei
  */
 public interface Server {
 	
@@ -24,10 +23,6 @@ public interface Server {
 	 * @param id プレイヤーのID.
 	 */
 	public void onGameRequested(int id);
-	
-	public void mori2();
-
-	public void kohei();
 	
 	/**
 	 * 対局が開始したことをクライアントに知らせる.引数のプレイヤーリストは
