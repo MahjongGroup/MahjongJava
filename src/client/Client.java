@@ -30,8 +30,9 @@ public interface Client {
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
+	 * @param index 
 	 */
-	public void onGameStartReceived(List<Player> playerList);
+	public void onGameStartReceived(List<Player> playerList, int index);
 
 	// 局開始前
 	
