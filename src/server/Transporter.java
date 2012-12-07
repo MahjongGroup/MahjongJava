@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
@@ -324,7 +325,6 @@ public class Transporter implements Server {
 		grandFlag = true;
 	}
 
-	@Override
 	public void sendField(List<Hai> tehai,Map<Kaze,HurohaiList> nakihai,Map<Kaze, List<Hai>> sutehai,Kaze currentTurn,
 			Hai currentSutehai,List<Integer> tehaiSize,int yamaSize,int wanpaiSize,List<HaiType> doraList) {
 		client.onFieldReceived(tehai,nakihai,sutehai,currentTurn,currentSutehai,tehaiSize,yamaSize,wanpaiSize,doraList);
@@ -385,4 +385,13 @@ public class Transporter implements Server {
 	public void notifyKyokuResult(KyokuResult result) {
 		client.onKyokuResultReceived(result);
 	}
+
+//	@Override
+//	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
+//			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
+//			List<Integer> tehaiSize, int yamaSize, int wanpaiSize,
+//			List<HaiType> doraList) {
+//		// TODO Auto-generated method stub
+//		
 }
+
