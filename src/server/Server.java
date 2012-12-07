@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
@@ -204,9 +205,10 @@ public interface Server {
 	 * @param currentTurn 現在ターンの風.
 	 * @param hai 
 	 */
-	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
+	void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
-			List<Integer> tehaiSize, int yamaSize,int intwanpaiSize, List<Hai> doraList);
+			List<Integer> tehaiSize, int yamaSize, int wanpaiSize,
+			List<HaiType> doraList);
 
 	/**
 	 * 指定された風の人がリーチしたことを各プレイヤーに伝える.
@@ -224,6 +226,9 @@ public interface Server {
 
 
 	public void notifyKyokuResult(KyokuResult kr);
+
+	
+	
 
 	
 	

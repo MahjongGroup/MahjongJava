@@ -1272,4 +1272,12 @@ public class Kyoku {
 		this.currentTumohai = tsumohai;
 		this.tsumoSize++;
 	}
+	
+	public List<Hai> getWanpaiList(){
+		return wanpai;
+	}
+	
+	public List<Hai> getYamahaiList(){
+		return yamahai;
+	}
 }

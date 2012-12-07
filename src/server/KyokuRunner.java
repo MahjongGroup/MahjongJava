@@ -173,11 +173,18 @@ public class KyokuRunner {
 			sutehai.put(kaze, sutehailist.toNakiExcludedHaiList());
 		}
 	
+		List<Integer> tehaiSize = new ArrayList<Integer>();
+		for(Kaze kaze:Kaze.values()){
+			tehaiSize.add(kyoku.getTehaiList(kaze).size());
+		}
+			
 		for (Kaze kaze : transporterMap.keySet()) {
 			TehaiList tehai = kyoku.getTehaiList(kaze);
 			Server tr = transporterMap.get(kaze);
 
-			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(),kyoku.getCurrentSutehai());
+			
+			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(),kyoku.getCurrentSutehai(),
+					tehaiSize,kyoku.getYamahaiList().size(),kyoku.getWanpaiList().size(),kyoku.getRealOpenDoraList());
 		}
 	}
 
