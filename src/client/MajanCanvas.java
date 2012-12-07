@@ -202,6 +202,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
+		
 
 		if (stateCodes.contains(StateCode.END)) {
 			g2.setColor(Color.RED);

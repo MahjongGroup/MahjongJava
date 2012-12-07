@@ -208,8 +208,7 @@ public interface Client {
 	public void onFieldReceived(List<Hai> tehai,
 			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
 			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
-			int yamaSize, int wanpaiSize, List<HaiType> doraList);
-	
+			int yamaSize, int wanpaiSize, List<Hai> doraList);
 	/**
 	 * サーバーから立直後のツモ切りしたことを受け取る.
 	 * これを受け取ったクライアントは牌を強制的に切ることになる.

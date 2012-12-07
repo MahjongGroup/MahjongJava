@@ -374,10 +374,11 @@ public class ConsoleClient implements Client {
 
 	@Override
 	public void onFieldReceived(List<Hai> tehai,
-			Map<Kaze, HurohaiList> nakihaiMap, Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn, Hai currentSutehai) {
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<Hai> doraList) {
+		// TODO Auto-generated method stub
 		
-		//TODO to be changed
 	}
 
 

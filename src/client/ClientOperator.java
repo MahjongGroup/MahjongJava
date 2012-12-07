@@ -378,7 +378,7 @@ public class ClientOperator implements Client{
 	public void onFieldReceived(List<Hai> tehai,
 			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
 			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
-			int yamaSize, int wanpaiSize, List<HaiType> doraList) {
+			int yamaSize, int wanpaiSize, List<Hai> doraList) {
 		if (canvas == null)
 			return;
 		ClientInfo info = canvas.getInfo();
@@ -396,8 +396,6 @@ public class ClientOperator implements Client{
 		}
 		info.yamaSize = yamaSize;
 		info.wanpaiSize = wanpaiSize;
-//		for(HaiType ht:doraList){
-//			info.doraList.add(MajanHai.valueOf(ht, aka));
-//		}
+		info.doraList = doraList;
 	}
 }
