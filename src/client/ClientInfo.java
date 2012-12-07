@@ -67,7 +67,13 @@ public class ClientInfo {
 		this.ankanableIndexList = new ArrayList<List<Integer>>();
 		this.kakanableIndexList = new ArrayList<List<Integer>>();
 		int dice = 2 + (int)(Math.random() * 10);
-		finish = dice;
+		finish = (dice + 66) % 68;
+//		2,6,10 % 4 = 2 ->39,35,31  17 * 2 + 1 = 35 + (6 - i)
+//		3,7,11 % 4 = 3 ->55,51,47  17 * 3 + 0 = 51 + (7 - i)
+//		4,8,12 % 4 = 0 ->3,-1,-5   17 * 0 - 1 = -1 + (8 - i)
+//		5,9    % 4 = 1 ->19,23     17 * 1 - 2 = 15 + (9 - i)
+		
+		
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 

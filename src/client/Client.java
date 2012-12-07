@@ -5,6 +5,7 @@ import java.util.Map;
 
 import server.KyokuRunner;
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
@@ -204,8 +205,10 @@ public interface Client {
 	 * @param currentTurn 現在の誰の番か.
 	 * @param currentSutehai 
 	 */
-	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,Kaze currentTurn, Hai currentSutehai);
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<HaiType> doraList);
 	
 	/**
 	 * サーバーから立直後のツモ切りしたことを受け取る.

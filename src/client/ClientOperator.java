@@ -9,9 +9,11 @@ import pages.Page;
 import pages.ResultPage;
 import server.Server;
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
+import system.MajanHai;
 import system.Mentu;
 import system.Player;
 
@@ -292,27 +294,28 @@ public class ClientOperator implements Client{
 	}
 
 
-	public void onFieldReceived(List<Hai> tehai,
-			Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn,Hai currentSutehai) {
-		if(canvas == null)
-			return;
-		ClientInfo info = canvas.getInfo();
-		info.tehai = tehai;
-		info.currentTurn = info.kaze.get(currentTurn);
-		for (Kaze k : Kaze.values()) {
-			int i = info.kaze.get(k);
-			synchronized (info.sutehaiMap) {
-				info.sutehaiMap.put(i, sutehaiMap.get(k));
-			}
-			if(k == currentTurn){
-				info.sutehaiMap.get(i).add(currentSutehai);
-				
-			}
-			info.hurohaiMap.put(i, nakihaiMap.get(k));
-		}
-	}
+//	@Override
+//	public void onFieldReceived(List<Hai> tehai,
+//			Map<Kaze, HurohaiList> nakihaiMap,
+//			Map<Kaze, List<Hai>> sutehaiMap,
+//			Kaze currentTurn,Hai currentSutehai) {
+//		if(canvas == null)
+//			return;
+//		ClientInfo info = canvas.getInfo();
+//		info.tehai = tehai;
+//		info.currentTurn = info.kaze.get(currentTurn);
+//		for (Kaze k : Kaze.values()) {
+//			int i = info.kaze.get(k);
+//			synchronized (info.sutehaiMap) {
+//				info.sutehaiMap.put(i, sutehaiMap.get(k));
+//			}
+//			if(k == currentTurn){
+//				info.sutehaiMap.get(i).add(currentSutehai);
+//				
+//			}
+//			info.hurohaiMap.put(i, nakihaiMap.get(k));
+//		}
+//	}
 
 
 	@Override
@@ -373,8 +376,9 @@ public class ClientOperator implements Client{
 
 	@Override
 	public void onFieldReceived(List<Hai> tehai,
-			Map<Kaze, HurohaiList> nakihaiMap, Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn, Hai currentSutehai) {
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<HaiType> doraList) {
 		if (canvas == null)
 			return;
 		ClientInfo info = canvas.getInfo();
@@ -383,11 +387,17 @@ public class ClientOperator implements Client{
 		for (Kaze k : Kaze.values()) {
 			int i = info.kaze.get(k);
 			synchronized (info.sutehaiMap) {
-				info.sutehaiMap.put(i, sutehaiMap.get(k));
+				info.sutehaiMap.put(i, sutehai.get(k));
 			}
+			info.tehaiSizeMap.put(i, tehaiSize.get(i));
 			if(k == currentTurn)
 				info.sutehaiMap.get(i).add(currentSutehai);
-			info.hurohaiMap.put(i, nakihaiMap.get(k));
+			info.hurohaiMap.put(i, nakihai.get(k));
 		}
+		info.yamaSize = yamaSize;
+		info.wanpaiSize = wanpaiSize;
+//		for(HaiType ht:doraList){
+//			info.doraList.add(MajanHai.valueOf(ht, aka));
+//		}
 	}
 }
