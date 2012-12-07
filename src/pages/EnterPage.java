@@ -126,6 +126,7 @@ public class EnterPage extends InputPage implements Page{
 	public EnterPage(MajanFrame frame,Server tr){
 		this(frame);
 		operator = new ClientOperator(tr);
+		((ClientOperator)operator).setFrame(frame);
 		((Transporter)tr).setClient(operator);
 		setOperator(operator);
 		if(operator != null)

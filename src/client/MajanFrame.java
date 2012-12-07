@@ -21,6 +21,14 @@ public class MajanFrame extends JFrame{
 	private Server server;
 	private ClientInfo info;
 	
+	public void setInfo(ClientInfo info){
+		this.info = info;
+	}
+	
+	public ClientInfo getInfo(){
+		return info;
+	}
+	
 	public void setServer(Server server){
 		this.server = server;
 	}

@@ -1,6 +1,7 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,11 @@ public class ClientOperator implements Client{
 	private MajanCanvas canvas;
 	private Server tr;
 	private Page page;
+	private MajanFrame frame;
+	
+	public void setFrame(MajanFrame frame){
+		this.frame = frame;
+	}
 	
 	public ClientOperator(Server tr){
 		this.tr = tr;
@@ -325,10 +331,13 @@ public class ClientOperator implements Client{
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
-		while(!(page instanceof MajanCanvas)){
-			
+		ClientInfo tmp = new ClientInfo(index);
+		tmp.players = players;
+		frame.setInfo(tmp);
+		tmp.sekiMap = new HashMap<Player, Integer>(4);
+		for (int i = 0; i < 4; i++) {
+			tmp.sekiMap.put(tmp.players[(4 - index)%4], i);
 		}
-		((MajanCanvas)page).setPlayers(players,index);
 		// TODO current
 	}
 	@Override

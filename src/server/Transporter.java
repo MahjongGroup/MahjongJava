@@ -366,7 +366,7 @@ public class Transporter implements Server {
 
 	@Override
 	public void notifyStartKyoku(Kaze bakaze, int kyokusu) {
-		// TODO Auto-generated method stub
+		client.onStartKyokuReceived(bakaze, kyokusu);
 		
 	}
 	
