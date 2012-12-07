@@ -115,4 +115,10 @@ public abstract class AbstractMajanHai implements Hai{
 		return hai.type();
 	}
 
+	@Override
+	public HaiType nextOfDora() {
+		return hai.nextOfDora();
+	}
+
+
 }
