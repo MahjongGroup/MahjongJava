@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import system.KyokuResult;
+
 import client.Client;
 import client.ClientOperator;
 import client.MajanFrame;
@@ -14,6 +16,7 @@ public class ResultPage extends InputPage implements Page{
 	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
+	private KyokuResult result;
 	public ResultPage(MajanFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
@@ -54,5 +57,9 @@ public class ResultPage extends InputPage implements Page{
 	public String getPageName() {
 		// TODO Auto-generated method stub
 		return "Result";
+	}
+	
+	public void setResult(KyokuResult result){
+		this.result = result;
 	}
 }
