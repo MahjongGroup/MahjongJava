@@ -230,8 +230,7 @@ public class Mentu{
 	 * 1萬,2萬という形から3萬を鳴いた場合,[1萬,2萬,3萬]という面子オブジェクトを生成できるが
 	 * 3萬が鳴かれてこの面子が出来たので,3萬は鳴かれたという情報を持つことになる. 
 	 */
-	public static class MentuHai implements Hai {
-		private final Hai hai;
+	public static class MentuHai extends AbstractMajanHai {
 		private final boolean naki;
 
 		/**
@@ -240,8 +239,7 @@ public class Mentu{
 		 * @param naki 鳴いている場合true.
 		 */
 		public MentuHai(Hai hai, boolean naki) {
-			// TODO change
-			this.hai = MajanHai.valueOf(hai.type(), hai.aka());
+			super(hai);
 			this.naki = naki;
 		}
 
@@ -254,11 +252,6 @@ public class Mentu{
 		}
 
 		@Override
-		public HaiType type() {
-			return hai.type();
-		}
-
-		@Override
 		public String toString() {
 			if (naki) {
 				return hai + "(鳴き)";
@@ -266,25 +259,6 @@ public class Mentu{
 			return hai.notation();
 		}
 
-		@Override
-		public String notation() {
-			return hai.notation();
-		}
-
-		@Override
-		public boolean aka() {
-			return hai.aka();
-		}
-
-		@Override
-		public int compareTo(Hai hai) {
-			return hai.compareTo(hai);
-		}
-
-		@Override
-		public int ordinal() {
-			return hai.ordinal();
-		}
 	}
 
 	/**

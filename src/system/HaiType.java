@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * 牌の種類を表す列挙型.
  */
-public enum HaiType {
+public enum HaiType{
 	ITI_MAN("一萬", 1),
 	NI_MAN("二萬", 2),
 	SAN_MAN("三萬", 3),
