@@ -25,7 +25,7 @@ public interface Server {
 	 */
 	public void onGameRequested(int id);
 	
-	public void mori();
+	public void mori2();
 
 	public void kohei();
 	
