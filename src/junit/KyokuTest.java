@@ -593,15 +593,11 @@ public class KyokuTest {
 	@Test
 	public void testGetDoraList() {
 		kyoku.init();
-		//System.out.println(kyoku.getDoraList());
-		kyoku.getDoraList();
 	}
 
 	@Test
 	public void testGetUradoraList() {
 		kyoku.init();
-		//System.out.println(kyoku.getUradoraList());
-		kyoku.getUradoraList();
 		
 	}
 
