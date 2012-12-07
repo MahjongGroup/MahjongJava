@@ -2,7 +2,6 @@ package system;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,13 +23,11 @@ public class KyokuPlayer {
 	private int kanSize;
 
 	// キャッシュ変数
-	// TODO テンパイ情報などを記憶しておく.changedフラグがfalseの場合はキャッシュされている
+	// テンパイ情報などを記憶しておく.checkフラグがtrueの場合はキャッシュされている
 	// 値を参照する.
-	private boolean changed;
+	private boolean cachedTenpaiCheckFlag;
 	private boolean cachedTenpaiFlag;
-	private List<Hai> cachedReachHaiList;
-	private List<Hai> cachedAgariHaiList;
-
+	
 	/**
 	 * コンストラクタ.
 	 */
@@ -66,6 +63,8 @@ public class KyokuPlayer {
 		this.nakiFlag = false;
 		this.dreachFlag = false;
 
+		this.cachedTenpaiCheckFlag = false;
+		
 		this.kanSize = 0;
 	}
 
@@ -75,6 +74,7 @@ public class KyokuPlayer {
 	 * @return addに成功した場合trueを返す.
 	 */
 	public boolean distribute(Hai hai) {
+		onStateChanged();
 		return this.tehaiList.add(hai);
 	}
 
@@ -153,6 +153,7 @@ public class KyokuPlayer {
 	public Mentu doKakan(Hai hai) {
 		if (hurohaiList.isKakan(hai.type()))
 			throw new IllegalArgumentException("指定された牌で加槓出来ません : " + hai);
+		onStateChanged();
 		Mentu m = hurohaiList.doKakan(hai);
 		return m;
 	}
@@ -170,6 +171,7 @@ public class KyokuPlayer {
 		Hai hai = tehaiList.get(index);
 		if (!hurohaiList.isKakan(hai.type()))
 			throw new IllegalArgumentException("指定された牌で加槓出来ません : " + hai);
+		onStateChanged();
 		Mentu m = hurohaiList.doKakan(hai);
 		tehaiList.remove(index);
 		tehaiList.add(tsumohai);
@@ -209,6 +211,8 @@ public class KyokuPlayer {
 	 *             指定された牌で暗槓できない場合.
 	 */
 	public Mentu doAnkan(Hai tsumohai, List<Integer> list) {
+		onStateChanged();
+
 		int index = -1;
 		if ((index = list.get(0)) == 13)
 			index = list.get(1);
@@ -292,6 +296,7 @@ public class KyokuPlayer {
 		if (index == 13) {
 			ret = tsumohai;
 		} else {
+			onStateChanged();
 			ret = tehaiList.remove(index);
 			if (tsumohai != null) {
 				tehaiList.add(tsumohai);
@@ -330,6 +335,7 @@ public class KyokuPlayer {
 	 * @return 明槓して出来た面子.
 	 */
 	public Mentu doMinkan(Hai minkanhai, Kaze kaze) {
+		onStateChanged();
 		HaiType type = minkanhai.type();
 
 		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
@@ -370,6 +376,7 @@ public class KyokuPlayer {
 	 * @return ポンして出来た面子.
 	 */
 	public Mentu doPon(List<Integer> ponList, Hai sutehai, Kaze kaze) {
+		onStateChanged();
 		int index0 = ponList.get(0);
 		int index1 = ponList.get(1);
 
@@ -423,6 +430,7 @@ public class KyokuPlayer {
 	 * @return チーして出来た面子.
 	 */
 	public Mentu doChi(List<Integer> tiList, Hai chihai, Kaze kaze) {
+		onStateChanged();
 		int index0 = tiList.get(0);
 		int index1 = tiList.get(1);
 
@@ -470,9 +478,13 @@ public class KyokuPlayer {
 	 * @return テンパイしている場合true.
 	 */
 	public boolean isTenpai() {
-		return AgariFunctions.isTenpai(tehaiList, hurohaiList, nakiFlag);
+		if(cachedTenpaiCheckFlag) {
+			return cachedTenpaiFlag;
+		}
+		cachedTenpaiCheckFlag = true;
+		return cachedTenpaiFlag = AgariFunctions.isTenpai(tehaiList, hurohaiList, nakiFlag);
 	}
-
+	
 	/**
 	 * このプレイヤーの槓サイズを返す.
 	 * 
@@ -485,8 +497,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌コンパレータで手牌をソートする.
 	 * 
-	 * @param c
-	 *            牌コンパレータ.
+	 * @param c 牌コンパレータ.
 	 */
 	public void sortTehai(HaiComparator c) {
 		Collections.sort(tehaiList, c);
@@ -495,11 +506,11 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌を手牌に追加する.
 	 * 
-	 * @param hai
-	 *            手牌に追加する牌.
+	 * @param hai 手牌に追加する牌.
 	 * @return addに成功した場合trueを返す.
 	 */
 	public boolean addTehai(Hai hai) {
+		onStateChanged();
 		return tehaiList.add(hai);
 	}
 
@@ -517,13 +528,12 @@ public class KyokuPlayer {
 	/**
 	 * このプレイヤーの手牌の指定されたインデックスの牌を削除する.
 	 * 
-	 * @param index
-	 *            削除する手牌の牌のインデックス.
+	 * @param index 削除する手牌の牌のインデックス.
 	 * @return 削除された牌.
-	 * @throws IndexOutOfBoundsException
-	 *             指定されたインデックスが範囲外の場合.
+	 * @throws IndexOutOfBoundsException 指定されたインデックスが範囲外の場合.
 	 */
 	public Hai removeTehai(int index) {
+		onStateChanged();
 		return tehaiList.remove(index);
 	}
 
@@ -534,8 +544,7 @@ public class KyokuPlayer {
 	/**
 	 * 捨牌リストから指定されたインデックスの捨牌を取得する.
 	 * 
-	 * @param index
-	 *            インデックス.
+	 * @param index インデックス.
 	 * @return 捨牌.
 	 */
 	public Sutehai getSutehai(int index) {
@@ -545,8 +554,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された牌を捨牌に追加する.
 	 * 
-	 * @param hai
-	 *            捨てる牌.
+	 * @param hai 捨てる牌.
 	 * @return addに成功した場合trueを返す.
 	 */
 	public boolean addSutehai(Sutehai hai) {
@@ -583,6 +591,13 @@ public class KyokuPlayer {
 	public HurohaiList getHurohaiList() {
 		return new HurohaiList(this.hurohaiList);
 	}
+	
+	/**
+	 * 内部状態が変化した場合はすべてのキャッシュフラグをfalseにする．
+	 */
+	private void onStateChanged() {
+		cachedTenpaiCheckFlag = false;
+	}
 
 	// DEBUG
 	public void disp() {
@@ -600,6 +615,7 @@ public class KyokuPlayer {
 
 	// DEBUG
 	public void setTehai(List<Hai> list) {
+		onStateChanged();
 		this.tehaiList.clear();
 		this.tehaiList.addAll(list);
 	}

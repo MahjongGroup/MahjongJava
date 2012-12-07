@@ -144,6 +144,7 @@ public class AgariResult {
 			}
 		}
 
+		// 赤ドラ確認
 		for (Hai hai : chParam.getHaiList()) {
 			if (hai.aka()) {
 				this.doraSize += 1;
@@ -169,6 +170,7 @@ public class AgariResult {
 				}
 			}
 		}
+		this.han += this.doraSize;
 
 		// 平和の場合は20符固定
 		if (yakuSet.contains(NormalYaku.PINHU)) {
@@ -223,7 +225,7 @@ public class AgariResult {
 		}
 		// 通常役の場合
 		else {
-			this.score = this.hu * (int) Math.pow(2, this.han + this.doraSize + 2);
+			this.score = this.hu * (int) Math.pow(2, this.han + 2);
 
 			if (score >= 2000) {
 				if (this.han <= 5) {
