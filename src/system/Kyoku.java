@@ -1215,7 +1215,7 @@ public class Kyoku {
 		if (this.currentTumohai != null)
 			throw new IllegalStateException("ツモ牌がnullでない場合にdoTsumoメソッドを呼び出せない");
 		if (!this.yamahai.remove(tsumohai)) {
-			throw new IllegalArgumentException("この牌は山に存在しない : " + tsumohai);
+//			throw new IllegalArgumentException("この牌は山に存在しない : " + tsumohai);
 		}
 		this.currentTumohai = tsumohai;
 		this.tsumoSize++;
