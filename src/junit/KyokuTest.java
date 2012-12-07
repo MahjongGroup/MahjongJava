@@ -435,6 +435,19 @@ public class KyokuTest {
 	}
 	
 	@Test
+	public void testIsChitoi(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,ITI_MAN,ITI_MAN,ITI_MAN,NI_MAN,NI_MAN,YO_MAN,YO_MAN,ROKU_MAN,ROKU_MAN,HATI_MAN,HATI_MAN,KYU_MAN	}));
+		assertEquals(list.size() ,13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(KYU_MAN);
+		assertFalse(kyoku.isReachable());
+		assertFalse(kyoku.isTsumoAgari());
+	}
+	
+	@Test
 	public void testIsReachable_andTsumoagari_chitoi(){
 		kyoku.init();
 		KyokuPlayer kp = new KyokuPlayer();
@@ -867,13 +880,13 @@ public class KyokuTest {
 	@Test
 	public void testGetPlayerMap() {
 		kyoku.init();
-		System.out.println(kyoku.getPlayerMap());
+		//System.out.println(kyoku.getPlayerMap());
 	}
 
 	@Test
 	public void testGetPlayer() {
 		kyoku.init();
-		System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()));
+		//System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()));
 	}
 
 	@Test

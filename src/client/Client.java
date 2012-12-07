@@ -202,9 +202,10 @@ public interface Client {
 	 * @param nakihaiMap 場の鳴き牌マップ.
 	 * @param sutehaiMap 場の捨て牌マップ(鳴かれた牌は除く).
 	 * @param currentTurn 現在の誰の番か.
+	 * @param currentSutehai 
 	 */
 	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,Kaze currentTurn);
+			Map<Kaze, List<Hai>> sutehaiMap,Kaze currentTurn, Hai currentSutehai);
 	
 	/**
 	 * サーバーから立直後のツモ切りしたことを受け取る.
