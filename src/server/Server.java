@@ -219,6 +219,8 @@ public interface Server {
 	 * 局が終わったときにその結果を返す．
 	 * @param result 局の結果．
 	 */
-	public void notifyKyokuResult(KyokuResult result);
+
+
+	public void notifyKyokuResult(KyokuResult kr);
 	
 }

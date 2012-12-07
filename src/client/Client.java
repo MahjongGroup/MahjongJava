@@ -225,6 +225,8 @@ public interface Client {
 	 * @param result 局の結果．
 	 */
 	public void onKyokuResultReceived(KyokuResult result);
+
+	public void onResultReceived(KyokuResult kr);
 	
 	
 }

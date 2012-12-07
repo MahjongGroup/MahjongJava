@@ -139,12 +139,30 @@ public class KyokuTest {
 
 	@Test
 	public void testGetAnkanableHaiList() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,ITI_MAN,ITI_MAN,ITI_MAN,NI_MAN,NI_MAN,NI_MAN,NI_MAN,NAN,NAN,NAN,NAN,PE}));
+		assertEquals(list.size(),13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo();
+		assertTrue(kyoku.isAnkanable());
+		kyoku.getAnkanableHaiList();
 	}
 
 	@Test
 	public void testDoAnkan() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { ITI_MAN, NI_MAN, SAN_MAN, YO_MAN, GO_MAN, ROKU_MAN, NANA_MAN, HATI_MAN, TON, TON, TON, TON, NAN }));
+		assertEquals(list.size(), 13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(KYU_MAN);
+		assertTrue(kyoku.isAnkanable());
+		kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
+		kyoku.doRinsyanTsumo();
+		assertFalse(kyoku.isTsumoAgari());
 	}
 
 	@Test
@@ -159,13 +177,41 @@ public class KyokuTest {
 
 	@Test
 	public void testDoRon() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		KyokuPlayer kp2 = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { ITI_MAN,ITI_MAN,ITI_MAN, NI_MAN, SAN_MAN, YO_MAN, GO_MAN, ROKU_MAN, NANA_MAN, HATI_MAN, KYU_MAN, KYU_MAN, KYU_MAN }));
+		List<Hai> list2 = new ArrayList<Hai>(Arrays.asList(new Hai[] {HAKU,HAKU,HAKU,HATU,HATU,HATU,TYUN,TYUN,TYUN,TON,TON,TON,NAN}));
+		assertEquals(list.size(), 13);
+		assertEquals(list2.size(), 13);
+		kp.setTehai(list);
+		kp2.setTehai(list2);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.setKyokuPlayer(Kaze.NAN,kp2);
+		
+		kyoku.doTsumo(NAN);
+		assertFalse(kyoku.isTsumoAgari());
+		kyoku.discard(13);
+		assertTrue(kyoku.isRonable(Kaze.NAN));
+		kyoku.doRon(Kaze.NAN);
 	}
 
 	@Test
 	public void testIsReach() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { ITI_MAN,ITI_MAN,ITI_MAN, NI_MAN, SAN_MAN, YO_MAN, GO_MAN, ROKU_MAN, NANA_MAN, HATI_MAN, KYU_MAN, KYU_MAN, NI_PIN }));
+		assertEquals(list.size(),13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(KYU_MAN);
+		assertFalse(kyoku.isTsumoAgari());
+		kyoku.doReach();
+		kyoku.discard(kyoku.getReachableHaiList().get(0));
+		assertTrue(kyoku.isReach(kyoku.getCurrentTurn()));
+		
 	}
+	
 
 	@Test
 	public void testIsReachable() {
@@ -173,10 +219,32 @@ public class KyokuTest {
 		kyoku.doTsumo();
 		kyoku.isReachable();
 	}
+	
+	public void testIsReachable_and_Tsumoagari_Kokushi(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { ITI_MAN,KYU_MAN,ITI_PIN, KYU_PIN, ITI_SOU, KYU_SOU, TON, NAN, SYA, PE, HATU, HAKU, TYUN }));
+		assertEquals(list.size(),13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(KYU_MAN);
+		assertTrue(kyoku.isReachable());
+		assertTrue(kyoku.isTsumoAgari());
+		kyoku.doTsumoAgari();
+	}
+	
 
 	@Test
 	public void testGetReachableHaiList() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] { ITI_MAN,ITI_MAN,ITI_MAN, NI_MAN, SAN_MAN, YO_MAN, GO_MAN, ROKU_MAN, NANA_MAN, HATI_MAN, KYU_MAN, KYU_MAN, KYU_MAN}));
+		assertEquals(list.size() ,13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(ITI_MAN);
+		assertTrue(kyoku.isReachable());
+		assertTrue(kyoku.getReachableHaiList().size() > 0);
 	}
 
 	@Test
