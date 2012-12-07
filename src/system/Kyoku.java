@@ -922,7 +922,7 @@ public class Kyoku {
 	public List<HaiType> getRealOpenDoraList() {
 		List<HaiType> list = new ArrayList<HaiType>();
 		for (int i = 0; i < this.newDoraSize + 1; i++) {
-			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i).type()));
+			list.add(this.wanpai.get(4 + 2 * i).nextOfDora());
 		}
 		return list;
 	}
@@ -948,7 +948,7 @@ public class Kyoku {
 	public List<HaiType> getRealUraDoraList() {
 		List<HaiType> list = new ArrayList<HaiType>();
 		for (int i = 0; i < this.newDoraSize + 1; i++) {
-			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i + 1).type()));
+			list.add(this.wanpai.get(4 + 2 * i + 1).type().nextOfDora());
 		}
 		return list;
 	}
@@ -960,8 +960,8 @@ public class Kyoku {
 	public List<HaiType> getRealAllDoraList() {
 		List<HaiType> list = new ArrayList<HaiType>();
 		for (int i = 0; i < this.newDoraSize + 1; i++) {
-			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i).type()));
-			list.add(Functions.getDora(this.wanpai.get(4 + 2 * i + 1).type()));
+			list.add(this.wanpai.get(4 + 2 * i).nextOfDora());
+			list.add(this.wanpai.get(4 + 2 * i + 1).nextOfDora());
 		}
 		return list;
 	}

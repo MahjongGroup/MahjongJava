@@ -37,6 +37,10 @@ public class MahjongGame {
 			mahjong.disp();
 			Console.wairEnter();
 			
+			for(Server server:transMap.values()){
+				server.notifyStartKyoku(kyoku.getBakaze(), mahjong.getKyokusu());
+			}
+			
 			KyokuRunner runner = new KyokuRunner(kyoku, transMap);
 			runner.run();
 
