@@ -44,7 +44,16 @@ public class ConsoleClient implements Client {
 
 	@Override
 	public void onKyusyukyuhaiRequested() {
-		// TODO 何もしない？
+		System.out.print("Kyusyukyuhai>");
+		int index = 0;
+		try {
+			index = getInt(reader);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("onDiscardReceived : IOExceptionが発生したためindexに0を代入.");
+			index = 0;
+		}
+		sendKyusyukyuhai(index == 1 ? true : false);
 	}
 
 	@Override

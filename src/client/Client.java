@@ -3,9 +3,11 @@ package client;
 import java.util.List;
 import java.util.Map;
 
+import server.KyokuRunner;
 import system.Hai;
 import system.HurohaiList;
 import system.Kaze;
+import system.KyokuResult;
 import system.Mentu;
 import system.Player;
 
@@ -218,8 +220,11 @@ public interface Client {
 	 */
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex);
 
-	
-	
+	/**
+	 * 局が終わったときのその結果をサーバーから受け取る.
+	 * @param result 局の結果．
+	 */
+	public void onKyokuResultReceived(KyokuResult result);
 	
 	
 }

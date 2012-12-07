@@ -6,6 +6,7 @@ import java.util.Map;
 import system.Hai;
 import system.HurohaiList;
 import system.Kaze;
+import system.KyokuResult;
 import system.Mentu;
 import system.Player;
 
@@ -34,7 +35,6 @@ public interface Server {
 	
 
 	// 局開始前
-
 	/**
 	 * 局が開始したことをプレイヤーに知らせる.引数はその局の場風,局数である.
 	 * 例えば「南場3局目」のときはKaze.NANと3を渡す.
@@ -44,10 +44,7 @@ public interface Server {
 	 */
 	public void notifyStartKyoku(Kaze bakaze, int kyokusu);
 
-	
-	
 	// 局
-	
 	/**
 	 * クライアントに九種九牌するか問い合わせる。
 	 */
@@ -216,4 +213,12 @@ public interface Server {
 	 */
 	public void notifyReach(Kaze currentTurn, int sutehaiIndex);
 
+	// 局の終わり
+	
+	/**
+	 * 局が終わったときにその結果を返す．
+	 * @param result 局の結果．
+	 */
+	public void notifyKyokuResult(KyokuResult result);
+	
 }

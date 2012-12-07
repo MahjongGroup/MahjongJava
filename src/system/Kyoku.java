@@ -191,8 +191,10 @@ public class Kyoku {
 	 * 
 	 * @return 九種九牌の場合はtrue.
 	 */
-
 	public boolean isKyusyukyuhai() {
+		if(!firstTurn) {
+			return false;
+		}
 		return kyokuPlayerMap.get(currentTurn).isKyusyukyuhai(currentTumohai);
 	}
 
