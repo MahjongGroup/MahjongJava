@@ -9,9 +9,11 @@ import pages.Page;
 import pages.ResultPage;
 import server.Server;
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
+import system.MajanHai;
 import system.Mentu;
 import system.Player;
 
@@ -133,6 +135,8 @@ public class ClientOperator implements Client{
 	public void onChiableIndexListsReceived(List<List<Integer>> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addButtonList(StateCode.SELECT_CHI);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
@@ -142,6 +146,8 @@ public class ClientOperator implements Client{
 	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addButtonList(StateCode.SELECT_PON);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
@@ -151,6 +157,8 @@ public class ClientOperator implements Client{
 	public void onMinkanableIndexListReceived(List<Integer> hais) {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		tmpList.add(hais);
@@ -193,7 +201,7 @@ public class ClientOperator implements Client{
 		setFocus();
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		for(Integer i:hais){
-			List<Integer> tmp = new ArrayList();
+			List<Integer> tmp = new ArrayList<Integer>();
 			tmp.add(i);
 			tmpList.add(tmp);
 		}
@@ -221,6 +229,8 @@ public class ClientOperator implements Client{
 	public void onRonRequested() {
 		if(canvas == null)
 			return;
+		//TODO to be removed
+		canvas.getInfo().tsumoHai = null;
 		setFocus();
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_RON);
@@ -233,12 +243,12 @@ public class ClientOperator implements Client{
 		hideFocus();
 		canvas.refreshStateCodes();
 		canvas.refreshButtonList();
-		int i = -1;
-		if(mentu.getKaze() != null) {
-			i = canvas.getInfo().kaze.get(mentu.getKaze());
-		}else {
-			i = 0;
-		}
+//		int i = -1;
+//		if(mentu.getKaze() != null) {
+//			i = canvas.getInfo().kaze.get(mentu.getKaze());
+//		}else {
+//			i = 0;
+//		}
 //		List<Sutehai> tmp = canvas.getInfo().sutehaiMap.get(i);
 //		tmp.remove(tmp.size() - 1);
 //		ClientInfo info = canvas.getInfo();
@@ -283,24 +293,30 @@ public class ClientOperator implements Client{
 		canvas.refreshStateCodes();
 	}
 
-	@Override
-	public void onFieldReceived(List<Hai> tehai,
-			Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,
-			Kaze currentTurn) {
-		if(canvas == null)
-			return;
-		ClientInfo info = canvas.getInfo();
-		info.tehai = tehai;
-		info.currentTurn = info.kaze.get(currentTurn);
-		for (Kaze k : Kaze.values()) {
-			int i = info.kaze.get(k);
-			synchronized (info.sutehaiMap) {
-				info.sutehaiMap.put(i, sutehaiMap.get(k));
-			}
-			info.hurohaiMap.put(i, nakihaiMap.get(k));
-		}
-	}
+
+//	@Override
+//	public void onFieldReceived(List<Hai> tehai,
+//			Map<Kaze, HurohaiList> nakihaiMap,
+//			Map<Kaze, List<Hai>> sutehaiMap,
+//			Kaze currentTurn,Hai currentSutehai) {
+//		if(canvas == null)
+//			return;
+//		ClientInfo info = canvas.getInfo();
+//		info.tehai = tehai;
+//		info.currentTurn = info.kaze.get(currentTurn);
+//		for (Kaze k : Kaze.values()) {
+//			int i = info.kaze.get(k);
+//			synchronized (info.sutehaiMap) {
+//				info.sutehaiMap.put(i, sutehaiMap.get(k));
+//			}
+//			if(k == currentTurn){
+//				info.sutehaiMap.get(i).add(currentSutehai);
+//				
+//			}
+//			info.hurohaiMap.put(i, nakihaiMap.get(k));
+//		}
+//	}
+
 
 	@Override
 	public void onTsumoAgariReceived() {
@@ -331,19 +347,22 @@ public class ClientOperator implements Client{
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
-		ClientInfo tmp = new ClientInfo(index);
-		tmp.players = players;
-		frame.setInfo(tmp);
-		tmp.sekiMap = new HashMap<Player, Integer>(4);
+		ClientInfo tmpInfo = new ClientInfo(index);
+		tmpInfo.playerNumber = index;
+		tmpInfo.players = players;
+		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
-			tmp.sekiMap.put(tmp.players[(4 - index)%4], i);
+			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], i);
 		}
+		tmpInfo.setIndex(index);
+		frame.setInfo(tmpInfo);
 		// TODO current
 	}
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
 		// TODO Auto-generated method stub
 		page.movePage("game");
+		((MajanCanvas)page).number = frame.getInfo().playerNumber;
 		((MajanCanvas)page).setKyokusu(kyokusu);
 		((MajanCanvas)page).setBakaze(bakaze);
 	}
@@ -352,6 +371,31 @@ public class ClientOperator implements Client{
 	public void onKyokuResultReceived(KyokuResult result) {
 		page.movePage("result");
 		((ResultPage)page).setResult(result);
-		// TODO Auto-generated method stub
+		// TODO ok?
+	}
+
+	@Override
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<Hai> doraList) {
+		if (canvas == null)
+			return;
+		ClientInfo info = canvas.getInfo();
+		info.tehai = tehai;
+		info.currentTurn = info.kaze.get(currentTurn);
+		for (Kaze k : Kaze.values()) {
+			int i = info.kaze.get(k);
+			synchronized (info.sutehaiMap) {
+				info.sutehaiMap.put(i, sutehai.get(k));
+			}
+			info.tehaiSizeMap.put(i, tehaiSize.get(i));
+			if(k == currentTurn)
+				info.sutehaiMap.get(i).add(currentSutehai);
+			info.hurohaiMap.put(i, nakihai.get(k));
+		}
+		info.yamaSize = yamaSize;
+		info.wanpaiSize = wanpaiSize;
+		info.doraList = doraList;
 	}
 }

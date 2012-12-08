@@ -23,7 +23,6 @@ import client.MajanFrame;
 public class EnterPage extends InputPage implements Page{
 	private List<Information> informations;
 	private boolean isFinish;
-	private MajanFrame frame;
 	private JButton enter;
 	private Client operator;
 
@@ -100,7 +99,7 @@ public class EnterPage extends InputPage implements Page{
 		enter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(EnterPage.this.frame != null)
+				if(EnterPage.this.getFrame() != null)
 					movePage("wait");
 			}
 		});
@@ -115,13 +114,13 @@ public class EnterPage extends InputPage implements Page{
 //			informations.get(0).setContent("IDを入力してください");
 //			return;
 //		}
-		frame.setTitle("No." + informations.get(0).getContent() + ":"
+		getFrame().setTitle("No." + informations.get(0).getContent() + ":"
 				+ informations.get(1).getContent());
 		operator.requestGame(Integer.parseInt(informations.get(0).getContent()));
-		frame.setPage(order);
+		getFrame().setPage(order);
 	}
 	public EnterPage(MajanFrame frame){
-		this.frame = frame;
+		setFrame(frame);
 	}
 	public EnterPage(MajanFrame frame,Server tr){
 		this(frame);

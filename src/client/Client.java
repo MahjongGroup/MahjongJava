@@ -5,6 +5,7 @@ import java.util.Map;
 
 import server.KyokuRunner;
 import system.Hai;
+import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
@@ -202,10 +203,12 @@ public interface Client {
 	 * @param nakihaiMap 場の鳴き牌マップ.
 	 * @param sutehaiMap 場の捨て牌マップ(鳴かれた牌は除く).
 	 * @param currentTurn 現在の誰の番か.
+	 * @param currentSutehai 
 	 */
-	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihaiMap,
-			Map<Kaze, List<Hai>> sutehaiMap,Kaze currentTurn);
-	
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<Hai> doraList);
 	/**
 	 * サーバーから立直後のツモ切りしたことを受け取る.
 	 * これを受け取ったクライアントは牌を強制的に切ることになる.

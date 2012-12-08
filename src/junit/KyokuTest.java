@@ -191,9 +191,10 @@ public class KyokuTest {
 		//System.out.println(kyoku.getReachableHaiList());
 		kyoku.doReach();
 		kyoku.discard(kyoku.getReachableHaiList().get(1));//東切り
-		System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
-		kyoku.doTsumo(HATI_PIN);//1~8筒でアガリ
 		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		kyoku.doTsumo(HATI_PIN);//4~8筒でアガリ
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+" : "+kyoku.getCurrentTsumoHai());
+		//System.out.println(kyoku.isTsumoAgari());
 		assertTrue(kyoku.isTsumoAgari());
 		kyoku.doTsumoAgari();
 	}
@@ -252,7 +253,11 @@ public class KyokuTest {
 		kyoku.nextTurn();
 		kyoku.discard(0);
 		kyoku.nextTurn();
+		kyoku.doTsumo();
 		assertTrue(kyoku.isKakanable());
+		//System.out.println(kyoku.getCurrentTurn()+" : "+kyoku.getTehaiList(kyoku.getCurrentTurn()));
+		//System.out.println(kyoku.getFuroHaiList(kyoku.getCurrentTurn()));
+		//System.out.println(kyoku.getKakanableHaiList());
 		assertTrue(kyoku.getKakanableHaiList().size() == 2);
 		kyoku.doKakan(1);
 		kyoku.doRinsyanTsumo();
@@ -307,16 +312,19 @@ public class KyokuTest {
 		assertEquals(list.size(),13);
 		assertEquals(list2.size(),13);
 		kp.setTehai(list);
-		kp.setTehai(list2);
+		kp2.setTehai(list2);
 		kyoku.setKyokuPlayer(Kaze.TON, kp);
 		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
 		kyoku.doTsumo(GO_MAN);
+		//System.out.println(kyoku.getCurrentTurn());
+		//System.out.println(kyoku.getTehaiList(kyoku.getCurrentTurn())+" : "+kyoku.getCurrentTsumoHai());
 		assertTrue(kyoku.isTsumoAgari());
 		kyoku.discard(13);
 		kyoku.nextTurn();
 		kyoku.doTsumo(ROKU_MAN);
 		kyoku.discard(13);
 		assertTrue(kyoku.isTenpai(Kaze.TON));
+		//System.out.println(kyoku.getSutehaiList(Kaze.TON));
 		assertFalse(kyoku.isRonable(Kaze.TON));
 	}
 
@@ -424,6 +432,19 @@ public class KyokuTest {
 		kyoku.doTsumoAgari();
 		KyokuResult kr = kyoku.createKyokuResult();
 		//System.out.println(kr.getAgariResult(kyoku.getCurrentPlayer()));
+	}
+	
+	@Test
+	public void testIsChitoi(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,ITI_MAN,ITI_MAN,ITI_MAN,NI_MAN,NI_MAN,YO_MAN,YO_MAN,ROKU_MAN,ROKU_MAN,HATI_MAN,HATI_MAN,KYU_MAN	}));
+		assertEquals(list.size() ,13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(KYU_MAN);
+		assertFalse(kyoku.isReachable());
+		assertFalse(kyoku.isTsumoAgari());
 	}
 	
 	@Test
@@ -535,7 +556,21 @@ public class KyokuTest {
 
 	@Test
 	public void testGetPonableHaiList() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,ITI_MAN,ITI_MAN,ITI_MAN,NI_MAN,NI_MAN,NI_MAN,HAKU,HAKU,HAKU,HAKU,HATU,HATU }));
+		kyoku.removeYamahai(list);
+		kyoku.removeWanpai(list);
+		assertEquals(list.size(),13);
+		kp.setTehai(list);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(TYUN);
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(NI_MAN);
+		kyoku.discard(13);
+		assertTrue(kyoku.isPonable(Kaze.TON));
+		assertTrue(kyoku.getPonableHaiList(Kaze.TON).size() == 3);
 	}
 
 	@Test
@@ -606,19 +641,166 @@ public class KyokuTest {
 	@Test
 	public void testIsSufontsuRenta() {
 		kyoku.init();
-		kyoku.isSufontsuRenta();
+		kyoku.doTsumo(TON);
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(TON);
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(TON);
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		assertFalse(kyoku.isSufontsuRenta());
+		kyoku.doTsumo(TON);
+		kyoku.discard(13);
+		assertTrue(kyoku.isSufontsuRenta());
 	}
 
 	@Test
 	public void testIsSukaikan() {
 		kyoku.init();
-		kyoku.isSukaikan();
+		KyokuPlayer kp0 = new KyokuPlayer();
+		KyokuPlayer kp1 = new KyokuPlayer();
+		List<Hai> list0 = new ArrayList<Hai>(Arrays.asList(new Hai[] {TON,TON,TON,TON,NAN,NAN,NAN,NAN,KYU_MAN,ITI_PIN,NI_PIN,HATU,HATU}));
+		List<Hai> list1 = new ArrayList<Hai>(Arrays.asList(new Hai[] {SYA,SYA,SYA,SYA,PE,PE,PE,PE,KYU_MAN,ITI_PIN,NI_PIN,HATU,HATU }));
+		kyoku.removeYamahai(list0);
+		kyoku.removeWanpai(list0);
+		kyoku.removeYamahai(list1);
+		kyoku.removeWanpai(list1);
+		assertEquals(list0.size(),13);
+		assertEquals(list1.size(),13);
+		kp0.setTehai(list0);
+		kp1.setTehai(list1);
+		kyoku.setKyokuPlayer(Kaze.TON, kp0);
+		kyoku.setKyokuPlayer(Kaze.NAN, kp1);
+		kyoku.doTsumo();
+		kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
+		kyoku.doRinsyanTsumo();
+		kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo();
+		kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
+		kyoku.doRinsyanTsumo();
+		assertFalse(kyoku.isSukaikan());
+		kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		assertTrue(kyoku.isSukaikan());
+		assertEquals(list0.size(),13);
+		
+
 	}
+	
+	
+	
+	public void testSukantsu(){
+		kyoku.init();
+		KyokuPlayer kp = new KyokuPlayer();
+		List<Hai> list = new ArrayList<Hai>(Arrays.asList(new Hai[] {TON,TON,TON,NAN,NAN,NAN,SYA,SYA,SYA,PE,PE,PE,HATU}));
+		kyoku.removeYamahai(list);
+		kyoku.removeWanpai(list);
+		assertEquals(list.size(),13);
+		kyoku.setKyokuPlayer(Kaze.TON, kp);
+		kyoku.doTsumo(ITI_PIN);
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(TON);
+		kyoku.discard(13);
+		assertTrue(kyoku.isMinkanable(Kaze.TON));
+		kyoku.doMinkan(Kaze.TON);
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(NAN);
+		kyoku.discard(13);
+		assertTrue(kyoku.isMinkanable(Kaze.TON));
+		kyoku.doMinkan(Kaze.TON);
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(SYA);
+		kyoku.discard(13);
+		assertTrue(kyoku.isMinkanable(Kaze.TON));
+		kyoku.doMinkan(Kaze.TON);
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(PE);
+		kyoku.discard(13);
+		assertTrue(kyoku.isMinkanable(Kaze.TON));
+		kyoku.doMinkan(Kaze.TON);
+		kyoku.doRinsyanTsumo();
+		kyoku.discard(13);
+		assertFalse(kyoku.isSukaikan());
+		kyoku.nextTurn();
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 
 	@Test
 	public void testIsSuchaReach() {
 		kyoku.init();
-		kyoku.isSuchaReach();
+		KyokuPlayer kp0 = new KyokuPlayer();
+		KyokuPlayer kp1 = new KyokuPlayer();
+		KyokuPlayer kp2 = new KyokuPlayer();
+		KyokuPlayer kp3 = new KyokuPlayer();
+		List<Hai> list0 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,HATU,HATU}));
+		List<Hai> list1 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,HATU,HATU }));
+		List<Hai> list2 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,HAKU,HAKU }));
+		List<Hai> list3 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,TYUN,TYUN }));
+		kyoku.removeYamahai(list0);
+		kyoku.removeWanpai(list0);
+		kyoku.removeYamahai(list1);
+		kyoku.removeWanpai(list1);
+		kyoku.removeYamahai(list2);
+		kyoku.removeWanpai(list2);
+		kyoku.removeYamahai(list3);
+		kyoku.removeWanpai(list3);
+		assertEquals(list0.size(),13);
+		assertEquals(list1.size(),13);
+		assertEquals(list2.size(),13);
+		assertEquals(list3.size(),13);
+		kp0.setTehai(list0);
+		kp1.setTehai(list1);
+		kp2.setTehai(list2);
+		kp3.setTehai(list3);
+		kyoku.setKyokuPlayer(Kaze.TON, kp0);
+		kyoku.setKyokuPlayer(Kaze.NAN, kp1);
+		kyoku.setKyokuPlayer(Kaze.SYA, kp2);
+		kyoku.setKyokuPlayer(Kaze.PE, kp3);
+		
+		kyoku.doTsumo(KYU_PIN);
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(KYU_PIN);
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(KYU_PIN);
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(KYU_PIN);
+		assertFalse(kyoku.isSuchaReach());
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		assertTrue(kyoku.isSuchaReach());
+	
+	
 	}
 
 	@Test
@@ -645,7 +827,37 @@ public class KyokuTest {
 
 	@Test
 	public void testDoTotyuRyukyokuSanchaho() {
-		fail("Not yet implemented");
+		kyoku.init();
+		KyokuPlayer kp1 = new KyokuPlayer();
+		KyokuPlayer kp2 = new KyokuPlayer();
+		KyokuPlayer kp3 = new KyokuPlayer();
+		List<Hai> list1 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,HATU,HATU }));
+		List<Hai> list2 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,HAKU,HAKU }));
+		List<Hai> list3 = new ArrayList<Hai>(Arrays.asList(new Hai[] {ITI_MAN,NI_MAN,SAN_MAN,YO_MAN,GO_MAN,ROKU_MAN,NANA_MAN,HATI_MAN,KYU_MAN,ITI_PIN,NI_PIN,TYUN,TYUN }));
+		kyoku.removeYamahai(list1);
+		kyoku.removeWanpai(list1);
+		kyoku.removeYamahai(list2);
+		kyoku.removeWanpai(list2);
+		kyoku.removeYamahai(list3);
+		kyoku.removeWanpai(list3);
+		assertEquals(list1.size(),13);
+		assertEquals(list2.size(),13);
+		assertEquals(list3.size(),13);
+		kp1.setTehai(list1);
+		kp2.setTehai(list2);
+		kp3.setTehai(list3);
+		kyoku.setKyokuPlayer(Kaze.NAN, kp1);
+		kyoku.setKyokuPlayer(Kaze.SYA, kp2);
+		kyoku.setKyokuPlayer(Kaze.PE, kp3);
+		kyoku.doTsumo(SAN_PIN);
+		kyoku.discard(13);
+		assertTrue(kyoku.isRonable(Kaze.NAN));
+		assertTrue(kyoku.isRonable(Kaze.SYA));
+		assertTrue(kyoku.isRonable(Kaze.PE));
+		kyoku.doRon(Kaze.NAN);
+		kyoku.doRon(Kaze.SYA);
+		kyoku.doRon(Kaze.PE);
+		assertTrue(kyoku.isSanchaho());
 	}
 
 	@Test
@@ -667,12 +879,14 @@ public class KyokuTest {
 
 	@Test
 	public void testGetPlayerMap() {
-		fail("Not yet implemented");
+		kyoku.init();
+		//System.out.println(kyoku.getPlayerMap());
 	}
 
 	@Test
 	public void testGetPlayer() {
-		fail("Not yet implemented");
+		kyoku.init();
+		//System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()));
 	}
 
 	@Test
@@ -708,6 +922,7 @@ public class KyokuTest {
 		kyoku.doRinsyanTsumo();
 		//System.out.println(kyoku.getOpenDoraList());	
 	}
+	
 	
 
 	@Test

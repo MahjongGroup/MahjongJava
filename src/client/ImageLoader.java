@@ -1,5 +1,8 @@
 package client;
 
+import static client.Constant.SCALED_HAI_HEIGHT;
+import static client.Constant.SCALED_HAI_WIDTH;
+
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.HashMap;
@@ -56,6 +59,10 @@ public class ImageLoader {
 	
 	public static Image load(int id) {
 		return Toolkit.getDefaultToolkit().createImage("res/"+IMAGE_MAP.get(id) + ".gif");
+	}
+	
+	public static Image loadScaled(int id){
+		return load(id).getScaledInstance(SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, Image.SCALE_DEFAULT);
 	}
 	
 }

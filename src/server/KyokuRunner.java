@@ -11,6 +11,7 @@ import system.Kaze;
 import system.Kyoku;
 import system.Mentu;
 import system.Player;
+import system.Sutehai;
 import system.SutehaiList;
 import system.TehaiList;
 import test.Console;
@@ -171,12 +172,19 @@ public class KyokuRunner {
 			SutehaiList sutehailist = kyoku.getSutehaiList(kaze);
 			sutehai.put(kaze, sutehailist.toNakiExcludedHaiList());
 		}
-
+	
+		List<Integer> tehaiSize = new ArrayList<Integer>();
+		for(Kaze kaze:Kaze.values()){
+			tehaiSize.add(kyoku.getTehaiList(kaze).size());
+		}
+			
 		for (Kaze kaze : transporterMap.keySet()) {
 			TehaiList tehai = kyoku.getTehaiList(kaze);
 			Server tr = transporterMap.get(kaze);
 
-			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn());
+			
+			tr.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(),kyoku.getCurrentSutehai(),
+					tehaiSize,kyoku.getYamahaiList().size(),kyoku.getWanpaiList().size(),kyoku.getOpenDoraList());
 		}
 	}
 
@@ -423,7 +431,11 @@ public class KyokuRunner {
 
 			if (kyoku.isReachable() && ai.isReach()) {
 				kyoku.doReach();
-				kyoku.discard(ai.discard());
+				int index = ai.discard();
+				kyoku.discard(index);
+				for (Transporter t : transporterMap.values()) {
+					t.notifyReach(kyoku.getCurrentTurn(), index);
+				}
 				System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 				Console.wairEnter();
 				stateCode = STATE_CODE_RON;
