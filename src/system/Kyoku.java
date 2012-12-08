@@ -17,8 +17,6 @@ import system.Hai.HaiComparator;
 /**
  * 1局を表すクラス。
  */
-// TODO　海底のときの嶺上ツモの問題修正
-// TODO　ワンパイからの嶺上ツモに変える？
 public class Kyoku {
 	Map<Kaze, KyokuPlayer> kyokuPlayerMap;
 
@@ -193,7 +191,7 @@ public class Kyoku {
 	 * @return 九種九牌の場合はtrue.
 	 */
 	public boolean isKyusyukyuhai() {
-		if(!firstTurn) {
+		if (!firstTurn) {
 			return false;
 		}
 		return kyokuPlayerMap.get(currentTurn).isKyusyukyuhai(currentTumohai);
@@ -250,6 +248,9 @@ public class Kyoku {
 	 */
 	public boolean isKakanable() {
 		if (this.kanSize == 4) {
+			return false;
+		}
+		if (this.tsumoSize == 70) {
 			return false;
 		}
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
@@ -318,6 +319,8 @@ public class Kyoku {
 		if (isSyukyoku())
 			return false;
 		if (this.kanSize == 4)
+			return false;
+		if (this.tsumoSize == 70)
 			return false;
 		if (currentTumohai == null)
 			return false;
@@ -411,11 +414,21 @@ public class Kyoku {
 		if (isReach(currentTurn)) {
 			return false;
 		}
+		if (isLastTurn())
+			return false;
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
 		if (kp.isNaki())
 			return false;
 		//TODO isTenpai
 		return isTenpai();
+	}
+
+	/**
+	 * 残りツモ枚数が4以下の場合trueを返す．
+	 * @return 最後の順のである場合はtrue．
+	 */
+	public boolean isLastTurn() {
+		return tsumoSize - 66 >= 0;
 	}
 
 	/**
@@ -949,7 +962,7 @@ public class Kyoku {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * この局の実際のドラ(表と裏)リストを返す．
 	 * @return この局の実際のドラ(表と裏)リスト.
@@ -1129,7 +1142,7 @@ public class Kyoku {
 		param.setJikaze(kaze);
 		return AgariFunctions.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
 	}
-	
+
 	/**
 	 * テンパイ判定用のチェックパラムを生成して返す．
 	 * @param naki 鳴いているか．
@@ -1142,7 +1155,7 @@ public class Kyoku {
 		ret.setJikaze(jikaze);
 		return ret;
 	}
-	
+
 	/**
 	 * この局の現在のチェッカーパラムを生成して,それを返す.
 	 * 
@@ -1204,11 +1217,10 @@ public class Kyoku {
 		}
 		return set;
 	}
-	
+
 	public int sizeOfYamahai() {
 		return yamahai.size();
 	}
-	
 
 	/**
 	 * 指定された風のプレイヤーの手牌リストのサイズを返す.
@@ -1230,7 +1242,7 @@ public class Kyoku {
 		System.out.println("ドラ：" + getRealAllDoraList());
 		System.out.println("");
 		for (Kaze kaze : Kaze.values()) {
-			if(currentTurn == kaze) {
+			if (currentTurn == kaze) {
 				System.out.println("→風：" + kaze);
 				System.out.println("\tツモ牌：" + currentTumohai);
 			} else {
@@ -1247,14 +1259,14 @@ public class Kyoku {
 			this.yamahai.remove(hai);
 		}
 	}
-	
+
 	//DEBUG
-	public void removeWanpai(Collection<Hai> c){
-		for(Hai hai : c){
+	public void removeWanpai(Collection<Hai> c) {
+		for (Hai hai : c) {
 			this.wanpai.remove(hai);
 		}
 	}
-	
+
 	// DEBUG
 	public void setKyokuPlayer(Kaze kaze, KyokuPlayer kp) {
 		this.kyokuPlayerMap.put(kaze, kp);
@@ -1267,7 +1279,7 @@ public class Kyoku {
 		if (this.currentTumohai != null)
 			throw new IllegalStateException("ツモ牌がnullでない場合にdoTsumoメソッドを呼び出せない");
 		if (!this.yamahai.remove(tsumohai)) {
-//			throw new IllegalArgumentException("この牌は山に存在しない : " + tsumohai);
+			//			throw new IllegalArgumentException("この牌は山に存在しない : " + tsumohai);
 		}
 		this.currentTumohai = tsumohai;
 		this.tsumoSize++;
