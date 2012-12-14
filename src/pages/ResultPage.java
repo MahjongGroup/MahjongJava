@@ -1,6 +1,8 @@
 package pages;
 
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -9,9 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import system.AgariResult;
 import system.KyokuResult;
@@ -22,7 +26,7 @@ import client.Client;
 import client.ClientOperator;
 import client.MajanFrame;
 
-public class ResultPage extends InputPage implements Page{
+public class ResultPage extends InputPage implements Page,MouseListener{
 	private Image imgBuffer;
 	private Graphics g2;
 	private KyokuResult result;
@@ -33,20 +37,7 @@ public class ResultPage extends InputPage implements Page{
 	{
 		newScore = new int[4];
 		oldScore = new int[4];
-		addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				getOperator().requestNextKyoku();
-			}
-		});
+		addMouseListener(this);
 	}
 	
 	public ResultPage(MajanFrame frame,Client operator){
@@ -77,28 +68,33 @@ public class ResultPage extends InputPage implements Page{
 		return "Result";
 	}
 	
+	private class ClearLabel extends JPanel{
+		public ClearLabel(String str){
+			JLabel tmp = new JLabel(str);
+			tmp.setOpaque(false);
+			tmp.setFont(new Font("sans-serif",Font.BOLD,25));
+			tmp.addMouseListener(ResultPage.this);
+			tmp.setHorizontalAlignment(SwingConstants.CENTER);
+			add(tmp);
+			setLayout(new CardLayout());
+			setOpaque(false);
+			addMouseListener(ResultPage.this);
+		}
+	}
+	
 	private class ResultPanel extends JPanel{
 		public ResultPanel(Player player,AgariResult result){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			JLabel playerName = new JLabel(player.getName());
-			playerName.setOpaque(false);
-			add(playerName);
+			add(new ClearLabel(player.getName()));
 			for(Yaku y:result.getYakuSet()){
-				JLabel tmpLabel = new JLabel(y.notation());
-				tmpLabel.setOpaque(false);
-				add(tmpLabel);
+				add(new ClearLabel(y.notation()));
 			}
-			JLabel han = new JLabel(result.getHan() + "翻");
-			han.setOpaque(false);
-			add(han);
-			JLabel hu = new JLabel(result.getHu() + "符");
-			hu.setOpaque(false);
-			add(hu);
+			add(new ClearLabel(result.getHan() + "翻"));
+			add(new ClearLabel(result.getHu() + "符"));
 			if(result.getScoreType() != ScoreType.NORMAL){
-				JLabel scoreType = new JLabel(result.getScoreType().notation());
-				scoreType.setOpaque(false);
-				add(scoreType);
+				add(new ClearLabel(result.getScoreType().notation()));
 			}
+			setOpaque(false);
 		}
 	}
 	
@@ -109,7 +105,7 @@ public class ResultPage extends InputPage implements Page{
 		this.newScore = newScore;
 		this.oldScore = oldScore;
 		if(result.isRyukyoku() || result.isTotyuRyukyoku()){
-			add(new JTextField("流局"));
+			add(new ClearLabel("流局"));
 			return;
 		}
 		List<Player> winnerList = new ArrayList<Player>();
@@ -119,5 +115,34 @@ public class ResultPage extends InputPage implements Page{
 			}
 		}
 		updateUI();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		getOperator().requestNextKyoku();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
