@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
+
 public class ImageLoader {
 	private static final Map<Integer, String> IMAGE_MAP = new HashMap<Integer, String>(1000);
 	static {
@@ -56,6 +58,11 @@ public class ImageLoader {
 		IMAGE_MAP.put(ImageID.hai_back, "back");
 		IMAGE_MAP.put(ImageID.hai_darkback, "darkback");
 
+	}
+	
+	public static ImageIcon loadIcon(int id){
+		ImageIcon tmpIcon = new ImageIcon("res/" + IMAGE_MAP.get(id) + ".gif");
+		return new ImageIcon("res/" + IMAGE_MAP.get(id) + ".gif");
 	}
 	
 	public static Image load(int id) {
