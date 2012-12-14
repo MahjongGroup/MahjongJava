@@ -76,8 +76,8 @@ public class AIType01 extends AbstractAI {
 		List<HaiType> haiTypeList = tlist.toHaiTypeList();
 		List<HaiType> tempList = new ArrayList<HaiType>(haiTypeList);
 
-//		リーチ可能なら聴牌状態に入る。
-		if(kyoku.isReachable())
+		// リーチ可能なら聴牌状態に入る。
+		if (kyoku.isReachable())
 			return kyoku.getReachableHaiList().get(0);
 		// 刻子を抜く。
 		for (HaiType haiType : haiTypeSet) {
@@ -107,7 +107,7 @@ public class AIType01 extends AbstractAI {
 		for (HaiType haiType : haiTypeSet) {
 			if (haiType.isTsuhai()) {
 				if (Functions.sizeOfHaiTypeList(haiType, tempList) == 1) {
-					 index = tlist.indexOf(MajanHai.valueOf(haiType, false));
+					index = tlist.indexOf(MajanHai.valueOf(haiType, false));
 					if (index == -1) {
 						index = tlist.indexOf(MajanHai.valueOf(haiType, true));
 						if (index == -1) {
@@ -212,8 +212,9 @@ public class AIType01 extends AbstractAI {
 		}
 		// 対子が2つ以上なら, 1つを切る。
 		if (toitsuArray[1] != 0) {
-			index =  toitsuArray[0];
-			if (index == tlist.size() - 1 && tsumohai != null) return 13;
+			index = toitsuArray[0];
+			if (index == tlist.size() - 1 && tsumohai != null)
+				return 13;
 			return index;
 		}
 		// 端に近い牌を切る。

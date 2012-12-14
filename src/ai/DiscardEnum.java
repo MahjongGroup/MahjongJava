@@ -21,13 +21,16 @@ public enum DiscardEnum implements DiscardStrategy {
 			return 0;
 		}
 	},
+	/**
+	 *　孤立牌を切る戦略.
+	 */
 	ISOLATED_HAI_DISCARD(){
 		@Override
 		public int discard(Kyoku kyoku,Player player) {
 			TehaiList tlist = kyoku.getTehaiList(kyoku.getKazeOf(player));
-			List<Hai> haiList = AIFunctions.isolatedHaiList(tlist);
-			
-			return 0;
+			List<Hai> haiList = AIMethods.getInvalidHaiList(tlist);
+			int index = -1;
+			return index;
 		}
 		
 	},
