@@ -226,10 +226,11 @@ public interface Server {
 	 * @param result 局の結果．
 	 * @param newScore 新しいスコア
 	 * @param oldScore 前のスコア
+	 * @param uradora 裏ドラリスト
 	 */
 
 
-	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore);
+	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList);
 
 	
 	/**
