@@ -393,6 +393,7 @@ public class Transporter implements Server {
 
 	@Override
 	public void onNextKyokuRequested(){
+		System.out.println("call");
 		endResultPage = true;
 	}
 	

@@ -287,6 +287,11 @@ public class ConsoleClient implements Client {
 		server.onRonReceived(result);
 	}
 
+	public void onGameResultReceived(int[] score){
+	}
+
+	
+	
 	@Override
 	public void onTsumoAgariRequested() {
 		System.out.println("TSUMO");
@@ -375,7 +380,7 @@ public class ConsoleClient implements Client {
 	}
 
 	@Override
-	public void onGameStartReceived(List<Player> playerList,int index) {
+	public void onGameStartReceived(List<Player> playerList,int index,int[] score) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -386,8 +391,12 @@ public class ConsoleClient implements Client {
 		
 	}
 
+	public void requestNextKyoku(){
+		server.onNextKyokuRequested();
+	}
+	
 	@Override
-	public void onKyokuResultReceived(KyokuResult result) {
+	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -216,6 +216,7 @@ public interface Client {
 	 */
 	// TODO これ必要？
 	public void onTsumoGiriReceived();
+	public void onGameResultReceived(int[] score);	
 	
 	// TODO 引数currentTurn確認.
 	/**
@@ -233,5 +234,6 @@ public interface Client {
 	 */
 	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores);
 
+	public void requestNextKyoku();
 	
 }
