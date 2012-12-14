@@ -363,8 +363,8 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void sendGameStart(List<Player> playerList,int index) {
-		client.onGameStartReceived(playerList,index);
+	public void sendGameStart(List<Player> playerList,int index, int[] scores) {
+		client.onGameStartReceived(playerList,index,scores);
 		// TODO Auto-generated method stub
 		
 	}
@@ -394,6 +394,10 @@ public class Transporter implements Server {
 	@Override
 	public void onNextKyokuRequested(){
 		endResultPage = true;
+	}
+	
+	public void notifyGameResult(int[] score){
+		client.onGameResultReceived(score);
 	}
 	
 //	@Override

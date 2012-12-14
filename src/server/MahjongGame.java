@@ -34,7 +34,7 @@ public class MahjongGame {
 		
 		for (Player p : transMap.keySet()) {
 			Server server = transMap.get(p);
-			server.sendGameStart(playerList, playerList.indexOf(p));
+			server.sendGameStart(playerList, playerList.indexOf(p), mahjong.getScores());
 		}
 
 		while (!mahjong.isEnd()) {
@@ -70,6 +70,10 @@ public class MahjongGame {
 			}else if(kr.isTsumoAgari()) {
 				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
 			}
+		}
+		
+		for(Server server:transMap.values()){
+			server.notifyGameResult(mahjong.getScores());
 		}
 		
 	}

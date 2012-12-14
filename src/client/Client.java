@@ -32,8 +32,9 @@ public interface Client {
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
 	 * @param index 
+	 * @param scores それぞれのプレイヤーの最初の持ち点の配列
 	 */
-	public void onGameStartReceived(List<Player> playerList, int index);
+	public void onGameStartReceived(List<Player> playerList, int index,int[] scores);
 
 	// 局開始前
 	

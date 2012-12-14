@@ -33,7 +33,7 @@ public interface Server {
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
 	 * @param index そのプレイヤーのインデックス
 	 */
-	public void sendGameStart(List<Player> playerList,int index);
+	public void sendGameStart(List<Player> playerList,int index,int scores[]);
 	
 
 	// 局開始前
@@ -238,6 +238,10 @@ public interface Server {
 	 */
 	public void onNextKyokuRequested();
 	
+	/**
+	 * 半荘が終わった時にその結果を送信
+	 */
+	public void notifyGameResult(int[] Score);
 
 	
 	
