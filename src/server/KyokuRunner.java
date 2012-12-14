@@ -99,7 +99,7 @@ public class KyokuRunner {
 					initTransporterFlag();
 					doRinsyanTsumo();
 					sendNeededInformation();
-					stateCode = STATE_CODE_TSUMOAGARI;
+					stateCode = STATE_CODE_SEND;
 					break;
 
 				case STATE_CODE_ANKAN:
