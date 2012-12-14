@@ -83,6 +83,8 @@ public class Transporter implements Server {
 		ronReceivedFlag = false;
 		ronReceivedResult = false;
 		tsumoagariReceivedResult = false;
+		endResultPage = false;
+		
 	}
 	
 	// DEBUG 結合用
