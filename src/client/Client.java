@@ -227,8 +227,10 @@ public interface Client {
 	/**
 	 * 局が終わったときのその結果をサーバーから受け取る.
 	 * @param result 局の結果．
+	 * @param newScores 新しいスコア
+	 * @param oldScores 前のスコア
 	 */
-	public void onKyokuResultReceived(KyokuResult result);
+	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores);
 
 	
 }

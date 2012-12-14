@@ -31,6 +31,7 @@ public interface Server {
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
+	 * @param index そのプレイヤーのインデックス
 	 */
 	public void sendGameStart(List<Player> playerList,int index);
 	
@@ -221,11 +222,14 @@ public interface Server {
 	
 	/**
 	 * 局が終わったときにその結果を返す．
+	 * 
 	 * @param result 局の結果．
+	 * @param newScore 新しいスコア
+	 * @param oldScore 前のスコア
 	 */
 
 
-	public void notifyKyokuResult(KyokuResult kr);
+	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore);
 
 	
 	/**
