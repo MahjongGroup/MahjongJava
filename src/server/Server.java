@@ -228,6 +228,11 @@ public interface Server {
 	public void notifyKyokuResult(KyokuResult kr);
 
 	
+	/**
+	 * 局が終わったあとの結果表示を終わらせるメソッド
+	 * 
+	 */
+	public void onNextKyokuRequested();
 	
 
 	
