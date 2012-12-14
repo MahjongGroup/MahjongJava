@@ -31,6 +31,11 @@ public class MahjongGame {
 	 */
 	public void run() {
 		mahjong.init();
+		
+		for (Player p : transMap.keySet()) {
+			Server server = transMap.get(p);
+			server.sendGameStart(playerList, playerList.indexOf(p), mahjong.getScores());
+		}
 
 		while (!mahjong.isEnd()) {
 			
@@ -45,12 +50,15 @@ public class MahjongGame {
 			KyokuRunner runner = new KyokuRunner(kyoku, transMap);
 			runner.run();
 
+			int oldScores[] = mahjong.getScores();
+			
 			mahjong.endKyoku();
 			mahjong.disp2();
-			
+
+			int newScores[] = mahjong.getScores();
 			KyokuResult kr = kyoku.createKyokuResult();
 			for(Server server:transMap.values()){
-				server.notifyKyokuResult(kr);
+				server.notifyKyokuResult(kr,newScores,oldScores);
 			}
 			waitKyokuResult();
 			
@@ -62,7 +70,10 @@ public class MahjongGame {
 			}else if(kr.isTsumoAgari()) {
 				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
 			}
-			Console.wairEnter();
+		}
+		
+		for(Server server:transMap.values()){
+			server.notifyGameResult(mahjong.getScores());
 		}
 		
 	}

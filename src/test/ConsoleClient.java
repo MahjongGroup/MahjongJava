@@ -22,6 +22,18 @@ import system.Player;
  * コンソール入力を受け付けるクライアント.
  */
 public class ConsoleClient implements Client {
+	private static class Kyoku {
+		// 各プレイヤーの手牌サイズ. 0から起家
+		int tehaiSizes[] = new int[4];
+		
+		// 山牌数
+		int yamahaiSize;
+		
+		// プレイヤーのインデックス
+		int playerIndex;
+		
+		
+	}
 
 	private BufferedReader reader;
 	
@@ -30,14 +42,22 @@ public class ConsoleClient implements Client {
 
 	/**
 	 * 指定されたサーバーを持つコンソールクライアントを生成する.
-	 * サーバーはnullで,あとからsetしてもよい.
 	 * @param server サーバ
 	 */
 	public ConsoleClient(Server server) {
 		this.server = server;
-		reader = new BufferedReader(new InputStreamReader(System.in));
+		this.onConstructed();
+	}
+
+	public ConsoleClient() {
+		this.server = server;
+		this.onConstructed();
 	}
 	
+	private void onConstructed() {
+		reader = new BufferedReader(new InputStreamReader(System.in));
+	}
+
 	// DEBUG 結合用メソッド
 	public void setServer(Server tr) {
 		this.server = tr;

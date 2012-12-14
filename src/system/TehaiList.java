@@ -1,6 +1,7 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +13,13 @@ import java.util.Set;
  * 手牌を表すリストクラス。
  */
 public class TehaiList implements List<Hai> {
+	private static final int zeroarr[];
+
+	static {
+		zeroarr = new int[37];
+		Arrays.fill(zeroarr, 0);
+	}
+
 	private final List<Hai> list;
 
 	public TehaiList() {
@@ -341,6 +349,37 @@ public class TehaiList implements List<Hai> {
 				count++;
 		}
 		return count;
+	}
+	
+	/**
+	 * 牌種の枚数の配列に変換する．牌種の枚数の配列とはその牌の牌種のidをインデックスとして
+	 * 中身にそのidの牌の枚数が入った配列である．牌種のidは36まであるので、返される配列の長さは
+	 * 37となる．
+	 * 
+	 * @return 牌種の枚数の配列．
+	 */
+	public int[] toSizeArray() {
+		int n[] = zeroarr.clone();
+		for (Hai hai : list) {
+			n[hai.type().id()]++;
+		}
+		return n;
+	}
+
+	/**
+	 * 牌種の枚数の配列に変換する．牌種の枚数の配列とはその牌の牌種のidをインデックスとして
+	 * 中身にそのidの牌の枚数が入った配列である．牌種のidは36まであるので、返される配列の長さは
+	 * 37となる．
+	 * 
+	 * @param list 手牌リスト．
+	 * @return 牌種の枚数の配列．
+	 */
+	public static int[] toSizeArray(List<? extends Hai> list) {
+		int n[] = zeroarr.clone();
+		for (Hai hai : list) {
+			n[hai.type().id()]++;
+		}
+		return n;
 	}
 
 	// override method ----------------------------------------------------

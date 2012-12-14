@@ -270,8 +270,8 @@ public class AgariResult {
 		tehaiPlusAgariHai.add(chParam.getAgariHai());
 
 		// 4面子1雀頭である
-		if (AgariFunctions.isNMentu1Janto(tehaiPlusAgariHai)) {
-			AgariFunctions.setMentuListAndJanto(tehaiList, chParam.getAgariHai(), hurohaiList, chParam);
+		if (AgariMethods.isNMentu1Janto(tehaiPlusAgariHai)) {
+			AgariMethods.setMentuListAndJanto(tehaiList, chParam.getAgariHai(), hurohaiList, chParam);
 			List<MatiType> matiTypeList = MatiType.getMatiTypeList(chParam);
 			chParam.setMatiType(matiTypeList.get(0));
 		} else {
