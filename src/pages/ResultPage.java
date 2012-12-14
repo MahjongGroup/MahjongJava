@@ -185,11 +185,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			for(Hai h:getFrame().getInfo().doraList){
 				tmpList.add(MajanHai.valueOf(h.nextOfDora(), false));
 			}
-			for(Hai h:uradoraList){
-				tmpList.add(MajanHai.valueOf(h.nextOfDora(), false));
+			if(kplayer.isReach()){
+				for(Hai h:uradoraList){
+					tmpList.add(MajanHai.valueOf(h.nextOfDora(), false));
+				}
 			}
-			if(kplayer.isReach())
-				tmpList.addAll(uradoraList);
 			add(new StringHaisPanel("ドラ",new ArrayList<Hai>(tmpList),"" + result.getDoraSize()));
 			add(new ClearLabel(result.getHan() + "翻"));
 			add(new ClearLabel(result.getHu() + "符"));
