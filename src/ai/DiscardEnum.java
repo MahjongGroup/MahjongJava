@@ -29,6 +29,8 @@ public enum DiscardEnum implements DiscardStrategy {
 		public int discard(Kyoku kyoku,Player player) {
 			TehaiList tlist = kyoku.getTehaiList(kyoku.getKazeOf(player));
 			List<Hai> haiList = AIMethods.getInvalidHaiList(tlist);
+			AIMethods.getHuyouHai(haiList);
+			
 			int index = -1;
 			return index;
 		}

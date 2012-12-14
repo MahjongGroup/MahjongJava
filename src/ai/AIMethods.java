@@ -3,8 +3,11 @@ package ai;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import system.Functions;
 import system.Hai;
@@ -23,7 +26,7 @@ import system.TehaiList;
 public class AIMethods {
 
 	/**
-	 * その牌が完全不要牌かどうかを返す。
+	 * その牌が広義不要牌かどうかを返す。
 	 * @param hai 牌
 	 * @param c 牌コレ
 	 * @return　
@@ -41,7 +44,7 @@ public class AIMethods {
 	}
 
 	/**
-	 * 手牌リストの中から完全不要牌のリストを返す。
+	 * 手牌リストの中から広義不要牌のリストを返す。
 	 * 
 	 * @param c 牌コレ
 	 * @return　孤立した牌のリスト
@@ -109,10 +112,17 @@ public class AIMethods {
 		}
 		return nearHaiTypeList;
 	}
-	
-	public static List<Hai> getExtendedValidHaiList(Collection<? extends Hai> c){
-		List<Hai> extendedValidHaiList = new ArrayList<Hai>();
-		
-		return extendedValidHaiList;
+	/**
+	 * 広義有効牌タイプのセットを返す。
+	 * @param c
+	 * @return
+	 */
+	public static Set<HaiType> getExtendedValidHaiTypeSet(Collection<? extends Hai> c){
+		Set<HaiType> extendedValidHaiSet = new TreeSet<HaiType>();
+		for (Hai hai : c) {
+			HaiType haiType = hai.type();
+			extendedValidHaiSet.addAll(getNearHaiTypeList(haiType));
+		}
+		return extendedValidHaiSet;
 	}
 }
