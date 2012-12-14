@@ -58,7 +58,7 @@ public class MahjongGame {
 			int newScores[] = mahjong.getScores();
 			KyokuResult kr = kyoku.createKyokuResult();
 			for(Server server:transMap.values()){
-				server.notifyKyokuResult(kr,newScores,oldScores);
+				server.notifyKyokuResult(kr,newScores,oldScores,kyoku.getUraDoraList());
 			}
 			waitKyokuResult();
 			
