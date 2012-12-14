@@ -431,7 +431,11 @@ public class KyokuRunner {
 
 			if (kyoku.isReachable() && ai.isReach()) {
 				kyoku.doReach();
-				kyoku.discard(ai.discard());
+				int index = ai.discard();
+				kyoku.discard(index);
+				for (Transporter t : transporterMap.values()) {
+					t.notifyReach(kyoku.getCurrentTurn(), index);
+				}
 				System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 				Console.wairEnter();
 				stateCode = STATE_CODE_RON;
