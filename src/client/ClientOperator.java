@@ -213,6 +213,7 @@ public class ClientOperator implements Client{
 	public void onReachReceived(Kaze currentTurn,int sutehaiIndex){
 		if(canvas == null)
 			return;
+		System.out.println("onReachReceived");
 		hideFocus();
 		ClientInfo info = canvas.getInfo();
 		int currentIndex = info.kaze.get(currentTurn);
@@ -389,11 +390,17 @@ public class ClientOperator implements Client{
 			synchronized (info.sutehaiMap) {
 				info.sutehaiMap.put(i, sutehai.get(k));
 			}
-			info.tehaiSizeMap.put(i, tehaiSize.get(i));
 			if(k == currentTurn)
 				info.sutehaiMap.get(i).add(currentSutehai);
 			info.hurohaiMap.put(i, nakihai.get(k));
 		}
+
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.TON), tehaiSize.get(0));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.NAN), tehaiSize.get(1));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.SYA), tehaiSize.get(2));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.PE), tehaiSize.get(3));
+		
+
 		info.yamaSize = yamaSize;
 		info.wanpaiSize = wanpaiSize;
 		info.doraList = doraList;

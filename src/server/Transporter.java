@@ -39,7 +39,8 @@ public class Transporter implements Server {
 	private boolean ronReceivedResult = false;
 	private boolean tsumoagariReceivedResult = false;
 	private boolean isWait = true;
-
+	private boolean endResultPage = false;
+	
 	// DEBUG 結合用
 	private Client client;
 	
@@ -60,7 +61,7 @@ public class Transporter implements Server {
 	public Transporter() {
 	}
 
-	 public void init() {
+	public void init() {
 		grandFlag = false;
 		kyusyukyuhaiReceivedFlag = false;
 		kyusyukyuhaiReceivedResult = false;
@@ -82,7 +83,7 @@ public class Transporter implements Server {
 		ronReceivedFlag = false;
 		ronReceivedResult = false;
 		tsumoagariReceivedResult = false;
-	 }
+	}
 	
 	// DEBUG 結合用
 	public void setClient(Client client) {
@@ -172,6 +173,10 @@ public class Transporter implements Server {
 	
 	public boolean isThereTsumohai(){
 		return tumoari;
+	}
+	
+	public boolean isEndResultPage(){
+		return endResultPage;
 	}
 	
 	// 九種九牌できるときに流局するかどうかをクライアントに聞く
@@ -386,6 +391,11 @@ public class Transporter implements Server {
 		client.onKyokuResultReceived(result);
 	}
 
+	@Override
+	public void onNextKyokuRequested(){
+		endResultPage = true;
+	}
+	
 //	@Override
 //	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 //			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,

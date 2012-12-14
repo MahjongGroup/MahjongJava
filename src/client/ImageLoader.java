@@ -54,6 +54,7 @@ public class ImageLoader {
 		IMAGE_MAP.put(ImageID.sangen_3, "sangen_3");
 
 		IMAGE_MAP.put(ImageID.hai_back, "back");
+		IMAGE_MAP.put(ImageID.hai_darkback, "darkback");
 
 	}
 	
