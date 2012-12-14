@@ -68,7 +68,6 @@ public class ClientInfo {
 		this.kakanableIndexList = new ArrayList<List<Integer>>();
 		int dice = 2 + (int)(Math.random() * 10);
 		finish = (17 * (dice % 4) + (7 - dice) + 67) % 68;
-		
 		//東の左手側が0
 		//yama:反時計周りに描画
 		//dora:時計周りに描画
@@ -147,6 +146,7 @@ public class ClientInfo {
 		this.kaze.put(Kaze.NAN, (5 - index) % 4);
 		this.kaze.put(Kaze.SYA, (6 - index) % 4);
 		this.kaze.put(Kaze.PE, (7 - index) % 4);
+		this.finish = (finish + kaze.get(Kaze.TON)) % 68;
 	}
 	
 	public void setID(int key,int id){

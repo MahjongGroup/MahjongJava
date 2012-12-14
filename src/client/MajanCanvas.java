@@ -203,6 +203,57 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 		
+		
+		int wanpaiSize = info.wanpaiSize;
+		int limit = info.yamaSize/2 + info.yamaSize%2 + info.finish + 1;
+		int finish = info.finish + 1 - (wanpaiSize/2 + wanpaiSize % 2 + (wanpaiSize==14?1:0));
+		if(finish < 0){
+			finish += 68;
+			limit += 68;
+		}
+		int ix = PLAYER_BLOCK1_X;
+		int iy = PLAYER_BLOCK1_Y;
+		int dx = 0;
+		for(int i = 0;i < 17;i++){
+			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
+				g2.drawImage(scaledHaiBackImage, ix + dx,
+						iy + 100, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+			dx += SCALED_HAI_WIDTH;
+			//TODO current
+		}
+
+		g2.rotate(-Math.PI);
+		g2.translate(-WINDOW_WIDTH, -WINDOW_HEIGHT);
+		dx = 0;
+		for(int i = 34;i < 51;i++){
+			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
+				g2.drawImage(scaledHaiBackImage, ix + dx,
+						iy + 100, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+			dx += SCALED_HAI_WIDTH;
+		}
+
+		g2.rotate(Math.PI / 2.0);
+		g2.translate(0, -WINDOW_WIDTH);
+		ix = PLAYER_BLOCK2_X;
+		iy = PLAYER_BLOCK2_Y;
+		dx = 0;
+		for(int i = 17;i < 34;i++){
+			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
+				g2.drawImage(scaledHaiBackImage, ix + dx,
+						iy + 100, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+			dx += SCALED_HAI_WIDTH;
+		}
+		g2.rotate(Math.PI);
+		g2.translate(-WINDOW_HEIGHT, -WINDOW_WIDTH);
+		dx = 0;
+		for(int i = 51;i < 68;i++){
+			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
+				g2.drawImage(scaledHaiBackImage, ix + dx,
+						iy + 100, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+			dx += SCALED_HAI_WIDTH;
+		}
+		g2.rotate(-Math.PI / 2.0);
+		g2.translate(-WINDOW_WIDTH, 0);
 
 		if (stateCodes.contains(StateCode.END)) {
 			g2.setColor(Color.RED);
@@ -519,8 +570,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			//クリック個所がボタンのある範囲にあるかどうか(y方向のみ判定)
 			if (my <= height + BUTTON_HEIGHT / 2 - 10
 					&& my >= height - BUTTON_HEIGHT / 2 - 10) {
-				//TODO current
-				
 				int half = buttonList.size() / 2;
 				//クリック個所がボタンのある範囲にあるかどうか(x方向)
 				for (int j = 0; j < buttonList.size(); j++) {
@@ -536,7 +585,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					sc = getSelectHaiFromSelect(buttonList.get(i));
 					isButtonSelected = true;
 				}
-					
 
 				refreshStateCodes();
 				addStateCode(sc);
@@ -567,6 +615,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						operator.sendMinkan(true);
 						refreshStateCodes();
 						refreshButtonList();
+						refreshNakiListExclude(null);
 						return;
 					default:
 						break;
@@ -680,6 +729,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			case SELECT_MINKAN:
 				operator.sendMinkan(true);
 				info.selectedIndexes.clear();
+				refreshButtonList();
+				refreshNakiListExclude(null);
+				refreshStateCodes();
 				addStateCode(StateCode.DISCARD_SELECT);
 				break;
 			case KYUSYUKYUHAI:
@@ -739,6 +791,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			if(hasOnlyElem){
 				addSelectedIndexesWhenOverHai(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 				refreshNakiListExclude(null);
+				refreshStateCodes();
 				return;
 			}
 			List<Integer> selectedIndexes = getInfo().selectedIndexes;
@@ -763,7 +816,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				}
 			}
 			if (flag || (sc.getNum() == 1 && i == j && j != -1)) {
-				System.out.println(selectedIndexes);
 				dispatch(sc);
 				selectedIndexes.clear();
 				refreshButtonList();
@@ -969,8 +1021,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		kill();
 	}
 	public void setFocus(){
-		getFrame().setLocation(0, 0);
-		getFrame().setAlwaysOnTop(true);
+//		getFrame().setLocation(0, 0);
+//		getFrame().setAlwaysOnTop(true);
 	}
 	public void hideFocus(){
 		getFrame().setAlwaysOnTop(false);
@@ -999,5 +1051,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		for(Kaze k:kaze.keySet()){
 			kaze.put(k, (kaze.get(k) + 1)%4);
 		}
+		info.finish = (info.finish + kaze.get(Kaze.TON)*17)%68;
 	}
 }
