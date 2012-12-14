@@ -213,6 +213,7 @@ public class ClientOperator implements Client{
 	public void onReachReceived(Kaze currentTurn,int sutehaiIndex){
 		if(canvas == null)
 			return;
+		System.out.println("onReachReceived");
 		hideFocus();
 		ClientInfo info = canvas.getInfo();
 		int currentIndex = info.kaze.get(currentTurn);

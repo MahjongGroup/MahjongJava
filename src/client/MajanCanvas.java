@@ -507,9 +507,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int my = e.getY();
 		hideFocus();
 		if (stateCodes.contains(StateCode.WAIT)){
-//			refreshNakiListExclude(null);
-//			refreshStateCodes();
-//			refreshButtonList();
 			return;
 		}
 		boolean hasOnlyElem = false;
@@ -518,14 +515,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			int width = getWidth() / 2;
 			int height = getHeight() / 2;
 			int i = buttonList.size() + 1;
-			boolean flag = false;
 			StateCode sc = null;
 			//クリック個所がボタンのある範囲にあるかどうか(y方向のみ判定)
-			System.out.println(buttonList.size());
-			System.out.println("before check");
 			if (my <= height + BUTTON_HEIGHT / 2 - 10
 					&& my >= height - BUTTON_HEIGHT / 2 - 10) {
-				System.out.println("in button height");
 				//TODO current
 				
 				int half = buttonList.size() / 2;
@@ -539,7 +532,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						break;
 					}
 				}
-				System.out.println(i);
 				if(i < buttonList.size()){
 					sc = getSelectHaiFromSelect(buttonList.get(i));
 					isButtonSelected = true;

@@ -60,7 +60,7 @@ public class Transporter implements Server {
 	public Transporter() {
 	}
 
-	 public void init() {
+	public void init() {
 		grandFlag = false;
 		kyusyukyuhaiReceivedFlag = false;
 		kyusyukyuhaiReceivedResult = false;
@@ -82,7 +82,7 @@ public class Transporter implements Server {
 		ronReceivedFlag = false;
 		ronReceivedResult = false;
 		tsumoagariReceivedResult = false;
-	 }
+	}
 	
 	// DEBUG 結合用
 	public void setClient(Client client) {
