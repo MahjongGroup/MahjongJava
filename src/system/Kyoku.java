@@ -43,9 +43,6 @@ public class Kyoku {
 	//後めくり槓フラグ
 	private boolean atomekuriKanFlag;
 
-	// 暗槓フラグ
-	private boolean ankanFlag;
-
 	// 初順フラグ 鳴かれてもfalseとなる
 	private boolean firstTurn;
 
@@ -114,7 +111,6 @@ public class Kyoku {
 		this.tenpaiMap.clear();
 		this.agariMap.clear();
 
-		this.ankanFlag = false;
 		this.atomekuriKanFlag = false;
 		this.tyankanFlag = false;
 		this.rinsyanFlag = false;
@@ -273,6 +269,8 @@ public class Kyoku {
 	 * @return 加槓して出来た面子.
 	 */
 	public Mentu doKakan(int index) {
+		this.openAtomekuriDora();
+
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
 		Mentu mentu = null;
 		// ツモ牌を加槓する場合
@@ -346,13 +344,14 @@ public class Kyoku {
 	 * @param 暗槓する牌のインデックス(13はツモ牌を表す).
 	 */
 	public Mentu doAnkan(List<Integer> list) {
+		this.openAtomekuriDora();
+		
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
 		Mentu m = kp.doAnkan(currentTumohai, list);
 
 		this.newDoraSize++;
 		this.firstTurn = false;
 		this.currentTumohai = null;
-		this.ankanFlag = true;
 
 		return m;
 	}
@@ -632,6 +631,7 @@ public class Kyoku {
 	 * 鳴いたときの副作用。
 	 */
 	private void naku() {
+		this.openAtomekuriDora();
 		this.currentSutehai = null;
 		this.firstTurn = false;
 		for (Kaze kaze : Kaze.values()) {
@@ -643,6 +643,7 @@ public class Kyoku {
 	 * 現在のターンを次のプレイヤーに移す.
 	 */
 	public void nextTurn() {
+		this.openAtomekuriDora();
 		if (this.firstTurn) {
 			if (this.tsumoSize >= 4)
 				this.firstTurn = false;
@@ -672,7 +673,7 @@ public class Kyoku {
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
 		Param param = newTenpaiCheckerParam(kp.isNaki(), currentTurn);
 
-		return AgariMethods.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
+		return AgariMethods.isTenpaiWithExtra(kp.getTehaiList(), this.currentTumohai, param, field);
 	}
 
 	/**
@@ -683,25 +684,14 @@ public class Kyoku {
 	 */
 	public boolean isTenpai(Kaze kaze) {
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		return AgariMethods.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), kp.isNaki());
+		return AgariMethods.isTenpai(kp.getTehaiList(), kp.isNaki());
 	}
 
-	public int openDora() {
-		// TODO check
-		int result = 0;
-
+	public void openAtomekuriDora() {
 		if (atomekuriKanFlag) {
 			this.newDoraSize++;
-			result++;
 			this.atomekuriKanFlag = false;
 		}
-		if (ankanFlag) {
-			this.newDoraSize++;
-			result++;
-			this.ankanFlag = false;
-		}
-
-		return result;
 	}
 
 	/**

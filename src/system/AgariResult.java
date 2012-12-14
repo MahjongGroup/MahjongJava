@@ -81,7 +81,7 @@ public class AgariResult {
 	public int getBaseScore() {
 		return baseScore;
 	}
-	
+
 	/**
 	 * 子のロンあがりしたときの点数、つまり基本点を4倍して切り上げした点数を返す．
 	 * @return the child score.
@@ -89,7 +89,7 @@ public class AgariResult {
 	public int getChildScore() {
 		return MyMath.ceil(baseScore * 4, 2);
 	}
-	
+
 	/**
 	 * 親のロンあがりしたときの点数、つまり基本点を6倍して切り上げした点数を返す．
 	 * @return the parent score.
@@ -157,10 +157,23 @@ public class AgariResult {
 	 * 翻数と符数を計算する。
 	 */
 	public void calcHanAndHu(List<HaiType> doraList, List<HaiType> uraDoraList) {
-		for (Yaku yaku : this.yakuSet) {
-			if (yaku instanceof NormalYaku) {
-				NormalYaku nYaku = (NormalYaku) yaku;
-				this.han += nYaku.getHansu();
+		// 鳴いている場合は食い下がりを考慮する．
+		if (chParam.isNaki()) {
+			for (Yaku yaku : this.yakuSet) {
+				if (yaku instanceof NormalYaku) {
+					NormalYaku nYaku = (NormalYaku) yaku;
+					this.han += nYaku.getHansu();
+					if (nYaku.isKuisagari()) {
+						this.han -= 1;
+					}
+				}
+			}
+		} else {
+			for (Yaku yaku : this.yakuSet) {
+				if (yaku instanceof NormalYaku) {
+					NormalYaku nYaku = (NormalYaku) yaku;
+					this.han += nYaku.getHansu();
+				}
 			}
 		}
 
@@ -172,7 +185,7 @@ public class AgariResult {
 		}
 
 		List<Hai> haiList = chParam.getHaiList();
-		
+
 		// 表ドラ確認
 		for (Hai hai : haiList) {
 			for (HaiType haiType : doraList) {
@@ -180,7 +193,7 @@ public class AgariResult {
 					this.doraSize += 1;
 			}
 		}
-		
+
 		// 立直している場合は裏ドラ確認
 		if (yakuSet.contains(NormalYaku.RICHI)) {
 			for (Hai hai : haiList) {
@@ -292,12 +305,12 @@ public class AgariResult {
 		// 4面子1雀頭である
 		PatternMethod.Value pvalue = PatternMethod.getValue(tehaiPlusAgariHai);
 		if (pvalue.isSuccessful()) {
-			if(pvalue.isIkkiTsukan()) {
+			if (pvalue.isIkkiTsukan()) {
 				chParam.addFlagCheckYaku(NormalYaku.IKKI);
 			}
-			if(pvalue.isIpeko()) {
+			if (pvalue.isIpeko()) {
 				chParam.addFlagCheckYaku(NormalYaku.IPEKO);
-			}else if(pvalue.isRyanpeko()) {
+			} else if (pvalue.isRyanpeko()) {
 				chParam.addFlagCheckYaku(NormalYaku.RYANPEKO);
 			}
 			AgariMethods.setMentuListAndJanto(tehaiList, chParam.getAgariHai(), hurohaiList, chParam);

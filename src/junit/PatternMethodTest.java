@@ -36,7 +36,6 @@ import org.junit.Test;
 
 import system.AgariMethods;
 import system.Hai;
-import system.HurohaiList;
 import system.TehaiList;
 import system.algo.PatternMethod;
 
@@ -304,7 +303,7 @@ public class PatternMethodTest {
 	public void testIsTenpai() {
 		// 1,2,2,3,3,3,4,4,5,6,7,8,9
 		for (int i = 0; i < 1000; i++) {
-			assertTrue(AgariMethods.isTenpai(list9, new HurohaiList(), false));
+			assertTrue(AgariMethods.isTenpai(list9, false));
 		}
 	}
 }

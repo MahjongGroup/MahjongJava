@@ -413,6 +413,34 @@ public class TehaiList implements List<Hai> {
 	public boolean contains(Object hai) {
 		return list.contains(hai);
 	}
+	
+	/**
+	 * 指定された牌種の牌をこのリストが含んでいる場合trueを返す．
+	 * @param type このリストに含まれているか確かめる牌種．
+	 * @return 含めれている場合はtrue．
+	 */
+	public boolean contains(HaiType type) {
+		for (Hai hai : list) {
+			if(hai.type() == type) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * このリストが指定された牌種のコレクションの要素をすべて
+	 * @param c
+	 * @return
+	 */
+	public boolean containsAllHaiType(Collection<HaiType> c) {
+		for (HaiType type : c) {
+			if(!contains(type)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
