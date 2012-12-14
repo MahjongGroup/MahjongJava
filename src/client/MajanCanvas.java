@@ -913,8 +913,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	private void refreshNakiListExclude(StateCode sc) {
 		for (StateCode key : getInfo().ableIndexList.keySet()) {
-			if (key == StateCode.SELECT_MINKAN)
+			if (key == StateCode.SELECT_MINKAN){
+				if(sc != StateCode.SELECT_MINKAN)
+					getInfo().ableIndexList.get(StateCode.SELECT_MINKAN).clear();
 				continue;
+			}
 			if (sc == null)
 				getInfo().ableIndexList.get(key).clear();
 			else {
@@ -972,8 +975,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		isAlive = false;
 	}
 	public void movePage(String order){
-		getFrame().setPage(order,imgBuffer);
 		kill();
+		repaint();
+		getFrame().setPage(order,imgBuffer);
 	}
 	public void setFocus(){
 //		getFrame().setLocation(0, 0);

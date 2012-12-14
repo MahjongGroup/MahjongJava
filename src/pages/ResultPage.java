@@ -56,9 +56,6 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		if(g2 == null)
 			g2 = imgBuffer.getGraphics();
 		super.paint(g2);
-		g2.drawString("Result", getWidth()/2, getHeight()/2);
-		g2.setColor(new Color(0,0,0,100));
-		g2.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(imgBuffer, 0, 0,this);
 	}
 
@@ -123,26 +120,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mousePressed(MouseEvent e) {}
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseReleased(MouseEvent e) {}
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseEntered(MouseEvent e) {}
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 }
