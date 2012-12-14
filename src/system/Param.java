@@ -91,6 +91,10 @@ public class Param {
 	public void setJikaze(Kaze jikaze) {
 		this.jikaze = jikaze;
 	}
+	
+	public boolean addFlagCheckYaku(Yaku addedYaku) {
+		return flagCheckYakuSet.add(addedYaku);
+	}
 
 	public Set<Yaku> getFlagCheckYakuSet() {
 		return new HashSet<Yaku>(flagCheckYakuSet);

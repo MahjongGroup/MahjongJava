@@ -5,11 +5,68 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import system.Hai;
+import system.TehaiList;
+
 /**
  * パターン法によるn面子1雀頭の判定アルゴリズムを表すクラス．
  * このアルゴリズムではn面子1雀頭の判定をした結果、その手牌が一盃口、二盃口、一気通貫であるかも分かる．
  */
 public class PatternMethod {
+	public static class Value{
+		private final int value;
+		
+		public Value(List<? extends Hai	> list) {
+			this.value = isNMentsu1Janto(list);
+		}
+		
+		/**
+		 * 一気通貫の場合trueを返す．
+		 * @return the flag of ikki.
+		 */
+		public boolean isIkkiTsukan() {
+			return (value & 0x16) == 0x16;
+		}
+		
+		/**
+		 * 
+		 * @return the flag of ipeko.
+		 */
+		public boolean isIpeko() {
+			return (value & 0xc) == 0x8;
+		}
+		
+		/**
+		 * 
+		 * @return the flag of ryanpeko.
+		 */
+		public boolean isRyanpeko() {
+			return (value & 0xc4) == 0x4;
+		}
+		
+		/**
+		 * @return true if you firstly remove syuntsu.
+		 */
+		public boolean isSyuntsuRm() {
+			return (value & 0x2) == 0x2;
+		}
+		
+		/**
+		 * 
+		 * @return true if you firstly remove kotsu.
+		 */
+		public boolean isKotsuRm() {
+			return (value & 0x1) == 0x1;
+		}
+		
+		/**
+		 * 
+		 * @return true if you successfully remove N mentsu 1 janto from tehai list.
+		 */
+		public boolean isSuccessful() {
+			return (value & 0x3) != 0;
+		}
+	}
 
 	/**
 	 * 指定された牌の数の配列からパターン法のキーを計算してそれを返す．
@@ -56,7 +113,7 @@ public class PatternMethod {
 		}
 		return ret.toArray(new Integer[0]);
 	}
-
+	
 	/**
 	 * 指定された手牌リストのキーの配列がn面子1雀頭であるかどうかを判定する．n面子1雀頭であれば0以外の整数値を返す．</br>
 	 * </br>
@@ -107,6 +164,29 @@ public class PatternMethod {
 		return ret;
 	}
 
+	
+	/**
+	 * 指定された手牌リストがn面子1雀頭であるかどうかを判定する．n面子1雀頭であれば0以外の整数値を返す．</br>
+	 * 返り値に関してはisNMentsu1Janto(Integer keys[])を参照せよ．
+	 * 
+	 * @param tlist 手牌リスト．
+	 * @return n面子1雀頭であれば0以外の整数値.
+	 */
+	public static int isNMentsu1Janto(List<? extends Hai> tlist) {
+		int indexes[] = TehaiList.toSizeArray(tlist);
+		return isNMentsu1Janto(calcKey(indexes));
+	}
+	
+	/**
+	 * 指定された手牌リストがn面子1雀頭であるかどうかを判定して、その結果オブジェクトを返す．
+	 * 
+	 * @param tlist 手牌リスト．
+	 * @return 結果オブジェクト．
+	 */
+	public static Value getValue(List<? extends Hai> list) {
+		return new Value(list);
+	}
+	
 	public static void loadClass() {
 		// 何もしない
 	}
