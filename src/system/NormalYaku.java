@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 通常役を表す列挙型．
+ * なかにはフラグで判定するものもある．一盃口、二盃口、一気通貫は面子判定時点で判定することが出きるので
+ * これらの役もフラグで判定する(一盃口、二盃口に関してはさらに鳴いていないという条件もある)．
+ */
 public enum NormalYaku implements Yaku {
 	RICHI("立直", 1, false, false, true, false) {
 		@Override
@@ -73,7 +78,7 @@ public enum NormalYaku implements Yaku {
 		@Override
 		public boolean check(Param param, Field field) {
 			for (Hai hai : param.getHaiList()) {
-				if (!hai.type().isTyuntyanhai())
+				if (!hai.isTyuntyanhai())
 					return false;
 			}
 			return true;
@@ -128,32 +133,7 @@ public enum NormalYaku implements Yaku {
 		public boolean check(Param param, Field field) {
 			if (param.isNaki())
 				return false;
-			List<Mentu> mlist = param.getMentuList();
-			//			ArrayList<String> idList = new ArrayList<String>();
-			//			for (Mentu mentu : mlist) {
-			//				if (mentu.type() == Mentu.Type.SYUNTU) {
-			//					int minId = Functions.min(mentu.get(0).type().id(), mentu
-			//							.get(1).type().id(), mentu.get(2).type().id());
-			//					String id = String.valueOf(minId);
-			//					idList.add(id);
-			//				}
-			//			}
-			//			if (idList.size() < 2)
-			//				return false;
-			//			for (String id : idList) {
-			//				idList.remove(id);
-			//				if (idList.contains(id))
-			//					return true;
-			//			}
-			for (Mentu m : mlist) {
-				List<Mentu> ml = new ArrayList<Mentu>();
-				ml.add(m);
-				mlist.retainAll(ml);
-				if (mlist.size() >= 2)
-					return true;
-			}
-
-			return false;
+			return param.getFlagCheckYakuSet().contains(NormalYaku.IPEKO);
 		}
 
 	},
@@ -218,8 +198,7 @@ public enum NormalYaku implements Yaku {
 			ArrayList<Integer> idList = new ArrayList<Integer>();
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.SYUNTU) {
-					int minId = Functions.min(mentu.get(0).type().id(), mentu.get(1).type().id(),
-							mentu.get(2).type().id());
+					int minId = Functions.min(mentu.get(0).type().id(), mentu.get(1).type().id(), mentu.get(2).type().id());
 					idList.add(minId);
 				}
 			}
@@ -285,24 +264,7 @@ public enum NormalYaku implements Yaku {
 
 		@Override
 		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
-			ArrayList<Integer> idList = new ArrayList<Integer>();
-			for (Mentu mentu : mlist) {
-				if (mentu.type() == Mentu.Type.SYUNTU) {
-					int minId = Functions.min(mentu.get(0).type().id(), mentu.get(1).type().id(),
-							mentu.get(2).type().id());
-					idList.add(minId);
-				}
-			}
-			if (idList.size() < 3)
-				return false;
-			for (int id : idList) {
-				if (id % 10 == 1) {
-					if (idList.contains(id + 3) && idList.contains(id + 6))
-						return true;
-				}
-			}
-			return false;
+			return param.getFlagCheckYakuSet().contains(NormalYaku.IKKI);
 		}
 
 	},
@@ -316,12 +278,11 @@ public enum NormalYaku implements Yaku {
 			List<Mentu> mlist = param.getMentuList();
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.SYUNTU) {
-					int minNum = Functions.min(mentu.get(0).type().number(), mentu.get(1).type()
-							.number(), mentu.get(2).type().number());
+					int minNum = Functions.min(mentu.get(0).number(), mentu.get(1).type().number(), mentu.get(2).type().number());
 					if (minNum != 1 && minNum != 7)
 						return false;
 				} else {
-					if (mentu.get(0).type().isTyuntyanhai())
+					if (mentu.get(0).isTyuntyanhai())
 						return false;
 				}
 			}
@@ -407,13 +368,11 @@ public enum NormalYaku implements Yaku {
 				return false;
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.SYUNTU) {
-					int minNum = Functions.min(mentu.get(0).type().number(), mentu.get(1).type()
-							.number(), mentu.get(2).type().number());
+					int minNum = Functions.min(mentu.get(0).number(), mentu.get(1).number(), mentu.get(2).number());
 					if (minNum != 1 && minNum != 7)
 						return false;
 				} else {
-					if (mentu.get(0).type().isTyuntyanhai()
-							|| mentu.get(0).type().isTsuhai())
+					if (mentu.get(0).isTyuntyanhai() || mentu.get(0).isTsuhai())
 						return false;
 				}
 			}
@@ -444,33 +403,7 @@ public enum NormalYaku implements Yaku {
 		public boolean check(Param param, Field field) {
 			if (param.isNaki())
 				return false;
-			List<Mentu> mlist = param.getMentuList();
-			//			ArrayList<String> idList = new ArrayList<String>();
-			//			for (Mentu mentu : mlist) {
-			//				if (mentu.type() != Mentu.Type.SYUNTU)
-			//					return false;
-			//				else {
-			//					int minId = Functions.min(mentu.get(0).type().id(), mentu.get(1).type().id(),
-			//							mentu.get(2).type().id());
-			//					String id = String.valueOf(minId);
-			//					idList.add(id);
-			//				}
-			//			}
-			//			for (int i = 0; i < 2; i++) {
-			//				String id = idList.get(i);
-			//				idList.remove(id);
-			//				if (!idList.remove(id))
-			//					return false;
-			//			}
-			for (Mentu m : mlist) {
-				if (m.type() != Mentu.Type.SYUNTU)
-					return false;
-				mlist.remove(m);
-				if (!m.contains(m))
-					return false;
-				mlist.remove(m);
-			}
-			return true;
+			return param.getFlagCheckYakuSet().contains(NormalYaku.RYANPEKO);
 		}
 
 	},
@@ -500,8 +433,7 @@ public enum NormalYaku implements Yaku {
 	private final boolean flagCheck;
 	private final boolean kouseiFlag;
 
-	private NormalYaku(String notation, int hansu, boolean naki, boolean kuisagari, boolean flag,
-			boolean kousei) {
+	private NormalYaku(String notation, int hansu, boolean naki, boolean kuisagari, boolean flag, boolean kousei) {
 		this.notation = notation;
 		this.hansu = hansu;
 		this.naki = naki;
@@ -547,4 +479,9 @@ public enum NormalYaku implements Yaku {
 		return notation;
 	}
 
+	public static void main(String[] args) {
+		for (Yaku yaku : NormalYaku.values()) {
+			System.out.println(yaku);
+		}
+	}
 }

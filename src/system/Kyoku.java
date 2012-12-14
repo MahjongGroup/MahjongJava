@@ -446,7 +446,7 @@ public class Kyoku {
 		param.setJikaze(kaze);
 
 		TehaiList tehaiList = kp.getTehaiList();
-		return AgariFunctions.getReachableIndexList(tehaiList, currentTumohai, param, field);
+		return AgariMethods.getReachableIndexList(tehaiList, currentTumohai, param, field);
 	}
 
 	/**
@@ -672,7 +672,7 @@ public class Kyoku {
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
 		Param param = newTenpaiCheckerParam(kp.isNaki(), currentTurn);
 
-		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
+		return AgariMethods.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), this.currentTumohai, param, field);
 	}
 
 	/**
@@ -683,7 +683,7 @@ public class Kyoku {
 	 */
 	public boolean isTenpai(Kaze kaze) {
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		return AgariFunctions.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), kp.isNaki());
+		return AgariMethods.isTenpai(kp.getTehaiList(), kp.getHurohaiList(), kp.isNaki());
 	}
 
 	public int openDora() {
@@ -1140,7 +1140,7 @@ public class Kyoku {
 		param.setNaki(kyokuPlayerMap.get(kaze).isNaki());
 		param.setAgariHai(agariHai);
 		param.setJikaze(kaze);
-		return AgariFunctions.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
+		return AgariMethods.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
 	}
 
 	/**

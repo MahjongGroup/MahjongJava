@@ -151,7 +151,7 @@ public class KyokuPlayer {
 	 *             指定された牌で加槓出来ない場合.
 	 */
 	public Mentu doKakan(Hai hai) {
-		if (hurohaiList.isKakan(hai.type()))
+		if (!hurohaiList.isKakan(hai.type()))
 			throw new IllegalArgumentException("指定された牌で加槓出来ません : " + hai);
 		onStateChanged();
 		Mentu m = hurohaiList.doKakan(hai);
@@ -482,7 +482,7 @@ public class KyokuPlayer {
 			return cachedTenpaiFlag;
 		}
 		cachedTenpaiCheckFlag = true;
-		return cachedTenpaiFlag = AgariFunctions.isTenpai(tehaiList, hurohaiList, nakiFlag);
+		return cachedTenpaiFlag = AgariMethods.isTenpai(tehaiList, hurohaiList, nakiFlag);
 	}
 	
 	/**
