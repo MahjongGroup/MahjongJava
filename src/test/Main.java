@@ -40,7 +40,7 @@ public class Main {
 		Map<Player, AI> aiMap = new HashMap<Player, AI>(4);
 		for (Player p : playerList) {
 			//AIの設定
-			aiMap.put(p, new AIType_Ex1(p));
+			aiMap.put(p, new AIType_Debug(p, false, true));
 		}
 
 		Mahjong mahjong = new Mahjong(playerList, new Rule());
