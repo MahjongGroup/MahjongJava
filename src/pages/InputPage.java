@@ -66,6 +66,7 @@ public abstract class InputPage extends JPanel implements Page{
 	}
 	public void setImage(Image image){
 		this.image = image;
+		updateUI();
 	}
 	@Override
 	public Client getOperator() {

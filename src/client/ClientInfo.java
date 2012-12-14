@@ -72,6 +72,7 @@ public class ClientInfo {
 		//yama:反時計周りに描画
 		//dora:時計周りに描画
 		
+		System.out.println("reset Reach");
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 

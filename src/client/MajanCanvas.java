@@ -183,6 +183,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			limit += 68;
 		}
 		int dx = 0;
+		int doraStart = finish + 3 - (8 - (wanpaiSize + 1)%2 - wanpaiSize==14?1:0);
 		for(int i = start;i < end;i++){
 			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
 				if (((finish == i || finish == i + 68) && (wanpaiSize % 2 == 1 || wanpaiSize == 14))
@@ -190,7 +191,15 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						|| ((limit - 1 == i || limit - 1 == i + 68) && info.yamaSize % 2 == 1))
 					g2.drawImage(scaledDarkHaiBackImage, ix + dx + indent_x,
 							iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-				else
+				else if ((doraStart <= i && doraStart
+						+ info.doraList.size()> i)
+						|| (doraStart <= i + 68 && doraStart + info.doraList.size() > i + 68)) {
+					g2.drawImage(haiImageMap.get(info.doraList.get((i
+							- (finish + 3) + 68) % 68)), ix + dx + indent_x, iy
+							+ indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT,
+							null);
+					//TODO ドラ表示
+				}else
 					g2.drawImage(scaledHaiBackImage, ix + dx + indent_x,
 							iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 			dx += SCALED_HAI_WIDTH;
@@ -913,8 +922,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	private void refreshNakiListExclude(StateCode sc) {
 		for (StateCode key : getInfo().ableIndexList.keySet()) {
-			if (key == StateCode.SELECT_MINKAN)
+			if (key == StateCode.SELECT_MINKAN){
+				if(sc != StateCode.SELECT_MINKAN)
+					getInfo().ableIndexList.get(StateCode.SELECT_MINKAN).clear();
 				continue;
+			}
 			if (sc == null)
 				getInfo().ableIndexList.get(key).clear();
 			else {
@@ -972,8 +984,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		isAlive = false;
 	}
 	public void movePage(String order){
-		getFrame().setPage(order,imgBuffer);
 		kill();
+		repaint();
+		getFrame().setPage(order,imgBuffer);
 	}
 	public void setFocus(){
 //		getFrame().setLocation(0, 0);
