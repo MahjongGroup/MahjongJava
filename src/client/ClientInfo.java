@@ -35,7 +35,7 @@ public class ClientInfo {
 	Hai sutehai;
 	public Player[] players;
 
-	List<Hai> doraList;
+	public List<Hai> doraList;
 	int honba;
 	Kaze bakaze;
 	int playerNumber;
