@@ -204,7 +204,11 @@ public interface Server {
 	 * @param nakihai 鳴き牌マップ.
 	 * @param sutehai 捨て牌マップ(鳴かれた牌は除く).
 	 * @param currentTurn 現在ターンの風.
-	 * @param hai 
+	 * @param currentSutehai 現在の捨て牌
+	 * @param tehaiSize 全てのプレイヤーの手牌の数
+	 * @param yamaSize 山牌の数
+	 * @param wanpaiSize 王牌の数
+	 * @param doraList 現在のドラのリスト
 	 */
 	void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
@@ -241,6 +245,7 @@ public interface Server {
 	
 	/**
 	 * 半荘が終わった時にその結果を送信
+	 * @param Score 全員の最終の持ち点が入った配列
 	 */
 	public void notifyGameResult(int[] Score);
 
