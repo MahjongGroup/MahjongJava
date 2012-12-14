@@ -167,7 +167,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			}
 		}
 		
-		public ResultPanel(Player player,AgariResult result,KyokuPlayer kplayer,Hai agariHai){
+		public ResultPanel(Player player,AgariResult result,KyokuPlayer kplayer,Hai agariHai,List<Hai> uradoraList){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			add(new ClearLabel(player.getName()));
 			List<Hai> tmpList = new ArrayList<Hai>(kplayer.getTehaiList());
@@ -181,8 +181,16 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			for(Yaku y:result.getYakuSet()){
 				add(new ClearLabel(y.notation()));
 			}
-			if(result.getDoraSize() != 0)
-				add(new StringHaisPanel("ドラ",getFrame().getInfo().doraList,"" + result.getDoraSize()));
+			tmpList = new ArrayList<Hai>();
+			for(Hai h:getFrame().getInfo().doraList){
+				tmpList.add(MajanHai.valueOf(h.nextOfDora(), false));
+			}
+			for(Hai h:uradoraList){
+				tmpList.add(MajanHai.valueOf(h.nextOfDora(), false));
+			}
+			if(kplayer.isReach())
+				tmpList.addAll(uradoraList);
+			add(new StringHaisPanel("ドラ",new ArrayList<Hai>(tmpList),"" + result.getDoraSize()));
 			add(new ClearLabel(result.getHan() + "翻"));
 			add(new ClearLabel(result.getHu() + "符"));
 			if(result.getScoreType() != ScoreType.NORMAL){
@@ -193,7 +201,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	
-	public void setResult(KyokuResult result,int[] newScore,int[] oldScore){
+	public void setResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList){
 		this.result = result;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.newScore = newScore;
@@ -208,7 +216,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		List<Player> winnerList = new ArrayList<Player>();
 		for(Player p:getFrame().getInfo().players){
 			if(result.isAgari(p)){
-				add(new ResultPanel(p, result.getAgariResult(p),result.getKyokuPlayer(p),result.getAgariHai()));
+				add(new ResultPanel(p, result.getAgariResult(p),result.getKyokuPlayer(p),result.getAgariHai(),uradoraList));
 			}
 		}
 		updateUI();

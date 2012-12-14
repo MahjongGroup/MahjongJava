@@ -396,7 +396,7 @@ public class ConsoleClient implements Client {
 	}
 	
 	@Override
-	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
+	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList) {
 		// TODO Auto-generated method stub
 		
 	}

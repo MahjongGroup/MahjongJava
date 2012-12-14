@@ -370,12 +370,6 @@ public class ClientOperator implements Client{
 		((MajanCanvas)page).setBakaze(bakaze);
 	}
 
-	@Override
-	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
-		page.movePage("result");
-		((ResultPage)page).setResult(result,newScore,oldScore);
-		//TODO ok?
-	}
 
 	public void requestNextKyoku(){
 		System.out.println("requestNextKyoku");
@@ -416,5 +410,13 @@ public class ClientOperator implements Client{
 		info.yamaSize = yamaSize;
 		info.wanpaiSize = wanpaiSize;
 		info.doraList = doraList;
+	}
+
+	@Override
+	public void onKyokuResultReceived(KyokuResult result, int[] newScores,
+			int[] oldScores, List<Hai> uradoraList) {
+		page.movePage("result");
+		((ResultPage)page).setResult(result,newScores,oldScores,uradoraList);
+		//TODO ok?
 	}
 }
