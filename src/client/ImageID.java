@@ -49,4 +49,5 @@ public class ImageID {
 	public static final int sangen_3 = 136;
 	
 	public static final int hai_back = 200;
+	public static final int hai_darkback = 201;
 }
