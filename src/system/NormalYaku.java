@@ -264,6 +264,27 @@ public enum NormalYaku implements Yaku {
 
 		@Override
 		public boolean check(Param param, Field field) {
+			// 鳴いている場合は面子から計算
+			if(param.isNaki()) {
+				List<Mentu> mlist = param.getMentuList();
+				ArrayList<Integer> idList = new ArrayList<Integer>();
+				for (Mentu mentu : mlist) {
+					if (mentu.type() == Mentu.Type.SYUNTU) {
+						int minId = Functions.min(mentu.get(0).type().id(), mentu.get(1).type().id(),
+								mentu.get(2).type().id());
+						idList.add(minId);
+					}
+				}
+				if (idList.size() < 3)
+					return false;
+				for (int id : idList) {
+					if (id % 10 == 1) {
+						if (idList.contains(id + 3) && idList.contains(id + 6))
+							return true;
+					}
+				}
+				return false;
+			}
 			return param.getFlagCheckYakuSet().contains(NormalYaku.IKKI);
 		}
 

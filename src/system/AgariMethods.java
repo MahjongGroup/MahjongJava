@@ -2,7 +2,6 @@ package system;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,12 +31,12 @@ public class AgariMethods {
 			TehaiList tempTehai = new TehaiList(tehaiList);
 			tempTehai.remove(i);
 			tempTehai.add(tsumohai);
-			if (isTenpai(tempTehai, new HurohaiList(0), param.isNaki())) {
+			if (isTenpai(tempTehai, param.isNaki())) {
 				result.add(i);
 			}
 		}
 
-		if (isTenpai(new TehaiList(tehaiList), new HurohaiList(0), param.isNaki())) {
+		if (isTenpai(new TehaiList(tehaiList), param.isNaki())) {
 			result.add(13);
 		}
 
@@ -45,17 +44,17 @@ public class AgariMethods {
 	}
 
 	/**
-	 * (余分な牌を含めずに)テンパイしている場合,trueを返す。
+	 * 指定された手牌がテンパイしている場合,trueを返す。
 	 * 
 	 * @param tehaiList　手牌リスト
-	 * @param hurohaiList　副露牌リスト
 	 * @param naki 鳴いているかどうか
 	 * @return　テンパイしている場合true
 	 */
-	public static boolean isTenpai(TehaiList tehaiList, HurohaiList hurohaiList, boolean naki) {
+	public static boolean isTenpai(TehaiList tehaiList, boolean naki) {
+		// TODO 関連牌種だけでチェックするように変更
 		for (HaiType type : HaiType.values()) {
 			Hai hai = MajanHai.valueOf(type, false);
-			if (isKeisikiAgari(tehaiList, hurohaiList, naki, hai)) {
+			if (isKeisikiAgari(tehaiList, naki, hai)) {
 				return true;
 			}
 		}
@@ -68,17 +67,16 @@ public class AgariMethods {
 	 * 
 	 * @param tsumohai　ツモ牌.
 	 * @param tehaiList　手牌リスト
-	 * @param hurohaiList　副露牌リスト
 	 * @param param　チェック用パラメータ(鳴き,場風,風,ルールだけをセットすれば良い)
 	 * @param f フィールド.
 	 * @return　テンパイしている場合true
 	 */
-	public static boolean isTenpai(TehaiList tehaiList, HurohaiList hurohaiList, Hai tsumohai, Param param, Field f) {
+	public static boolean isTenpaiWithExtra(TehaiList tehaiList, Hai tsumohai, Param param, Field f) {
 		if (param.isNaki()) {
 			return false;
 		}
 
-		if (isTenpai(tehaiList, new HurohaiList(0), param.isNaki())) {
+		if (isTenpai(tehaiList, param.isNaki())) {
 			return true;
 		}
 
@@ -86,7 +84,7 @@ public class AgariMethods {
 			TehaiList tempTehai = new TehaiList(tehaiList);
 			tempTehai.remove(i);
 			tempTehai.add(tsumohai);
-			if (isTenpai(tempTehai, new HurohaiList(0), param.isNaki())) {
+			if (isTenpai(tempTehai, param.isNaki())) {
 				return true;
 			}
 		}
@@ -118,29 +116,26 @@ public class AgariMethods {
 	/**
 	 * あがれる場合trueを返す。あがれない場合,役がない場合はfalse
 	 * 
-	 * @param tehaiList 手牌のリスト
-	 * @param hurohaiList 副露牌のリスト
+	 * @param tlist 手牌のリスト
+	 * @param hlist 副露牌のリスト
 	 * @param param 役チェックパラメーター
 	 * @param f 場風,ルールなど.
 	 * @return　あがれる場合true
 	 */
-	public static boolean isAgari(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f) {
-		assert param.getFlagCheckYakuSet() != null;
-		assert param.getJikaze() != null;
-
-		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
+	public static boolean isAgari(TehaiList tlist, HurohaiList hlist, Param param, Field f) {
+		List<Hai> haiList = new ArrayList<Hai>(tlist);
 		haiList.add(param.getAgariHai());
-		for (Mentu m : hurohaiList) {
+		for (Mentu m : hlist) {
 			haiList.addAll(m.asList());
 		}
 		param.setHaiList(haiList);
 
-		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
+		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tlist);
 		tehaiPlusAgariHai.add(param.getAgariHai());
 
 		// 4面子1雀頭である
 		if (isNMentu1Janto(tehaiPlusAgariHai)) {
-			if (!setMentuListAndJanto(tehaiList, param.getAgariHai(), hurohaiList, param)) {
+			if (!setMentuListAndJanto(tlist, param.getAgariHai(), hlist, param)) {
 				throw new IllegalStateException();
 			}
 
@@ -311,21 +306,17 @@ public class AgariMethods {
 	 * あがれる場合trueを返す。isAgariとの違いは役がなくてもtrueを返しうるということである。
 	 * 
 	 * @param tehaiList 手牌のリスト
-	 * @param hurohaiList 副露牌のリスト
 	 * @param naki 鳴き
 	 * @param agariHai あがり牌
 	 * @return　あがれる場合true
 	 */
-	public static boolean isKeisikiAgari(TehaiList tehaiList, HurohaiList hurohaiList, boolean naki, Hai agariHai) {
+	public static boolean isKeisikiAgari(TehaiList tehaiList, boolean naki, Hai agariHai) {
 		Param param = new Param();
 		param.setNaki(naki);
 		param.setAgariHai(agariHai);
 
 		List<Hai> haiList = new ArrayList<Hai>(tehaiList);
 		haiList.add(param.getAgariHai());
-		for (Mentu m : hurohaiList) {
-			haiList.addAll(m.asList());
-		}
 		param.setHaiList(haiList);
 
 		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
@@ -363,17 +354,86 @@ public class AgariMethods {
 	 * @param haiList n面子1雀頭か検査するリスト
 	 * @return 指定されたリストがn面子1雀頭で構成されている場合true
 	 */
-	public static boolean isNMentu1Janto(List<? extends Hai> haiList) {
-		if (haiList.size() % 3 != 2)
+	public static boolean isNMentu1Janto(List<? extends Hai> tlist) {
+		if (tlist.size() % 3 != 2)
 			return false;
 		// パターン法を採用
-		int index[] = TehaiList.toSizeArray(haiList);
-		Integer keys[] = PatternMethod.calcKey(index);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		return value != 0;
+		return (PatternMethod.isNMentsu1Janto(tlist) & 0x3) != 0x0;
 		
 		// バックトラック法
 //		return BackTrackMethod.isNMentu1Janto(haiList);
+	}
+
+	/**
+	 * あがり形がn面子1雀頭の場合に手牌リストの牌を順子刻子->とって出来た面子リストを返す．
+	 * 
+	 * @param haiList 手牌リスト
+	 * @param agariHai 上がり牌
+	 * @param huroList 副露牌リスト
+	 * @param chParam チェッカーパラメータ
+	 * @return 面子リストの設定に成功した場合true
+	 */
+	public static boolean getMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai, HurohaiList huroList, Param chParam) {
+		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
+		List<HaiType> haiListCopy = new ArrayList<HaiType>();
+		for (Hai hai : haiList) {
+			haiListCopy.add(hai.type());
+		}
+		haiListCopy.add(agariHai.type());
+
+		for (HaiType haiType : haiTypeSet) {
+			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
+				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
+				HaiType janto = haiType;
+				List<Mentu> tempMentuList = new ArrayList<Mentu>();
+
+				tempList.remove(haiType);
+				tempList.remove(haiType);
+
+				// 刻子を取り除く
+				for (HaiType haiType2 : haiTypeSet) {
+					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
+						Hai hai = MajanHai.valueOf(haiType2, false);
+						tempMentuList.add(new Mentu(hai, hai, hai));
+
+						tempList.remove(haiType2);
+						tempList.remove(haiType2);
+						tempList.remove(haiType2);
+					}
+				}
+
+				// 順子を取り除く
+				for (SuType suType : SuType.values()) {
+					for (int i = 1; i <= 7; i++) {
+						HaiType haiArray[] = new HaiType[3];
+						haiArray[0] = HaiType.valueOf(suType, i);
+						haiArray[1] = HaiType.valueOf(suType, i + 1);
+						haiArray[2] = HaiType.valueOf(suType, i + 2);
+
+						if (tempList.containsAll(Arrays.asList(haiArray))) {
+							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
+							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
+							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
+
+							tempMentuList.add(new Mentu(hai0, hai1, hai2));
+							tempList.remove(haiArray[0]);
+							tempList.remove(haiArray[1]);
+							tempList.remove(haiArray[2]);
+							i--;
+						}
+					}
+				}
+
+				if (tempList.size() == 0) {
+					tempMentuList.addAll(huroList);
+
+					chParam.setJanto(janto);
+					chParam.setMentuList(tempMentuList);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

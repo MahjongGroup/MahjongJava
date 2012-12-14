@@ -482,7 +482,7 @@ public class KyokuPlayer {
 			return cachedTenpaiFlag;
 		}
 		cachedTenpaiCheckFlag = true;
-		return cachedTenpaiFlag = AgariMethods.isTenpai(tehaiList, hurohaiList, nakiFlag);
+		return cachedTenpaiFlag = AgariMethods.isTenpai(tehaiList, nakiFlag);
 	}
 	
 	/**
