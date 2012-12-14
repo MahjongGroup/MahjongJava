@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import util.MyMath;
+
 /**
  * 役セットと点数などをもつクラス。
  * 
@@ -17,7 +19,7 @@ public class AgariResult {
 	private boolean yakuman;
 	private int yakumanSize;
 	private int doraSize;
-	private int score;
+	private int baseScore;
 	private ScoreType scoreType;
 	private Param chParam;
 	private Field field;
@@ -72,10 +74,27 @@ public class AgariResult {
 	}
 
 	/**
-	 * @return the score
+	 * 基本点を返す．子のロンあがりの場合の点数はこの基本点の4倍(親の場合は6倍)となる.
+	 * @return the base score.
 	 */
-	public int getScore() {
-		return score;
+	public int getBaseScore() {
+		return baseScore;
+	}
+	
+	/**
+	 * 子のロンあがりしたときの点数、つまり基本点を4倍して切り上げした点数を返す．
+	 * @return the child score.
+	 */
+	public int getChildScore() {
+		return MyMath.ceil(baseScore * 4, 2);
+	}
+	
+	/**
+	 * 親のロンあがりしたときの点数、つまり基本点を6倍して切り上げした点数を返す．
+	 * @return the parent score.
+	 */
+	public int getParentScore() {
+		return MyMath.ceil(baseScore * 6, 2);
 	}
 
 	/**
@@ -112,7 +131,7 @@ public class AgariResult {
 		else {
 			result.calcHanAndHu(doraList, uraDoraList);
 		}
-		result.calcScore();
+		result.calcBaseScore();
 		return result;
 	}
 
@@ -217,31 +236,31 @@ public class AgariResult {
 	/**
 	 * 基本点を計算する。
 	 */
-	public void calcScore() {
+	public void calcBaseScore() {
 		// 役満の場合
 		if (this.yakuman) {
-			this.score = this.yakumanSize * 8000;
+			this.baseScore = this.yakumanSize * 8000;
 			this.scoreType = ScoreType.YAKUMAN;
 		}
 		// 通常役の場合
 		else {
-			this.score = this.hu * (int) Math.pow(2, this.han + 2);
+			this.baseScore = this.hu * (int) Math.pow(2, this.han + 2);
 
-			if (score >= 2000) {
+			if (baseScore >= 2000) {
 				if (this.han <= 5) {
-					this.score = 2000;
+					this.baseScore = 2000;
 					this.scoreType = ScoreType.MANGAN;
 				} else if (this.han <= 7) {
-					this.score = 3000;
+					this.baseScore = 3000;
 					this.scoreType = ScoreType.HANEMAN;
 				} else if (this.han <= 10) {
-					this.score = 4000;
+					this.baseScore = 4000;
 					this.scoreType = ScoreType.BAIMAN;
 				} else if (this.han <= 12) {
-					this.score = 6000;
+					this.baseScore = 6000;
 					this.scoreType = ScoreType.SANBAIMAN;
 				} else {
-					this.score = 8000;
+					this.baseScore = 8000;
 					this.scoreType = ScoreType.YAKUMAN;
 				}
 			} else {
@@ -396,7 +415,7 @@ public class AgariResult {
 
 	@Override
 	public String toString() {
-		return "AgariResult [yakuSet=" + yakuSet + ", han=" + han + ", hu=" + hu + ", yakuman=" + yakuman + ", yakumanSize=" + yakumanSize + ", doraSize=" + doraSize + ", score=" + score + ", scoreType=" + scoreType + ", chParam=" + chParam + "]";
+		return "AgariResult [yakuSet=" + yakuSet + ", han=" + han + ", hu=" + hu + ", yakuman=" + yakuman + ", yakumanSize=" + yakumanSize + ", doraSize=" + doraSize + ", score=" + baseScore + ", scoreType=" + scoreType + ", chParam=" + chParam + "]";
 	}
 
 }

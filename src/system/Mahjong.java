@@ -139,7 +139,7 @@ public class Mahjong {
 						// 親の場合
 						if (p.equals(oya)) {
 							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getScore(), 6)
+									.getAgariResult(p).getBaseScore(), 6)
 									+ 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore + 1000 * tsumibo;
 							scores[sekiMap.get(p2)] -= tmpScore;
@@ -147,7 +147,7 @@ public class Mahjong {
 							tsumibo = 0;
 						} else {
 							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getScore(), 4)
+									.getAgariResult(p).getBaseScore(), 4)
 									+ 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore;
 							scores[sekiMap.get(p2)] -= tmpScore;
@@ -161,7 +161,7 @@ public class Mahjong {
 							if (!kyokuResult.isAgari(p))
 								continue;
 							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getScore(), 4)
+									.getAgariResult(p).getBaseScore(), 4)
 									+ 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore + 1000 * tsumibo;
 							scores[sekiMap.get(p2)] -= tmpScore;
@@ -185,7 +185,7 @@ public class Mahjong {
 							if (!kyokuResult.isAgari(p))
 								continue;
 							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getScore(), 4)
+									.getAgariResult(p).getBaseScore(), 4)
 									+ 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore;
 							scores[sekiMap.get(p2)] -= tmpScore;
@@ -206,7 +206,7 @@ public class Mahjong {
 							continue;
 						int tmpScore = getCeilScore(
 								kyokuResult.getAgariResult(tsumoPlayer)
-										.getScore(), 2)
+										.getBaseScore(), 2)
 								+ 100 * honba;
 						scores[sekiMap.get(player)] -= tmpScore;
 						totalScore += tmpScore;
@@ -226,7 +226,7 @@ public class Mahjong {
 						if (p.equals(oya)) {
 							tmpScore = getCeilScore(
 									kyokuResult.getAgariResult(tsumoPlayer)
-											.getScore(), 2)
+											.getBaseScore(), 2)
 									+ 100 * honba;
 							scores[sekiMap.get(p)] -= tmpScore;
 							totalScore += tmpScore;
@@ -235,7 +235,7 @@ public class Mahjong {
 						else {
 							tmpScore = getCeilScore(
 									kyokuResult.getAgariResult(tsumoPlayer)
-											.getScore(), 1)
+											.getBaseScore(), 1)
 									+ 100 * honba;
 							scores[sekiMap.get(p)] -= tmpScore;
 							totalScore += tmpScore;
@@ -474,11 +474,11 @@ public class Mahjong {
 					if (kyokuResult.isRonAgari())
 						System.out.println("和了 :" + p.getName() + "  放銃 :"
 								+ kyokuResult.getHojuPlayer().getName() + "  "
-								+ kyokuResult.getAgariResult(p).getScore()
+								+ kyokuResult.getAgariResult(p).getBaseScore()
 								+ "点");
 					if (kyokuResult.isTsumoAgari())
 						System.out.println("和了 :" + p.getName() + "  自獏 "
-								+ kyokuResult.getAgariResult(p).getScore()
+								+ kyokuResult.getAgariResult(p).getBaseScore()
 								+ "点");
 				}
 			}

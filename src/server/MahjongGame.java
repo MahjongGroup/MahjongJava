@@ -79,12 +79,13 @@ public class MahjongGame {
 	}
 	
 	private void waitKyokuResult(){
-		Transporter tr = new Transporter();
-		while(!tr.isEndResultPage()){
-			try{
-				Thread.sleep(100);
-			}catch(Exception e){
-				e.printStackTrace();
+		for (Transporter tr : transMap.values()) {
+			while(!tr.isEndResultPage()){
+				try{
+					Thread.sleep(100);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
 	}
