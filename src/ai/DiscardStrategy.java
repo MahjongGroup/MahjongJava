@@ -4,7 +4,7 @@ import system.Kyoku;
 import system.Player;
 
 /**
- * AIが牌をdiscardをするときに用いられる戦略のインターフェース．
+ * AIが牌をdiscardするときに用いられる戦略のインターフェース．
  */
 public interface DiscardStrategy {
 
