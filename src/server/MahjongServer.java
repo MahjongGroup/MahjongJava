@@ -13,6 +13,7 @@ import client.ClientOperator;
 import client.MajanFrame;
 
 /**
+ * 大和家にて…
  * 麻雀サーバーを表すクラス.
  * とりあえずテスト用にメイン関数のみ実装.
  */
