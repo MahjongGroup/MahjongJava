@@ -77,28 +77,27 @@ public class ResultPage extends InputPage implements Page{
 		return "Result";
 	}
 	
+	private class ClearLabel extends JLabel{
+		public ClearLabel(String str){
+			super(str);
+			setOpaque(false);
+			setHorizontalTextPosition(JLabel.CENTER);
+		}
+	}
+	
 	private class ResultPanel extends JPanel{
 		public ResultPanel(Player player,AgariResult result){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			JLabel playerName = new JLabel(player.getName());
-			playerName.setOpaque(false);
-			add(playerName);
+			add(new ClearLabel(player.getName()));
 			for(Yaku y:result.getYakuSet()){
-				JLabel tmpLabel = new JLabel(y.notation());
-				tmpLabel.setOpaque(false);
-				add(tmpLabel);
+				add(new ClearLabel(y.notation()));
 			}
-			JLabel han = new JLabel(result.getHan() + "翻");
-			han.setOpaque(false);
-			add(han);
-			JLabel hu = new JLabel(result.getHu() + "符");
-			hu.setOpaque(false);
-			add(hu);
+			add(new ClearLabel(result.getHan() + "翻"));
+			add(new ClearLabel(result.getHu() + "符"));
 			if(result.getScoreType() != ScoreType.NORMAL){
-				JLabel scoreType = new JLabel(result.getScoreType().notation());
-				scoreType.setOpaque(false);
-				add(scoreType);
+				add(new ClearLabel(result.getScoreType().notation()));
 			}
+			setOpaque(false);
 		}
 	}
 	
