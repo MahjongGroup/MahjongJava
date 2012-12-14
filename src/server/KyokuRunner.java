@@ -433,8 +433,14 @@ public class KyokuRunner {
 				kyoku.doReach();
 				int index = ai.discard();
 				kyoku.discard(index);
+				int reachSutehaiIndex = kyoku.getSutehaiList(kyoku.getCurrentTurn()).size() - 1;
+				for (int i = 0; i < kyoku.getSutehaiList(kyoku.getCurrentTurn()).size(); i++) {
+					if (kyoku.getSutehaiList(kyoku.getCurrentTurn()).get(i).isNaki()) {
+						reachSutehaiIndex--;
+					}
+				}
 				for (Transporter t : transporterMap.values()) {
-					t.notifyReach(kyoku.getCurrentTurn(), index);
+					t.notifyReach(kyoku.getCurrentTurn(), reachSutehaiIndex);
 				}
 				System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 				Console.wairEnter();

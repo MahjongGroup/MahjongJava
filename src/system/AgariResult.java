@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import system.algo.PatternMethod;
 import util.MyMath;
 
 /**
@@ -289,7 +290,16 @@ public class AgariResult {
 		tehaiPlusAgariHai.add(chParam.getAgariHai());
 
 		// 4面子1雀頭である
-		if (AgariMethods.isNMentu1Janto(tehaiPlusAgariHai)) {
+		PatternMethod.Value pvalue = PatternMethod.getValue(tehaiPlusAgariHai);
+		if (pvalue.isSuccessful()) {
+			if(pvalue.isIkkiTsukan()) {
+				chParam.addFlagCheckYaku(NormalYaku.IKKI);
+			}
+			if(pvalue.isIpeko()) {
+				chParam.addFlagCheckYaku(NormalYaku.IPEKO);
+			}else if(pvalue.isRyanpeko()) {
+				chParam.addFlagCheckYaku(NormalYaku.RYANPEKO);
+			}
 			AgariMethods.setMentuListAndJanto(tehaiList, chParam.getAgariHai(), hurohaiList, chParam);
 			List<MatiType> matiTypeList = MatiType.getMatiTypeList(chParam);
 			chParam.setMatiType(matiTypeList.get(0));
