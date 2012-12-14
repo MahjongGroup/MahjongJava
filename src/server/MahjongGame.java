@@ -33,6 +33,7 @@ public class MahjongGame {
 		mahjong.init();
 
 		while (!mahjong.isEnd()) {
+			
 			Kyoku kyoku = mahjong.startKyoku();
 			mahjong.disp();
 			Console.wairEnter();
@@ -51,6 +52,8 @@ public class MahjongGame {
 			for(Server server:transMap.values()){
 				server.notifyKyokuResult(kr);
 			}
+			waitKyokuResult();
+			
 			if(kr.isRonAgari()) {
 				for (Player player : playerList) {
 					if(kr.isAgari(player)) 
@@ -63,4 +66,16 @@ public class MahjongGame {
 		}
 		
 	}
+	
+	private void waitKyokuResult(){
+		Transporter tr = new Transporter();
+		while(!tr.isEndResultPage()){
+			try{
+				Thread.sleep(100);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
