@@ -639,7 +639,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 	
 	private boolean isInSelectableHai(int mx, int my) {
-		StateCode sc = buttonList.get(0);
+		if (!(PLAYER_BLOCK1_Y + 270 <= my
+				&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT))
+			return false;
+		StateCode sc = getSelectHaiFromSelect(buttonList.get(0));
+		if(!getInfo().ableIndexList.containsKey(sc))
+			return false;
 		List<List<Integer>> tmpList = getInfo().ableIndexList.get(sc);
 		if (tmpList != null) {
 			for (List<Integer> tmpSubList : tmpList) {
@@ -671,150 +676,50 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		if (stateCodes.contains(StateCode.WAIT)){
 			return;
 		}
-		boolean hasOnlyElem = false;
-		boolean isButtonSelected = false;
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			StateCode sc = null;
 			if(isInButton(mx,my) != -1){
 				sc = getSelectHaiFromSelect(buttonList.get(isInButton(mx, my)));
-				isButtonSelected = true;
 			}else if(buttonList.size() == 1 && isInSelectableHai(mx, my)){
-				
-			}
-			
-			int width = getWidth() / 2;
-			int height = getHeight() / 2;
-			int i = buttonList.size() + 1;
-			//クリック個所がボタンのある範囲にあるかどうか(y方向のみ判定)
-			if (my <= height + BUTTON_HEIGHT / 2 - 10
-					&& my >= height - BUTTON_HEIGHT / 2 - 10) {
-				int half = buttonList.size() / 2;
-				//クリック個所がボタンのある範囲にあるかどうか(x方向)
-				for (int j = 0; j < buttonList.size(); j++) {
-					if (mx <= width - BUTTON_WIDTH * (half - 1 - j) - 10
-							* (half - j)
-							&& mx >= width - BUTTON_WIDTH * (half - j) - 10
-									* (half - j)) {
-						i = j;
-						break;
-					}
-				}
-				if(i < buttonList.size()){
-					sc = getSelectHaiFromSelect(buttonList.get(i));
-					isButtonSelected = true;
-				}
-
-				refreshStateCodes();
-				addStateCode(sc);
-				refreshNakiListExclude(sc);
-				
-				if(sc == null)
-					for(StateCode subSc:buttonList){
-						dispatch(subSc);
-					}
-				else{
-					switch(sc){
-					case SELECT_RON:
-						operator.sendRon(true);
-						refreshStateCodes();
-						refreshButtonList();
-						return;
-					case KYUSYUKYUHAI:
-						operator.sendKyusyukyuhai(true);
-						refreshStateCodes();
-						refreshButtonList();
-						return;
-					case SELECT_TSUMO:
-						operator.sendTsumoAgari();
-						refreshStateCodes();
-						refreshButtonList();
-						return;
-					case SELECT_MINKAN:
-						operator.sendMinkan(true);
-						refreshStateCodes();
-						refreshButtonList();
-						refreshNakiListExclude(null);
-						return;
-					default:
-						break;
-					}
-				}
-				refreshButtonList();
-				if (!(getInfo().ableIndexList.containsKey(sc) && getInfo().ableIndexList
-						.get(sc).size() == 1))
-					return;
-			} else {
-				//行動の選択肢が1つしかない場合は牌を直接選ぶことを許す
-				//ここではそれ以外を除外し,ここで処理を終了している
-				if(buttonList.size() != 1){
-					refreshStateCodes();
-					refreshNakiListExclude(null);
-					for(StateCode subSc:buttonList){
-						dispatch(subSc);
-					}
-					refreshButtonList();
-					return;
-				}else{
-					if (!((my <= PLAYER_BLOCK1_Y + HAI_HEIGHT + 270 && my >= PLAYER_BLOCK1_Y + 270)
-					// クリック個所が手牌のある範囲にあり(y方向の判定)
-					&& ((mx <= PLAYER_BLOCK1_X
-							+ info.tehai.size() * HAI_WIDTH && mx >= PLAYER_BLOCK1_X)
-					// ツモ牌以外の牌がある範囲にあるか(x方向の判定)
-					|| (info.tsumoHai != null && (mx <= PLAYER_BLOCK1_X
-							+ (info.tehai.size() + 1) * HAI_WIDTH + 20 && mx >= PLAYER_BLOCK1_X
-							+ info.tehai.size() * HAI_WIDTH + 20))
-					// ツモ牌のある範囲にある(x方向の判定)
-					))) {
-						refreshStateCodes();
-						refreshNakiListExclude(null);
-						for (StateCode subSc : buttonList) {
-							dispatch(subSc);
-						}
-						refreshButtonList();
-						return;
-					}
-				}
-			}
-			boolean tmpFlag = false;
-			if(!isButtonSelected){
 				sc = getSelectHaiFromSelect(buttonList.get(0));
-				List<List<Integer>> tmpList = getInfo().ableIndexList.get(sc);
-				if(tmpList != null){
-					for(List<Integer> tmpSubList:tmpList){
-						if(tmpSubList == null)
-							break;
-						for(Integer integer:tmpSubList){
-							if(mx <= PLAYER_BLOCK1_X + (integer + 1) * HAI_WIDTH 
-									&& mx >= PLAYER_BLOCK1_X + integer * HAI_WIDTH){
-										tmpFlag = true;
-										break;
-							}
-						}
-						if(tmpSubList.contains(13) 
-								&& mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1) * HAI_WIDTH + 20
-								&& mx >= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH + 20){
-							tmpFlag = true;
-						}
-						if(tmpFlag)
-							break;
-					}
+			}
+			else{
+				for(StateCode subSc:buttonList){
+					dispatch(subSc);
 				}
 				refreshStateCodes();
-				refreshNakiListExclude(sc);
-				refreshButtonList();
-			}else{
-				tmpFlag = true;
-			}
-			if(!tmpFlag){
 				refreshNakiListExclude(null);
-				for(StateCode subSc:StateCode.values()){
-					if(subSc.name().compareTo(sc.name().replaceAll("_HAI", "")) == 0){
-						sc = subSc;
-						break;
-					}
-				}
-				dispatch(sc);
+				refreshButtonList();
 				return;
+			}
+			refreshButtonList();
+			refreshStateCodes();
+			addStateCode(sc);
+			refreshNakiListExclude(sc);
+			switch(sc){
+			case SELECT_RON:
+				operator.sendRon(true);
+				refreshStateCodes();
+				refreshButtonList();
+				return;
+			case KYUSYUKYUHAI:
+				operator.sendKyusyukyuhai(true);
+				refreshStateCodes();
+				refreshButtonList();
+				return;
+			case SELECT_TSUMO:
+				operator.sendTsumoAgari();
+				refreshStateCodes();
+				refreshButtonList();
+				return;
+			case SELECT_MINKAN:
+				operator.sendMinkan(true);
+				refreshStateCodes();
+				refreshButtonList();
+				refreshNakiListExclude(null);
+				return;
+			default:
+				break;
 			}
 			//クリック個所がボタンのある範囲にあったか
 			//複数の選択肢から1つを選んだか
@@ -822,97 +727,99 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			//今回選択された動作以外に関係するデータは消去
 				
 			// 今回選択された動作に対する動作
-			switch (sc) {
-			case SELECT_CHI_HAI:
-				if (info.ableIndexList.get(sc).size() != 1) {
-					addStateCode(sc);
-				} else {
-					operator.sendChiIndexList(info.ableIndexList.get(sc).get(0));
-					refreshButtonList();
-					refreshNakiListExclude(null);
-					refreshStateCodes();
-					return;
-				}
-				break;
-			case SELECT_PON_HAI:
-				if (info.ableIndexList.get(sc).size() != 1) {
-					addStateCode(sc);
-				} else {
-					operator.sendPonIndexList(info.ableIndexList.get(sc).get(0));
-					refreshButtonList();
-					refreshNakiListExclude(null);
-					refreshStateCodes();
-					return;
-				}
-				break;
-			case SELECT_MINKAN:
-				operator.sendMinkan(true);
-				info.selectedIndexes.clear();
-				refreshButtonList();
-				refreshNakiListExclude(null);
-				refreshStateCodes();
-				addStateCode(StateCode.DISCARD_SELECT);
-				break;
-			case KYUSYUKYUHAI:
-				operator.sendKyusyukyuhai(true);
-				break;
-			case SELECT_ANKAN_HAI:
-				if (info.ableIndexList.get(sc).size() != 1) {
-					addStateCode(sc);
-				} else {
-					operator.sendAnkanIndexList(info.ableIndexList.get(sc).get(
-							0));
-					refreshButtonList();
-					refreshNakiListExclude(null);
-					refreshStateCodes();
-					return;
-				}
-				break;
-			case SELECT_REACH_HAI:
-				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
-						.get(sc).get(0).size() == 1)) {
-					addStateCode(sc);
-				} else {
-					getFrame().setTitle(getFrame().getTitle() + "*");
-					operator.sendReachIndex(info.ableIndexList.get(sc).get(0)
-							.get(0));
-					refreshButtonList();
-					refreshNakiListExclude(null);
-					refreshStateCodes();
-					return;
-				}
-				break;
-			case SELECT_KAKAN_HAI:
-				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
-						.get(sc).get(0).size() == 1)) {
-					addStateCode(sc);
-				} else {
-					operator.sendKakanIndex(info.ableIndexList.get(sc).get(0)
-							.get(0));
-					refreshButtonList();
-					refreshNakiListExclude(null);
-					refreshStateCodes();
-					return;
-				}
-				break;
-			case SELECT_TSUMO:
-				operator.sendTsumoAgari();
-				return;
-			case SELECT_RON:
-				operator.sendRon(true);
-				return;
-			default:
-				break;
-			}
-			hasOnlyElem = true;
+//			switch (sc) {
+//			case SELECT_CHI_HAI:
+//				if (info.ableIndexList.get(sc).size() != 1) {
+//					addStateCode(sc);
+//				} else {
+//					operator.sendChiIndexList(info.ableIndexList.get(sc).get(0));
+//					refreshButtonList();
+//					refreshNakiListExclude(null);
+//					refreshStateCodes();
+//					return;
+//				}
+//				break;
+//			case SELECT_PON_HAI:
+//				if (info.ableIndexList.get(sc).size() != 1) {
+//					addStateCode(sc);
+//				} else {
+//					operator.sendPonIndexList(info.ableIndexList.get(sc).get(0));
+//					refreshButtonList();
+//					refreshNakiListExclude(null);
+//					refreshStateCodes();
+//					return;
+//				}
+//				break;
+//			case SELECT_MINKAN:
+//				operator.sendMinkan(true);
+//				info.selectedIndexes.clear();
+//				refreshButtonList();
+//				refreshNakiListExclude(null);
+//				refreshStateCodes();
+//				addStateCode(StateCode.DISCARD_SELECT);
+//				break;
+//			case KYUSYUKYUHAI:
+//				operator.sendKyusyukyuhai(true);
+//				break;
+//			case SELECT_ANKAN_HAI:
+//				if (info.ableIndexList.get(sc).size() != 1) {
+//					addStateCode(sc);
+//				} else {
+//					operator.sendAnkanIndexList(info.ableIndexList.get(sc).get(
+//							0));
+//					refreshButtonList();
+//					refreshNakiListExclude(null);
+//					refreshStateCodes();
+//					return;
+//				}
+//				break;
+//			case SELECT_REACH_HAI:
+//				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
+//						.get(sc).get(0).size() == 1)) {
+//					addStateCode(sc);
+//				} else {
+//					getFrame().setTitle(getFrame().getTitle() + "*");
+//					operator.sendReachIndex(info.ableIndexList.get(sc).get(0)
+//							.get(0));
+//					refreshButtonList();
+//					refreshNakiListExclude(null);
+//					refreshStateCodes();
+//					return;
+//				}
+//				break;
+//			case SELECT_KAKAN_HAI:
+//				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
+//						.get(sc).get(0).size() == 1)) {
+//					addStateCode(sc);
+//				} else {
+//					operator.sendKakanIndex(info.ableIndexList.get(sc).get(0)
+//							.get(0));
+//					refreshButtonList();
+//					refreshNakiListExclude(null);
+//					refreshStateCodes();
+//					return;
+//				}
+//				break;
+//			case SELECT_TSUMO:
+//				operator.sendTsumoAgari();
+//				return;
+//			case SELECT_RON:
+//				operator.sendRon(true);
+//				return;
+//			default:
+//				break;
+//			}
 		}
 		for (StateCode sc : stateCodes) {
-			if(hasOnlyElem){
-				addSelectedIndexesWhenOverHai(mx, my, sc.getNum(), info.ableIndexList.get(sc));
-				refreshNakiListExclude(sc);
+			if(info.ableIndexList.containsKey(sc) && info.ableIndexList.get(sc).size() == 1){
+				info.selectedIndexes = info.ableIndexList.get(sc).get(0);
+				dispatch(sc);
+				info.selectedIndexes.clear();
+				refreshNakiListExclude(null);
 				refreshStateCodes();
 				return;
 			}
+//			addSelectedIndexesWhenOverHai(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 			List<Integer> selectedIndexes = getInfo().selectedIndexes;
 			int size = selectedIndexes.size();
 			int i = selectedIndexes.isEmpty() ? -1 : selectedIndexes.get(0);
