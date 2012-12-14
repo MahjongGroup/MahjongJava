@@ -73,12 +73,13 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	private class ClearLabel extends JPanel{
-		{			setLayout(new CardLayout());
+		{
 			setOpaque(false);
 			addMouseListener(ResultPage.this);
 		}
 		public ClearLabel(){}
 		public ClearLabel(String str){
+			setLayout(new CardLayout());
 			JLabel tmp = new JLabel(str);
 			tmp.setOpaque(false);
 			tmp.setFont(new Font("sans-serif",Font.BOLD,25));
@@ -87,6 +88,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			add(tmp);
 		}
 		public ClearLabel(Hai hai){
+			setLayout(new CardLayout());
 			JLabel tmp = new JLabel(new ImageIcon(ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai))));
 			add(tmp);
 			tmp.setOpaque(false);
