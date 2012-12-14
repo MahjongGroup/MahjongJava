@@ -1,20 +1,21 @@
 package pages;
 
 import java.awt.CardLayout;
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import system.AgariResult;
@@ -79,6 +80,29 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		}
 	}
 	
+	private class ScorePanel extends JPanel{
+		private GridBagConstraints getGrid(int x,int y,int width,int height){
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridx = x;
+			gbc.gridy = y;
+			gbc.gridwidth = width;
+			gbc.gridheight = height;
+			return gbc;
+		}
+		public ScorePanel(int[] newScore,int[] oldScore){
+			GridBagLayout gbl = new GridBagLayout();
+			Player[] players = getFrame().getInfo().players;
+			for(int i = 0;i < players.length;i++){
+				ClearLabel name = new ClearLabel(players[i].getName());
+				ClearLabel scoreChange = new ClearLabel(newScore[i] + "->" + oldScore[i]);
+				gbl.setConstraints(name, getGrid(0, i, 1, 1));
+				gbl.setConstraints(scoreChange, getGrid(1, i, 1, 1));
+			}
+			setLayout(gbl);
+			setOpaque(false);
+		}
+	}
+	
 	private class ResultPanel extends JPanel{
 		public ResultPanel(Player player,AgariResult result){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -96,11 +120,12 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	
-	public void setResult(KyokuResult result,int[] beforeScore,int[] afterScore){
+	public void setResult(KyokuResult result,int[] newScore,int[] oldScore){
 		this.result = result;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.newScore = newScore;
 		this.oldScore = oldScore;
+		add(new ScorePanel(newScore, oldScore));
 		if(result.isRyukyoku() || result.isTotyuRyukyoku()){
 			add(new ClearLabel("流局"));
 			return;
