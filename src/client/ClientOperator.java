@@ -373,7 +373,7 @@ public class ClientOperator implements Client{
 	@Override
 	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
 		page.movePage("result");
-		((ResultPage)page).setResult(result,oldScore,newScore);
+		((ResultPage)page).setResult(result,newScore,oldScore);
 		//TODO ok?
 	}
 

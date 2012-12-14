@@ -219,6 +219,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		Graphics2D g2 = (Graphics2D) gg;
 		
 		g2.clearRect(0, 0, getWidth(), getHeight());
+		super.paint(g2);
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 
@@ -228,14 +229,23 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 
 		g2.rotate(Math.PI / 2.0);
-		g2.translate(0, -WINDOW_WIDTH);
+		g2.translate(-100, -WINDOW_WIDTH + 50);
+		g2.rotate(-Math.PI / 20.0);
 
 		drawHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);
 
+		g2.rotate(Math.PI / 20.0);
+		g2.translate(100, -50);
+		
 		g2.rotate(Math.PI);
-		g2.translate(-WINDOW_HEIGHT, -WINDOW_WIDTH);
+		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 80);
+
+		g2.rotate(Math.PI / 15.0);
 
 		drawHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);
+
+		g2.rotate(-Math.PI / 15.0);
+		g2.translate(-100, 80);
 
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
@@ -248,15 +258,21 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		drawPartOfYama(g2, 34, 51, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y);
 
 		g2.rotate(Math.PI / 2.0);
-		g2.translate(0, -WINDOW_WIDTH);
-		
+		g2.translate(-50, -WINDOW_WIDTH + 50);
+		g2.rotate(-Math.PI / 18.0);
+
 		drawPartOfYama(g2, 17, 34, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
+		g2.rotate(Math.PI / 18.0);
+		g2.translate(50, -50);
 		g2.rotate(Math.PI);
-		g2.translate(-WINDOW_HEIGHT, -WINDOW_WIDTH);
+		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 100);
+		g2.rotate(Math.PI / 20.0);
 		
 		drawPartOfYama(g2, 51, 68, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
+		g2.rotate(-Math.PI / 20.0);
+		g2.translate(-100, 100);
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 
@@ -288,6 +304,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	}
 
+	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
+		if(info == null)
+			return;
+	}
+	
 	public void drawHai(int player, int ix, int iy, int sute_x, Graphics2D g2) {
 		if (info == null)
 			return;

@@ -59,12 +59,7 @@ public class ImageLoader {
 		IMAGE_MAP.put(ImageID.hai_darkback, "darkback");
 
 	}
-	
-	public static ImageIcon loadIcon(int id){
-		ImageIcon tmpIcon = new ImageIcon("res/" + IMAGE_MAP.get(id) + ".gif");
-		return new ImageIcon("res/" + IMAGE_MAP.get(id) + ".gif");
-	}
-	
+		
 	public static Image load(int id) {
 		return Toolkit.getDefaultToolkit().createImage("res/"+IMAGE_MAP.get(id) + ".gif");
 	}

@@ -1,6 +1,7 @@
 package pages;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -10,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import static client.Constant.SCALED_HAI_WIDTH;
+import static client.Constant.SCALED_HAI_HEIGHT;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -70,6 +73,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	private class ClearLabel extends JPanel{
+		{			setLayout(new CardLayout());
+			setOpaque(false);
+			addMouseListener(ResultPage.this);
+		}
+		public ClearLabel(){}
 		public ClearLabel(String str){
 			JLabel tmp = new JLabel(str);
 			tmp.setOpaque(false);
@@ -77,17 +85,12 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			tmp.addMouseListener(ResultPage.this);
 			tmp.setHorizontalAlignment(SwingConstants.CENTER);
 			add(tmp);
-			setLayout(new CardLayout());
-			setOpaque(false);
-			addMouseListener(ResultPage.this);
 		}
 		public ClearLabel(Hai hai){
-			JLabel tmp = new JLabel(ImageLoader.loadIcon(MajanHaiIDMapper.getID(hai)));
+			JLabel tmp = new JLabel(new ImageIcon(ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai))));
 			add(tmp);
 			tmp.setOpaque(false);
 			tmp.addMouseListener(ResultPage.this);
-			setOpaque(false);
-			addMouseListener(ResultPage.this);
 		}
 	}
 	
@@ -99,6 +102,9 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			gbc.gridwidth = width;
 			gbc.gridheight = height;
 			return gbc;
+		}
+		{
+//			setPreferredSize(new Dimension(10, getHeight()));
 		}
 		public ScorePanel(int[] newScore,int[] oldScore){
 			GridBagLayout gbl = new GridBagLayout();
@@ -123,16 +129,24 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		}
 	}
 	
-	private class TehaiPanel extends JPanel{
-		public TehaiPanel(List<Hai> tehai){
-			for(Hai h:tehai){
-				add(new ClearLabel(h));
-			}
-			updateUI();
-		}
-	}
 	
 	private class ResultPanel extends JPanel{
+		private class TehaiPanel extends JPanel{
+			public TehaiPanel(List<Hai> tehai){
+				setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+				for(Hai h:tehai){
+					add(new ClearLabel(h));
+				}
+				setOpaque(false);
+				updateUI();
+			}
+		}
+		
+		private class DoraPanel extends ClearLabel{
+			public DoraPanel(int doraCount,List<Hai> doraList){
+			}
+		}
+		
 		public ResultPanel(Player player,AgariResult result,KyokuPlayer kplayer){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			add(new ClearLabel(player.getName()));
@@ -161,6 +175,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		add(new ScorePanel(newScore, oldScore));
 		if(result.isRyukyoku() || result.isTotyuRyukyoku()){
 			add(new ClearLabel("流局"));
+			updateUI();
 			return;
 		}
 		List<Player> winnerList = new ArrayList<Player>();
