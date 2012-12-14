@@ -222,11 +222,13 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		super.paint(g2);
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 
 		g2.rotate(-Math.PI);
 		g2.translate(-WINDOW_WIDTH, -WINDOW_HEIGHT);
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 
 		g2.rotate(Math.PI / 2.0);
 		g2.translate(-100, -WINDOW_WIDTH + 50);
@@ -236,6 +238,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 		g2.rotate(Math.PI / 20.0);
 		g2.translate(100, -50);
+
+		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
 		
 		g2.rotate(Math.PI);
 		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 80);
@@ -247,6 +251,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.rotate(-Math.PI / 15.0);
 		g2.translate(-100, 80);
 
+		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
+		
+		
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 		
@@ -307,6 +314,33 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
 		if(info == null)
 			return;
+		List<Hai> suteHaiList = null;
+		synchronized (info.sutehaiMap) {
+			suteHaiList = info.sutehaiMap.get(player);
+		}
+		int dy = 0;
+		int screenHeight = WINDOW_HEIGHT;
+		for (int j = 0; j < 4; j++) {
+			int dx = 170 - SCALED_HAI_WIDTH;
+			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
+				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
+				if (info.reachPosMap.get(player) == null
+						|| info.reachPosMap.get(player) != j * 6 + i) {
+					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
+							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					dx += SCALED_HAI_WIDTH;
+				} else {
+					g2.rotate(Math.PI / 2.0);
+					g2.translate(0, -screenHeight);
+					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
+							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					g2.translate(0, screenHeight);
+					g2.rotate(-Math.PI / 2.0);
+					dx += SCALED_HAI_HEIGHT;
+				}
+			}
+			dy += SCALED_HAI_HEIGHT;
+		}
 	}
 	
 	public void drawHai(int player, int ix, int iy, int sute_x, Graphics2D g2) {
@@ -432,32 +466,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			dy -= SCALED_HAI_HEIGHT;
 		}
 
-		List<Hai> suteHaiList = null;
-		synchronized (info.sutehaiMap) {
-			suteHaiList = info.sutehaiMap.get(player);
-		}
-		dy = 0;
-		for (int j = 0; j < 4; j++) {
-			dx = 170 - SCALED_HAI_WIDTH;
-			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
-				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
-				if (info.reachPosMap.get(player) == null
-						|| info.reachPosMap.get(player) != j * 6 + i) {
-					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
-							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-					dx += SCALED_HAI_WIDTH;
-				} else {
-					g2.rotate(Math.PI / 2.0);
-					g2.translate(0, -screenHeight);
-					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
-							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-					g2.translate(0, screenHeight);
-					g2.rotate(-Math.PI / 2.0);
-					dx += SCALED_HAI_HEIGHT;
-				}
-			}
-			dy += SCALED_HAI_HEIGHT;
-		}
 	}
 
 	@Override
