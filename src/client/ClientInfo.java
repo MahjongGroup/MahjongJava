@@ -33,7 +33,7 @@ public class ClientInfo {
 	List<Integer> reachableIndexList;
 	List<Integer> selectedIndexes;
 	Hai sutehai;
-	Player[] players;
+	public Player[] players;
 
 	List<Hai> doraList;
 	int honba;

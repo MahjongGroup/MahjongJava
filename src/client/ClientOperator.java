@@ -344,10 +344,13 @@ public class ClientOperator implements Client{
 		// TODO Auto-generated method stub
 	}
 	@Override
-	public void onGameStartReceived(List<Player> playerList,int index) {
+	public void onGameStartReceived(List<Player> playerList,int index,int[] score) {
+		// TODO insert score
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
 			players[i] = playerList.get(i);
+		//TODO to be changed
+		index = 1;
 		ClientInfo tmpInfo = new ClientInfo(index);
 		tmpInfo.playerNumber = index;
 		tmpInfo.players = players;
@@ -357,7 +360,6 @@ public class ClientOperator implements Client{
 		}
 		tmpInfo.setIndex(index);
 		frame.setInfo(tmpInfo);
-		// TODO current
 	}
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
@@ -369,12 +371,22 @@ public class ClientOperator implements Client{
 	}
 
 	@Override
-	public void onKyokuResultReceived(KyokuResult result) {
+	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
 		page.movePage("result");
-		((ResultPage)page).setResult(result);
-		// TODO ok?
+		((ResultPage)page).setResult(result,oldScore,newScore);
+		//TODO ok?
 	}
 
+	public void requestNextKyoku(){
+		System.out.println("requestNextKyoku");
+		tr.onNextKyokuRequested();
+	}
+	
+	public void onGameResultReceived(int[] score){
+		//TODO to be changed
+	}
+	
+	
 	@Override
 	public void onFieldReceived(List<Hai> tehai,
 			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
