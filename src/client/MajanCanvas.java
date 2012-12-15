@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import pages.GraphicalPage;
 import pages.Page;
+import sun.awt.image.ToolkitImage;
 import system.Hai;
 import system.Kaze;
 import system.MajanHai;
@@ -54,6 +56,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private Image haiBackImage;
 	private Image scaledHaiBackImage;
 	private Image scaledDarkHaiBackImage;
+	private Image reachImage;
 	// system?
 	private Client operator;
 	private List<StateCode> buttonList;
@@ -140,6 +143,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		this.scaledHaiBackImage = ImageLoader.loadScaled(ImageID.hai_back);
 		this.scaledDarkHaiBackImage = ImageLoader.loadScaled(ImageID.hai_darkback);
 		this.stateCodes = EnumSet.of(StateCode.WAIT);
+		this.reachImage = Toolkit.getDefaultToolkit().createImage("image/reach.png");
 
 //		this.operator = new ClientOperator(this);
 
@@ -176,7 +180,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int wanpaiSize = info.wanpaiSize;
 		int limit = info.yamaSize/2 + info.yamaSize%2 + info.finish + 1;
 		int finish = info.finish + 1 - (wanpaiSize/2 + wanpaiSize % 2 + (wanpaiSize==14?1:0));
-		int indent_y = 170;
+		int indent_y = 200;
 		int indent_x = 50;
 		if(finish < 0){
 			finish += 68;
@@ -221,14 +225,23 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.clearRect(0, 0, getWidth(), getHeight());
 		super.paint(g2);
 		
+		g2.setColor(Color.BLACK);
+		g2.setFont(new Font("",Font.BOLD,20));
+		g2.drawString(info.bakaze.notation(), getWidth()/2, getHeight()/2 - 10);
+		if(info.honba != 0)
+			g2.drawString(info.honba + "本場", getWidth()/2, getHeight()/2 + 10);
+		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
-
+		if(info.reachPosMap.get(0) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y - 30, null);
 		g2.rotate(-Math.PI);
 		g2.translate(-WINDOW_WIDTH, -WINDOW_HEIGHT);
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		if(info.reachPosMap.get(2) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y , null);
 
 		g2.rotate(Math.PI / 2.0);
 		g2.translate(-100, -WINDOW_WIDTH + 50);
@@ -240,6 +253,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(100, -50);
 
 		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
+		if(info.reachPosMap.get(1) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
 		g2.rotate(Math.PI);
 		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 80);
@@ -252,6 +267,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(-100, 80);
 
 		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
+		if(info.reachPosMap.get(3) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
 		
 		g2.rotate(-Math.PI / 2.0);
@@ -265,21 +282,21 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		drawPartOfYama(g2, 34, 51, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y);
 
 		g2.rotate(Math.PI / 2.0);
-		g2.translate(-50, -WINDOW_WIDTH + 50);
-		g2.rotate(-Math.PI / 18.0);
+		g2.translate(-100, -WINDOW_WIDTH + 50);
+		g2.rotate(-Math.PI / 20.0);
 
 		drawPartOfYama(g2, 17, 34, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
-		g2.rotate(Math.PI / 18.0);
-		g2.translate(50, -50);
-		g2.rotate(Math.PI);
-		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 100);
 		g2.rotate(Math.PI / 20.0);
+		g2.translate(100, -50);
+		g2.rotate(Math.PI);
+		g2.translate(-WINDOW_HEIGHT + 150, -WINDOW_WIDTH - 100);
+		g2.rotate(Math.PI / 25.0);
 		
 		drawPartOfYama(g2, 51, 68, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
-		g2.rotate(-Math.PI / 20.0);
-		g2.translate(-100, 100);
+		g2.rotate(-Math.PI / 25.0);
+		g2.translate(-150, 100);
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 
