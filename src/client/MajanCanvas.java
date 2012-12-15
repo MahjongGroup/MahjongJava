@@ -227,9 +227,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		
 		g2.setColor(Color.BLACK);
 		g2.setFont(new Font("",Font.BOLD,20));
-		g2.drawString(info.bakaze.notation(), getWidth()/2, getHeight()/2 - 10);
-		if(info.honba != 0)
-			g2.drawString(info.honba + "本場", getWidth()/2, getHeight()/2 + 10);
+		g2.drawString(info.bakaze.notation() + " " + info.kyokusu + "局", getWidth()/2 - 50, getHeight()/2 - 10 - 20);
+		g2.drawString(info.honba + "本場", getWidth()/2-50, getHeight()/2 + 10 - 20);
+		g2.drawString("積み棒:" + info.tsumiBou, getWidth()/2 - 50, getHeight()/2 + 30 - 20);
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);

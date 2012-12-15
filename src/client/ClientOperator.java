@@ -414,8 +414,9 @@ public class ClientOperator implements Client{
 
 	@Override
 	public void onKyokuResultReceived(KyokuResult result, int[] newScores,
-			int[] oldScores, List<Hai> uradoraList) {
+			int[] oldScores, List<Hai> uradoraList,int tsumiBou) {
 		page.movePage("result");
+		canvas.getInfo().tsumiBou = tsumiBou;
 		((ResultPage)page).setResult(result,newScores,oldScores,uradoraList);
 		//TODO ok?
 	}
