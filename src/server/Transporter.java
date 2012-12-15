@@ -372,8 +372,8 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void notifyStartKyoku(Kaze bakaze, int kyokusu) {
-		client.onStartKyokuReceived(bakaze, kyokusu);
+	public void notifyStartKyoku(Kaze bakaze, int kyokusu,int honba ,int tsumibou) {
+		client.onStartKyokuReceived(bakaze, kyokusu,honba,tsumibou);
 		
 	}
 	
@@ -389,8 +389,8 @@ public class Transporter implements Server {
 	}
 	
 	@Override
-	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList,int tsumibou) {
-		client.onKyokuResultReceived(result,newScore,oldScore,uradoraList,tsumibou);
+	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList) {
+		client.onKyokuResultReceived(result,newScore,oldScore,uradoraList);
 	}
 
 	@Override

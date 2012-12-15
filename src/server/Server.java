@@ -43,8 +43,10 @@ public interface Server {
 	 * 
 	 * @param bakaze その局の場風.
 	 * @param kyokusu その局の局数.
+	 * @param honba その局の本場
+	 * @param tsumibou 積み棒の数
 	 */
-	public void notifyStartKyoku(Kaze bakaze, int kyokusu);
+	public void notifyStartKyoku(Kaze bakaze, int kyokusu,int honba,int tsumibou);
 
 	// 局
 	/**
@@ -231,11 +233,10 @@ public interface Server {
 	 * @param newScore 新しいスコア
 	 * @param oldScore 前のスコア
 	 * @param uradora 裏ドラリスト
-	 * @param tsumibou 積み棒の数
 	 */
 
 
-	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList,int tsumibou);
+	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList);
 
 	
 	/**
