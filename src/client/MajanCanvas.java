@@ -289,8 +289,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			int size = buttonList.size();
-			int width = getWidth() / 2;
-			int height = getHeight() / 2;
+			int width = getWidth()/2;
+			int height = PLAYER_BLOCK1_Y + 260;
 			int half = size / 2;
 			for (int i = 0; i < size; i++) {
 				g2.setColor(Color.orange);
@@ -300,10 +300,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						BUTTON_CURVE, BUTTON_CURVE);
 				g2.setColor(Color.BLACK);
 				g2.setFont(new Font("", Font.BOLD, 15));
-				int margin = buttonList.get(i).name().compareTo("KYUSYUKYUHAI") == 0 ? 0
-						: 7;
 
-				g2.drawString(buttonList.get(i).name().substring(margin), tmpX
+				g2.drawString(buttonList.get(i).getButtonName(), tmpX
 						+ BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
 			}
 		}
@@ -658,8 +656,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 
 	private int isInButton(int mx,int my){
-		int width = getWidth() / 2;
-		int height = getHeight() / 2;
+		int width = getWidth()/2;
+		int height = PLAYER_BLOCK1_Y + 260;
 		if (my <= height + BUTTON_HEIGHT / 2 - 10
 				&& my >= height - BUTTON_HEIGHT / 2 - 10) {
 			int half = buttonList.size() / 2;
