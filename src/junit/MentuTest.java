@@ -1,6 +1,15 @@
 package junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static system.MajanHai.ITI_MAN;
+import static system.MajanHai.ITI_SOU;
+import static system.MajanHai.NI_MAN;
+import static system.MajanHai.NI_SOU;
+import static system.MajanHai.SAN_MAN;
+import static system.MajanHai.SAN_SOU;
+import static system.MajanHai.TON;
 
 import org.junit.Test;
 
@@ -9,9 +18,24 @@ import system.Kaze;
 import system.MajanHai;
 import system.Mentu;
 
-import static system.MajanHai.*;
-
 public class MentuTest {
+	@Test
+	public void testCopy() {
+		Mentu m1 = new Mentu(SAN_MAN, ITI_MAN, NI_MAN);
+		Mentu m2 = new Mentu(m1, Kaze.TON, NI_MAN);
+		assertEquals(m2.isNaki(), true);
+		assertEquals(m2.getKaze(), Kaze.TON);
+		assertTrue(m2.get(1).isNaki());
+	}
+
+	@Test
+	public void testOrder() {
+		Mentu m1 = new Mentu(SAN_MAN, ITI_MAN, NI_MAN);
+		assertEquals(m1.type(), Mentu.Type.SYUNTU);
+		assertEquals(m1.get(0).type(), ITI_MAN.type());
+		assertEquals(m1.get(1).type(), NI_MAN.type());
+		assertEquals(m1.get(2).type(), SAN_MAN.type());
+	}
 
 	@Test
 	public void testAnko() {
@@ -67,7 +91,7 @@ public class MentuTest {
 					} catch (IllegalArgumentException e) {
 						assertEquals(m, null);
 					}
-					if(m != null) {
+					if (m != null) {
 						assertTrue(m.type() != null);
 					}
 				}

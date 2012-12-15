@@ -12,7 +12,7 @@ import java.util.Map;
  * 牌の並びは連続している牌の並びを個数で表現したもので、例えば「1,1,1,2,2,3,3,4,4,4,4」のようなときは
  * 3224という整数値となる．
  * フラグは8bitのフラグで1bit目から「刻子からとれるか」、「順子からとれるか」、
- * 「二盃口か」、「一盃口か」、「一気通貫か」を表す．残り3bitは未定である．
+ * 「二盃口か」、「順子からとって一盃口か」、「刻子からとって一盃口か」、「一気通貫か」を表す．残り2bitは未定である．
  * 
  * ある牌の並びの一盃口フラグ(あるいは二盃口、一気通貫フラグ)がたっているとき、三暗刻や対々和になることは決してない(恐らく)．
  * よって、「刻子からとれる」フラグ、「順子からとれる」フラグの立っているほうを選択すればよい.
@@ -67,17 +67,17 @@ public class PatternMethodKeyValueCreator {
 		}
 	}
 
-	public static byte removeSyuntsu(int num[]) {
+	public static byte removeSyuntsu(int num[], int ipekoflag) {
 		boolean peko = false;
 		byte ret = 0;
 		int ittsu = 0;
 		for (int i = 0; i < num.length - 2; i++) {
 			if (num[i] >= 1 && num[i + 1] >= 1 && num[i + 2] >= 1) {
 				if (peko) {
-					if ((ret & 0x8) != 0) {
+					if ((ret & ipekoflag) != 0) {
 						ret |= 0x4;
 					} else {
-						ret |= 0x8;
+						ret |= ipekoflag;
 						peko = false;
 					}
 				} else {
@@ -100,7 +100,7 @@ public class PatternMethodKeyValueCreator {
 			}
 		}
 		if (ittsu == 3) {
-			ret |= 0x10;
+			ret |= 0x20;
 		}
 		return ret;
 	}
@@ -111,7 +111,7 @@ public class PatternMethodKeyValueCreator {
 
 		int copy[] = num.clone();
 		removeKotsu(copy);
-		flag |= removeSyuntsu(copy);
+		flag |= removeSyuntsu(copy, 0x10);
 		if (equalsZero(copy)) {
 			ret |= 0x1;
 			ret |= flag;
@@ -119,7 +119,7 @@ public class PatternMethodKeyValueCreator {
 
 		flag = 0;
 		copy = num.clone();
-		flag |= removeSyuntsu(copy);
+		flag |= removeSyuntsu(copy, 0x8);
 		removeKotsu(copy);
 		if (equalsZero(copy)) {
 			ret |= 0x2;
@@ -137,7 +137,7 @@ public class PatternMethodKeyValueCreator {
 				byte flag = 0;
 				copy[j] -= 2;
 				removeKotsu(copy);
-				flag |= removeSyuntsu(copy);
+				flag |= removeSyuntsu(copy, 0x10);
 				if (equalsZero(copy)) {
 					ret |= 0x1;
 					ret |= flag;
@@ -146,7 +146,7 @@ public class PatternMethodKeyValueCreator {
 				copy = num.clone();
 				flag = 0;
 				copy[j] -= 2;
-				flag |= removeSyuntsu(copy);
+				flag |= removeSyuntsu(copy, 0x8);
 				removeKotsu(copy);
 				if (equalsZero(copy)) {
 					ret |= 0x2;

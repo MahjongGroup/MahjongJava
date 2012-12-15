@@ -1,7 +1,5 @@
 package system;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import system.Mentu.Type;
@@ -12,35 +10,53 @@ import system.Mentu.Type;
 public enum MatiType {
 	TANKI(2) {
 		@Override
-		public boolean check(Param param) {
-			if(param.getJanto() == param.getAgariHai().type())
+		public boolean check(HaiType agari, Mentu m, HaiType janto) {
+			if (janto == agari)
+				return true;
+			return false;
+		}
+
+		@Override
+		public boolean check(List<Mentu> m, HaiType agari, HaiType janto) {
+			if (janto == agari)
 				return true;
 			return false;
 		}
 	},
 	RYANMEN(0) {
 		@Override
-		public boolean check(Param param) {
-			HaiType agariType = param.getAgariHai().type();
-			
-			// あがり牌が数牌でない場合
-			if(agariType.isTsuhai())
-				return false;
-			
-			for (Mentu mentu : param.getMentuList()) {
-				if(mentu.isNaki())
-					continue;
+		public boolean check(HaiType agari, Mentu m, HaiType janto) {
 
-				if(mentu.type() == Type.SYUNTU) {
-					if(agariType.suType() != mentu.get(0).type().suType())
+			// あがり牌が数牌でない場合
+			if (agari.isTsuhai())
+				return false;
+
+			if (m.type() == Type.SYUNTU) {
+				if (agari.suType() != m.get(0).type().suType())
+					return false;
+
+				if (m.get(0).type().number() != 7 && m.get(0).type() == agari)
+					return true;
+				if (m.get(2).type().number() != 3 && m.get(2).type() == agari)
+					return true;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean check(List<Mentu> mlist, HaiType agari, HaiType janto) {
+			// あがり牌が数牌でない場合
+			if (agari.isTsuhai())
+				return false;
+
+			for (Mentu m : mlist) {
+				if (m.type() == Type.SYUNTU) {
+					if (agari.suType() != m.get(0).type().suType())
 						continue;
-					
-					Mentu m = new Mentu(mentu);
-					Collections.sort(m.asList(), Hai.HaiComparator.ASCENDING_ORDER);
-					
-					if(m.get(0).type().number() != 7 && m.get(0).type() == agariType)
+
+					if (m.get(0).type().number() != 7 && m.get(0).type() == agari)
 						return true;
-					if(m.get(2).type().number() != 3 && m.get(2).type() == agariType)
+					if (m.get(2).type().number() != 3 && m.get(2).type() == agari)
 						return true;
 				}
 			}
@@ -49,25 +65,33 @@ public enum MatiType {
 	},
 	KANTYAN(2) {
 		@Override
-		public boolean check(Param param) {
-			HaiType agariType = param.getAgariHai().type();
-			
+		public boolean check(HaiType agari, Mentu m, HaiType janto) {
 			// あがり牌が数牌でない場合
-			if(agariType.isTsuhai())
+			if (agari.isTsuhai())
 				return false;
-			
-			for (Mentu mentu : param.getMentuList()) {
-				if(mentu.isNaki())
-					continue;
 
-				if(mentu.type() == Type.SYUNTU) {
-					if(agariType.suType() != mentu.get(0).type().suType())
+			if (m.type() == Type.SYUNTU) {
+				if (agari.suType() != m.get(0).type().suType())
+					return false;
+
+				if (m.get(1).type() == agari)
+					return true;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean check(List<Mentu> mlist, HaiType agari, HaiType janto) {
+			// あがり牌が数牌でない場合
+			if (agari.isTsuhai())
+				return false;
+
+			for (Mentu m : mlist) {
+				if (m.type() == Type.SYUNTU) {
+					if (agari.suType() != m.get(0).type().suType())
 						continue;
-					
-					Mentu m = new Mentu(mentu);
-					Collections.sort(m.asList(), Hai.HaiComparator.ASCENDING_ORDER);
-					
-					if(m.get(1).type() == agariType)
+
+					if (m.get(1).type() == agari)
 						return true;
 				}
 			}
@@ -76,32 +100,45 @@ public enum MatiType {
 	},
 	PENTYAN(2) {
 		@Override
-		public boolean check(Param param) {
-			HaiType agariType = param.getAgariHai().type();
-			
+		public boolean check(HaiType agari, Mentu m, HaiType janto) {
 			// あがり牌が数牌でない場合
-			if(agariType.isTsuhai())
+			if (agari.isTsuhai())
 				return false;
-			
-			int number = agariType.number();
-			if(number != 3 && number != 7)
+
+			int number = agari.number();
+			if (number != 3 && number != 7)
 				return false;
-			
-			for (Mentu mentu : param.getMentuList()) {
-				if(mentu.isNaki())
-					continue;
-				
-				if(mentu.type() == Type.SYUNTU) {
-					
-					if(agariType.suType() != mentu.get(0).type().suType())
+
+			if (m.type() == Type.SYUNTU) {
+				if (agari.suType() != m.get(0).type().suType())
+					return false;
+
+				if (m.get(0).type().number() == 7)
+					return true;
+				if (m.get(2).type().number() == 3)
+					return true;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean check(List<Mentu> mlist, HaiType agari, HaiType janto) {
+			// あがり牌が数牌でない場合
+			if (agari.isTsuhai())
+				return false;
+
+			int number = agari.number();
+			if (number != 3 && number != 7)
+				return false;
+
+			for (Mentu m : mlist) {
+				if (m.type() == Type.SYUNTU) {
+					if (agari.suType() != m.get(0).type().suType())
 						continue;
-					
-					Mentu m = new Mentu(mentu);
-					Collections.sort(m.asList(), Hai.HaiComparator.ASCENDING_ORDER);
-					
-					if(m.get(0).type().number() == 7)
+
+					if (m.get(0).type().number() == 7)
 						return true;
-					if(m.get(2).type().number() == 3)
+					if (m.get(2).type().number() == 3)
 						return true;
 				}
 			}
@@ -110,15 +147,21 @@ public enum MatiType {
 	},
 	SYABO(0) {
 		@Override
-		public boolean check(Param param) {
-			for (Mentu m : param.getMentuList()) {
-				if(m.isNaki())
+		public boolean check(HaiType agari, Mentu m, HaiType janto) {
+			if (m.type() != Type.KOTU)
+				return false;
+
+			if (m.get(0).type() == agari)
+				return true;
+			return false;
+		}
+
+		@Override
+		public boolean check(List<Mentu> mlist, HaiType agari, HaiType janto) {
+			for (Mentu m : mlist) {
+				if (m.type() != Type.KOTU)
 					continue;
-				
-				if(m.type() != Type.KOTU)
-					continue;
-				
-				if(m.get(0).type() == param.getAgariHai().type())
+				if (m.get(0).type() == agari)
 					return true;
 			}
 			return false;
@@ -126,11 +169,11 @@ public enum MatiType {
 	};
 
 	private int hu;
-	
+
 	private MatiType(int hu) {
 		this.hu = hu;
 	}
-	
+
 	/**
 	 * この待ちタイプの符を返す。
 	 * @return 符
@@ -138,24 +181,32 @@ public enum MatiType {
 	public int hu() {
 		return this.hu;
 	}
-	
-	public abstract boolean check(Param param);
-	
+
 	/**
-	 * 上がり形から考えられる全ての待ちタイプのリストを返す。
-	 * 
-	 * @param param　チェッカーパラム
-	 * @return　考えられる全ての待ちタイプのリスト
+	 * 指定された面子とあがり牌からこの待ちの種類であるかどうかを判定する．
+	 * @param agari あがり牌の種類．
+	 * @param m 待ちの種類を調べる面子．単騎を判定する場合はnullでよい．
+	 * @param janto 雀頭の牌の種類．
+	 * @return
 	 */
-	public static List<MatiType> getMatiTypeList(Param param) {
-		List<MatiType> result = new ArrayList<MatiType>();
-		
+	public abstract boolean check(HaiType agari, Mentu m, HaiType janto);
+
+	public abstract boolean check(List<Mentu> mlist, HaiType agari, HaiType janto);
+
+	public static MatiType getMatiType(HaiType agari, Mentu m, HaiType janto) {
 		for (MatiType mt : values()) {
-			if(mt.check(param)) {
-				result.add(mt);
+			if (mt.check(agari, m, janto)) {
+				// exclude the case of TANKI
+				if(mt == TANKI)
+					continue;
+				return mt;
 			}
 		}
-		return result;
+		return null;
 	}
 	
+	public static boolean isTanki(HaiType agari, HaiType janto) {
+		return TANKI.check(null, agari, janto);
+	}
+
 }

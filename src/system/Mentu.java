@@ -3,6 +3,7 @@ package system;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -12,6 +13,8 @@ import java.util.ListIterator;
  * 　明順子,明刻,明槓子(明槓),明槓子(加槓),
  * 　暗順子,暗刻,暗槓子
  * 上記のように,このオブジェクトは鳴き面子以外にも用いられる(上がり判定時などに使用).
+ * 
+ * この面子の構成牌は昇順にソートされていることが保証される．
  */
 public class Mentu {
 	/**
@@ -140,6 +143,7 @@ public class Mentu {
 		this.kaze = null;
 		this.naki = false;
 		this.kakanFlag = false;
+		Collections.sort(haiList, Hai.HaiComparator.ASCENDING_ORDER);
 	}
 
 	/**
@@ -169,6 +173,7 @@ public class Mentu {
 		this.naki = true;
 
 		this.kakanFlag = false;
+		Collections.sort(haiList, Hai.HaiComparator.ASCENDING_ORDER);
 	}
 
 	/**
@@ -183,6 +188,23 @@ public class Mentu {
 		this.kaze = mentu.kaze;
 		this.kakanFlag = false;
 	}
+	
+	/**
+	 * 指定された面子を指定された牌で鳴かれたことにするコンストラクタ．
+	 * @param mentu 面子．
+	 * @param kaze どこから鳴いたのか．
+	 * @param naki 鳴かれた牌．
+	 */
+	public Mentu(Mentu mentu, Kaze kaze, Hai naki) {
+		this.haiList = new ArrayList<MentuHai>(mentu.haiList);
+		this.haiList.remove(new MentuHai(naki, false));
+		this.haiList.add(new MentuHai(naki, true));
+		this.naki = true;
+		this.type = mentu.type;
+		this.kaze = kaze;
+		this.kakanFlag = false;
+		Collections.sort(haiList, Hai.HaiComparator.ASCENDING_ORDER);
+	}
 
 	// 加槓コンストラクタ.
 	private Mentu(Mentu mentu, Hai hai) {
@@ -192,6 +214,7 @@ public class Mentu {
 		this.type = Type.KANTU;
 		this.kaze = mentu.kaze;
 		this.kakanFlag = true;
+		Collections.sort(haiList, Hai.HaiComparator.ASCENDING_ORDER);
 	}
 
 	public List<MentuHai> asList() {
@@ -212,6 +235,20 @@ public class Mentu {
 
 	public boolean contains(Object hai) {
 		return haiList.contains(hai);
+	}
+	
+	/**
+	 * この面子が指定された牌種を含んでいる場合trueを返す．
+	 * @param type the hai type whose presence in this list to be tested.
+	 * @return true if this mentu contains the specified type.
+	 */
+	public boolean contains(HaiType type) {
+		for (Hai hai : haiList) {
+			if(hai.type() == type) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean containsAll(Collection<?> c) {

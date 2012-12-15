@@ -96,34 +96,32 @@ public class PatternMethodTest {
 		int n[] = list1.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 3);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x2);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) == 0x8);
-		assertTrue((value & 0x10) != 0x10);
-
+		PatternMethod.Value value = PatternMethod.getValue(list1);
+		assertTrue(value.isSyuntsuRm());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(value.isIpeko());
+		assertTrue(!value.isIkkiTsukan());
+		
 		for (int i = 0; i < 1000; i++) {
 			n = list1.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list1);
 		}
 	}
 
 	@Test
 	public void testPatternMethodList2() {
+		// 2,3,4,4,5,6, 二,三,四, ５,６,７,９,９
 		int n[] = list2.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 4);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) != 0x8);
-		assertTrue((value & 0x10) != 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list2);
+		assertTrue(value.isSyuntsuRm() && value.isKotsuRm());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(!value.isIpeko());
+		assertTrue(!value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list2.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list2);
 		}
 	}
 
@@ -132,16 +130,14 @@ public class PatternMethodTest {
 		int n[] = list3.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 1);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x2);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) != 0x8);
-		assertTrue((value & 0x10) != 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list3);
+		assertTrue(value.isSyuntsuRm());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(!value.isIpeko());
+		assertTrue(!value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list3.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list3);
 		}
 	}
 
@@ -152,16 +148,14 @@ public class PatternMethodTest {
 		int n[] = list4.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 2);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) != 0x8);
-		assertTrue((value & 0x10) == 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list4);
+		assertTrue(value.isSuccessful());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(!value.isIpeko());
+		assertTrue(value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list4.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list4);
 		}
 	}
 
@@ -173,16 +167,14 @@ public class PatternMethodTest {
 		int n[] = list5.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 2);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) == 0x8);
-		assertTrue((value & 0x10) == 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list5);
+		assertTrue(value.isSyuntsuRm() && value.isKotsuRm());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(value.isIpeko());
+		assertTrue(value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list5.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list5);
 		}
 	}
 
@@ -193,15 +185,12 @@ public class PatternMethodTest {
 		int n[] = list6.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 3);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) == 0x4);
-		assertTrue((value & 0x10) != 0x10);
-
+		PatternMethod.Value value = PatternMethod.getValue(list6);
+		assertTrue(value.isSyuntsuRm() && value.isKotsuRm());
+		assertTrue(value.isRyanpeko());
+		assertTrue(!value.isIkkiTsukan());
 		for (int i = 0; i < 1000; i++) {
-			n = list6.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list6);
 		}
 	}
 
@@ -212,16 +201,14 @@ public class PatternMethodTest {
 		int n[] = list8.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 1);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) != 0x4);
-		assertTrue((value & 0x8) == 0x8);
-		assertTrue((value & 0x10) != 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list8);
+		assertTrue(value.isSyuntsuRm() && value.isKotsuRm());
+		assertTrue(!value.isRyanpeko());
+		assertTrue(value.isIpeko());
+		assertTrue(!value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list8.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list8);
 		}
 	}
 
@@ -232,15 +219,13 @@ public class PatternMethodTest {
 		int n[] = list7.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 2);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0x3);
-		assertTrue((value & 0x4) == 0x4);
-		assertTrue((value & 0x10) != 0x10);
+		PatternMethod.Value value = PatternMethod.getValue(list7);
+		assertTrue(value.isSyuntsuRm() && value.isKotsuRm());
+		assertTrue(value.isRyanpeko());
+		assertTrue(!value.isIkkiTsukan());
 
 		for (int i = 0; i < 1000; i++) {
-			n = list7.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(list7);
 		}
 	}
 
@@ -249,13 +234,11 @@ public class PatternMethodTest {
 		int n[] = noList1.toSizeArray();
 		Integer keys[] = PatternMethod.calcKey(n);
 		assertEquals(keys.length, 2);
-		int value = PatternMethod.isNMentsu1Janto(keys);
-		assertTrue((value & 0x3) == 0);
+		PatternMethod.Value value = PatternMethod.getValue(noList1);
+		assertTrue(!value.isSuccessful());
 
 		for (int i = 0; i < 1000; i++) {
-			n = noList1.toSizeArray();
-			keys = PatternMethod.calcKey(n);
-			PatternMethod.isNMentsu1Janto(keys);
+			PatternMethod.getValue(noList1);
 		}
 	}
 

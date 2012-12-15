@@ -140,7 +140,7 @@ public class AgariMethods {
 			}
 
 			// 両面待ちととれる場合
-			if (MatiType.RYANMEN.check(param)) {
+			if (MatiType.RYANMEN.check(param.getMentuList(), param.getAgariHai().type(), param.getJanto())) {
 				param.setMatiType(MatiType.RYANMEN);
 				for (Yaku yaku : NormalYaku.values()) {
 					if (yaku.check(param, f)) {

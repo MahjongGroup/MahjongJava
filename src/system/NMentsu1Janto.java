@@ -1,7 +1,6 @@
 package system;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -14,76 +13,86 @@ import java.util.Set;
  * 雀頭のとり方が複数ある場合もあるが点数には影響しないため昇順で牌を並べた場合に</br>
  * 小さいほうから雀頭をとることにする．</br>
  */
-public class NMentsu1Janto {
-	private final Hai janto;
-	private final List<Mentu> list;
+public class NMentsu1Janto extends UnmodifiableList<Mentu>{
+	private final HaiType janto;
 
-	private NMentsu1Janto(Hai janto, List<Mentu> list) {
+	private NMentsu1Janto(HaiType janto, List<Mentu> list) {
+		super(list);
 		this.janto = janto;
-		this.list = list;
 	}
-
-	public static NMentsu1Janto newInstanceFromSyuntsu(List<? extends Hai> tlist, Hai agariHai) {
+	
+	public HaiType getJanto() {
+		return janto;
+	}
+	
+	/**
+	 * 雀頭->順子->刻子の順番に面子を取り除いて出来たn面子1雀頭オブジェクトを生成してそれを返す．
+	 * 
+	 * @param tlist 手牌リスト．
+	 * @return n面子1雀頭オブジェクト．
+	 */
+	public static NMentsu1Janto newInstanceFromSyuntsu(List<? extends Hai> tlist) {
 		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(tlist);
-		List<Hai> haiListCopy = new ArrayList<HaiType>();
-		for (Hai hai : tlist) {
-			haiListCopy.add(hai.type());
-		}
-		haiListCopy.add(agariHai.type());
+		TehaiList cptlist =  new TehaiList(tlist);
 
 		for (HaiType haiType : haiTypeSet) {
-			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
-				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
+			if (cptlist.sizeOf(haiType) >= 2) {
+				TehaiList tempList = new TehaiList(cptlist);
+				
 				HaiType janto = haiType;
 				List<Mentu> tempMentuList = new ArrayList<Mentu>();
 
+				// 雀頭を取り除く
+				tempList.remove(haiType);
+				tempList.remove(haiType);
+
+				// 順子を取り除く
+				removeSyuntsu(tempList, tempMentuList);
+				
+				// 刻子を取り除く
+				removeKotsu(haiTypeSet, tempList, tempMentuList);
+
+				if (tempList.size() == 0) {
+					return new NMentsu1Janto(janto, tempMentuList);
+				}
+			}
+		}
+		throw new IllegalArgumentException("指定された手牌では順子から面子を取り出してn面子1雀頭を生成できない");
+	}
+
+	/**
+	 * 雀頭->刻子->順子の順番に面子を取り除いて出来たn面子1雀頭オブジェクトを生成してそれを返す．
+	 * 
+	 * @param tlist 手牌リスト．
+	 * @return n面子1雀頭オブジェクト．
+	 */
+	public static NMentsu1Janto newInstanceFromKotsu(List<? extends Hai> tlist) {
+		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(tlist);
+		TehaiList cptlist =  new TehaiList(tlist);
+
+		for (HaiType haiType : haiTypeSet) {
+			if (cptlist.sizeOf(haiType) >= 2) {
+				TehaiList tempList = new TehaiList(cptlist);
+				
+				HaiType janto = haiType;
+				List<Mentu> tempMentuList = new ArrayList<Mentu>();
+
+				// 雀頭を取り除く
 				tempList.remove(haiType);
 				tempList.remove(haiType);
 
 				// 刻子を取り除く
-				for (HaiType haiType2 : haiTypeSet) {
-					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
-						Hai hai = MajanHai.valueOf(haiType2, false);
-						tempMentuList.add(new Mentu(hai, hai, hai));
-
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-					}
-				}
+				removeKotsu(haiTypeSet, tempList, tempMentuList);
 
 				// 順子を取り除く
-				for (SuType suType : SuType.values()) {
-					for (int i = 1; i <= 7; i++) {
-						HaiType haiArray[] = new HaiType[3];
-						haiArray[0] = HaiType.valueOf(suType, i);
-						haiArray[1] = HaiType.valueOf(suType, i + 1);
-						haiArray[2] = HaiType.valueOf(suType, i + 2);
-
-						if (tempList.containsAll(Arrays.asList(haiArray))) {
-							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
-							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
-							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
-
-							tempMentuList.add(new Mentu(hai0, hai1, hai2));
-							tempList.remove(haiArray[0]);
-							tempList.remove(haiArray[1]);
-							tempList.remove(haiArray[2]);
-							i--;
-						}
-					}
-				}
+				removeSyuntsu(tempList, tempMentuList);
 
 				if (tempList.size() == 0) {
-					tempMentuList.addAll(huroList);
-
-					chParam.setJanto(janto);
-					chParam.setMentuList(tempMentuList);
-					return true;
+					return new NMentsu1Janto(janto, tempMentuList);
 				}
 			}
 		}
-
+		throw new IllegalArgumentException("指定された手牌では刻子から面子を取り出してn面子1雀頭を生成できない");
 	}
 
 	// 刻子を取り除く
@@ -99,7 +108,7 @@ public class NMentsu1Janto {
 	}
 
 	// 順子を取り除く
-	public static void removeSyuntsu(TehaiList tempList, List<Mentu> tempMentuList) {
+	private static void removeSyuntsu(TehaiList tempList, List<Mentu> tempMentuList) {
 		for (SuType suType : SuType.values()) {
 			for (int i = 1; i <= 7; i++) {
 				HaiType types[] = new HaiType[3];
