@@ -231,10 +231,11 @@ public interface Server {
 	 * @param newScore 新しいスコア
 	 * @param oldScore 前のスコア
 	 * @param uradora 裏ドラリスト
+	 * @param tsumibou 積み棒の数
 	 */
 
 
-	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList);
+	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList,int tsumibou);
 
 	
 	/**
