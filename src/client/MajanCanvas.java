@@ -312,6 +312,26 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
 		if(info == null)
 			return;
+		switch(player){
+		case 0:
+			ix += 50;
+			iy += 50;
+			break;
+		case 1:
+			ix += 40;
+			iy-=20;
+			break;
+		case 2:
+			ix += 30;
+			iy+=80;
+			break;
+		case 3:
+			ix += 40;
+			iy-=20;
+			break;
+		default:
+			break;
+		}
 		List<Hai> suteHaiList = null;
 		synchronized (info.sutehaiMap) {
 			suteHaiList = info.sutehaiMap.get(player);
