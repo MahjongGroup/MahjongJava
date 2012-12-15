@@ -250,10 +250,11 @@ public class KyokuRunner {
 			if (p.isMan()) {
 				Transporter tr = transporterMap.get(kyoku.getCurrentTurn());
 				tr.requestKyusyukyuhai();
-				if (waitKyusyukyuhai(tr))
+				if (waitKyusyukyuhai(tr)){
 					kyoku.doKyusyukyuhai();
-				stateCode = STATE_CODE_ENDOFKYOKU;
-				return;
+					stateCode = STATE_CODE_ENDOFKYOKU;
+					return;
+				}		
 				// while loop を抜ける
 			} else {
 				AI ai = aiMap.get(kyoku.getCurrentTurn());
