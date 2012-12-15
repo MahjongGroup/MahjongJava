@@ -7,7 +7,6 @@ import java.util.Set;
 
 import system.Functions;
 import system.Hai;
-import system.HaiGroup2;
 import system.HaiType;
 import system.Kaze;
 import system.MajanHai;

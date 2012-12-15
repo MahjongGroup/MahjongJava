@@ -44,7 +44,7 @@ public class MahjongGame {
 			Console.wairEnter();
 			
 			for(Server server:transMap.values()){
-				server.notifyStartKyoku(kyoku.getBakaze(), mahjong.getKyokusu());
+				server.notifyStartKyoku(kyoku.getBakaze(), mahjong.getKyokusu(),mahjong.getHonba(),mahjong.getTsumibo());
 			}
 			
 			KyokuRunner runner = new KyokuRunner(kyoku, transMap);
@@ -54,11 +54,11 @@ public class MahjongGame {
 			
 			mahjong.endKyoku();
 			mahjong.disp2();
-
+			
 			int newScores[] = mahjong.getScores();
 			KyokuResult kr = kyoku.createKyokuResult();
 			for(Server server:transMap.values()){
-				server.notifyKyokuResult(kr,newScores,oldScores);
+				server.notifyKyokuResult(kr,newScores,oldScores,kyoku.getUraDoraList());
 			}
 			waitKyokuResult();
 			

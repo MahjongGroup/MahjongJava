@@ -362,20 +362,16 @@ public class ClientOperator implements Client{
 		frame.setInfo(tmpInfo);
 	}
 	@Override
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu,int honba,int tsumibou) {
 		// TODO Auto-generated method stub
 		page.movePage("game");
+		canvas.getInfo().honba = honba;
+		canvas.getInfo().tsumiBou = tsumibou;
 		((MajanCanvas)page).number = frame.getInfo().playerNumber;
 		((MajanCanvas)page).setKyokusu(kyokusu);
 		((MajanCanvas)page).setBakaze(bakaze);
 	}
 
-	@Override
-	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore) {
-		page.movePage("result");
-		((ResultPage)page).setResult(result,oldScore,newScore);
-		//TODO ok?
-	}
 
 	public void requestNextKyoku(){
 		System.out.println("requestNextKyoku");
@@ -416,5 +412,13 @@ public class ClientOperator implements Client{
 		info.yamaSize = yamaSize;
 		info.wanpaiSize = wanpaiSize;
 		info.doraList = doraList;
+	}
+
+	@Override
+	public void onKyokuResultReceived(KyokuResult result, int[] newScores,
+			int[] oldScores, List<Hai> uradoraList) {
+		page.movePage("result");
+		((ResultPage)page).setResult(result,newScores,oldScores,uradoraList);
+		//TODO ok?
 	}
 }

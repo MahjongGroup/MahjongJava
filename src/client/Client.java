@@ -44,8 +44,10 @@ public interface Client {
 	 * 
 	 * @param bakaze その局の場風.
 	 * @param kyokusu その局の局数.
+	 * @param honba その局の本場.
+	 * @param tsumibou 現在の積み棒の数.
 	 */
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu);
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu,int honba,int tsumibou);
 	
 	
 	// 局
@@ -231,9 +233,14 @@ public interface Client {
 	 * @param result 局の結果．
 	 * @param newScores 新しいスコア
 	 * @param oldScores 前のスコア
+	 * @param uradoraList 裏ドラのリスト
 	 */
-	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores);
+	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores, List<Hai> uradoraList);
 
+	
+	/**
+	 * resultページから、次の局の開始をサーバ側に要求する
+	 */
 	public void requestNextKyoku();
 	
 }

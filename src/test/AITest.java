@@ -18,14 +18,15 @@ public class AITest {
 		tlist.add(MajanHai.NANA_MAN);
 		tlist.add(MajanHai.HATI_MAN);
 		tlist.add(MajanHai.KYU_MAN);
-		tlist.add(MajanHai.HAKU);
-		tlist.add(MajanHai.HATU);
-		tlist.add(MajanHai.KYU_PIN);
-		tlist.add(MajanHai.ITI_SOU);
+		tlist.add(MajanHai.ITI_MAN);
+		tlist.add(MajanHai.ITI_MAN);
+		tlist.add(MajanHai.KYU_MAN);
+		tlist.add(MajanHai.ITI_MAN);
 		//ツモ牌
-		tlist.add(MajanHai.HAKU);
+		tlist.add(MajanHai.KYU_MAN);
 		
 		System.out.println(tlist.toString());
 		System.out.println(AIMethods.getInvalidHaiList(tlist));
+		System.out.println(AIMethods.getExtendedValidHaiTypeSet(tlist));
 	}
 }

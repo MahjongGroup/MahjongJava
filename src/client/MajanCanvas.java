@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import pages.GraphicalPage;
 import pages.Page;
+import sun.awt.image.ToolkitImage;
 import system.Hai;
 import system.Kaze;
 import system.MajanHai;
@@ -54,6 +56,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private Image haiBackImage;
 	private Image scaledHaiBackImage;
 	private Image scaledDarkHaiBackImage;
+	private Image reachImage;
 	// system?
 	private Client operator;
 	private List<StateCode> buttonList;
@@ -140,7 +143,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		this.scaledHaiBackImage = ImageLoader.loadScaled(ImageID.hai_back);
 		this.scaledDarkHaiBackImage = ImageLoader.loadScaled(ImageID.hai_darkback);
 		this.stateCodes = EnumSet.of(StateCode.WAIT);
-
+		this.reachImage = Toolkit.getDefaultToolkit().createImage("image/reach.png");
 //		this.operator = new ClientOperator(this);
 
 		// 結合テスト
@@ -176,7 +179,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int wanpaiSize = info.wanpaiSize;
 		int limit = info.yamaSize/2 + info.yamaSize%2 + info.finish + 1;
 		int finish = info.finish + 1 - (wanpaiSize/2 + wanpaiSize % 2 + (wanpaiSize==14?1:0));
-		int indent_y = 170;
+		int indent_y = 200;
 		int indent_x = 50;
 		if(finish < 0){
 			finish += 68;
@@ -219,24 +222,54 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		Graphics2D g2 = (Graphics2D) gg;
 		
 		g2.clearRect(0, 0, getWidth(), getHeight());
+		super.paint(g2);
+		
+		g2.setColor(Color.BLACK);
+		g2.setFont(new Font("",Font.BOLD,20));
+		g2.drawString(info.bakaze.notation() + " " + info.kyokusu + "局", getWidth()/2 - 50, getHeight()/2 - 10 - 20);
+		g2.drawString(info.honba + "本場", getWidth()/2-50, getHeight()/2 + 10 - 20);
+		g2.drawString("積み棒:" + info.tsumiBou, getWidth()/2 - 50, getHeight()/2 + 30 - 20);
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
-
+		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		if(info.reachPosMap.get(0) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y - 30, null);
 		g2.rotate(-Math.PI);
 		g2.translate(-WINDOW_WIDTH, -WINDOW_HEIGHT);
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		if(info.reachPosMap.get(2) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y , null);
 
 		g2.rotate(Math.PI / 2.0);
-		g2.translate(0, -WINDOW_WIDTH);
+		g2.translate(-100, -WINDOW_WIDTH + 50);
+		g2.rotate(-Math.PI / 20.0);
 
 		drawHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);
 
+		g2.rotate(Math.PI / 20.0);
+		g2.translate(100, -50);
+
+		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
+		if(info.reachPosMap.get(1) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
+		
 		g2.rotate(Math.PI);
-		g2.translate(-WINDOW_HEIGHT, -WINDOW_WIDTH);
+		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 80);
+
+		g2.rotate(Math.PI / 15.0);
 
 		drawHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);
 
+		g2.rotate(-Math.PI / 15.0);
+		g2.translate(-100, 80);
+
+		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
+		if(info.reachPosMap.get(3) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
+		
+		
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 		
@@ -248,15 +281,21 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		drawPartOfYama(g2, 34, 51, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y);
 
 		g2.rotate(Math.PI / 2.0);
-		g2.translate(0, -WINDOW_WIDTH);
-		
+		g2.translate(-100, -WINDOW_WIDTH + 50);
+		g2.rotate(-Math.PI / 20.0);
+
 		drawPartOfYama(g2, 17, 34, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
+		g2.rotate(Math.PI / 20.0);
+		g2.translate(100, -50);
 		g2.rotate(Math.PI);
-		g2.translate(-WINDOW_HEIGHT, -WINDOW_WIDTH);
+		g2.translate(-WINDOW_HEIGHT + 150, -WINDOW_WIDTH - 100);
+		g2.rotate(Math.PI / 25.0);
 		
 		drawPartOfYama(g2, 51, 68, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
+		g2.rotate(-Math.PI / 25.0);
+		g2.translate(-150, 100);
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
 
@@ -266,8 +305,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			int size = buttonList.size();
-			int width = getWidth() / 2;
-			int height = getHeight() / 2;
+			int width = getWidth()/2;
+			int height = PLAYER_BLOCK1_Y + 260;
 			int half = size / 2;
 			for (int i = 0; i < size; i++) {
 				g2.setColor(Color.orange);
@@ -277,10 +316,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						BUTTON_CURVE, BUTTON_CURVE);
 				g2.setColor(Color.BLACK);
 				g2.setFont(new Font("", Font.BOLD, 15));
-				int margin = buttonList.get(i).name().compareTo("KYUSYUKYUHAI") == 0 ? 0
-						: 7;
 
-				g2.drawString(buttonList.get(i).name().substring(margin), tmpX
+				g2.drawString(buttonList.get(i).getButtonName(), tmpX
 						+ BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
 			}
 		}
@@ -288,6 +325,58 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	}
 
+	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
+		if(info == null)
+			return;
+		switch(player){
+		case 0:
+			ix += 50;
+			iy += 50;
+			break;
+		case 1:
+			ix += 40;
+			iy-=20;
+			break;
+		case 2:
+			ix += 30;
+			iy+=80;
+			break;
+		case 3:
+			ix += 40;
+			iy-=20;
+			break;
+		default:
+			break;
+		}
+		List<Hai> suteHaiList = null;
+		synchronized (info.sutehaiMap) {
+			suteHaiList = info.sutehaiMap.get(player);
+		}
+		int dy = 0;
+		int screenHeight = WINDOW_HEIGHT;
+		for (int j = 0; j < 4; j++) {
+			int dx = 170 - SCALED_HAI_WIDTH;
+			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
+				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
+				if (info.reachPosMap.get(player) == null
+						|| info.reachPosMap.get(player) != j * 6 + i) {
+					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
+							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					dx += SCALED_HAI_WIDTH;
+				} else {
+					g2.rotate(Math.PI / 2.0);
+					g2.translate(0, -screenHeight);
+					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
+							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					g2.translate(0, screenHeight);
+					g2.rotate(-Math.PI / 2.0);
+					dx += SCALED_HAI_HEIGHT;
+				}
+			}
+			dy += SCALED_HAI_HEIGHT;
+		}
+	}
+	
 	public void drawHai(int player, int ix, int iy, int sute_x, Graphics2D g2) {
 		if (info == null)
 			return;
@@ -411,32 +500,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			dy -= SCALED_HAI_HEIGHT;
 		}
 
-		List<Hai> suteHaiList = null;
-		synchronized (info.sutehaiMap) {
-			suteHaiList = info.sutehaiMap.get(player);
-		}
-		dy = 0;
-		for (int j = 0; j < 4; j++) {
-			dx = 170 - SCALED_HAI_WIDTH;
-			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
-				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
-				if (info.reachPosMap.get(player) == null
-						|| info.reachPosMap.get(player) != j * 6 + i) {
-					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
-							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-					dx += SCALED_HAI_WIDTH;
-				} else {
-					g2.rotate(Math.PI / 2.0);
-					g2.translate(0, -screenHeight);
-					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
-							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-					g2.translate(0, screenHeight);
-					g2.rotate(-Math.PI / 2.0);
-					dx += SCALED_HAI_HEIGHT;
-				}
-			}
-			dy += SCALED_HAI_HEIGHT;
-		}
 	}
 
 	@Override
@@ -629,8 +692,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 
 	private int isInButton(int mx,int my){
-		int width = getWidth() / 2;
-		int height = getHeight() / 2;
+		int width = getWidth()/2;
+		int height = PLAYER_BLOCK1_Y + 260;
 		if (my <= height + BUTTON_HEIGHT / 2 - 10
 				&& my >= height - BUTTON_HEIGHT / 2 - 10) {
 			int half = buttonList.size() / 2;
@@ -730,94 +793,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			default:
 				break;
 			}
-			//クリック個所がボタンのある範囲にあったか
-			//複数の選択肢から1つを選んだか
-			//もしくは1つの選択肢の指定した箇所をクリックしたか
-			//今回選択された動作以外に関係するデータは消去
-				
-			// 今回選択された動作に対する動作
-//			switch (sc) {
-//			case SELECT_CHI_HAI:
-//				if (info.ableIndexList.get(sc).size() != 1) {
-//					addStateCode(sc);
-//				} else {
-//					operator.sendChiIndexList(info.ableIndexList.get(sc).get(0));
-//					refreshButtonList();
-//					refreshNakiListExclude(null);
-//					refreshStateCodes();
-//					return;
-//				}
-//				break;
-//			case SELECT_PON_HAI:
-//				if (info.ableIndexList.get(sc).size() != 1) {
-//					addStateCode(sc);
-//				} else {
-//					operator.sendPonIndexList(info.ableIndexList.get(sc).get(0));
-//					refreshButtonList();
-//					refreshNakiListExclude(null);
-//					refreshStateCodes();
-//					return;
-//				}
-//				break;
-//			case SELECT_MINKAN:
-//				operator.sendMinkan(true);
-//				info.selectedIndexes.clear();
-//				refreshButtonList();
-//				refreshNakiListExclude(null);
-//				refreshStateCodes();
-//				addStateCode(StateCode.DISCARD_SELECT);
-//				break;
-//			case KYUSYUKYUHAI:
-//				operator.sendKyusyukyuhai(true);
-//				break;
-//			case SELECT_ANKAN_HAI:
-//				if (info.ableIndexList.get(sc).size() != 1) {
-//					addStateCode(sc);
-//				} else {
-//					operator.sendAnkanIndexList(info.ableIndexList.get(sc).get(
-//							0));
-//					refreshButtonList();
-//					refreshNakiListExclude(null);
-//					refreshStateCodes();
-//					return;
-//				}
-//				break;
-//			case SELECT_REACH_HAI:
-//				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
-//						.get(sc).get(0).size() == 1)) {
-//					addStateCode(sc);
-//				} else {
-//					getFrame().setTitle(getFrame().getTitle() + "*");
-//					operator.sendReachIndex(info.ableIndexList.get(sc).get(0)
-//							.get(0));
-//					refreshButtonList();
-//					refreshNakiListExclude(null);
-//					refreshStateCodes();
-//					return;
-//				}
-//				break;
-//			case SELECT_KAKAN_HAI:
-//				if (!(info.ableIndexList.get(sc).size() == 1 && info.ableIndexList
-//						.get(sc).get(0).size() == 1)) {
-//					addStateCode(sc);
-//				} else {
-//					operator.sendKakanIndex(info.ableIndexList.get(sc).get(0)
-//							.get(0));
-//					refreshButtonList();
-//					refreshNakiListExclude(null);
-//					refreshStateCodes();
-//					return;
-//				}
-//				break;
-//			case SELECT_TSUMO:
-//				operator.sendTsumoAgari();
-//				return;
-//			case SELECT_RON:
-//				operator.sendRon(true);
-//				return;
-//			default:
-//				break;
-//			}
 		}
 		for (StateCode sc : stateCodes) {
 			if(info.ableIndexList.containsKey(sc) && info.ableIndexList.get(sc).size() == 1){
@@ -828,7 +803,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				refreshStateCodes();
 				return;
 			}
-//			addSelectedIndexesWhenOverHai(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 			List<Integer> selectedIndexes = getInfo().selectedIndexes;
 			int size = selectedIndexes.size();
 			int i = selectedIndexes.isEmpty() ? -1 : selectedIndexes.get(0);
