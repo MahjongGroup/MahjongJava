@@ -233,7 +233,7 @@ public interface Client {
 	 * @param oldScores 前のスコア
 	 * @param uradoraList 裏ドラのリスト
 	 */
-	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores, List<Hai> uradoraList);
+	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores, List<Hai> uradoraList,int tsumibou);
 
 	
 	/**
