@@ -362,9 +362,11 @@ public class ClientOperator implements Client{
 		frame.setInfo(tmpInfo);
 	}
 	@Override
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu,int honba,int tsumibou) {
 		// TODO Auto-generated method stub
 		page.movePage("game");
+		canvas.getInfo().honba = honba;
+		canvas.getInfo().tsumiBou = tsumibou;
 		((MajanCanvas)page).number = frame.getInfo().playerNumber;
 		((MajanCanvas)page).setKyokusu(kyokusu);
 		((MajanCanvas)page).setBakaze(bakaze);
@@ -414,9 +416,8 @@ public class ClientOperator implements Client{
 
 	@Override
 	public void onKyokuResultReceived(KyokuResult result, int[] newScores,
-			int[] oldScores, List<Hai> uradoraList,int tsumiBou) {
+			int[] oldScores, List<Hai> uradoraList) {
 		page.movePage("result");
-		canvas.getInfo().tsumiBou = tsumiBou;
 		((ResultPage)page).setResult(result,newScores,oldScores,uradoraList);
 		//TODO ok?
 	}

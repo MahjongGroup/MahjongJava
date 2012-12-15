@@ -386,7 +386,7 @@ public class ConsoleClient implements Client {
 	}
 
 	@Override
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu) {
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu,int honba,int tsumibou) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -396,7 +396,7 @@ public class ConsoleClient implements Client {
 	}
 	
 	@Override
-	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList,int tsumiBou) {
+	public void onKyokuResultReceived(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList) {
 		// TODO Auto-generated method stub
 		
 	}
