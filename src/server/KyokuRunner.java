@@ -249,7 +249,6 @@ public class KyokuRunner {
 			Player p = kyoku.getCurrentPlayer();
 			if (p.isMan()) {
 				Transporter tr = transporterMap.get(kyoku.getCurrentTurn());
-				tr.requestKyusyukyuhai();
 				if (waitKyusyukyuhai(tr)){
 					kyoku.doKyusyukyuhai();
 					stateCode = STATE_CODE_ENDOFKYOKU;
