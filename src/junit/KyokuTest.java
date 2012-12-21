@@ -963,7 +963,7 @@ public class KyokuTest {
 		kyoku.discard(13);
 		kyoku.doRon(Kaze.TON);
 		KyokuResult kr = kyoku.createKyokuResult();
-		System.out.println(kr.getAgariResult(p1));
+		//System.out.println(kr.getAgariResult(p1));
 		
 	}
 
