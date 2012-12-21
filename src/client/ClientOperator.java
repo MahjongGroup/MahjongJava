@@ -399,6 +399,9 @@ public class ClientOperator implements Client{
 	@Override
 	public void onKyokuResultReceived(KyokuResult result, int[] newScores,
 			int[] oldScores, List<Hai> uradoraList) {
+		try{
+			Thread.sleep(100);
+		}catch(InterruptedException e){}
 		page.movePage("result");
 		((ResultPage)page).setResult(result,newScores,oldScores,uradoraList);
 		//TODO ok?

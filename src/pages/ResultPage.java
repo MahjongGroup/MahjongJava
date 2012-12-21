@@ -38,11 +38,14 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	private int[] newScore;
 	private int[] oldScore;
 	private JPanel[] pointsPanel;
+	private int winnerCount;
+	private List<ResultPanel> resultPanels;
 	
 	{
 		newScore = new int[4];
 		oldScore = new int[4];
 		addMouseListener(this);
+		winnerCount = 0;
 	}
 	
 	
@@ -210,20 +213,32 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			updateUI();
 			return;
 		}
-		add(new ScorePanel(newScore, oldScore));
-		List<Player> winnerList = new ArrayList<Player>();
+		resultPanels = new ArrayList<ResultPanel>();
 		for(Player p:getFrame().getInfo().players){
 			if(result.isAgari(p)){
-				add(new ResultPanel(p, result.getAgariResult(p),result.getKyokuPlayer(p),result.getAgariHai(),uradoraList));
+				resultPanels.add(new ResultPanel(p, result.getAgariResult(p),result.getKyokuPlayer(p),result.getAgariHai(),uradoraList));
 			}
 		}
+		mouseClicked(null);
 		updateUI();
 	}
 	
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		getFrame().getOperator().requestNextKyoku();
+		if(winnerCount < resultPanels.size()){
+			removeAll();
+			add(resultPanels.get(winnerCount));
+			winnerCount++;
+			updateUI();
+		}else if(winnerCount == resultPanels.size()){
+			removeAll();
+			add(new ScorePanel(newScore, oldScore));
+			winnerCount++;
+			updateUI();
+		}else{
+			getFrame().getOperator().requestNextKyoku();			
+		}
 	}
 
 	@Override
