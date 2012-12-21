@@ -49,6 +49,10 @@ public class ClientInfo {
 	int currentTurn;
 	int kyokusu;
 	public Map<Kaze, Integer> kaze;
+	
+	{
+		scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
+	}
 
 	public void resetBeforeKyoku(){
 		sutehai = null;
@@ -69,7 +73,6 @@ public class ClientInfo {
 				.synchronizedMap(new HashMap<Integer, List<Mentu>>());
 		this.tehaiSizeMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
-		this.scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
 		this.tsumoHai = MajanHai.ITI_MAN;
 		this.selectedIndexes = new ArrayList<Integer>();
 		this.chiableIndexLists = new ArrayList<List<Integer>>();

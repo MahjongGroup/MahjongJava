@@ -360,7 +360,7 @@ public class ClientOperator implements Client{
 		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
 			tmpInfo.sekiMap.put(tmpInfo.players[i], (4 - index + i)%4);
-			tmpInfo.scoreMap.put((4 - index + i) % 4, score[i]);
+			tmpInfo.setScore((4 - index + i) % 4, score[i]);
 		}
 //		tmpInfo.setIndex(index);
 		frame.setInfo(tmpInfo);
