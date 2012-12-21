@@ -3,6 +3,7 @@ package ai;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import system.Functions;
 import system.Hai;
@@ -19,9 +20,11 @@ import system.TehaiList;
  */
 public class AIType02 extends AbstractAI {
 	
+	private Set<HaiType> extendedValidHaiSet;
 	
 	public AIType02(Player p) {
 		super(p);
+		extendedValidHaiSet = new TreeSet<HaiType>();
 	}
 
 	@Override
@@ -55,7 +58,21 @@ public class AIType02 extends AbstractAI {
 	@Override
 	public int discard() {
 		// TODO Auto-generated method stub
-		int index = DiscardEnum.INDEX_0_DISCARD.discard(kyoku, super.player);
+		Hai hai = kyoku.getCurrentTsumoHai();
+		TehaiList tlist = kyoku.getTehaiList(kyoku.getKazeOf(player));
+		
+		if(extendedValidHaiSet == null)
+			extendedValidHaiSet = AIMethods.getExtendedValidHaiTypeSet(tlist);
+		
+		if(!extendedValidHaiSet.contains(hai)){
+			return 13;
+		}else{
+			extendedValidHaiSet.addAll(AIMethods.getNearHaiTypeList(hai.type()));
+		}
+		int index = DiscardEnum.ISOLATED_HAI_DISCARD.discard(kyoku, super.player);
+		if(index != -1)
+			return index;
+		
 		
 		return index;
 	}

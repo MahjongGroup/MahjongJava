@@ -199,8 +199,11 @@ public class AgariMethods {
 	 * @param sutehaiList 捨てた牌のリスト.
 	 * @return フリテンの場合はtrue.
 	 */
-	public boolean isFuriten(List<Hai> machiList, List<Hai> sutehaiList) {
-		// TODO no implementation
+	public static boolean isFuriten(List<Hai> machiList, List<Hai> sutehaiList) {
+		for (Hai hai : machiList) {
+			if(sutehaiList.contains(hai))
+				return true;
+		}
 		return false;
 	}
 	
@@ -214,9 +217,13 @@ public class AgariMethods {
 	 * @param naki 鳴いている場合true. 
 	 * @return 待ち牌リスト.
 	 */
-	public List<Hai> getMachiHaiList(TehaiList list, boolean naki) {
-		// TODO no implementation
-		return null;
+	public static List<Hai> getMachiHaiList(TehaiList list, boolean naki) {
+		List<Hai> machiHaiList = new ArrayList<Hai>();
+		for (Hai hai : MajanHai.values()) {
+			if(isKeisikiAgari(list, naki, hai))
+				machiHaiList.add(hai);
+		}
+		return machiHaiList;
 	}
 
 	
