@@ -69,7 +69,6 @@ public class MahjongGame {
 					}else{
 						soten.add(karisoten*6 - karisoten%100 + 100);
 					}
-						
 				}else{
 					if((karisoten*4)%100 == 0){
 						soten.add(karisoten*4);

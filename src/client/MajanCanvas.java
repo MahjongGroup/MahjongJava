@@ -233,6 +233,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawJihu(0, PLAYER_BLOCK1_X + 270, PLAYER_BLOCK1_Y + 30, g2);
 		if(info.reachPosMap.get(0) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y - 30, null);
 		g2.rotate(-Math.PI);
@@ -240,6 +241,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawJihu(2, PLAYER_BLOCK1_X + 290, PLAYER_BLOCK1_Y + 60, g2);
 		if(info.reachPosMap.get(2) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y , null);
 
@@ -253,6 +255,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(100, -50);
 
 		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
+		drawJihu(1, PLAYER_BLOCK2_X + 300, PLAYER_BLOCK2_Y - 80, g2);
 		if(info.reachPosMap.get(1) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
@@ -267,6 +270,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(-100, 80);
 
 		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
+		drawJihu(3, PLAYER_BLOCK2_X + 260, PLAYER_BLOCK2_Y - 60, g2);
 		if(info.reachPosMap.get(3) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
@@ -324,6 +328,18 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 		gBody.drawImage(imgBuffer, 0, 0, this);
 
+	}
+	public void drawJihu(int player,int ix,int iy,Graphics2D g2){
+		Kaze tmp = null;
+		g2.setColor(Color.WHITE);
+		for(Kaze k:Kaze.values()){
+			if(getInfo().kaze.get(k) == player){
+				tmp = k;
+				break;
+			}
+		}
+		g2.drawString(tmp.notation(), ix, iy);
+		g2.setColor(Color.BLACK);
 	}
 
 	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){

@@ -214,7 +214,8 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	
-	public void setResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList){
+	public void setResult(KyokuResult result, int[] newScore, int[] oldScore,
+			List<Integer> changeScore, List<Hai> uradoraList) {
 		this.result = result;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.newScore = newScore;
@@ -235,7 +236,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 				}
 				resultPanels.add(new ResultPanel(p, result.getAgariResult(p),
 						result.getKyokuPlayer(p), result.getAgariHai(),
-						uradoraList, newScore[index] - oldScore[index]));
+						uradoraList, changeScore.get(index)));
 			}
 		}
 		mouseClicked(null);
