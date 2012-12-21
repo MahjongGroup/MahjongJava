@@ -78,10 +78,6 @@ public class MajanFrame extends JFrame{
 
 	public void setPage(String order,Image image){
 		setPage(order);
-		if(order.toLowerCase().compareTo("result") == 0){
-			((ResultPage)page).setImage(image);
-//			((ResultPage)page).
-		}
 		mainPanel.updateUI();
 	}
 	

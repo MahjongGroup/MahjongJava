@@ -1,6 +1,7 @@
 package pages;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -154,7 +155,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 				Dimension d = new Dimension(SCALED_HAI_WIDTH,SCALED_HAI_HEIGHT);
 				for(Hai h:tehai){
 					ClearLabel tmpClearLabel = new ClearLabel(h);
-					tmpClearLabel.setSize(SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT);
+					tmpClearLabel.setSize(d);
 					tmpClearLabel.setPreferredSize(d);
 					add(new ClearLabel(h));
 				}

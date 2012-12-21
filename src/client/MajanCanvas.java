@@ -958,7 +958,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void movePage(String order){
 		kill();
 		repaint();
-		getFrame().setPage(order,imgBuffer);
+		getFrame().setPage(order);
 	}
 	public void setFocus(){
 //		getFrame().setLocation(0, 0);
