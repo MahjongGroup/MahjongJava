@@ -389,8 +389,8 @@ public class Transporter implements Server {
 	}
 	
 	@Override
-	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList) {
-		client.onKyokuResultReceived(result,newScore,oldScore,uradoraList);
+	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Integer> soten,List<Hai> uradoraList) {
+		client.onKyokuResultReceived(result,newScore,oldScore,soten,uradoraList);
 	}
 
 	@Override

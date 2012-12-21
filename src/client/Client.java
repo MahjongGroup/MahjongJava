@@ -233,9 +233,10 @@ public interface Client {
 	 * @param result 局の結果．
 	 * @param newScores 新しいスコア
 	 * @param oldScores 前のスコア
+	 * @param soten 役点数の素点のリスト
 	 * @param uradoraList 裏ドラのリスト
 	 */
-	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores, List<Hai> uradoraList);
+	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores,List<Integer> soten ,List<Hai> uradoraList);
 
 	
 	/**
