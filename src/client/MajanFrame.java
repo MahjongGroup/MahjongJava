@@ -64,6 +64,11 @@ public class MajanFrame extends JFrame{
 	}
 
 	
+	public void addScore(JPanel p){
+		mainPanel.add(p);
+		mainPanel.setComponentZOrder(p, 1);
+	}
+	
 	public void setPage(String order){
 		mainPanel.removeAll();
 		page = getPageFromString(order);

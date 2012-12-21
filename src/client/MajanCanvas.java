@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import pages.GraphicalPage;
 import pages.Page;
 import sun.awt.image.ToolkitImage;
@@ -154,17 +157,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		this.scaledDarkHaiBackImage = ImageLoader.loadScaled(ImageID.hai_darkback);
 		this.stateCodes = EnumSet.of(StateCode.WAIT);
 		this.reachImage = Toolkit.getDefaultToolkit().createImage("image/reach.png");
-//		this.operator = new ClientOperator(this);
 
 		// 結合テスト
-//		this.info = new ClientInfo(0);
-//		this.number = (objSize++)%4;
 		this.number = -1;
-//		info.sekiMap = new HashMap<Player, Integer>(4);
-		//TODO to be repair
-//		for (int i = 0; i < 4; i++) {
-//			info.sekiMap.put(info.players[(4 - number)%4], i);
-//		}
 		System.out.println("add operator");
 		
 		this.buttonList = new ArrayList<StateCode>();
@@ -382,8 +377,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		if(player % 2 != 1)
 			g2.drawString(tmp.notation(), ix - 30, iy);
 		else
-			g2.drawString(tmp.notation(), ix + 30, iy);
-		g2.drawString(info.scoreMap.get(player) + "", ix, iy);
+			g2.drawString(tmp.notation(), ix + 60, iy);
+		JPanel tmpPanel = new JPanel();
+		tmpPanel.add(new JLabel(getInfo().scoreMap.get(player) + ""));
+		getFrame().addScore(tmpPanel);
+		g2.drawString(getInfo().scoreMap.get(player) + "", ix, iy);
 		g2.setColor(Color.BLACK);
 	}
 
