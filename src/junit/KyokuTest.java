@@ -955,6 +955,8 @@ public class KyokuTest {
 		kyoku.setKyokuPlayer(Kaze.TON, kp1);
 		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
 		kyoku.doTsumo(ROKU_PIN);
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
 		kyoku.discard(13);
 		kyoku.nextTurn();
 		kyoku.doTsumo(GO_MAN);
