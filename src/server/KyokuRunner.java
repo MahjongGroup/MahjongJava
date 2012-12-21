@@ -513,7 +513,6 @@ public class KyokuRunner {
 				if (p.isMan()) {
 					Transporter tr = transporterMap.get(kaze);
 					boolean doRon = waitRon(tr);
-					System.out.println(doRon);
 					if (doRon) {
 						kyoku.doRon(kaze);
 						doRonPlayer.add(p);
@@ -534,6 +533,8 @@ public class KyokuRunner {
 							kyoku.doTotyuRyukyokuSanchaho();
 						}
 						kyoku.doSyukyoku();
+					}else{
+						kyoku.onRonRejected(kaze);
 					}
 				} else {
 					// AI
@@ -557,6 +558,8 @@ public class KyokuRunner {
 							kyoku.doTotyuRyukyokuSanchaho();
 						}
 						kyoku.doSyukyoku();
+					}else{
+						kyoku.onRonRejected(kaze);
 					}
 				}
 			}

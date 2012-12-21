@@ -371,7 +371,7 @@ public class Kyoku {
 		}
 
 		Set<Yaku> yaku = this.getYakuSetByFlag(kaze, false);
-		return isAgari(true, this.currentSutehai, kaze, yaku);
+		return isAgari(false, this.currentSutehai, kaze, yaku);
 	}
 
 	/**
@@ -393,6 +393,9 @@ public class Kyoku {
 		this.krbuilder.put(playerMap.get(kaze), ar);
 	}
 
+	public void onRonRejected(Kaze kaze){
+		kyokuPlayerMap.get(kaze).setTatyaFuritenFlag(true);
+	}
 	/**
 	 * 指定された風の人がリーチしている場合はtrueを返す.
 	 * 
@@ -531,6 +534,7 @@ public class Kyoku {
 
 		this.naku();
 		this.currentTurn = kaze;
+		kyokuPlayerMap.get(currentTurn).setTatyaFuritenFlag(false);
 		this.atomekuriKanFlag = true;
 		return m;
 	}
@@ -579,6 +583,7 @@ public class Kyoku {
 
 		this.naku();
 		this.currentTurn = kaze;
+		kyokuPlayerMap.get(currentTurn).setTatyaFuritenFlag(false);
 		return m;
 	}
 
@@ -624,6 +629,7 @@ public class Kyoku {
 
 		this.naku();
 		this.currentTurn = next;
+		kyokuPlayerMap.get(currentTurn).setTatyaFuritenFlag(false);
 		return m;
 	}
 
@@ -651,20 +657,21 @@ public class Kyoku {
 		kyokuPlayerMap.get(currentTurn).addSutehai(new Sutehai(currentSutehai));
 		this.currentSutehai = null;
 		this.currentTurn = this.currentTurn.simo();
+		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
+		if(!kp.isReach()){
+			kp.setTatyaFuritenFlag(false);
+		}
 	}
 
 	/**
-	 * 指定された風の人が指定された牌タイプでフリテンになっている場合trueを返す.
+	 * 指定された風の人がフリテンになっている場合trueを返す.
 	 * このメソッドは同順フリテンも判定する.
 	 * 
 	 * @param kaze 風.
-	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
-	public boolean isFuriten(Kaze kaze, HaiType type) {
-		// TODO no impelementation
-//		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
-		return false;
+	public boolean isFuriten(Kaze kaze) {
+		return kyokuPlayerMap.get(kaze).isFuriten();
 	}
 
 	/**
@@ -1123,7 +1130,7 @@ public class Kyoku {
 	 */
 	private boolean isAgari(boolean tumo, Hai agariHai, Kaze kaze, Set<Yaku> flagCheckYakuSet) {
 		Param param = new Param();
-		if (isFuriten(kaze, agariHai.type())) {
+		if (isFuriten(kaze) && !tumo) {
 			return false;
 		}
 
