@@ -450,16 +450,10 @@ public class KyokuPlayer {
 	/**
 	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
 	 * 
-	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
-	public boolean isFuriten(Kaze kaze, HaiType type) {
-		for (Hai hai : sutehaiList) {
-			if (hai.type() == type) {
-				return true;
-			}
-		}
-		return false;
+	public boolean isFuriten() {
+		return AgariMethods.isFuriten(getMachihaiList(), sutehaiList);
 	}
 	
 	/**
@@ -471,8 +465,7 @@ public class KyokuPlayer {
 	 * @return 待ち牌リスト.
 	 */
 	public List<Hai> getMachihaiList() {
-		// TODO no implementation
-		return null;
+		return AgariMethods.getMachiHaiList(tehaiList, nakiFlag);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package test;
 
 import ai.AIMethods;
+import system.AgariMethods;
 import system.Hai;
 import system.HaiType;
 import system.MajanHai;
@@ -21,12 +22,13 @@ public class AITest {
 		tlist.add(MajanHai.ITI_MAN);
 		tlist.add(MajanHai.ITI_MAN);
 		tlist.add(MajanHai.KYU_MAN);
-		tlist.add(MajanHai.ITI_MAN);
+	//	tlist.add(MajanHai.ITI_MAN);
 		//ツモ牌
 		tlist.add(MajanHai.KYU_MAN);
 		
 		System.out.println(tlist.toString());
 		System.out.println(AIMethods.getInvalidHaiList(tlist));
 		System.out.println(AIMethods.getExtendedValidHaiTypeSet(tlist));
+		System.out.println(AgariMethods.getMachiHaiList(tlist, false));
 	}
 }

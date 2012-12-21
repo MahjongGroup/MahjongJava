@@ -199,7 +199,7 @@ public class AgariMethods {
 	 * @param sutehaiList 捨てた牌のリスト.
 	 * @return フリテンの場合はtrue.
 	 */
-	public static boolean isFuriten(List<Hai> machiList, List<Hai> sutehaiList) {
+	public static boolean isFuriten(List<Hai> machiList, SutehaiList sutehaiList) {
 		for (Hai hai : machiList) {
 			if(sutehaiList.contains(hai))
 				return true;
