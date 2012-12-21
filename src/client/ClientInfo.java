@@ -11,7 +11,6 @@ import system.Kaze;
 import system.MajanHai;
 import system.Mentu;
 import system.Player;
-import system.Sutehai;
 
 public class ClientInfo {
 	List<Hai> tehai;
@@ -35,6 +34,7 @@ public class ClientInfo {
 	Hai sutehai;
 	int tsumiBou;
 	public Player[] players;
+	int[] scores;
 
 	public List<Hai> doraList;
 	int honba;
@@ -51,6 +51,18 @@ public class ClientInfo {
 	Map<Kaze, Integer> kaze;
 
 	public void resetBeforeKyoku(){
+		sutehai = null;
+		tsumiBou = 0;
+		doraList = new ArrayList<Hai>();
+		honba = 0;
+		bakaze = null;
+		finish = 0;
+		yamaSize = 0;
+		wanpaiSize = 0;
+		tsumoHai = null;
+		currentTurn = 0;
+		kyokusu = 0;
+		this.scores = new int[4];
 		this.tehai = Collections.synchronizedList(new ArrayList<Hai>());
 		this.sutehaiMap = Collections
 				.synchronizedMap(new HashMap<Integer, List<Hai>>());
@@ -59,8 +71,6 @@ public class ClientInfo {
 		this.tehaiSizeMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 		this.scoreMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
-		this.nameMap = Collections.synchronizedMap(new HashMap<Integer, String>());
-		this.IDMap = Collections.synchronizedMap(new HashMap<Integer, Integer>());
 		this.tsumoHai = MajanHai.ITI_MAN;
 		this.selectedIndexes = new ArrayList<Integer>();
 		this.chiableIndexLists = new ArrayList<List<Integer>>();
@@ -73,7 +83,6 @@ public class ClientInfo {
 		//yama:反時計周りに描画
 		//dora:時計周りに描画
 		
-		System.out.println("reset Reach");
 		reachPosMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 

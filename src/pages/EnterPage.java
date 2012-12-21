@@ -32,6 +32,9 @@ public class EnterPage extends InputPage implements Page{
 				repaint();
 				try{
 					sleep(10);
+					//TODO to be removed for four players
+					if(EnterPage.this.getFrame() != null)
+						movePage("wait");
 				}catch(InterruptedException e){}
 			}
 		}
@@ -127,9 +130,8 @@ public class EnterPage extends InputPage implements Page{
 		operator = new ClientOperator(tr);
 		((ClientOperator)operator).setFrame(frame);
 		((Transporter)tr).setClient(operator);
-		setOperator(operator);
 		if(operator != null)
-			((ClientOperator)getOperator()).setPage(this);
+			((ClientOperator)getFrame().getOperator()).setPage(this);
 	}
 	@Override
 	public String getPageName() {

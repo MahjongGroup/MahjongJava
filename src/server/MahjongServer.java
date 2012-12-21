@@ -21,6 +21,7 @@ public class MahjongServer {
 	// DEBUG
 	public static void main(String[] args) {
 		List<Player> plist = new ArrayList<Player>(4);
+		
 		plist.add(new Player(10, "imatom", true));
 		plist.add(new Player(21, "moseshi", false));
 		plist.add(new Player(34, "fillshion", false));
@@ -48,6 +49,7 @@ public class MahjongServer {
 					public void run() {
 						MajanFrame frame = new MajanFrame();
 						frame.setServer(tr);
+						frame.setPage("start");
 					}
 				}).setTransporter(tr).run();
 			}else{

@@ -10,7 +10,6 @@ import client.ClientOperator;
 import client.MajanFrame;
 
 public class WaitPage extends GraphicalPage implements Page{
-	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
 	private int count;
@@ -35,7 +34,8 @@ public class WaitPage extends GraphicalPage implements Page{
 	}
 		
 	public WaitPage(MajanFrame frame){
-		this.frame = frame;
+		setFrame(frame);
+		getFrame().getOperator().requestGame(0);
 	}
 	public WaitPage(MajanFrame frame,Client operator){
 		this(frame);
@@ -50,7 +50,7 @@ public class WaitPage extends GraphicalPage implements Page{
 	
 	public void moveGame(){
 		kill();
-		frame.setPage("game");
+		getFrame().setPage("game");
 	}
 	
 	public void paint(Graphics g){
@@ -94,6 +94,6 @@ public class WaitPage extends GraphicalPage implements Page{
 	}
 	@Override
 	public void movePage(String order) {
-		frame.setPage(order);
+		getFrame().setPage(order);
 	}
 }

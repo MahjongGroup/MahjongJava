@@ -45,12 +45,6 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		addMouseListener(this);
 	}
 	
-	public ResultPage(MajanFrame frame,Client operator){
-		this(frame);
-		setOperator(operator);
-		if(operator != null)
-			((ClientOperator)getOperator()).setPage(this);
-	}
 	
 	public ResultPage(MajanFrame frame){
 		setFrame(frame);
@@ -110,7 +104,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			GridBagLayout gbl = new GridBagLayout();
 			Player[] players = getFrame().getInfo().players;
 			for(int i = 0;i < players.length;i++){
-				ClearLabel name = new ClearLabel(players[i].getName());
+				ClearLabel name = null;
+				if(players[i] == null)
+					name = new ClearLabel("");
+				else
+					name = new ClearLabel(players[i].getName());
 				ClearLabel newPlayerScore = new ClearLabel(newScore[i] + "");
 				ClearLabel flow = new ClearLabel("->");
 				ClearLabel oldPlayerScore = new ClearLabel(oldScore[i] + "");
@@ -225,7 +223,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		getOperator().requestNextKyoku();
+		getFrame().getOperator().requestNextKyoku();
 	}
 
 	@Override

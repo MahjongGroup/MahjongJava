@@ -73,7 +73,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 		int x = (getWidth() - BUTTON_WIDTH)/2;
 		int y = (getHeight() - BUTTON_HEIGHT)/2;
 		for(State st:State.values()){
-			System.out.println(mx + ":" + my + ":" + x + ":" + y);
+//			System.out.println(mx + ":" + my + ":" + x + ":" + y);
 			if(mx >= x
 					&& mx <= x + BUTTON_WIDTH * 2
 					&& my <= y + BUTTON_HEIGHT * 2
@@ -89,7 +89,10 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	
 	private void dispatch(State st){
 		isFinish = true;
-		getFrame().setPage(st.name());
+		if(st == State.ENTER)
+			getFrame().setPage("WAIT");
+		else
+			getFrame().setPage(st.name());
 //		switch(st){
 //		case CONFIG:
 //			frame.setPage("Config");

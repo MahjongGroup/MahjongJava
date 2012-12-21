@@ -47,7 +47,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	 */
 	private static final long serialVersionUID = 1L;
 	private ClientInfo info;
-	private boolean existTsumo;
 	private GameThread gthread;
 	private OperatorThread opthread;
 	private EnumSet<StateCode> stateCodes;
@@ -75,7 +74,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	 */
 
 	{
-		existTsumo = true;
 		isAlive = true;
 	}
 
@@ -129,6 +127,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	public MajanCanvas(MajanFrame frame) {
 		setFrame(frame);
+		operator = getFrame().getOperator();
 		this.info = frame.getInfo();
 		info.resetBeforeKyoku();
 		this.haiImageMap = new HashMap<Hai, Image>();
@@ -172,6 +171,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 
 	public ClientInfo getInfo() {
+		if(info == null)
+			info = getFrame().getInfo();
 		return info;
 	}
 
@@ -865,9 +866,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		buttonList.add(sc);
 	}
 
-	public void setExistTsumo(boolean existTsumo) {
-		this.existTsumo = existTsumo;
-	}
 
 	private void drawFrameBasedOnRule(Graphics2D g2, int index, int x, int y,
 			List<List<Integer>> rule) {
