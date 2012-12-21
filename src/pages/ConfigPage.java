@@ -95,6 +95,7 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 			imgBuffer = createImage(getWidth(),getHeight());
 		if(g2 == null)
 			g2 = imgBuffer.getGraphics();
+		super.paint(g2);
 		g2.clearRect(0, 0, getWidth(), getHeight());
 		int x = getWidth() * 2 / 5;
 		int y = getHeight()/5;

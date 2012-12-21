@@ -52,6 +52,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 			imgBuffer = createImage(getWidth(),getHeight());
 		if(g2 == null)
 			g2 = imgBuffer.getGraphics();
+		super.paint(g2);
 		int x = (getWidth() - BUTTON_WIDTH) / 2;
 		int y = (getHeight() - BUTTON_HEIGHT) / 2;
 		for (State st : State.values()) {
