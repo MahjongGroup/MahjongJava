@@ -200,7 +200,10 @@ public class AgariMethods {
 	 * @return フリテンの場合はtrue.
 	 */
 	public boolean isFuriten(List<Hai> machiList, List<Hai> sutehaiList) {
-		// TODO no implementation
+		for (Hai hai : machiList) {
+			if(sutehaiList.contains(hai))
+				return true;
+		}
 		return false;
 	}
 	
@@ -215,8 +218,12 @@ public class AgariMethods {
 	 * @return 待ち牌リスト.
 	 */
 	public List<Hai> getMachiHaiList(TehaiList list, boolean naki) {
-		// TODO no implementation
-		return null;
+		List<Hai> machiHaiList = new ArrayList<Hai>();
+		for (Hai hai : MajanHai.values()) {
+			if(isKeisikiAgari(list, naki, hai))
+				machiHaiList.add(hai);
+		}
+		return machiHaiList;
 	}
 
 	

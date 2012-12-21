@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import system.Functions;
 import system.Hai;
 import system.HaiType;
+import system.Kaze;
 import system.Kyoku;
 import system.MajanHai;
 import system.SuType;
@@ -61,19 +62,28 @@ public class AIMethods {
 
 	/**
 	 * 与えられたコレクションの中から最も有効でない牌を返す。
+	 * ここでは、オタ風＜役牌＜数牌　とする。
+	 * 数牌の優先順位は数が5に近いほど高くなる。
 	 * 
 	 * @param 牌のコレクション（主に孤立牌リスト）
 	 * @return　最も有効でない牌
 	 */
-	public static Hai getHuyouHai(Collection<? extends Hai> c) {
-
+	public static Hai getHuyouHai(Collection<? extends Hai> c,Kaze bakaze,Kaze jikaze) {
+		// TODO interrupted
 		Hai tempHai = null;
+		int number = -1;
 		for (Hai hai : c) {
-			if (hai.isSuhai() && hai.isYaotyuhai())
-				return hai;
+			if(hai.isTsuhai() && !hai.isSangenhai()){
+				
+			}
 			if (tempHai == null) {
 				tempHai = hai;
 				continue;
+			}
+			if(hai.isTsuhai()){
+				
+			}else{
+				
 			}
 		}
 		return tempHai;
