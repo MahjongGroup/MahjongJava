@@ -60,9 +60,11 @@ public class MahjongGame {
 			KyokuResult kr = kyoku.createKyokuResult();
 			List<Integer> soten = new ArrayList<Integer>();
 			for(Player p :playerList){
-				AgariResult ar = kr.getAgariResult(p);
-				int karisoten = ar.getBaseScore();
-				
+				int karisoten = 0;
+				if(kr.isAgari(p)){
+					AgariResult ar = kr.getAgariResult(p);
+					karisoten = ar.getBaseScore();
+				}
 				if(playerList.indexOf(p) == 0){
 					if((karisoten*6)%100 == 0){
 						soten.add(karisoten*6);
