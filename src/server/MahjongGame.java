@@ -63,22 +63,13 @@ public class MahjongGame {
 				int karisoten = 0;
 				if(kr.isAgari(p)){
 					AgariResult ar = kr.getAgariResult(p);
-					karisoten = ar.getBaseScore();
-				}
-				if(playerList.indexOf(p) == 0){
-					if((karisoten*6)%100 == 0){
-						soten.add(karisoten*6);
+					if(playerList.indexOf(p)==0){
+						karisoten = ar.getParentScore();
 					}else{
-						soten.add(karisoten*6 - karisoten%100 + 100);
-					}
-				}else{
-					if((karisoten*4)%100 == 0){
-						soten.add(karisoten*4);
-					}else{
-						soten.add(karisoten*4 - karisoten%100 + 100);
+						karisoten = ar.getChildScore();
 					}
 				}
-				
+				soten.add(karisoten);
 			}
 			
 			
