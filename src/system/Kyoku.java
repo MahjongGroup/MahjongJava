@@ -227,7 +227,7 @@ public class Kyoku {
 		Kaze kaze = currentTurn;
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(true, currentTumohai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealOpenDoraList(), getRealUraDoraList());
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, null, getRealOpenDoraList(), getRealUraDoraList());
 		Player agarip = playerMap.get(currentTurn);
 		Player oya = playerMap.get(TON);
 
@@ -384,7 +384,7 @@ public class Kyoku {
 
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
 		Param param = newCheckerParam(false, currentSutehai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, getRealOpenDoraList(), getRealUraDoraList());
+		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, currentTurn, getRealOpenDoraList(), getRealUraDoraList());
 
 		if (this.krbuilder == null) {
 			this.krbuilder = new KyokuRonAgariResult.Builder();
@@ -654,14 +654,17 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
+	 * 指定された風の人が指定された牌タイプでフリテンになっている場合trueを返す.
+	 * このメソッドは同順フリテンも判定する.
 	 * 
 	 * @param kaze 風.
 	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
 	public boolean isFuriten(Kaze kaze, HaiType type) {
-		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
+		// TODO no impelementation
+//		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
+		return false;
 	}
 
 	/**

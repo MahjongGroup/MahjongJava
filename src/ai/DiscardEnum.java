@@ -4,7 +4,9 @@ import java.util.List;
 
 import system.Hai;
 import system.HaiType;
+import system.Kaze;
 import system.Kyoku;
+import system.MajanHai;
 import system.Player;
 import system.TehaiList;
 
@@ -27,11 +29,15 @@ public enum DiscardEnum implements DiscardStrategy {
 	ISOLATED_HAI_DISCARD(){
 		@Override
 		public int discard(Kyoku kyoku,Player player) {
-			TehaiList tlist = kyoku.getTehaiList(kyoku.getKazeOf(player));
+			Kaze jikaze = kyoku.getKazeOf(player);
+			TehaiList tlist = kyoku.getTehaiList(jikaze);
 			List<Hai> haiList = AIMethods.getInvalidHaiList(tlist);
-			AIMethods.getHuyouHai(haiList);
-			
+			Hai hai = AIMethods.getHuyouHai(haiList,kyoku.getBakaze(),jikaze);
 			int index = -1;
+			
+			if(hai != null)
+				index = tlist.indexOf(hai);
+			
 			return index;
 		}
 		

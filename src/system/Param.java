@@ -28,6 +28,28 @@ public class Param {
 	// 待ちの形
 	private MatiType matiType;
 
+	public Param() {
+	}
+	
+	/**
+	 * コピーコンストラクタ．
+	 * @param p the param to be copied
+	 */
+	public Param(Param p) {
+		this.tsumo = p.tsumo;
+		this.agariHai = p.agariHai;
+		this.naki = p.naki;
+		this.jikaze = p.jikaze;
+		if(p.flagCheckYakuSet != null)
+			this.flagCheckYakuSet = new HashSet<Yaku>(p.flagCheckYakuSet);
+		if(p.haiList != null)
+			this.haiList = new ArrayList<Hai>(p.haiList);
+		if(MentuList != null)
+			this.MentuList = new ArrayList<Mentu>(MentuList);
+		this.janto = p.janto;
+		this.matiType = p.matiType;
+	}
+	
 	public List<Hai> getHaiList() {
 		return new ArrayList<Hai>(haiList);
 	}

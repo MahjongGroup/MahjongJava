@@ -415,17 +415,17 @@ public class KyokuRunner {
 		} else {
 			// AIの処理
 			if (kyoku.isReach(kyoku.getCurrentTurn())) {
-				try {
-					Thread.sleep(1000);
+			//	try {
+					//Thread.sleep(1000);
 					kyoku.discardTsumoHai();
 					System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 					Console.wairEnter();
 
 					stateCode = STATE_CODE_RON;
 					return;
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			//	} catch (InterruptedException e) {
+				//	e.printStackTrace();
+				//}
 			}
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
 
