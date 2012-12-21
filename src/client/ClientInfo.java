@@ -48,7 +48,7 @@ public class ClientInfo {
 	Hai tsumoHai;
 	int currentTurn;
 	int kyokusu;
-	Map<Kaze, Integer> kaze;
+	public Map<Kaze, Integer> kaze;
 
 	public void resetBeforeKyoku(){
 		sutehai = null;

@@ -1,5 +1,6 @@
 package pages;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import system.AgariResult;
 import system.Hai;
+import system.Kaze;
 import system.KyokuPlayer;
 import system.KyokuResult;
 import system.MajanHai;
@@ -25,11 +27,12 @@ import system.Mentu;
 import system.Player;
 import system.ScoreType;
 import system.Yaku;
-import client.Client;
-import client.ClientOperator;
 import client.ImageLoader;
 import client.MajanFrame;
 import client.MajanHaiIDMapper;
+
+import static client.Constant.*;
+
 
 public class ResultPage extends InputPage implements Page,MouseListener{
 	private Image imgBuffer;
@@ -46,6 +49,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		oldScore = new int[4];
 		addMouseListener(this);
 		winnerCount = 0;
+		resultPanels = new ArrayList<ResultPanel>();
 	}
 	
 	
@@ -147,7 +151,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		private class TehaiPanel extends JPanel{
 			public TehaiPanel(List<Hai> tehai){
 				setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+				Dimension d = new Dimension(SCALED_HAI_WIDTH,SCALED_HAI_HEIGHT);
 				for(Hai h:tehai){
+					ClearLabel tmpClearLabel = new ClearLabel(h);
+					tmpClearLabel.setSize(SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT);
+					tmpClearLabel.setPreferredSize(d);
 					add(new ClearLabel(h));
 				}
 				setOpaque(false);
@@ -168,7 +176,8 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			}
 		}
 		
-		public ResultPanel(Player player,AgariResult result,KyokuPlayer kplayer,Hai agariHai,List<Hai> uradoraList){
+		public ResultPanel(Player player, AgariResult result,
+				KyokuPlayer kplayer, Hai agariHai, List<Hai> uradoraList,int getScore) {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			add(new ClearLabel(player.getName()));
 			List<Hai> tmpList = new ArrayList<Hai>(kplayer.getTehaiList());
@@ -197,6 +206,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 			if(result.getScoreType() != ScoreType.NORMAL){
 				add(new ClearLabel(result.getScoreType().notation()));
 			}
+			add(new ClearLabel(getScore + ""));
 			setOpaque(false);
 		}
 	}
@@ -216,7 +226,15 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		resultPanels = new ArrayList<ResultPanel>();
 		for(Player p:getFrame().getInfo().players){
 			if(result.isAgari(p)){
-				resultPanels.add(new ResultPanel(p, result.getAgariResult(p),result.getKyokuPlayer(p),result.getAgariHai(),uradoraList));
+				int index = -1;
+				for(Kaze k:Kaze.values()){
+					index = getFrame().getInfo().kaze.get(k);
+					if(getFrame().getInfo().players[index]==p)
+						break;
+				}
+				resultPanels.add(new ResultPanel(p, result.getAgariResult(p),
+						result.getKyokuPlayer(p), result.getAgariHai(),
+						uradoraList, newScore[index] - oldScore[index]));
 			}
 		}
 		mouseClicked(null);
