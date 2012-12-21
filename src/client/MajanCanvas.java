@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -56,6 +57,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private Image scaledHaiBackImage;
 	private Image scaledDarkHaiBackImage;
 	private Image reachImage;
+	private int animationCount;
+	private StateCode animeState;
+	private int nakiPlayer;
 	// system?
 	private Client operator;
 	private List<StateCode> buttonList;
@@ -75,6 +79,13 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	{
 		isAlive = true;
+		animationCount = -1;
+	}
+	
+	public void startAnimation(int player,StateCode sc){
+		nakiPlayer = player;
+		animationCount = 0;
+		animeState = sc;
 	}
 
 	private class OperatorThread extends Thread {
@@ -326,8 +337,38 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						+ BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
 			}
 		}
+		if(animationCount > -1){
+			int x = (getWidth() - BUTTON_WIDTH)/2;
+			int y = (getHeight() - BUTTON_HEIGHT)/2;
+			g2.setColor(Color.RED);
+			g2.fillOval(x, y, BUTTON_WIDTH * 3 / 2, BUTTON_HEIGHT * 3 / 2);
+			switch(nakiPlayer){
+			case -1:
+				break;
+			case 0:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 70,x + 40}, new int[] {y + 20,y + 200,y + 20}, 3));
+				break;
+			case 1:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 300,x + 100}, new int[] {y + 20,y + 40,y + 60}, 3));
+				break;
+			case 2:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 70,x + 40}, new int[] {y + 20,y - 200,y + 20}, 3));
+				break;
+			case 3:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x - 200,x + 100}, new int[] {y + 20,y + 40,y + 60}, 3));
+				break;
+			default:
+				break;
+			}
+			g2.setColor(Color.BLACK);
+			g2.drawString(animeState.getButtonName() + "!", x + BUTTON_WIDTH/2, y + BUTTON_HEIGHT/2);
+			if(animationCount > 100){
+				animationCount = -100;
+				stateCodes.remove(StateCode.DRAW_ANIME);
+			}
+			animationCount++;
+		}
 		gBody.drawImage(imgBuffer, 0, 0, this);
-
 	}
 	public void drawJihu(int player,int ix,int iy,Graphics2D g2){
 		Kaze tmp = null;
@@ -338,7 +379,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				break;
 			}
 		}
-		g2.drawString(tmp.notation(), ix, iy);
+		if(player % 2 != 1)
+			g2.drawString(tmp.notation(), ix - 30, iy);
+		else
+			g2.drawString(tmp.notation(), ix + 30, iy);
+		g2.drawString(info.scoreMap.get(player) + "", ix, iy);
 		g2.setColor(Color.BLACK);
 	}
 
@@ -762,7 +807,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int mx = e.getX();
 		int my = e.getY();
 		hideFocus();
-		if (stateCodes.contains(StateCode.WAIT)){
+		if (stateCodes.contains(StateCode.WAIT) || animationCount > -1){
 			return;
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {

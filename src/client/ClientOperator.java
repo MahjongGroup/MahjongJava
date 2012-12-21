@@ -14,6 +14,7 @@ import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
 import system.Mentu;
+import system.Mentu.Type;
 import system.Player;
 
 public class ClientOperator implements Client{
@@ -221,9 +222,8 @@ public class ClientOperator implements Client{
 		if(page == null || !isPageIsCanvas())
 			return;
 		MajanCanvas canvas = (MajanCanvas)page;
-		System.out.println("onReachReceived");
-		
 		ClientInfo info = canvas.getInfo();
+		canvas.startAnimation(info.kaze.get(currentTurn),StateCode.SELECT_REACH);
 		int currentIndex = info.kaze.get(currentTurn);
 		info.reachPosMap.put(currentIndex, sutehaiIndex + 1);
 	}
@@ -252,7 +252,24 @@ public class ClientOperator implements Client{
 		if(page == null || !isPageIsCanvas())
 			return;
 		MajanCanvas canvas = (MajanCanvas)page;
-		
+		int index;
+		for(index = 0;index < canvas.getInfo().players.length;index++){
+			if(canvas.getInfo().players[index] == player)
+				break;
+		}
+		switch (mentu.type()) {
+		case KANTU:
+			canvas.startAnimation(index,StateCode.SELECT_KAN);
+			break;
+		case SYUNTU:
+			canvas.startAnimation(index,StateCode.SELECT_CHI);
+			break;
+		case KOTU:
+			canvas.startAnimation(index,StateCode.SELECT_PON);
+			break;
+		default:
+			break;
+		}
 		canvas.refreshStateCodes();
 		canvas.refreshButtonList();
 	}
@@ -261,6 +278,10 @@ public class ClientOperator implements Client{
 		if(page == null || !isPageIsCanvas())
 			return;
 		MajanCanvas canvas = (MajanCanvas)page;
+		canvas.startAnimation(-1,StateCode.SELECT_RON);
+		try{
+			Thread.sleep(100);
+		}catch(InterruptedException e){}
 		page.movePage("result");
 	}
 
@@ -302,8 +323,13 @@ public class ClientOperator implements Client{
 
 	@Override
 	public void onTsumoAgariReceived() {
-		if(page == null)
+		if(page == null || !isPageIsCanvas())
 			return;
+		MajanCanvas canvas = (MajanCanvas)page;
+		canvas.startAnimation(-1,StateCode.SELECT_TSUMO);
+		try{
+			Thread.sleep(100);
+		}catch(InterruptedException e){}
 		page.movePage("result");
 	}
 	@Override
@@ -333,7 +359,8 @@ public class ClientOperator implements Client{
 		tmpInfo.players = players;
 		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
-			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], (4 - index + i)%4);
+			tmpInfo.sekiMap.put(tmpInfo.players[i], (4 - index + i)%4);
+			tmpInfo.scoreMap.put((4 - index + i) % 4, score[i]);
 		}
 //		tmpInfo.setIndex(index);
 		frame.setInfo(tmpInfo);

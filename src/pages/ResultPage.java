@@ -80,7 +80,6 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		}
 		public ClearLabel(){}
 		public ClearLabel(String str){
-			setLayout(new CardLayout());
 			JLabel tmp = new JLabel(str);
 			tmp.setOpaque(false);
 			tmp.setFont(new Font("sans-serif",Font.BOLD,25));

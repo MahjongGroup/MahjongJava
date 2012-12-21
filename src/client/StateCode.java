@@ -8,6 +8,7 @@ public enum StateCode {
 	SELECT_ANKAN(104,"暗槓"),
 	SELECT_MINKAN(105,"明槓"),
 	SELECT_KAKAN(106,"加槓"),
+	SELECT_KAN(1000,"槓"),
 	DISCARD_HAI(1,""),
 
 	
@@ -25,7 +26,8 @@ public enum StateCode {
 	SELECT_RON(109,"ロン"),
 	SELECT_TSUMO(110,"ツモ"),
 	SELECT_BUTTON(112,""),			//pon,kan,chi
-	END(200,"");
+	END(200,""),
+	DRAW_ANIME(300,"");
 	private int num;
 	private String name;
 	private StateCode(int num,String name){

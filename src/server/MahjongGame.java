@@ -78,7 +78,6 @@ public class MahjongGame {
 						soten.add(karisoten*4 - karisoten%100 + 100);
 					}
 				}
-				
 			}
 			
 			
