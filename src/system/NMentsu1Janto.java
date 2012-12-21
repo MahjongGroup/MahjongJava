@@ -1,6 +1,7 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +35,7 @@ public class NMentsu1Janto extends UnmodifiableList<Mentu>{
 	public static NMentsu1Janto newInstanceFromSyuntsu(List<? extends Hai> tlist) {
 		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(tlist);
 		TehaiList cptlist =  new TehaiList(tlist);
+		Collections.sort(cptlist, Hai.HaiComparator.ASCENDING_ORDER);
 
 		for (HaiType haiType : haiTypeSet) {
 			if (cptlist.sizeOf(haiType) >= 2) {
@@ -69,7 +71,8 @@ public class NMentsu1Janto extends UnmodifiableList<Mentu>{
 	public static NMentsu1Janto newInstanceFromKotsu(List<? extends Hai> tlist) {
 		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(tlist);
 		TehaiList cptlist =  new TehaiList(tlist);
-
+		Collections.sort(cptlist, Hai.HaiComparator.ASCENDING_ORDER);
+		
 		for (HaiType haiType : haiTypeSet) {
 			if (cptlist.sizeOf(haiType) >= 2) {
 				TehaiList tempList = new TehaiList(cptlist);
