@@ -450,8 +450,7 @@ public class KyokuPlayer {
 	/**
 	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
 	 * 
-	 * @param type
-	 *            牌タイプ.
+	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
 	public boolean isFuriten(Kaze kaze, HaiType type) {
@@ -461,6 +460,19 @@ public class KyokuPlayer {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * この局プレイヤーがテンパイしている場合、その待ち牌リストを返す.
+	 * テンパイしていない場合は空のリストを返す.
+	 * 
+	 * このメソッドから得られる待ち牌を合わせた手牌は役がない場合もある.
+	 * 
+	 * @return 待ち牌リスト.
+	 */
+	public List<Hai> getMachihaiList() {
+		// TODO no implementation
+		return null;
 	}
 
 	/**

@@ -654,14 +654,17 @@ public class Kyoku {
 	}
 
 	/**
-	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
+	 * 指定された風の人が指定された牌タイプでフリテンになっている場合trueを返す.
+	 * このメソッドは同順フリテンも判定する.
 	 * 
 	 * @param kaze 風.
 	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
 	public boolean isFuriten(Kaze kaze, HaiType type) {
-		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
+		// TODO no impelementation
+//		return kyokuPlayerMap.get(kaze).isFuriten(kaze, type);
+		return false;
 	}
 
 	/**

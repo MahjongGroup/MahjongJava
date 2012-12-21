@@ -160,6 +160,9 @@ public class AgariResult {
 	 * @param param チェッカーパラム
 	 * @param f フィールドインスタンス．
 	 * @param hoju 放銃したプレイヤーの風．
+	 * @param doraList 表ドラのリスト.
+	 * @param uradoraList 裏ドラリスト.
+	 * 
 	 * @return あがり結果。あがっていない場合はnull。
 	 */
 	public static AgariResult createAgariResult(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f, Kaze hoju, List<HaiType> doraList, List<HaiType> uraDoraList) {
@@ -337,6 +340,7 @@ public class AgariResult {
 		List<Hai> tehaiPlusAgariHai = new ArrayList<Hai>(tehaiList);
 		tehaiPlusAgariHai.add(chParam.getAgariHai());
 
+		// n面子1雀頭
 		PatternMethod.Value pvalue = PatternMethod.getValue(tehaiPlusAgariHai);
 		if (pvalue.isSuccessful()) {
 			if (pvalue.isIkkiTsukan()) {
