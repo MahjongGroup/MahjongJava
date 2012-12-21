@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import system.AgariResult;
 import system.Kyoku;
 import system.KyokuResult;
 import system.Mahjong;
@@ -57,8 +58,23 @@ public class MahjongGame {
 			
 			int newScores[] = mahjong.getScores();
 			KyokuResult kr = kyoku.createKyokuResult();
+			List<Integer> soten = new ArrayList<Integer>();
+			for(Player p :playerList){
+				int karisoten = 0;
+				if(kr.isAgari(p)){
+					AgariResult ar = kr.getAgariResult(p);
+					if(playerList.indexOf(p)==0){
+						karisoten = ar.getParentScore();
+					}else{
+						karisoten = ar.getChildScore();
+					}
+				}
+				soten.add(karisoten);
+			}
+			
+			
 			for(Server server:transMap.values()){
-				server.notifyKyokuResult(kr,newScores,oldScores,kyoku.getUraDoraList());
+				server.notifyKyokuResult(kr,newScores,oldScores,soten,kyoku.getUraDoraList());
 			}
 			waitKyokuResult();
 			

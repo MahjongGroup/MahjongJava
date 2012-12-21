@@ -232,11 +232,12 @@ public interface Server {
 	 * @param result 局の結果．
 	 * @param newScore 新しいスコア
 	 * @param oldScore 前のスコア
+	 * @param soten 役点数の素点
 	 * @param uradora 裏ドラリスト
 	 */
 
 
-	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Hai> uradoraList);
+	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Integer> soten,List<Hai> uradoraList);
 
 	
 	/**

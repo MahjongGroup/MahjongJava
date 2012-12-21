@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -56,6 +57,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	private Image scaledHaiBackImage;
 	private Image scaledDarkHaiBackImage;
 	private Image reachImage;
+	private int animationCount;
+	private StateCode animeState;
+	private int nakiPlayer;
 	// system?
 	private Client operator;
 	private List<StateCode> buttonList;
@@ -75,6 +79,13 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 	{
 		isAlive = true;
+		animationCount = -1;
+	}
+	
+	public void startAnimation(int player,StateCode sc){
+		nakiPlayer = player;
+		animationCount = 0;
+		animeState = sc;
 	}
 
 	private class OperatorThread extends Thread {
@@ -233,6 +244,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawJihu(0, PLAYER_BLOCK1_X + 270, PLAYER_BLOCK1_Y + 30, g2);
 		if(info.reachPosMap.get(0) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y - 30, null);
 		g2.rotate(-Math.PI);
@@ -240,6 +252,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
+		drawJihu(2, PLAYER_BLOCK1_X + 290, PLAYER_BLOCK1_Y + 60, g2);
 		if(info.reachPosMap.get(2) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y , null);
 
@@ -253,6 +266,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(100, -50);
 
 		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
+		drawJihu(1, PLAYER_BLOCK2_X + 300, PLAYER_BLOCK2_Y - 80, g2);
 		if(info.reachPosMap.get(1) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
@@ -267,6 +281,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(-100, 80);
 
 		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
+		drawJihu(3, PLAYER_BLOCK2_X + 260, PLAYER_BLOCK2_Y - 60, g2);
 		if(info.reachPosMap.get(3) != null)
 			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
 		
@@ -322,8 +337,54 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 						+ BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
 			}
 		}
+		if(animationCount > -1){
+			int x = (getWidth() - BUTTON_WIDTH)/2;
+			int y = (getHeight() - BUTTON_HEIGHT)/2;
+			g2.setColor(Color.RED);
+			g2.fillOval(x, y, BUTTON_WIDTH * 3 / 2, BUTTON_HEIGHT * 3 / 2);
+			switch(nakiPlayer){
+			case -1:
+				break;
+			case 0:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 70,x + 40}, new int[] {y + 20,y + 200,y + 20}, 3));
+				break;
+			case 1:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 300,x + 100}, new int[] {y + 20,y + 40,y + 60}, 3));
+				break;
+			case 2:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x + 70,x + 40}, new int[] {y + 20,y - 200,y + 20}, 3));
+				break;
+			case 3:
+				g2.fillPolygon(new Polygon(new int[] {x + 100, x - 200,x + 100}, new int[] {y + 20,y + 40,y + 60}, 3));
+				break;
+			default:
+				break;
+			}
+			g2.setColor(Color.BLACK);
+			g2.drawString(animeState.getButtonName() + "!", x + BUTTON_WIDTH/2, y + BUTTON_HEIGHT/2);
+			if(animationCount > 100){
+				animationCount = -100;
+				stateCodes.remove(StateCode.DRAW_ANIME);
+			}
+			animationCount++;
+		}
 		gBody.drawImage(imgBuffer, 0, 0, this);
-
+	}
+	public void drawJihu(int player,int ix,int iy,Graphics2D g2){
+		Kaze tmp = null;
+		g2.setColor(Color.WHITE);
+		for(Kaze k:Kaze.values()){
+			if(getInfo().kaze.get(k) == player){
+				tmp = k;
+				break;
+			}
+		}
+		if(player % 2 != 1)
+			g2.drawString(tmp.notation(), ix - 30, iy);
+		else
+			g2.drawString(tmp.notation(), ix + 30, iy);
+		g2.drawString(info.scoreMap.get(player) + "", ix, iy);
+		g2.setColor(Color.BLACK);
 	}
 
 	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
@@ -746,7 +807,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int mx = e.getX();
 		int my = e.getY();
 		hideFocus();
-		if (stateCodes.contains(StateCode.WAIT)){
+		if (stateCodes.contains(StateCode.WAIT) || animationCount > -1){
 			return;
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {

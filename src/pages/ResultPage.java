@@ -1,5 +1,6 @@
 package pages;
 
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -79,7 +80,6 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		}
 		public ClearLabel(){}
 		public ClearLabel(String str){
-//			setLayout(new CardLayout());
 			JLabel tmp = new JLabel(str);
 			tmp.setOpaque(false);
 			tmp.setFont(new Font("sans-serif",Font.BOLD,25));
@@ -213,14 +213,14 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	
-	public void setResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList){
+	public void setResult(KyokuResult result, int[] newScore, int[] oldScore,
+			List<Integer> changeScore, List<Hai> uradoraList) {
 		this.result = result;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.newScore = newScore;
 		this.oldScore = oldScore;
 		if(result.isRyukyoku() || result.isTotyuRyukyoku()){
 			add(new ClearLabel("流局"));
-			add(new ScorePanel(newScore, oldScore));
 			updateUI();
 			return;
 		}
@@ -235,7 +235,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 				}
 				resultPanels.add(new ResultPanel(p, result.getAgariResult(p),
 						result.getKyokuPlayer(p), result.getAgariHai(),
-						uradoraList, newScore[index] - oldScore[index]));
+						uradoraList, changeScore.get(index)));
 			}
 		}
 		mouseClicked(null);
