@@ -282,6 +282,9 @@ public class KyokuRunner {
 					Console.wairEnter();
 					stateCode = STATE_CODE_ENDOFKYOKU;
 					return;
+				}else{
+					stateCode = STATE_CODE_KAKAN;
+					return;
 				}
 			} else {
 				AI ai = aiMap.get(kyoku.getCurrentTurn());
