@@ -371,7 +371,7 @@ public class Kyoku {
 		}
 
 		Set<Yaku> yaku = this.getYakuSetByFlag(kaze, false);
-		return isAgari(true, this.currentSutehai, kaze, yaku);
+		return isAgari(false, this.currentSutehai, kaze, yaku);
 	}
 
 	/**
