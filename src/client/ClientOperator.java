@@ -313,6 +313,14 @@ public class ClientOperator implements Client{
 	}
 	@Override
 	public void onGameStartReceived(List<Player> playerList,int index,int[] score) {
+		Map<Kaze, Player> playerMap = new HashMap<Kaze, Player>(4);
+		for(int i = 0; i < playerList.size(); i++) {
+			playerMap.put(Kaze.valueOf(i), playerList.get(i));
+		}
+		
+		Kaze playerKaze = Kaze.valueOf(index);
+		
+		
 		// TODO insert score
 		Player[] players = new Player[playerList.size()];
 		for(int i = 0;i < playerList.size();i++)
@@ -325,9 +333,9 @@ public class ClientOperator implements Client{
 		tmpInfo.players = players;
 		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
-			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], i);
+			tmpInfo.sekiMap.put(tmpInfo.players[(4 - index + i)%4], (4 - index + i)%4);
 		}
-		tmpInfo.setIndex(index);
+//		tmpInfo.setIndex(index);
 		frame.setInfo(tmpInfo);
 		frame.setPage("game");
 	}

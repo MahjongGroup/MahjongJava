@@ -61,7 +61,6 @@ public class ClientInfo {
 		wanpaiSize = 0;
 		tsumoHai = null;
 		currentTurn = 0;
-		kyokusu = 0;
 		this.scores = new int[4];
 		this.tehai = Collections.synchronizedList(new ArrayList<Hai>());
 		this.sutehaiMap = Collections

@@ -31,7 +31,7 @@ public interface Client {
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
-	 * @param index 
+	 * @param index そのプレイヤーの上のリストにおけるインデックス
 	 * @param scores それぞれのプレイヤーの最初の持ち点の配列
 	 */
 	public void onGameStartReceived(List<Player> playerList, int index,int[] scores);

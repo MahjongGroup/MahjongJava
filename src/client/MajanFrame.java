@@ -30,7 +30,7 @@ public class MajanFrame extends JFrame{
 	
 	public ClientInfo getInfo(){
 		if(info == null){
-			info = new ClientInfo();			
+			info = new ClientInfo();
 		}
 		return info;
 	}

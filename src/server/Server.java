@@ -31,7 +31,7 @@ public interface Server {
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
-	 * @param index そのプレイヤーのインデックス
+	 * @param index そのプレイヤーの上のリストにおけるインデックス
 	 */
 	public void sendGameStart(List<Player> playerList,int index,int scores[]);
 	
