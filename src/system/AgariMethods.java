@@ -190,6 +190,34 @@ public class AgariMethods {
 
 		return false;
 	}
+	
+	/**
+	 * フリテンの場合はtrueを返す．つまり、自分の待ち牌が既に捨て牌にある場合はtrueを返す.
+	 * この関数は同順フリテンなどは考慮しない.
+	 * 
+	 * @param machiList 待っている牌のリスト.
+	 * @param sutehaiList 捨てた牌のリスト.
+	 * @return フリテンの場合はtrue.
+	 */
+	public boolean isFuriten(List<Hai> machiList, List<Hai> sutehaiList) {
+		// TODO no implementation
+		return false;
+	}
+	
+	/**
+	 * 指定された手牌がテンパイしている場合、その待ち牌リストを返す.
+	 * テンパイしていない場合は空のリストを返す.
+	 * 
+	 * この関数から得られる待ち牌を合わせた手牌は役がない場合もある.
+	 * 
+	 * @param list 手牌リスト.
+	 * @param naki 鳴いている場合true. 
+	 * @return 待ち牌リスト.
+	 */
+	public List<Hai> getMachiHaiList(TehaiList list, boolean naki) {
+		// TODO no implementation
+		return null;
+	}
 
 	
 	// TODO このメソッドはAgariResultが代わりに提供するように変更．
@@ -306,7 +334,7 @@ public class AgariMethods {
 	 * あがれる場合trueを返す。isAgariとの違いは役がなくてもtrueを返しうるということである。
 	 * 
 	 * @param tehaiList 手牌のリスト
-	 * @param naki 鳴き
+	 * @param naki 鳴いているかどうか
 	 * @param agariHai あがり牌
 	 * @return　あがれる場合true
 	 */

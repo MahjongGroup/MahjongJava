@@ -11,9 +11,7 @@ import system.algo.PatternMethod;
 import util.MyMath;
 
 /**
- * 役セットと点数などをもつクラス。
- * 
- * @author kohei
+ * ある一人のプレイヤーのあがったときの結果を表すクラス．役セットと点数などを持つ。
  */
 public class AgariResult {
 	private Set<Yaku> yakuSet;
@@ -28,7 +26,7 @@ public class AgariResult {
 	private Field field;
 	private Kaze hoju;
 
-	public AgariResult(Param param, Field f, Kaze hoju) {
+	private AgariResult(Param param, Field f, Kaze hoju) {
 		this.chParam = param;
 		this.field = f;
 		this.yakuman = false;
@@ -129,7 +127,9 @@ public class AgariResult {
 	}
 
 	/**
-	 * 面子の取り出しかたや、待ちの種類などが既に決まっている場合にこのメソッドを呼び出す．
+	 * 面子の取り出しかたや、待ちの種類(両面待ちなど)などが既に決まっている場合に
+	 * このメソッドを呼び出す．
+	 * 
 	 * @param p
 	 * @param f
 	 * @param doralist
@@ -158,6 +158,8 @@ public class AgariResult {
 	 * @param tehaiList 手牌リスト
 	 * @param hurohaiList 副露牌リスト
 	 * @param param チェッカーパラム
+	 * @param f フィールドインスタンス．
+	 * @param hoju 放銃したプレイヤーの風．
 	 * @return あがり結果。あがっていない場合はnull。
 	 */
 	public static AgariResult createAgariResult(TehaiList tehaiList, HurohaiList hurohaiList, Param param, Field f, Kaze hoju, List<HaiType> doraList, List<HaiType> uraDoraList) {
