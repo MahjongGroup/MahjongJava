@@ -611,7 +611,7 @@ public class KyokuTest {
 		kyoku.init();
 		kyoku.doTsumo();
 		kyoku.discard(0);
-		kyoku.isFuriten(Kaze.TON, HaiType.ITI_MAN);
+		kyoku.isFuriten(Kaze.TON);
 	}
 
 	@Test
@@ -951,7 +951,7 @@ public class KyokuTest {
 		assertEquals(list1.size() ,13);
 		kp1.setTehai(list1);
 		assertEquals(list2.size() ,13);
-		kp1.setTehai(list2);
+		kp2.setTehai(list2);
 		kyoku.setKyokuPlayer(Kaze.TON, kp1);
 		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
 		kyoku.doTsumo(ROKU_PIN);
@@ -963,9 +963,39 @@ public class KyokuTest {
 		kyoku.discard(13);
 		kyoku.doRon(Kaze.TON);
 		KyokuResult kr = kyoku.createKyokuResult();
-		System.out.println(kr.getAgariResult(p1));
+		//System.out.println(kr.getAgariResult(p1));
 	}
-
+	
+	@Test
+	public void yakuHanteiSananko(){
+		kyoku.init();
+		KyokuPlayer kp1 = new KyokuPlayer();
+		KyokuPlayer kp2 = new KyokuPlayer();
+		List<Hai> list1 = new ArrayList<Hai>(Arrays.asList(new Hai[] { SAN_MAN,SAN_MAN,SAN_MAN, GO_MAN, GO_MAN, ROKU_MAN, ROKU_MAN,  ITI_SOU, ITI_SOU, ITI_SOU, SAN_SOU, YO_SOU, GO_SOU}));
+		List<Hai> list2 = new ArrayList<Hai>(Arrays.asList(new Hai[]  { ITI_MAN,ITI_MAN,YO_MAN, YO_MAN, GO_MAN, ROKU_MAN, ROKU_MAN,  NI_SOU, SAN_SOU, SAN_SOU, YO_SOU, YO_SOU, GO_SOU}));
+//		kyoku.removeYamahai(list1);
+//		kyoku.removeWanpai(list1);
+//		kyoku.removeYamahai(list2);
+//		kyoku.removeWanpai(list2);
+		assertEquals(list1.size() ,13);
+		kp1.setTehai(list1);
+		assertEquals(list2.size() ,13);
+		kp2.setTehai(list2);
+		kyoku.setKyokuPlayer(Kaze.TON, kp1);
+		kyoku.setKyokuPlayer(Kaze.NAN, kp2);
+		kyoku.doTsumo(ROKU_PIN);
+		assertTrue(kyoku.isReachable());
+		kyoku.doReach();
+		kyoku.discard(13);
+		kyoku.nextTurn();
+		kyoku.doTsumo(GO_MAN);
+		kyoku.discard(13);
+		kyoku.doRon(Kaze.TON);
+		KyokuResult kr = kyoku.createKyokuResult();
+		//System.out.println(kr.getAgariResult(p1));
+	}
+	
+	@Test
 	public void yakuHanteiKantyan(){
 		kyoku.init();
 		KyokuPlayer kp1 = new KyokuPlayer();

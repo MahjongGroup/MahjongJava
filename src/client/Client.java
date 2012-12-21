@@ -244,4 +244,9 @@ public interface Client {
 	 */
 	public void requestNextKyoku();
 	
+	/**
+	 * ゲームが終了したことをサーバ側から受け取る
+	 */
+	public void onGameOverReceived();
+
 }
