@@ -132,5 +132,24 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	public String getPageName(){
 		return "Start";
 	}
+
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
+	}
 	
 }

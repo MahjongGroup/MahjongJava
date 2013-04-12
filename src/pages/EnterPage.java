@@ -18,6 +18,7 @@ import server.Server;
 import server.Transporter;
 import client.Client;
 import client.ClientOperator;
+import client.MahjongCanvas;
 import client.MahjongFrame;
 
 public class EnterPage extends InputPage implements Page{
@@ -137,6 +138,21 @@ public class EnterPage extends InputPage implements Page{
 	public String getPageName() {
 		// TODO Auto-generated method stub
 		return "Enter";
+	}
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		return MahjongCanvas.class.getName();
 	}
 	
 }

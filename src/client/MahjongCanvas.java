@@ -96,6 +96,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 			// TODO 通信
 			while (isAlive) {
 				try {
+					System.out.println(info.currentTurn);
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
 				}
@@ -800,14 +801,14 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		if (!(PLAYER_BLOCK1_Y + 270 <= my && my <= PLAYER_BLOCK1_Y + 270
 				+ HAI_HEIGHT))
 			return false;
-		StateCode sc = getSelectHaiFromSelect(buttonList.get(0));
+		StateCode sc = getSelectHaiFromSelectButton(buttonList.get(0));
 
 		// ここから試運用
 
 		List<StateCode> myTurnsActions = new ArrayList<StateCode>();
 		myTurnsActions.add(StateCode.SELECT_REACH);
-		myTurnsActions.add(StateCode.SELECT_ANKAN);
 		myTurnsActions.add(StateCode.SELECT_TSUMO);
+		myTurnsActions.add(StateCode.SELECT_KAKAN);
 
 		if (myTurnsActions.contains(sc))
 			return false;
@@ -863,7 +864,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	}
 
 	private StateCode getButton(int buttonIndex) {
-		return getSelectHaiFromSelect(buttonList.get(buttonIndex));
+		return getSelectHaiFromSelectButton(buttonList.get(buttonIndex));
 	}
 
 	public void choiseHai(java.awt.event.MouseEvent e) {
@@ -890,7 +891,12 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 				for (StateCode subSc : buttonList) {
 					dispatch(subSc);
 				}
-				refreshStateCodes();
+				if (stateCodes.contains(StateCode.DISCARD_SELECT)) {
+					refreshStateCodes();
+				} else {
+					refreshStateCodes();
+					stateCodes.add(StateCode.DISCARD_SELECT);
+				}
 				refreshNakiListExclude(null);
 				refreshButtonList();
 				scopeSkip = true;
@@ -999,17 +1005,8 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	}
 
 	public void refreshStateCodes() {
-		if (stateCodes.contains(StateCode.DISCARD_SELECT)) {
-			stateCodes.clear();
-			stateCodes.add(StateCode.DISCARD_SELECT);
-		} else {
-			// ここからが試運用でない部分
-
-			stateCodes.clear();
-			stateCodes.add(StateCode.WAIT);
-
-			// ここまでが試運用でない部分
-		}
+		stateCodes.clear();
+		stateCodes.add(StateCode.WAIT);
 	}
 
 	public void refreshButtonList() {
@@ -1073,7 +1070,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	 *            input
 	 * @return output
 	 */
-	public StateCode getSelectHaiFromSelect(StateCode sc) {
+	public StateCode getSelectHaiFromSelectButton(StateCode sc) {
 		switch (sc) {
 		case SELECT_CHI:
 			return StateCode.SELECT_CHI_HAI;
@@ -1157,5 +1154,24 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 			kaze.put(k, (kaze.get(k) + 1) % 4);
 		}
 		info.finish = (info.finish + kaze.get(Kaze.TON) * 17) % 68;
+	}
+
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return !isAlive;
+	}
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isAlive = false;
+	}
+
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
 	}
 }

@@ -19,6 +19,7 @@ public class WaitPage extends GraphicalPage implements Page{
 	private static int largeCircleRect;
 	private static double e;
 	private static Color selectedColor;
+	private boolean isFinish;
 	
 	
 	static{
@@ -95,5 +96,22 @@ public class WaitPage extends GraphicalPage implements Page{
 	@Override
 	public void movePage(String order) {
 		getFrame().setPage(order);
+	}
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+		
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
 	}
 }
