@@ -18,7 +18,7 @@ import client.MajanFrame;
  */
 public class MahjongServer {
 
-	// DEBUG もせもせもせし
+	// DEBUG
 	public static void main(String[] args) {
 		List<Player> plist = new ArrayList<Player>(4);
 		
