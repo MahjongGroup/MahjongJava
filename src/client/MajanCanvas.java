@@ -866,9 +866,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			StateCode sc = null;
+
 			// ここから試運用
 			boolean scopeSkip = false;
 			// ここまで試運用
+
 			int buttonIndex = -1;
 			if ((buttonIndex = isInButton(mx, my)) != -1) {
 				stateCodes.remove(StateCode.DISCARD_SELECT);
