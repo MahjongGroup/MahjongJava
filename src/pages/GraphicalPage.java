@@ -50,7 +50,7 @@ public abstract class GraphicalPage extends Canvas implements Page{
 			}
 		}
 	}
-	public void kill(){
+	public void finish(){
 		isFinish = true;
 	}
 	public void setPreferredSize(Dimension d){

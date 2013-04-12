@@ -50,7 +50,7 @@ public class WaitPage extends GraphicalPage implements Page{
 	}
 	
 	public void moveGame(){
-		kill();
+		finish();
 		getFrame().setPage("game");
 	}
 	

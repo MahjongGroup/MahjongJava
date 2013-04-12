@@ -69,7 +69,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	// graphics
 	private Image imgBuffer;
 	private Graphics gg;
-	private boolean isAlive;
+	private boolean isFinish;
 
 	// 結合テスト
 	private static int objSize = 0;
@@ -80,7 +80,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	 */
 
 	{
-		isAlive = true;
+		isFinish = false;
 		animationCount = -1;
 	}
 
@@ -94,9 +94,8 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		@Override
 		public void run() {
 			// TODO 通信
-			while (isAlive) {
+			while (!isFinish()) {
 				try {
-					System.out.println(info.currentTurn);
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
 				}
@@ -109,7 +108,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		public void run() {
 			long preTime = System.currentTimeMillis();
 
-			while (isAlive) {
+			while (!isFinish()) {
 				repaint();
 				try {
 					long dt = System.currentTimeMillis() - preTime;
@@ -127,6 +126,7 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	public MahjongCanvas(MahjongFrame frame, Client operator) {
 		this(frame);
 		this.operator = operator;
+		//TODO current
 		setOperator(operator);
 		if (operator != null)
 			((ClientOperator) operator).setPage(this);
@@ -1107,12 +1107,8 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		return imgBuffer;
 	}
 
-	public void kill() {
-		isAlive = false;
-	}
-
 	public void movePage(String order) {
-		kill();
+		finish();
 		repaint();
 		getFrame().setPage(order);
 	}
@@ -1159,13 +1155,13 @@ public class MahjongCanvas extends GraphicalPage implements MouseListener,
 	@Override
 	public boolean isFinish() {
 		// TODO Auto-generated method stub
-		return !isAlive;
+		return isFinish;
 	}
 
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
-		isAlive = false;
+		isFinish = true;
 	}
 
 	@Override
