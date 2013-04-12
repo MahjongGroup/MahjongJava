@@ -812,12 +812,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		myTurnsActions.add(StateCode.SELECT_ANKAN);
 		myTurnsActions.add(StateCode.SELECT_TSUMO);
 
-		if(myTurnsActions.contains(sc))
+		if (myTurnsActions.contains(sc))
 			return false;
-		
-		if(StateCode.SELECT_ANKAN == sc && isInTheHai(13, mx))
+
+		if (StateCode.SELECT_ANKAN == sc && isInTheHai(13, mx))
 			return false;
-		
+
 		// ここまで試運用
 
 		if (!getInfo().ableIndexList.containsKey(sc))
@@ -866,7 +866,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			StateCode sc = null;
+			// ここから試運用
+			boolean scopeSkip = false;
+			// ここまで試運用
 			if (isInButton(mx, my) != -1) {
+				stateCodes.remove(StateCode.DISCARD_SELECT);
 				sc = getSelectHaiFromSelect(buttonList.get(isInButton(mx, my)));
 			} else if (buttonList.size() == 1 && isInSelectableHai(mx, my)) {
 				sc = getSelectHaiFromSelect(buttonList.get(0));
@@ -877,39 +881,43 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 				refreshStateCodes();
 				refreshNakiListExclude(null);
 				refreshButtonList();
-				return;
+				scopeSkip = true;
 			}
-			refreshButtonList();
-			refreshStateCodes();
-			addStateCode(sc);
-			refreshNakiListExclude(sc);
-			switch (sc) {
-			case SELECT_RON:
-				operator.sendRon(true);
-				refreshStateCodes();
+			if (!scopeSkip) {
 				refreshButtonList();
-				return;
-			case KYUSYUKYUHAI:
-				operator.sendKyusyukyuhai(true);
 				refreshStateCodes();
-				refreshButtonList();
-				return;
-			case SELECT_TSUMO:
-				operator.sendTsumoAgari();
-				refreshStateCodes();
-				refreshButtonList();
-				return;
-			case SELECT_MINKAN:
-				operator.sendMinkan(true);
-				refreshStateCodes();
-				refreshButtonList();
-				refreshNakiListExclude(null);
-				return;
-			default:
-				break;
+				addStateCode(sc);
+				refreshNakiListExclude(sc);
+				switch (sc) {
+				case SELECT_RON:
+					operator.sendRon(true);
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case KYUSYUKYUHAI:
+					operator.sendKyusyukyuhai(true);
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case SELECT_TSUMO:
+					operator.sendTsumoAgari();
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case SELECT_MINKAN:
+					operator.sendMinkan(true);
+					refreshStateCodes();
+					refreshButtonList();
+					refreshNakiListExclude(null);
+					return;
+				default:
+					break;
+				}
 			}
 		}
 		for (StateCode sc : stateCodes) {
+			if (sc == StateCode.WAIT)
+				return;
 			if (info.ableIndexList.containsKey(sc)
 					&& info.ableIndexList.get(sc).size() == 1) {
 				info.selectedIndexes = info.ableIndexList.get(sc).get(0);
@@ -979,8 +987,17 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 	}
 
 	public void refreshStateCodes() {
-		stateCodes.clear();
-		stateCodes.add(StateCode.WAIT);
+		if (stateCodes.contains(StateCode.DISCARD_SELECT)) {
+			stateCodes.clear();
+			stateCodes.add(StateCode.DISCARD_SELECT);
+		} else {
+			// ここからが試運用でない部分
+
+			stateCodes.clear();
+			stateCodes.add(StateCode.WAIT);
+
+			// ここまでが試運用でない部分
+		}
 	}
 
 	public void refreshButtonList() {
