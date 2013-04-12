@@ -216,8 +216,10 @@ public class Transporter implements Server {
 	// クライアントが切った牌のインデックスを受け取る
 	@Override
 	public void onDiscardIndexReceived(int index) {
+		grandFlag = true;
 		discardedReceivedFlag = true;
 		discardedIndexResult = index;
+		
 	}
 	
 
