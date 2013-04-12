@@ -869,9 +869,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 			// ここから試運用
 			boolean scopeSkip = false;
 			// ここまで試運用
-			if (isInButton(mx, my) != -1) {
+			int buttonIndex = -1;
+			if ((buttonIndex = isInButton(mx, my)) != -1) {
 				stateCodes.remove(StateCode.DISCARD_SELECT);
-				sc = getSelectHaiFromSelect(buttonList.get(isInButton(mx, my)));
+				sc = getSelectHaiFromSelect(buttonList.get(buttonIndex));
 			} else if (buttonList.size() == 1 && isInSelectableHai(mx, my)) {
 				sc = getSelectHaiFromSelect(buttonList.get(0));
 			} else {
