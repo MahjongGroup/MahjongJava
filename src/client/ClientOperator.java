@@ -20,9 +20,9 @@ import system.Player;
 public class ClientOperator implements Client {
 	private Server tr;
 	private Page page;
-	private MajanFrame frame;
+	private MahjongFrame frame;
 
-	public void setFrame(MajanFrame frame) {
+	public void setFrame(MahjongFrame frame) {
 		this.frame = frame;
 	}
 

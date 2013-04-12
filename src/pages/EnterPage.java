@@ -18,7 +18,7 @@ import server.Server;
 import server.Transporter;
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class EnterPage extends InputPage implements Page{
 	private List<Information> informations;
@@ -122,10 +122,10 @@ public class EnterPage extends InputPage implements Page{
 		operator.requestGame(Integer.parseInt(informations.get(0).getContent()));
 		getFrame().setPage(order);
 	}
-	public EnterPage(MajanFrame frame){
+	public EnterPage(MahjongFrame frame){
 		setFrame(frame);
 	}
-	public EnterPage(MajanFrame frame,Server tr){
+	public EnterPage(MahjongFrame frame,Server tr){
 		this(frame);
 		operator = new ClientOperator(tr);
 		((ClientOperator)operator).setFrame(frame);

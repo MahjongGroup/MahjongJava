@@ -7,7 +7,7 @@ import java.awt.Image;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class WaitPage extends GraphicalPage implements Page{
 	private Image imgBuffer;
@@ -33,11 +33,11 @@ public class WaitPage extends GraphicalPage implements Page{
 		count = 0;
 	}
 		
-	public WaitPage(MajanFrame frame){
+	public WaitPage(MahjongFrame frame){
 		setFrame(frame);
 		getFrame().getOperator().requestGame(0);
 	}
-	public WaitPage(MajanFrame frame,Client operator){
+	public WaitPage(MahjongFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
 		if(operator != null)

@@ -123,13 +123,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		}
 	}
 
-	public MajanCanvas(MajanFrame frame, Client operator) {
+	public MajanCanvas(MahjongFrame frame, Client operator) {
 		this(frame);
-		System.out.println(operator == null);
 		this.operator = operator;
-		System.out.println(operator == null);
 		setOperator(operator);
-		System.out.println(operator == null);
 		if (operator != null)
 			((ClientOperator) operator).setPage(this);
 	}
@@ -139,7 +136,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		return "Canvas";
 	}
 
-	public MajanCanvas(MajanFrame frame) {
+	public MajanCanvas(MahjongFrame frame) {
 		setFrame(frame);
 		operator = getFrame().getOperator();
 		this.info = frame.getInfo();
@@ -857,14 +854,26 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		// choiseHai(e);
 	}
 
+	private boolean isWait() {
+		return stateCodes.contains(StateCode.WAIT);
+	}
+
+	private boolean isSelectTime() {
+		return stateCodes.contains(StateCode.SELECT_BUTTON);
+	}
+
+	private StateCode getButton(int buttonIndex) {
+		return getSelectHaiFromSelect(buttonList.get(buttonIndex));
+	}
+
 	public void choiseHai(java.awt.event.MouseEvent e) {
 		int mx = e.getX();
 		int my = e.getY();
 		hideFocus();
-		if (stateCodes.contains(StateCode.WAIT) || animationCount > -1) {
+		if (isWait() || animationCount > -1) {
 			return;
 		}
-		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
+		if (isSelectTime()) {
 			StateCode sc = null;
 
 			// ここから試運用
@@ -874,9 +883,9 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 			int buttonIndex = -1;
 			if ((buttonIndex = isInButton(mx, my)) != -1) {
 				stateCodes.remove(StateCode.DISCARD_SELECT);
-				sc = getSelectHaiFromSelect(buttonList.get(buttonIndex));
+				sc = getButton(buttonIndex);
 			} else if (buttonList.size() == 1 && isInSelectableHai(mx, my)) {
-				sc = getSelectHaiFromSelect(buttonList.get(0));
+				sc = getButton(0);
 			} else {
 				for (StateCode subSc : buttonList) {
 					dispatch(subSc);

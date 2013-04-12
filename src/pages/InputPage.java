@@ -13,13 +13,13 @@ import server.Transporter;
 import client.Client;
 import client.ClientOperator;
 import client.MajanCanvas;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public abstract class InputPage extends JPanel implements Page{
 	private JLabel back;
 	private Image image;
 	private boolean isFinish;
-	private MajanFrame frame;
+	private MahjongFrame frame;
 	private static Page page;
 	
 	{
@@ -47,7 +47,7 @@ public abstract class InputPage extends JPanel implements Page{
 		}
 	}
 
-	protected void setFrame(MajanFrame frame){
+	protected void setFrame(MahjongFrame frame){
 		this.frame = frame;
 	}
 	
@@ -72,7 +72,7 @@ public abstract class InputPage extends JPanel implements Page{
 	public void setPage(Page page){
 		((ClientOperator)getFrame().getOperator()).setPage(page);
 	}
-	protected MajanFrame getFrame(){
+	protected MahjongFrame getFrame(){
 		return frame;
 	}
 }

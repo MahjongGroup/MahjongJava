@@ -9,24 +9,24 @@ import javax.swing.ImageIcon;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public abstract class GraphicalPage extends Canvas implements Page{
 	private Image image;
 	private boolean isFinish;
 	private Client operator;
-	private MajanFrame frame;
+	private MahjongFrame frame;
 	{
 		image = new ImageIcon("image/background.jpg").getImage();
 		isFinish = false;
 		startThread();
 	}
 	
-	public void setFrame(MajanFrame frame){
+	public void setFrame(MahjongFrame frame){
 		this.frame = frame;
 	}
 	
-	public MajanFrame getFrame(){
+	public MahjongFrame getFrame(){
 		return frame;
 	}
 	

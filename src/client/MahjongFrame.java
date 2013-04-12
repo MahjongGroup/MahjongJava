@@ -17,7 +17,7 @@ import server.MahjongServer;
 import server.Server;
 import server.Transporter;
 
-public class MajanFrame extends JFrame{
+public class MahjongFrame extends JFrame{
 	private JPanel mainPanel;
 	private Client operator;
 	private Page page;
@@ -52,7 +52,7 @@ public class MajanFrame extends JFrame{
 //		MajanFrame frame = new MajanFrame();
 //		frame.setPage("start");
 	}
-	public MajanFrame() {
+	public MahjongFrame() {
 		this.setSize(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT);
 		mainPanel = new JPanel();
 		mainPanel.setPreferredSize(getSize());

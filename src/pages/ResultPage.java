@@ -30,7 +30,7 @@ import system.Player;
 import system.ScoreType;
 import system.Yaku;
 import client.ImageLoader;
-import client.MajanFrame;
+import client.MahjongFrame;
 import client.MajanHaiIDMapper;
 
 import static client.Constant.*;
@@ -53,7 +53,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	}
 	
 	
-	public ResultPage(MajanFrame frame){
+	public ResultPage(MahjongFrame frame){
 		setFrame(frame);
 	}
 	public void paint(Graphics g){

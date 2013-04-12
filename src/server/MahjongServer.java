@@ -10,7 +10,7 @@ import system.Rule;
 import test.ConsoleClient;
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 /**
  * 麻雀サーバーを表すクラス.
@@ -47,7 +47,7 @@ public class MahjongServer {
 					
 					@Override
 					public void run() {
-						MajanFrame frame = new MajanFrame();
+						MahjongFrame frame = new MahjongFrame();
 						frame.setServer(tr);
 						frame.setPage("start");
 					}

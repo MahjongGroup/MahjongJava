@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class StartPage extends GraphicalPage implements MouseListener{
 	private boolean isFinish;
@@ -35,14 +35,14 @@ public class StartPage extends GraphicalPage implements MouseListener{
 			}
 		}
 	}
-	public StartPage(MajanFrame frame,Client operator){
+	public StartPage(MahjongFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
 		if(operator != null)
 			((ClientOperator)getOperator()).setPage(this);
 	}
 	
-	public StartPage(MajanFrame frame){
+	public StartPage(MahjongFrame frame){
 		setFrame(frame);
 		addMouseListener(this);
 //		new PaintThread().start();
