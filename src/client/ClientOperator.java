@@ -280,7 +280,7 @@ public class ClientOperator implements Client{
 		MajanCanvas canvas = (MajanCanvas)page;
 		canvas.startAnimation(-1,StateCode.SELECT_RON);
 		try{
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		}catch(InterruptedException e){}
 		page.movePage("result");
 	}
@@ -328,7 +328,7 @@ public class ClientOperator implements Client{
 		MajanCanvas canvas = (MajanCanvas)page;
 		canvas.startAnimation(-1,StateCode.SELECT_TSUMO);
 		try{
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		}catch(InterruptedException e){}
 		page.movePage("result");
 	}
