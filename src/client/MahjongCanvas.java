@@ -44,7 +44,7 @@ import system.Mentu;
 import system.Mentu.MentuHai;
 import system.Player;
 
-public class MajanCanvas extends GraphicalPage implements MouseListener,
+public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		MouseMotionListener, Page {
 	/**
 	 * 
@@ -123,7 +123,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		}
 	}
 
-	public MajanCanvas(MahjongFrame frame, Client operator) {
+	public MahjongCanvas(MahjongFrame frame, Client operator) {
 		this(frame);
 		this.operator = operator;
 		setOperator(operator);
@@ -136,7 +136,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		return "Canvas";
 	}
 
-	public MajanCanvas(MahjongFrame frame) {
+	public MahjongCanvas(MahjongFrame frame) {
 		setFrame(frame);
 		operator = getFrame().getOperator();
 		this.info = frame.getInfo();

@@ -12,7 +12,7 @@ import server.Transporter;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanCanvas;
+import client.MahjongCanvas;
 import client.MahjongFrame;
 
 public abstract class InputPage extends JPanel implements Page{

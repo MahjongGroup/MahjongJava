@@ -98,7 +98,7 @@ public class MahjongFrame extends JFrame{
 		if(str.compareTo("wait") == 0)
 			return new WaitPage(this);
 		if(str.compareTo("game") == 0)
-			return new MajanCanvas(this);
+			return new MahjongCanvas(this);
 		if(str.compareTo("result") == 0)
 			return new ResultPage(this);
 		return null;
