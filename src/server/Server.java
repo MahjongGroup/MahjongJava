@@ -252,6 +252,9 @@ public interface Server {
 	 */
 	public void notifyGameResult(int[] Score);
 
-	
+	/** 
+	 *　ゲームが終わったことをクライアントに送信
+	 */
+	public void sendGameOver();
 	
 }

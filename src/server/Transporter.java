@@ -403,6 +403,9 @@ public class Transporter implements Server {
 		client.onGameResultReceived(score);
 	}
 	
+	public void sendGameOver(){
+		client.onGameOverReceived();
+	}
 //	@Override
 //	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 //			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,

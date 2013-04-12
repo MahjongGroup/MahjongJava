@@ -17,6 +17,7 @@ import system.TehaiList;
 import test.Console;
 import ai.AI;
 import ai.AIType01;
+import ai.AIType_Debug;
 
 /**
  * 1回の局を走らせるクラス.
@@ -41,7 +42,7 @@ public class KyokuRunner {
 		for (Player p : playerMap.values()) {
 			if (p.isMan())
 				continue;
-			AI ai = new AIType01(p);
+			AI ai = new AIType_Debug(p, false, true);
 			ai.update(kyoku);
 			this.aiMap.put(kyoku.getKazeOf(p), ai);
 		}
