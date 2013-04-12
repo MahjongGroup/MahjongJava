@@ -39,10 +39,8 @@ import static client.Constant.*;
 public class ResultPage extends InputPage implements Page,MouseListener{
 	private Image imgBuffer;
 	private Graphics g2;
-	private KyokuResult result;
 	private int[] newScore;
 	private int[] oldScore;
-	private JPanel[] pointsPanel;
 	private int winnerCount;
 	private List<ResultPanel> resultPanels;
 	
@@ -215,10 +213,13 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	
 	public void setResult(KyokuResult result, int[] newScore, int[] oldScore,
 			List<Integer> changeScore, List<Hai> uradoraList) {
-		this.result = result;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.newScore = newScore;
 		this.oldScore = oldScore;
+		for(int i = 0;i < 4;i++){
+			int index = getFrame().getInfo().kaze.get(Kaze.valueOf(i));
+			getFrame().getInfo().setScore(index, newScore[i]);
+		}
 		if(result.isRyukyoku() || result.isTotyuRyukyoku()){
 			add(new ClearLabel("流局"));
 			updateUI();

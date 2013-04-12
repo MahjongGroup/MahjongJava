@@ -380,8 +380,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			g2.drawString(tmp.notation(), ix + 60, iy);
 		JPanel tmpPanel = new JPanel();
 		tmpPanel.add(new JLabel(getInfo().scoreMap.get(player) + ""));
-		getFrame().addScore(tmpPanel);
-		g2.drawString(getInfo().scoreMap.get(player) + "", ix, iy);
+		g2.drawString(getInfo().scoreMap.get(player) + "スコアああああああ", ix, iy);
 		g2.setColor(Color.BLACK);
 	}
 

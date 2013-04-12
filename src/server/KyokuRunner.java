@@ -42,7 +42,7 @@ public class KyokuRunner {
 		for (Player p : playerMap.values()) {
 			if (p.isMan())
 				continue;
-			AI ai = new AIType_Debug(p, false, true);
+			AI ai = new AIType_Debug(p, false, false);
 			ai.update(kyoku);
 			this.aiMap.put(kyoku.getKazeOf(p), ai);
 		}
