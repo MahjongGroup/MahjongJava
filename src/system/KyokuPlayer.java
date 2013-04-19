@@ -19,6 +19,8 @@ public class KyokuPlayer {
 	private boolean reachFlag;
 	private boolean dreachFlag;
 	private boolean nakiFlag;
+	private boolean furitenFlag;
+	private boolean tatyaFuritenFlag;
 
 	private int kanSize;
 
@@ -27,7 +29,7 @@ public class KyokuPlayer {
 	// 値を参照する.
 	private boolean cachedTenpaiCheckFlag;
 	private boolean cachedTenpaiFlag;
-	
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -49,6 +51,7 @@ public class KyokuPlayer {
 		this.reachFlag = kp.isReach();
 		this.kanSize = kp.getKanSize();
 		this.nakiFlag = kp.isNaki();
+		this.furitenFlag = kp.isFuriten();
 	}
 
 	/**
@@ -62,9 +65,10 @@ public class KyokuPlayer {
 		this.reachFlag = false;
 		this.nakiFlag = false;
 		this.dreachFlag = false;
+		this.furitenFlag = false;
 
 		this.cachedTenpaiCheckFlag = false;
-		
+
 		this.kanSize = 0;
 	}
 
@@ -114,7 +118,7 @@ public class KyokuPlayer {
 				return true;
 			}
 		}
-		
+
 		if (tsumo != null && hurohaiList.isKakan(tsumo.type())) {
 			return true;
 		}
@@ -338,7 +342,8 @@ public class KyokuPlayer {
 		onStateChanged();
 		HaiType type = minkanhai.type();
 
-		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
+		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type),
+				tehaiList.remove(type), tehaiList.remove(type));
 		hurohaiList.add(m);
 		nakiFlag = true;
 		return m;
@@ -434,7 +439,8 @@ public class KyokuPlayer {
 		int index0 = tiList.get(0);
 		int index1 = tiList.get(1);
 
-		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0), tehaiList.get(index1));
+		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0),
+				tehaiList.get(index1));
 		if (index0 < index1) {
 			tehaiList.remove(index1);
 			tehaiList.remove(index0);
@@ -448,20 +454,23 @@ public class KyokuPlayer {
 	}
 
 	/**
-	 * 指定された風の人が指定された牌タイプがフリテンの場合trueを返す.
+	 * フリテンの場合trueを返す.
 	 * 
-	 * @param type 牌タイプ.
 	 * @return フリテンの場合true.
 	 */
-	public boolean isFuriten(Kaze kaze, HaiType type) {
-		for (Hai hai : sutehaiList) {
-			if (hai.type() == type) {
-				return true;
-			}
-		}
-		return false;
+	public boolean isFuriten() {
+		furitenFlag = AgariMethods.isFuriten(getMachihaiList(), sutehaiList);
+		return (furitenFlag || tatyaFuritenFlag);
 	}
-	
+
+	/**
+	 *　他家振聴フラグをセットする。
+	 * @param tf
+	 */
+	public void setTatyaFuritenFlag(boolean tf) {
+		this.tatyaFuritenFlag = tf;
+	}
+
 	/**
 	 * この局プレイヤーがテンパイしている場合、その待ち牌リストを返す.
 	 * テンパイしていない場合は空のリストを返す.
@@ -471,8 +480,7 @@ public class KyokuPlayer {
 	 * @return 待ち牌リスト.
 	 */
 	public List<Hai> getMachihaiList() {
-		// TODO no implementation
-		return null;
+		return AgariMethods.getMachiHaiList(tehaiList, nakiFlag);
 	}
 
 	/**
@@ -490,13 +498,13 @@ public class KyokuPlayer {
 	 * @return テンパイしている場合true.
 	 */
 	public boolean isTenpai() {
-		if(cachedTenpaiCheckFlag) {
+		if (cachedTenpaiCheckFlag) {
 			return cachedTenpaiFlag;
 		}
 		cachedTenpaiCheckFlag = true;
 		return cachedTenpaiFlag = AgariMethods.isTenpai(tehaiList, nakiFlag);
 	}
-	
+
 	/**
 	 * このプレイヤーの槓サイズを返す.
 	 * 
@@ -603,7 +611,7 @@ public class KyokuPlayer {
 	public HurohaiList getHurohaiList() {
 		return new HurohaiList(this.hurohaiList);
 	}
-	
+
 	/**
 	 * 内部状態が変化した場合はすべてのキャッシュフラグをfalseにする．
 	 */

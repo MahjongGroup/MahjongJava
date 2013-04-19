@@ -8,18 +8,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import server.Transporter;
+
 import client.Client;
 import client.ClientOperator;
-import client.MajanCanvas;
-import client.MajanFrame;
+import client.MahjongCanvas;
+import client.MahjongFrame;
 
 public abstract class InputPage extends JPanel implements Page{
 	private JLabel back;
 	private Image image;
 	private boolean isFinish;
-	private MajanFrame frame;
-	private Page page;
-	private Client operator;
+	private MahjongFrame frame;
+	private static Page page;
 	
 	{
 //		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -46,7 +47,7 @@ public abstract class InputPage extends JPanel implements Page{
 		}
 	}
 
-	protected void setFrame(MajanFrame frame){
+	protected void setFrame(MahjongFrame frame){
 		this.frame = frame;
 	}
 	
@@ -68,18 +69,10 @@ public abstract class InputPage extends JPanel implements Page{
 		this.image = image;
 		updateUI();
 	}
-	@Override
-	public Client getOperator() {
-		return operator;
-	}
 	public void setPage(Page page){
-		((ClientOperator)operator).setPage(page);
+		((ClientOperator)getFrame().getOperator()).setPage(page);
 	}
-	protected void setOperator(Client operator){
-		this.operator = operator;
-	}
-	
-	protected MajanFrame getFrame(){
+	protected MahjongFrame getFrame(){
 		return frame;
 	}
 }

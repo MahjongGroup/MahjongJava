@@ -10,7 +10,7 @@ import system.Rule;
 import test.ConsoleClient;
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 /**
  * 麻雀サーバーを表すクラス.
@@ -21,6 +21,7 @@ public class MahjongServer {
 	// DEBUG
 	public static void main(String[] args) {
 		List<Player> plist = new ArrayList<Player>(4);
+		
 		plist.add(new Player(10, "imatom", true));
 		plist.add(new Player(21, "moseshi", false));
 		plist.add(new Player(34, "fillshion", false));
@@ -46,8 +47,9 @@ public class MahjongServer {
 					
 					@Override
 					public void run() {
-						MajanFrame frame = new MajanFrame();
+						MahjongFrame frame = new MahjongFrame();
 						frame.setServer(tr);
+						frame.setPage("start");
 					}
 				}).setTransporter(tr).run();
 			}else{
@@ -71,20 +73,12 @@ public class MahjongServer {
 		try{
 			Thread.sleep(3000);
 		}catch(InterruptedException e){}
-
-//		int index = 0;
-//		for(Transporter tr:transMap.values()){
-//			tr.sendGameStart(plist,(index+5)%4);
-//			index++;
-//		}
-		
-		
-		
 		
 		Rule rule = new Rule();
 		
 		MahjongGame game = new MahjongGame(plist, rule, transMap);
 		game.run();
+		
 	}
 	public MahjongServer() {
 	}

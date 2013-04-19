@@ -216,8 +216,10 @@ public class Transporter implements Server {
 	// クライアントが切った牌のインデックスを受け取る
 	@Override
 	public void onDiscardIndexReceived(int index) {
+		grandFlag = true;
 		discardedReceivedFlag = true;
 		discardedIndexResult = index;
+		
 	}
 	
 
@@ -389,8 +391,8 @@ public class Transporter implements Server {
 	}
 	
 	@Override
-	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Hai> uradoraList) {
-		client.onKyokuResultReceived(result,newScore,oldScore,uradoraList);
+	public void notifyKyokuResult(KyokuResult result,int[] newScore,int[] oldScore,List<Integer> soten,List<Hai> uradoraList) {
+		client.onKyokuResultReceived(result,newScore,oldScore,soten,uradoraList);
 	}
 
 	@Override
@@ -403,6 +405,9 @@ public class Transporter implements Server {
 		client.onGameResultReceived(score);
 	}
 	
+	public void sendGameOver(){
+		client.onGameOverReceived();
+	}
 //	@Override
 //	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
 //			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,

@@ -31,7 +31,7 @@ public interface Client {
 	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
 	 * 
 	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
-	 * @param index 
+	 * @param index そのプレイヤーの上のリストにおけるインデックス
 	 * @param scores それぞれのプレイヤーの最初の持ち点の配列
 	 */
 	public void onGameStartReceived(List<Player> playerList, int index,int[] scores);
@@ -233,9 +233,10 @@ public interface Client {
 	 * @param result 局の結果．
 	 * @param newScores 新しいスコア
 	 * @param oldScores 前のスコア
+	 * @param soten 役点数の素点のリスト
 	 * @param uradoraList 裏ドラのリスト
 	 */
-	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores, List<Hai> uradoraList);
+	public void onKyokuResultReceived(KyokuResult result,int[] newScores,int[] oldScores,List<Integer> soten ,List<Hai> uradoraList);
 
 	
 	/**
@@ -243,4 +244,9 @@ public interface Client {
 	 */
 	public void requestNextKyoku();
 	
+	/**
+	 * ゲームが終了したことをサーバ側から受け取る
+	 */
+	public void onGameOverReceived();
+
 }

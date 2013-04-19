@@ -18,7 +18,8 @@ import server.Server;
 import server.Transporter;
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongCanvas;
+import client.MahjongFrame;
 
 public class EnterPage extends InputPage implements Page{
 	private List<Information> informations;
@@ -32,6 +33,9 @@ public class EnterPage extends InputPage implements Page{
 				repaint();
 				try{
 					sleep(10);
+					//TODO to be removed for four players
+					if(EnterPage.this.getFrame() != null)
+						movePage("wait");
 				}catch(InterruptedException e){}
 			}
 		}
@@ -119,22 +123,36 @@ public class EnterPage extends InputPage implements Page{
 		operator.requestGame(Integer.parseInt(informations.get(0).getContent()));
 		getFrame().setPage(order);
 	}
-	public EnterPage(MajanFrame frame){
+	public EnterPage(MahjongFrame frame){
 		setFrame(frame);
 	}
-	public EnterPage(MajanFrame frame,Server tr){
+	public EnterPage(MahjongFrame frame,Server tr){
 		this(frame);
 		operator = new ClientOperator(tr);
 		((ClientOperator)operator).setFrame(frame);
 		((Transporter)tr).setClient(operator);
-		setOperator(operator);
 		if(operator != null)
-			((ClientOperator)getOperator()).setPage(this);
+			((ClientOperator)getFrame().getOperator()).setPage(this);
 	}
 	@Override
 	public String getPageName() {
 		// TODO Auto-generated method stub
 		return "Enter";
+	}
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		return MahjongCanvas.class.getName();
 	}
 	
 }

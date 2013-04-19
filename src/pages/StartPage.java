@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class StartPage extends GraphicalPage implements MouseListener{
 	private boolean isFinish;
@@ -35,14 +35,14 @@ public class StartPage extends GraphicalPage implements MouseListener{
 			}
 		}
 	}
-	public StartPage(MajanFrame frame,Client operator){
+	public StartPage(MahjongFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
 		if(operator != null)
 			((ClientOperator)getOperator()).setPage(this);
 	}
 	
-	public StartPage(MajanFrame frame){
+	public StartPage(MahjongFrame frame){
 		setFrame(frame);
 		addMouseListener(this);
 //		new PaintThread().start();
@@ -52,6 +52,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 			imgBuffer = createImage(getWidth(),getHeight());
 		if(g2 == null)
 			g2 = imgBuffer.getGraphics();
+		super.paint(g2);
 		int x = (getWidth() - BUTTON_WIDTH) / 2;
 		int y = (getHeight() - BUTTON_HEIGHT) / 2;
 		for (State st : State.values()) {
@@ -73,7 +74,7 @@ public class StartPage extends GraphicalPage implements MouseListener{
 		int x = (getWidth() - BUTTON_WIDTH)/2;
 		int y = (getHeight() - BUTTON_HEIGHT)/2;
 		for(State st:State.values()){
-			System.out.println(mx + ":" + my + ":" + x + ":" + y);
+//			System.out.println(mx + ":" + my + ":" + x + ":" + y);
 			if(mx >= x
 					&& mx <= x + BUTTON_WIDTH * 2
 					&& my <= y + BUTTON_HEIGHT * 2
@@ -89,7 +90,10 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	
 	private void dispatch(State st){
 		isFinish = true;
-		getFrame().setPage(st.name());
+		if(st == State.ENTER)
+			getFrame().setPage("WAIT");
+		else
+			getFrame().setPage(st.name());
 //		switch(st){
 //		case CONFIG:
 //			frame.setPage("Config");
@@ -127,6 +131,25 @@ public class StartPage extends GraphicalPage implements MouseListener{
 	@Override
 	public String getPageName(){
 		return "Start";
+	}
+
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
 	}
 	
 }

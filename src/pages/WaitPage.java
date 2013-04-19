@@ -7,10 +7,9 @@ import java.awt.Image;
 
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class WaitPage extends GraphicalPage implements Page{
-	private MajanFrame frame;
 	private Image imgBuffer;
 	private Graphics g2;
 	private int count;
@@ -20,6 +19,7 @@ public class WaitPage extends GraphicalPage implements Page{
 	private static int largeCircleRect;
 	private static double e;
 	private static Color selectedColor;
+	private boolean isFinish;
 	
 	
 	static{
@@ -34,10 +34,11 @@ public class WaitPage extends GraphicalPage implements Page{
 		count = 0;
 	}
 		
-	public WaitPage(MajanFrame frame){
-		this.frame = frame;
+	public WaitPage(MahjongFrame frame){
+		setFrame(frame);
+		getFrame().getOperator().requestGame(0);
 	}
-	public WaitPage(MajanFrame frame,Client operator){
+	public WaitPage(MahjongFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
 		if(operator != null)
@@ -49,8 +50,8 @@ public class WaitPage extends GraphicalPage implements Page{
 	}
 	
 	public void moveGame(){
-		kill();
-		frame.setPage("game");
+		finish();
+		getFrame().setPage("game");
 	}
 	
 	public void paint(Graphics g){
@@ -94,6 +95,23 @@ public class WaitPage extends GraphicalPage implements Page{
 	}
 	@Override
 	public void movePage(String order) {
-		frame.setPage(order);
+		getFrame().setPage(order);
+	}
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+		
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
 	}
 }
