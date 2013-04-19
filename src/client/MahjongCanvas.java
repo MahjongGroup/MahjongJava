@@ -44,7 +44,7 @@ import system.Mentu;
 import system.Mentu.MentuHai;
 import system.Player;
 
-public class MajanCanvas extends GraphicalPage implements MouseListener,
+public class MahjongCanvas extends GraphicalPage implements MouseListener,
 		MouseMotionListener, Page {
 	/**
 	 * 
@@ -69,7 +69,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 	// graphics
 	private Image imgBuffer;
 	private Graphics gg;
-	private boolean isAlive;
+	private boolean isFinish;
 
 	// 結合テスト
 	private static int objSize = 0;
@@ -80,7 +80,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 	 */
 
 	{
-		isAlive = true;
+		isFinish = false;
 		animationCount = -1;
 	}
 
@@ -94,7 +94,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		@Override
 		public void run() {
 			// TODO 通信
-			while (isAlive) {
+			while (!isFinish()) {
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -108,7 +108,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		public void run() {
 			long preTime = System.currentTimeMillis();
 
-			while (isAlive) {
+			while (!isFinish()) {
 				repaint();
 				try {
 					long dt = System.currentTimeMillis() - preTime;
@@ -123,13 +123,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		}
 	}
 
-	public MajanCanvas(MajanFrame frame, Client operator) {
+	public MahjongCanvas(MahjongFrame frame, Client operator) {
 		this(frame);
-		System.out.println(operator == null);
 		this.operator = operator;
-		System.out.println(operator == null);
+		//TODO current
 		setOperator(operator);
-		System.out.println(operator == null);
 		if (operator != null)
 			((ClientOperator) operator).setPage(this);
 	}
@@ -139,7 +137,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		return "Canvas";
 	}
 
-	public MajanCanvas(MajanFrame frame) {
+	public MahjongCanvas(MahjongFrame frame) {
 		setFrame(frame);
 		operator = getFrame().getOperator();
 		this.info = frame.getInfo();
@@ -803,21 +801,21 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		if (!(PLAYER_BLOCK1_Y + 270 <= my && my <= PLAYER_BLOCK1_Y + 270
 				+ HAI_HEIGHT))
 			return false;
-		StateCode sc = getSelectHaiFromSelect(buttonList.get(0));
+		StateCode sc = getSelectHaiFromSelectButton(buttonList.get(0));
 
 		// ここから試運用
 
 		List<StateCode> myTurnsActions = new ArrayList<StateCode>();
 		myTurnsActions.add(StateCode.SELECT_REACH);
-		myTurnsActions.add(StateCode.SELECT_ANKAN);
 		myTurnsActions.add(StateCode.SELECT_TSUMO);
+		myTurnsActions.add(StateCode.SELECT_KAKAN);
 
-		if(myTurnsActions.contains(sc))
+		if (myTurnsActions.contains(sc))
 			return false;
-		
-		if(StateCode.SELECT_ANKAN == sc && isInTheHai(13, mx))
+
+		if (StateCode.SELECT_ANKAN == sc && isInTheHai(13, mx))
 			return false;
-		
+
 		// ここまで試運用
 
 		if (!getInfo().ableIndexList.containsKey(sc))
@@ -857,59 +855,87 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		// choiseHai(e);
 	}
 
+	private boolean isWait() {
+		return stateCodes.contains(StateCode.WAIT);
+	}
+
+	private boolean isSelectTime() {
+		return stateCodes.contains(StateCode.SELECT_BUTTON);
+	}
+
+	private StateCode getButton(int buttonIndex) {
+		return getSelectHaiFromSelectButton(buttonList.get(buttonIndex));
+	}
+
 	public void choiseHai(java.awt.event.MouseEvent e) {
 		int mx = e.getX();
 		int my = e.getY();
 		hideFocus();
-		if (stateCodes.contains(StateCode.WAIT) || animationCount > -1) {
+		if (isWait() || animationCount > -1) {
 			return;
 		}
-		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
+		if (isSelectTime()) {
 			StateCode sc = null;
-			if (isInButton(mx, my) != -1) {
-				sc = getSelectHaiFromSelect(buttonList.get(isInButton(mx, my)));
+
+			// ここから試運用
+			boolean scopeSkip = false;
+			// ここまで試運用
+
+			int buttonIndex = -1;
+			if ((buttonIndex = isInButton(mx, my)) != -1) {
+				stateCodes.remove(StateCode.DISCARD_SELECT);
+				sc = getButton(buttonIndex);
 			} else if (buttonList.size() == 1 && isInSelectableHai(mx, my)) {
-				sc = getSelectHaiFromSelect(buttonList.get(0));
+				sc = getButton(0);
 			} else {
 				for (StateCode subSc : buttonList) {
 					dispatch(subSc);
 				}
-				refreshStateCodes();
+				if (stateCodes.contains(StateCode.DISCARD_SELECT)) {
+					refreshStateCodes();
+				} else {
+					refreshStateCodes();
+					stateCodes.add(StateCode.DISCARD_SELECT);
+				}
 				refreshNakiListExclude(null);
 				refreshButtonList();
-				return;
+				scopeSkip = true;
 			}
-			refreshButtonList();
-			refreshStateCodes();
-			addStateCode(sc);
-			refreshNakiListExclude(sc);
-			switch (sc) {
-			case SELECT_RON:
-				operator.sendRon(true);
-				refreshStateCodes();
+			if (!scopeSkip) {
 				refreshButtonList();
-				return;
-			case KYUSYUKYUHAI:
-				operator.sendKyusyukyuhai(true);
 				refreshStateCodes();
-				refreshButtonList();
-				return;
-			case SELECT_TSUMO:
-				operator.sendTsumoAgari();
-				refreshStateCodes();
-				refreshButtonList();
-				return;
-			case SELECT_MINKAN:
-				operator.sendMinkan(true);
-				refreshStateCodes();
-				refreshButtonList();
-				refreshNakiListExclude(null);
-				return;
-			default:
-				break;
+				addStateCode(sc);
+				refreshNakiListExclude(sc);
+				switch (sc) {
+				case SELECT_RON:
+					operator.sendRon(true);
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case KYUSYUKYUHAI:
+					operator.sendKyusyukyuhai(true);
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case SELECT_TSUMO:
+					operator.sendTsumoAgari();
+					refreshStateCodes();
+					refreshButtonList();
+					return;
+				case SELECT_MINKAN:
+					operator.sendMinkan(true);
+					refreshStateCodes();
+					refreshButtonList();
+					refreshNakiListExclude(null);
+					return;
+				default:
+					break;
+				}
 			}
 		}
 		for (StateCode sc : stateCodes) {
+			if (sc == StateCode.WAIT)
+				return;
 			if (info.ableIndexList.containsKey(sc)
 					&& info.ableIndexList.get(sc).size() == 1) {
 				info.selectedIndexes = info.ableIndexList.get(sc).get(0);
@@ -1044,7 +1070,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 	 *            input
 	 * @return output
 	 */
-	public StateCode getSelectHaiFromSelect(StateCode sc) {
+	public StateCode getSelectHaiFromSelectButton(StateCode sc) {
 		switch (sc) {
 		case SELECT_CHI:
 			return StateCode.SELECT_CHI_HAI;
@@ -1081,12 +1107,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 		return imgBuffer;
 	}
 
-	public void kill() {
-		isAlive = false;
-	}
-
 	public void movePage(String order) {
-		kill();
+		finish();
 		repaint();
 		getFrame().setPage(order);
 	}
@@ -1128,5 +1150,24 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,
 			kaze.put(k, (kaze.get(k) + 1) % 4);
 		}
 		info.finish = (info.finish + kaze.get(Kaze.TON) * 17) % 68;
+	}
+
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
 	}
 }

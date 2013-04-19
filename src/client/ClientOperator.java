@@ -20,9 +20,9 @@ import system.Player;
 public class ClientOperator implements Client {
 	private Server tr;
 	private Page page;
-	private MajanFrame frame;
+	private MahjongFrame frame;
 
-	public void setFrame(MajanFrame frame) {
+	public void setFrame(MahjongFrame frame) {
 		this.frame = frame;
 	}
 
@@ -34,7 +34,7 @@ public class ClientOperator implements Client {
 	}
 
 	public boolean isPageIsCanvas() {
-		return page instanceof MajanCanvas;
+		return page instanceof MahjongCanvas;
 	}
 
 	public ClientOperator(Server tr) {
@@ -45,7 +45,7 @@ public class ClientOperator implements Client {
 		this.page = page;
 	}
 
-	public ClientOperator(MajanCanvas c) {
+	public ClientOperator(MahjongCanvas c) {
 		this.page = c;
 	}
 
@@ -56,7 +56,7 @@ public class ClientOperator implements Client {
 	public void sendDiscardIndex(int index) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onDiscardIndexReceived(index);
 		canvas.getInfo().tsumoHai = null;
 		canvas.refreshStateCodes();
@@ -65,7 +65,7 @@ public class ClientOperator implements Client {
 	public void onTsumoGiriReceived() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.getInfo().tsumoHai = null;
 		canvas.refreshStateCodes();
 	}
@@ -73,7 +73,7 @@ public class ClientOperator implements Client {
 	public void sendChiIndexList(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onChiIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 				: null);
 		canvas.refreshStateCodes();
@@ -82,7 +82,7 @@ public class ClientOperator implements Client {
 	public void sendPonIndexList(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onPonIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 				: null);
 		canvas.refreshStateCodes();
@@ -91,7 +91,7 @@ public class ClientOperator implements Client {
 	public void sendAnkanIndexList(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onAnkanIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 				: null);
 		canvas.refreshStateCodes();
@@ -100,7 +100,7 @@ public class ClientOperator implements Client {
 	public void sendMinkan(boolean answer) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onMinkanableIndexReceived(answer);
 		canvas.refreshStateCodes();
 	}
@@ -108,7 +108,7 @@ public class ClientOperator implements Client {
 	public void sendKakanIndex(int index) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onKakanableIndexReceived(index);
 		canvas.refreshStateCodes();
 	}
@@ -116,7 +116,7 @@ public class ClientOperator implements Client {
 	public void sendReachIndex(int index) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onReachIndexReceived(index);
 		canvas.refreshStateCodes();
 		if (index != -1)
@@ -126,7 +126,7 @@ public class ClientOperator implements Client {
 	public void sendRon(boolean answer) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onRonReceived(answer);
 		canvas.refreshStateCodes();
 	}
@@ -138,7 +138,7 @@ public class ClientOperator implements Client {
 	public void onChiableIndexListsReceived(List<List<Integer>> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		// TODO to be removed
 		canvas.getInfo().tsumoHai = null;
 		canvas.addButtonList(StateCode.SELECT_CHI);
@@ -149,7 +149,7 @@ public class ClientOperator implements Client {
 	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		// TODO to be removed
 		canvas.getInfo().tsumoHai = null;
 
@@ -161,7 +161,7 @@ public class ClientOperator implements Client {
 	public void onMinkanableIndexListReceived(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		// TODO to be removed
 		canvas.getInfo().tsumoHai = null;
 
@@ -175,7 +175,7 @@ public class ClientOperator implements Client {
 	public void onKyusyukyuhaiRequested() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		canvas.addButtonList(StateCode.KYUSYUKYUHAI);
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
@@ -184,7 +184,7 @@ public class ClientOperator implements Client {
 	public void onAnkanableIndexListsReceived(List<List<Integer>> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_ANKAN);
@@ -194,7 +194,7 @@ public class ClientOperator implements Client {
 	public void onKakanableIndexListReceived(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		tmpList.add(hais);
@@ -206,7 +206,7 @@ public class ClientOperator implements Client {
 	public void onReachableIndexListReceived(List<Integer> hais) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 		for (Integer i : hais) {
@@ -222,7 +222,7 @@ public class ClientOperator implements Client {
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		ClientInfo info = canvas.getInfo();
 		canvas.startAnimation(info.kaze.get(currentTurn),
 				StateCode.SELECT_REACH);
@@ -233,7 +233,7 @@ public class ClientOperator implements Client {
 	public void onTsumoAgariRequested() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.addStateCode(StateCode.SELECT_BUTTON);
 		canvas.addButtonList(StateCode.SELECT_TSUMO);
 	}
@@ -241,7 +241,7 @@ public class ClientOperator implements Client {
 	public void onRonRequested() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		// TODO to be removed
 		canvas.getInfo().tsumoHai = null;
 
@@ -252,7 +252,7 @@ public class ClientOperator implements Client {
 	public void onNakiReceived(Player player, Mentu mentu) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		int index;
 		for (index = 0; index < canvas.getInfo().players.length; index++) {
 			if (canvas.getInfo().players[index] == player)
@@ -278,7 +278,7 @@ public class ClientOperator implements Client {
 	public void onRonReceived(Map<Player, List<Hai>> playerHaiMap) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.startAnimation(-1, StateCode.SELECT_RON);
 		try {
 			Thread.sleep(1000);
@@ -290,7 +290,7 @@ public class ClientOperator implements Client {
 	public void onTsumoHaiReceived(Hai hai) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.getInfo().tsumoHai = hai;
 		canvas.addStateCode(StateCode.DISCARD_SELECT);
 	}
@@ -298,7 +298,7 @@ public class ClientOperator implements Client {
 	public void onDiscardReceived(boolean existTsumo) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		canvas.addStateCode(StateCode.DISCARD_SELECT);
 	}
@@ -307,7 +307,7 @@ public class ClientOperator implements Client {
 		System.out.println(page == null);
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 
 		canvas.getInfo().tsumoHai = null;
 	}
@@ -316,7 +316,7 @@ public class ClientOperator implements Client {
 	public void sendTsumoAgari() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		tr.onTsumoAgariReceived();
 		canvas.refreshStateCodes();
 	}
@@ -325,7 +325,7 @@ public class ClientOperator implements Client {
 	public void onTsumoAgariReceived() {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.startAnimation(-1, StateCode.SELECT_TSUMO);
 		try {
 			Thread.sleep(1000);
@@ -379,7 +379,7 @@ public class ClientOperator implements Client {
 		page.movePage("game");
 		frame.getInfo().honba = honba;
 		frame.getInfo().tsumiBou = tsumibou;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		canvas.number = frame.getInfo().playerNumber;
 		canvas.setKyokusu(kyokusu);
 		canvas.setBakaze(bakaze);
@@ -401,7 +401,7 @@ public class ClientOperator implements Client {
 			int yamaSize, int wanpaiSize, List<Hai> doraList) {
 		if (page == null || !isPageIsCanvas())
 			return;
-		MajanCanvas canvas = (MajanCanvas) page;
+		MahjongCanvas canvas = (MahjongCanvas) page;
 		ClientInfo info = canvas.getInfo();
 		info.tehai = tehai;
 		info.currentTurn = info.kaze.get(currentTurn);

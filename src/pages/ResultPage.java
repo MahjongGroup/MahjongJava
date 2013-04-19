@@ -30,7 +30,7 @@ import system.Player;
 import system.ScoreType;
 import system.Yaku;
 import client.ImageLoader;
-import client.MajanFrame;
+import client.MahjongFrame;
 import client.MajanHaiIDMapper;
 
 import static client.Constant.*;
@@ -43,6 +43,7 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	private int[] oldScore;
 	private int winnerCount;
 	private List<ResultPanel> resultPanels;
+	private boolean isFinish;
 	
 	{
 		newScore = new int[4];
@@ -50,10 +51,11 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 		addMouseListener(this);
 		winnerCount = 0;
 		resultPanels = new ArrayList<ResultPanel>();
+		isFinish = false;
 	}
 	
 	
-	public ResultPage(MajanFrame frame){
+	public ResultPage(MahjongFrame frame){
 		setFrame(frame);
 	}
 	public void paint(Graphics g){
@@ -269,4 +271,18 @@ public class ResultPage extends InputPage implements Page,MouseListener{
 	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
+	@Override
+	public boolean isFinish() {
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		isFinish = true;
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		String s = null;
+		return s;
+	}
 }

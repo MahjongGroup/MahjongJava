@@ -16,7 +16,7 @@ import java.util.List;
 import system.Rule;
 import client.Client;
 import client.ClientOperator;
-import client.MajanFrame;
+import client.MahjongFrame;
 
 public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	private Rule rule;
@@ -78,12 +78,12 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 		isFinish = false;
 	}
 	
-	public ConfigPage(MajanFrame frame){
+	public ConfigPage(MahjongFrame frame){
 		setFrame(frame);
 		addMouseListener(this);
 		new PaintThread().start();
 	}
-	public ConfigPage(MajanFrame frame,Client operator){
+	public ConfigPage(MahjongFrame frame,Client operator){
 		this(frame);
 		setOperator(operator);
 		if(operator != null)
@@ -188,5 +188,20 @@ public class ConfigPage extends GraphicalPage implements MouseListener, Page{
 	@Override
 	public String getPageName(){
 		return "Config";
+	}
+	@Override
+	public boolean isFinish() {
+		// TODO Auto-generated method stub
+		return isFinish;
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		isFinish = true;
+	}
+	@Override
+	public String getNextPageName() {
+		// TODO Auto-generated method stub
+		return StartPage.class.getName();
 	}
 }
