@@ -212,7 +212,7 @@ public class Kyoku {
 
 	public boolean isTsumoAgari() {
 		// TODO check
-		Set<Yaku> yaku = this.getYakuSetByFlag(currentTurn, true);
+		Set<Yaku> yaku = this.newYakuFlagSet(currentTurn, true);
 		return isAgari(true, this.currentTumohai, currentTurn, yaku);
 	}
 
@@ -226,8 +226,17 @@ public class Kyoku {
 
 		Kaze kaze = currentTurn;
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		Param param = newCheckerParam(true, currentTumohai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, null, getRealOpenDoraList(), getRealUraDoraList());
+		
+		AgariResult.Builder agb = new AgariResult.Builder();
+		agb.setAgariParam(new AgariParam(true, kp.isNaki(), currentTumohai, kaze, newYakuFlagSet(kaze, true)));
+		agb.setField(field);
+		agb.setHurohaiList(kp.getHurohaiList());
+		agb.setOpenDoraList(getRealOpenDoraList());
+		agb.setTehaiList(kp.getTehaiList());
+		agb.setUraDoraList(getRealUraDoraList());
+		agb.setYakuFlag(newYakuFlagSet(kaze, true));
+		AgariResult ar = agb.build();
+		
 		Player agarip = playerMap.get(currentTurn);
 		Player oya = playerMap.get(TON);
 
@@ -370,8 +379,8 @@ public class Kyoku {
 			return false;
 		}
 
-		Set<Yaku> yaku = this.getYakuSetByFlag(kaze, false);
-		return isAgari(true, this.currentSutehai, kaze, yaku);
+		Set<Yaku> yaku = this.newYakuFlagSet(kaze, false);
+		return isAgari(false, this.currentSutehai, kaze, yaku);
 	}
 
 	/**
@@ -382,10 +391,20 @@ public class Kyoku {
 		if (this.result != null)
 			throw new IllegalStateException("既にKyokuResultは生成されている");
 
-		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		Param param = newCheckerParam(false, currentSutehai, kaze);
-		AgariResult ar = AgariResult.createAgariResult(kp.getTehaiList(), kp.getHurohaiList(), param, field, currentTurn, getRealOpenDoraList(), getRealUraDoraList());
+		KyokuPlayer kp  = kyokuPlayerMap.get(kaze);
 
+		AgariResult.Builder agb = new AgariResult.Builder();
+		agb.setAgariParam(new AgariParam(false, kp.isNaki(), currentSutehai, kaze, newYakuFlagSet(kaze, false)));
+		agb.setField(field);
+		agb.setHojuKaze(currentTurn);
+		agb.setHurohaiList(kp.getHurohaiList());
+		agb.setOpenDoraList(getRealOpenDoraList());
+		agb.setTehaiList(kp.getTehaiList());
+		agb.setUraDoraList(getRealUraDoraList());
+		agb.setYakuFlag(newYakuFlagSet(kaze, false));
+		AgariResult ar = agb.build();
+
+		
 		if (this.krbuilder == null) {
 			this.krbuilder = new KyokuRonAgariResult.Builder();
 		}
@@ -438,14 +457,13 @@ public class Kyoku {
 	public List<Integer> getReachableHaiList() {
 		//TODO check
 		Kaze kaze = getCurrentTurn();
-		Param param = new Param();
-
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		param.setNaki(kp.isNaki());
-		param.setJikaze(kaze);
 
 		TehaiList tehaiList = kp.getTehaiList();
-		return AgariMethods.getReachableIndexList(tehaiList, currentTumohai, param, field);
+		if(kp.isNaki())
+			return new ArrayList<Integer>(0);
+		
+		return AgariMethods.getReachableIndexList(tehaiList, currentTumohai, field);
 	}
 
 	/**
@@ -674,9 +692,7 @@ public class Kyoku {
 	 */
 	public boolean isTenpai() {
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
-		Param param = newTenpaiCheckerParam(kp.isNaki(), currentTurn);
-
-		return AgariMethods.isTenpaiWithExtra(kp.getTehaiList(), this.currentTumohai, param, field);
+		return AgariMethods.isTenpaiWithExtra(kp.getTehaiList(), this.currentTumohai, field);
 	}
 
 	/**
@@ -1122,49 +1138,12 @@ public class Kyoku {
 	 * @return あがれるならtrue
 	 */
 	private boolean isAgari(boolean tumo, Hai agariHai, Kaze kaze, Set<Yaku> flagCheckYakuSet) {
-		Param param = new Param();
 		if (isFuriten(kaze, agariHai.type())) {
 			return false;
 		}
 
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);
-		param.setFlagCheckYakuSet(flagCheckYakuSet);
-		param.setTsumo(tumo);
-		param.setNaki(kyokuPlayerMap.get(kaze).isNaki());
-		param.setAgariHai(agariHai);
-		param.setJikaze(kaze);
-		return AgariMethods.isAgari(kp.getTehaiList(), kp.getHurohaiList(), param, field);
-	}
-
-	/**
-	 * テンパイ判定用のチェックパラムを生成して返す．
-	 * @param naki 鳴いているか．
-	 * @param jikaze 自風．
-	 * @return テンパイ判定用のチェックパラム. 
-	 */
-	public Param newTenpaiCheckerParam(boolean naki, Kaze jikaze) {
-		Param ret = new Param();
-		ret.setNaki(naki);
-		ret.setJikaze(jikaze);
-		return ret;
-	}
-
-	/**
-	 * この局の現在のチェッカーパラムを生成して,それを返す.
-	 * 
-	 * @param tumo ツモかどうか.
-	 * @param agariHai 上がり牌.
-	 * @param kaze 自風.
-	 * @return チェッカーパラム.
-	 */
-	public Param newCheckerParam(boolean tumo, Hai agariHai, Kaze kaze) {
-		Param param = new Param();
-		param.setTsumo(tumo);
-		param.setAgariHai(agariHai);
-		param.setNaki(kyokuPlayerMap.get(kaze).isNaki());
-		param.setJikaze(kaze);
-		param.setFlagCheckYakuSet(getYakuSetByFlag(kaze, tumo));
-		return param;
+		return AgariMethods.isAgari(kp.getTehaiList(), kp.getHurohaiList(), agariHai, flagCheckYakuSet, tumo, kp.isNaki(), kaze, field);
 	}
 
 	/**
@@ -1174,7 +1153,7 @@ public class Kyoku {
 	 * @param tumo ツモ.
 	 * @return 役フラグセット.
 	 */
-	public Set<Yaku> getYakuSetByFlag(Kaze kaze, boolean tumo) {
+	public Set<Yaku> newYakuFlagSet(Kaze kaze, boolean tumo) {
 		Set<Yaku> set = new HashSet<Yaku>();
 
 		KyokuPlayer kp = kyokuPlayerMap.get(kaze);

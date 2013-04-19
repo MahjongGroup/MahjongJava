@@ -41,7 +41,7 @@ import system.Mentu;
 import system.Mentu.MentuHai;
 import system.Player;
 
-public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMotionListener, Page{
+public class MajanCanvas extends GraphicalPage implements MouseListener, MouseMotionListener, Page {
 	/**
 	 * 
 	 */
@@ -68,7 +68,6 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	// 結合テスト
 	private static int objSize = 0;
 	int number;
-
 
 	/**
 	 * サーバーとの通信を確認するスレッド。何か通信があれば、データを受け取ったり、メソッドを実行したりする。
@@ -112,18 +111,19 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 	}
 
-	public MajanCanvas(MajanFrame frame,Client operator){
+	public MajanCanvas(MajanFrame frame, Client operator) {
 		this(frame);
 		System.out.println(operator == null);
 		this.operator = operator;
 		System.out.println(operator == null);
 		setOperator(operator);
 		System.out.println(operator == null);
-		if(operator != null)
-			((ClientOperator)operator).setPage(this);
+		if (operator != null)
+			((ClientOperator) operator).setPage(this);
 	}
+
 	@Override
-	public String getPageName(){
+	public String getPageName() {
 		return "Canvas";
 	}
 
@@ -144,19 +144,19 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		this.scaledDarkHaiBackImage = ImageLoader.loadScaled(ImageID.hai_darkback);
 		this.stateCodes = EnumSet.of(StateCode.WAIT);
 		this.reachImage = Toolkit.getDefaultToolkit().createImage("image/reach.png");
-//		this.operator = new ClientOperator(this);
+		//		this.operator = new ClientOperator(this);
 
 		// 結合テスト
-//		this.info = new ClientInfo(0);
-//		this.number = (objSize++)%4;
+		//		this.info = new ClientInfo(0);
+		//		this.number = (objSize++)%4;
 		this.number = -1;
-//		info.sekiMap = new HashMap<Player, Integer>(4);
+		//		info.sekiMap = new HashMap<Player, Integer>(4);
 		//TODO to be repair
-//		for (int i = 0; i < 4; i++) {
-//			info.sekiMap.put(info.players[(4 - number)%4], i);
-//		}
+		//		for (int i = 0; i < 4; i++) {
+		//			info.sekiMap.put(info.players[(4 - number)%4], i);
+		//		}
 		System.out.println("add operator");
-		
+
 		this.buttonList = new ArrayList<StateCode>();
 
 		// this.testOperator = new Test(this);
@@ -175,44 +175,35 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		return info;
 	}
 
-	private void drawPartOfYama(Graphics g2,int start,int end,int ix,int iy){
+	private void drawPartOfYama(Graphics g2, int start, int end, int ix, int iy) {
 		int wanpaiSize = info.wanpaiSize;
-		int limit = info.yamaSize/2 + info.yamaSize%2 + info.finish + 1;
-		int finish = info.finish + 1 - (wanpaiSize/2 + wanpaiSize % 2 + (wanpaiSize==14?1:0));
+		int limit = info.yamaSize / 2 + info.yamaSize % 2 + info.finish + 1;
+		int finish = info.finish + 1 - (wanpaiSize / 2 + wanpaiSize % 2 + (wanpaiSize == 14 ? 1 : 0));
 		int indent_y = 200;
 		int indent_x = 50;
-		if(finish < 0){
+		if (finish < 0) {
 			finish += 68;
 			limit += 68;
 		}
 		int dx = 0;
-		int doraStart = finish + 3 - (8 - (wanpaiSize + 1)%2 - wanpaiSize==14?1:0);
-		for(int i = start;i < end;i++){
-			if((finish <= i && i < limit)||(finish <= i + 68 && i + 68 < limit))
-				if (((finish == i || finish == i + 68) && (wanpaiSize % 2 == 1 || wanpaiSize == 14))
-						|| ((finish + 1 == i || finish + 1 == i + 68) && wanpaiSize == 14)
-						|| ((limit - 1 == i || limit - 1 == i + 68) && info.yamaSize % 2 == 1))
-					g2.drawImage(scaledDarkHaiBackImage, ix + dx + indent_x,
-							iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
-				else if ((doraStart <= i && doraStart
-						+ info.doraList.size()> i)
-						|| (doraStart <= i + 68 && doraStart + info.doraList.size() > i + 68)) {
-					g2.drawImage(haiImageMap.get(info.doraList.get((i
-							- (finish + 3) + 68) % 68)), ix + dx + indent_x, iy
-							+ indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT,
-							null);
+		int doraStart = finish + 3 - (8 - (wanpaiSize + 1) % 2 - wanpaiSize == 14 ? 1 : 0);
+		for (int i = start; i < end; i++) {
+			if ((finish <= i && i < limit) || (finish <= i + 68 && i + 68 < limit))
+				if (((finish == i || finish == i + 68) && (wanpaiSize % 2 == 1 || wanpaiSize == 14)) || ((finish + 1 == i || finish + 1 == i + 68) && wanpaiSize == 14) || ((limit - 1 == i || limit - 1 == i + 68) && info.yamaSize % 2 == 1))
+					g2.drawImage(scaledDarkHaiBackImage, ix + dx + indent_x, iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				else if ((doraStart <= i && doraStart + info.doraList.size() > i) || (doraStart <= i + 68 && doraStart + info.doraList.size() > i + 68)) {
+					g2.drawImage(haiImageMap.get(info.doraList.get((i - (finish + 3) + 68) % 68)), ix + dx + indent_x, iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 					//TODO ドラ表示
-				}else
-					g2.drawImage(scaledHaiBackImage, ix + dx + indent_x,
-							iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				} else
+					g2.drawImage(scaledHaiBackImage, ix + dx + indent_x, iy + indent_y, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 			dx += SCALED_HAI_WIDTH;
 			//TODO current
 		}
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		if(number == -1)
+		if (number == -1)
 			return;
 		if (imgBuffer == null)
 			imgBuffer = createImage(getWidth(), getHeight());
@@ -220,27 +211,27 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			gg = imgBuffer.getGraphics();
 		Graphics2D gBody = (Graphics2D) g;
 		Graphics2D g2 = (Graphics2D) gg;
-		
+
 		g2.clearRect(0, 0, getWidth(), getHeight());
 		super.paint(g2);
-		
+
 		g2.setColor(Color.BLACK);
-		g2.setFont(new Font("",Font.BOLD,20));
-		g2.drawString(info.bakaze.notation() + " " + info.kyokusu + "局", getWidth()/2 - 50, getHeight()/2 - 10 - 20);
-		g2.drawString(info.honba + "本場", getWidth()/2-50, getHeight()/2 + 10 - 20);
-		g2.drawString("積み棒:" + info.tsumiBou, getWidth()/2 - 50, getHeight()/2 + 30 - 20);
-		
+		g2.setFont(new Font("", Font.BOLD, 20));
+		g2.drawString(info.bakaze.notation() + " " + info.kyokusu + "局", getWidth() / 2 - 50, getHeight() / 2 - 10 - 20);
+		g2.drawString(info.honba + "本場", getWidth() / 2 - 50, getHeight() / 2 + 10 - 20);
+		g2.drawString("積み棒:" + info.tsumiBou, getWidth() / 2 - 50, getHeight() / 2 + 30 - 20);
+
 		drawHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(0, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
-		if(info.reachPosMap.get(0) != null)
-			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y - 30, null);
+		if (info.reachPosMap.get(0) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200, PLAYER_BLOCK1_Y - 30, null);
 		g2.rotate(-Math.PI);
 		g2.translate(-WINDOW_WIDTH, -WINDOW_HEIGHT);
 
 		drawHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
 		drawSuteHai(2, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y, 170, g2);
-		if(info.reachPosMap.get(2) != null)
-			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200,PLAYER_BLOCK1_Y , null);
+		if (info.reachPosMap.get(2) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK1_X + 200, PLAYER_BLOCK1_Y, null);
 
 		g2.rotate(Math.PI / 2.0);
 		g2.translate(-100, -WINDOW_WIDTH + 50);
@@ -251,10 +242,10 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.rotate(Math.PI / 20.0);
 		g2.translate(100, -50);
 
-		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);		
-		if(info.reachPosMap.get(1) != null)
-			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
-		
+		drawSuteHai(1, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 250, g2);
+		if (info.reachPosMap.get(1) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200, PLAYER_BLOCK2_Y - 100, null);
+
 		g2.rotate(Math.PI);
 		g2.translate(-WINDOW_HEIGHT + 100, -WINDOW_WIDTH - 80);
 
@@ -266,13 +257,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.translate(-100, 80);
 
 		drawSuteHai(3, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y, 1250, g2);
-		if(info.reachPosMap.get(3) != null)
-			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200,PLAYER_BLOCK2_Y -100, null);
-		
-		
+		if (info.reachPosMap.get(3) != null)
+			g2.drawImage(reachImage, PLAYER_BLOCK2_X + 200, PLAYER_BLOCK2_Y - 100, null);
+
 		g2.rotate(-Math.PI / 2.0);
 		g2.translate(-WINDOW_WIDTH, 0);
-		
+
 		drawPartOfYama(g2, 0, 17, PLAYER_BLOCK1_X, PLAYER_BLOCK1_Y);
 
 		g2.rotate(-Math.PI);
@@ -291,7 +281,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		g2.rotate(Math.PI);
 		g2.translate(-WINDOW_HEIGHT + 150, -WINDOW_WIDTH - 100);
 		g2.rotate(Math.PI / 25.0);
-		
+
 		drawPartOfYama(g2, 51, 68, PLAYER_BLOCK2_X, PLAYER_BLOCK2_Y);
 
 		g2.rotate(-Math.PI / 25.0);
@@ -305,45 +295,43 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			int size = buttonList.size();
-			int width = getWidth()/2;
+			int width = getWidth() / 2;
 			int height = PLAYER_BLOCK1_Y + 260;
 			int half = size / 2;
 			for (int i = 0; i < size; i++) {
 				g2.setColor(Color.orange);
 				int tmpX = width - BUTTON_WIDTH * (half - i) - 10 * (half - i);
 				int tmpY = height - BUTTON_HEIGHT / 2 - 10;
-				g2.fillRoundRect(tmpX, tmpY, BUTTON_WIDTH, BUTTON_HEIGHT,
-						BUTTON_CURVE, BUTTON_CURVE);
+				g2.fillRoundRect(tmpX, tmpY, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_CURVE, BUTTON_CURVE);
 				g2.setColor(Color.BLACK);
 				g2.setFont(new Font("", Font.BOLD, 15));
 
-				g2.drawString(buttonList.get(i).getButtonName(), tmpX
-						+ BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
+				g2.drawString(buttonList.get(i).getButtonName(), tmpX + BUTTON_WIDTH / 2, tmpY + BUTTON_HEIGHT / 2);
 			}
 		}
 		gBody.drawImage(imgBuffer, 0, 0, this);
 
 	}
 
-	public void drawSuteHai(int player,int ix,int iy,int sute_x,Graphics2D g2){
-		if(info == null)
+	public void drawSuteHai(int player, int ix, int iy, int sute_x, Graphics2D g2) {
+		if (info == null)
 			return;
-		switch(player){
+		switch (player) {
 		case 0:
 			ix += 50;
 			iy += 50;
 			break;
 		case 1:
 			ix += 40;
-			iy-=20;
+			iy -= 20;
 			break;
 		case 2:
 			ix += 30;
-			iy+=80;
+			iy += 80;
 			break;
 		case 3:
 			ix += 40;
-			iy-=20;
+			iy -= 20;
 			break;
 		default:
 			break;
@@ -358,16 +346,13 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			int dx = 170 - SCALED_HAI_WIDTH;
 			for (int i = 0; j * 6 + i < suteHaiList.size() && i < 6; i++) {
 				Image image = scaledHaiImageMap.get(suteHaiList.get(j * 6 + i));
-				if (info.reachPosMap.get(player) == null
-						|| info.reachPosMap.get(player) != j * 6 + i) {
-					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy,
-							SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				if (info.reachPosMap.get(player) == null || info.reachPosMap.get(player) != j * 6 + i) {
+					g2.drawImage(image, ix + SCALED_HAI_WIDTH + dx, iy + dy, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 					dx += SCALED_HAI_WIDTH;
 				} else {
 					g2.rotate(Math.PI / 2.0);
 					g2.translate(0, -screenHeight);
-					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH
-							- ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+					g2.drawImage(image, iy + dy, screenHeight - dx - SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH - ix, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 					g2.translate(0, screenHeight);
 					g2.rotate(-Math.PI / 2.0);
 					dx += SCALED_HAI_HEIGHT;
@@ -376,7 +361,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			dy += SCALED_HAI_HEIGHT;
 		}
 	}
-	
+
 	public void drawHai(int player, int ix, int iy, int sute_x, Graphics2D g2) {
 		if (info == null)
 			return;
@@ -390,15 +375,12 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int dx = 0;
 		for (int i = 0; i < tehaiSize; i++) {
 			if (player != 0) {
-				g2.drawImage(scaledHaiBackImage, ix + dx + TEHAI_INDENT,
-						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				g2.drawImage(scaledHaiBackImage, ix + dx + TEHAI_INDENT, iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 				dx += SCALED_HAI_WIDTH;
 			} else {
 				Image image = haiImageMap.get(info.tehai.get(i));
-				int selectedMargin 
-				= selectedIndexes.contains((Integer) i) ? -20: 0;
-				g2.drawImage(image, ix + dx, iy + 270 + selectedMargin,
-						HAI_WIDTH, HAI_HEIGHT, null);
+				int selectedMargin = selectedIndexes.contains((Integer) i) ? -20 : 0;
+				g2.drawImage(image, ix + dx, iy + 270 + selectedMargin, HAI_WIDTH, HAI_HEIGHT, null);
 				drawColoredFrame(g2, i, ix + dx, iy + selectedMargin + 270);
 				dx += HAI_WIDTH;
 			}
@@ -407,13 +389,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			if (player == 0) {
 				dx += HAI_HEIGHT - HAI_WIDTH;
 				int selectedMargin = selectedIndexes.contains(13) ? -20 : 0;
-				g2.drawImage(haiImageMap.get(info.tsumoHai), ix + dx, iy + 270
-						+ selectedMargin, HAI_WIDTH, HAI_HEIGHT, null);
+				g2.drawImage(haiImageMap.get(info.tsumoHai), ix + dx, iy + 270 + selectedMargin, HAI_WIDTH, HAI_HEIGHT, null);
 				drawColoredFrame(g2, 13, ix + dx, iy + selectedMargin + 270);
 			} else {
 				dx += SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH;
-				g2.drawImage(scaledHaiBackImage, ix + dx + TEHAI_INDENT,
-						iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
+				g2.drawImage(scaledHaiBackImage, ix + dx + TEHAI_INDENT, iy + 270, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 			}
 		}
 
@@ -436,13 +416,11 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			if (mentuSize == 0)
 				continue;
 			// 右から順番に格納
-			MentuHai[] hurohaiArray = new MentuHai[mentu.isKakan() ? mentuSize + 1
-					: mentuSize];
+			MentuHai[] hurohaiArray = new MentuHai[mentu.isKakan() ? mentuSize + 1 : mentuSize];
 			dx = screenWidth - SCALED_HAI_HEIGHT * 2;
 			if (mentu.isNaki()) {
 				int fromKaze = (info.kaze.get(hurohaiList.get(i).getKaze()) + 4 - player) % 4;
-				fromKaze = (fromKaze - 1) * (fromKaze - 2) / 2
-						* (mentuSize - 1) - (fromKaze - 1) * (fromKaze - 3);
+				fromKaze = (fromKaze - 1) * (fromKaze - 2) / 2 * (mentuSize - 1) - (fromKaze - 1) * (fromKaze - 3);
 				int j = 0;
 				for (MentuHai mh : mentu.asList()) {
 					if (mh.isNaki()) {
@@ -455,24 +433,17 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 					hurohaiArray[j++] = mh;
 				}
 				for (j = 0; j < mentuSize; j++) {
-					Hai tmpHai = MajanHai.valueOf(hurohaiArray[j].type(),
-							hurohaiArray[j].aka());
+					Hai tmpHai = MajanHai.valueOf(hurohaiArray[j].type(), hurohaiArray[j].aka());
 					Image image = scaledHaiImageMap.get(tmpHai);
 					// TODO
 					if (j == fromKaze) {
 						g2.rotate(Math.PI / 2.0);
 						g2.translate(0, -screenHeight);
-						g2.drawImage(image, dy + (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH),
-								screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH,
-								SCALED_HAI_HEIGHT, null);
+						g2.drawImage(image, dy + (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH), screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 						if (mentu.isKakan()) {
-							tmpHai = MajanHai.valueOf(hurohaiArray[3].type(),
-									hurohaiArray[3].aka());
+							tmpHai = MajanHai.valueOf(hurohaiArray[3].type(), hurohaiArray[3].aka());
 							image = haiImageMap.get(tmpHai);
-							g2.drawImage(image, dy
-									+ (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH * 2),
-									screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH,
-									SCALED_HAI_HEIGHT, null);
+							g2.drawImage(image, dy + (SCALED_HAI_HEIGHT - SCALED_HAI_WIDTH * 2), screenHeight - dx - SCALED_HAI_WIDTH, SCALED_HAI_WIDTH, SCALED_HAI_HEIGHT, null);
 						}
 						g2.translate(0, screenHeight);
 						g2.rotate(-Math.PI / 2.0);
@@ -506,31 +477,27 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	public void update(Graphics g) {
 		this.paint(g);
 	}
-	private void addSelectedIndexesWhenOverHai(int mx, int my, int max,
-			List<List<Integer>> rule) {
+
+	private void addSelectedIndexesWhenOverHai(int mx, int my, int max, List<List<Integer>> rule) {
 		List<Hai> tehai = getInfo().tehai;
 		List<Integer> selectedIndexes = getInfo().selectedIndexes;
-		if(PLAYER_BLOCK1_Y + 270 > my
-				|| my > PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT + 20){
+		if (PLAYER_BLOCK1_Y + 270 > my || my > PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT + 20) {
 			selectedIndexes.clear();
 			return;
 		}
 		for (int i = 0; i < tehai.size(); i++) {
-			if (PLAYER_BLOCK1_X + HAI_WIDTH * i <= mx
-					&& mx <= PLAYER_BLOCK1_X + HAI_WIDTH * (i + 1) ) {
+			if (PLAYER_BLOCK1_X + HAI_WIDTH * i <= mx && mx <= PLAYER_BLOCK1_X + HAI_WIDTH * (i + 1)) {
 				int margin = 0;
 				if (selectedIndexes.contains(i))
 					margin -= 20;
-				if (PLAYER_BLOCK1_Y + 270 + margin <= my
-						&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT) {
+				if (PLAYER_BLOCK1_Y + 270 + margin <= my && my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT) {
 					if (!selectedIndexes.contains(i)) {
 						int count = 0;
 						List<Integer> tmpSubList = new ArrayList<Integer>();
-						if (selectedIndexes.size() < max
-								&& selectedIndexes.size() > 0)
+						if (selectedIndexes.size() < max && selectedIndexes.size() > 0)
 							return;
 						selectedIndexes = new ArrayList<Integer>();
-						if(rule != null)
+						if (rule != null)
 							for (List<Integer> subList : rule) {
 								if (subList.contains(i)) {
 									count++;
@@ -551,17 +518,14 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		int margin = 0;
 		if (selectedIndexes.contains(13))
 			margin -= 20;
-		if (mx <= dx + HAI_WIDTH && mx >= dx
-				&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT
-				&& my >= PLAYER_BLOCK1_Y + 270 + margin) {
+		if (mx <= dx + HAI_WIDTH && mx >= dx && my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT && my >= PLAYER_BLOCK1_Y + 270 + margin) {
 			if (!selectedIndexes.contains(13)) {
 				int count = 0;
 				List<Integer> tmpSubList = new ArrayList<Integer>();
-				if (selectedIndexes.size() < max
-						&& selectedIndexes.size() > 0)
+				if (selectedIndexes.size() < max && selectedIndexes.size() > 0)
 					return;
 				selectedIndexes = new ArrayList<Integer>();
-				if(rule != null)
+				if (rule != null)
 					for (List<Integer> subList : rule) {
 						if (subList.contains(13)) {
 							count++;
@@ -578,35 +542,31 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		}
 	}
 
-	private int addSelectedIndexes(int mx, int my, int max,
-			List<List<Integer>> rule) {
+	private int addSelectedIndexes(int mx, int my, int max, List<List<Integer>> rule) {
 		List<Hai> tehai = getInfo().tehai;
 		List<Integer> selectedIndexes;
 		selectedIndexes = getInfo().selectedIndexes;
 		int i;
 		for (i = 0; i < tehai.size(); i++) {
-			if (PLAYER_BLOCK1_X + HAI_WIDTH * i <= mx
-					&& mx <= PLAYER_BLOCK1_X + HAI_WIDTH * (i + 1)) {
+			if (PLAYER_BLOCK1_X + HAI_WIDTH * i <= mx && mx <= PLAYER_BLOCK1_X + HAI_WIDTH * (i + 1)) {
 				int margin = 0;
 				if (selectedIndexes.contains(i))
 					margin -= 20;
-				if (PLAYER_BLOCK1_Y + 270 + margin <= my
-						&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT) {
+				if (PLAYER_BLOCK1_Y + 270 + margin <= my && my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT) {
 					if (selectedIndexes.contains(i)) {
 						if (max != 1) {
 							selectedIndexes.remove((Integer) i);
 							i = -1;
 						}
 					} else {
-						if(rule != null)
+						if (rule != null)
 							if (rule.size() == 0) {
 								if (selectedIndexes.size() == max)
 									selectedIndexes.remove(0);
 								selectedIndexes.add(i);
 							} else {
 								for (List<Integer> l : rule) {
-									if (l.containsAll(selectedIndexes)
-											&& l.contains(i)) {
+									if (l.containsAll(selectedIndexes) && l.contains(i)) {
 										if (selectedIndexes.size() == max)
 											selectedIndexes.remove(0);
 										selectedIndexes.add(i);
@@ -622,9 +582,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		if (i >= tehai.size())
 			if (getInfo().currentTurn == 0) {
 				int dx = tehai.size() * HAI_WIDTH + 20 + PLAYER_BLOCK1_X;
-				if (mx <= dx + HAI_WIDTH  && mx >= dx
-						&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT
-						&& my >= PLAYER_BLOCK1_Y + 270) {
+				if (mx <= dx + HAI_WIDTH && mx >= dx && my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT && my >= PLAYER_BLOCK1_Y + 270) {
 					i = 13;
 					if (selectedIndexes.contains(i)) {
 						if (max != 1) {
@@ -691,31 +649,26 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		refreshStateCodes();
 	}
 
-	private int isInButton(int mx,int my){
-		int width = getWidth()/2;
+	private int isInButton(int mx, int my) {
+		int width = getWidth() / 2;
 		int height = PLAYER_BLOCK1_Y + 260;
-		if (my <= height + BUTTON_HEIGHT / 2 - 10
-				&& my >= height - BUTTON_HEIGHT / 2 - 10) {
+		if (my <= height + BUTTON_HEIGHT / 2 - 10 && my >= height - BUTTON_HEIGHT / 2 - 10) {
 			int half = buttonList.size() / 2;
 			//クリック個所がボタンのある範囲にあるかどうか(x方向)
 			for (int j = 0; j < buttonList.size(); j++) {
-				if (mx <= width - BUTTON_WIDTH * (half - 1 - j) - 10
-						* (half - j)
-						&& mx >= width - BUTTON_WIDTH * (half - j) - 10
-								* (half - j)) {
+				if (mx <= width - BUTTON_WIDTH * (half - 1 - j) - 10 * (half - j) && mx >= width - BUTTON_WIDTH * (half - j) - 10 * (half - j)) {
 					return j;
 				}
 			}
 		}
 		return -1;
 	}
-	
+
 	private boolean isInSelectableHai(int mx, int my) {
-		if (!(PLAYER_BLOCK1_Y + 270 <= my
-				&& my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT))
+		if (!(PLAYER_BLOCK1_Y + 270 <= my && my <= PLAYER_BLOCK1_Y + 270 + HAI_HEIGHT))
 			return false;
 		StateCode sc = getSelectHaiFromSelect(buttonList.get(0));
-		if(!getInfo().ableIndexList.containsKey(sc))
+		if (!getInfo().ableIndexList.containsKey(sc))
 			return false;
 		List<List<Integer>> tmpList = getInfo().ableIndexList.get(sc);
 		if (tmpList != null) {
@@ -723,40 +676,46 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 				if (tmpSubList == null)
 					break;
 				for (Integer integer : tmpSubList) {
-					if (mx <= PLAYER_BLOCK1_X + (integer + 1) * HAI_WIDTH
-							&& mx >= PLAYER_BLOCK1_X + integer * HAI_WIDTH) {
+					if (mx <= PLAYER_BLOCK1_X + (integer + 1) * HAI_WIDTH && mx >= PLAYER_BLOCK1_X + integer * HAI_WIDTH) {
 						return true;
 					}
 				}
-				if (tmpSubList.contains(13)
-						&& mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1)
-								* HAI_WIDTH + 20
-						&& mx >= PLAYER_BLOCK1_X + info.tehai.size()
-								* HAI_WIDTH + 20) {
+				if (tmpSubList.contains(13) && mx <= PLAYER_BLOCK1_X + (info.tehai.size() + 1) * HAI_WIDTH + 20 && mx >= PLAYER_BLOCK1_X + info.tehai.size() * HAI_WIDTH + 20) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(java.awt.event.MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(java.awt.event.MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(java.awt.event.MouseEvent e) {
 		int mx = e.getX();
 		int my = e.getY();
 		hideFocus();
-		if (stateCodes.contains(StateCode.WAIT)){
+		if (stateCodes.contains(StateCode.WAIT)) {
 			return;
 		}
 		if (stateCodes.contains(StateCode.SELECT_BUTTON)) {
 			StateCode sc = null;
-			if(isInButton(mx,my) != -1){
+			if (isInButton(mx, my) != -1) {
 				sc = getSelectHaiFromSelect(buttonList.get(isInButton(mx, my)));
-			}else if(buttonList.size() == 1 && isInSelectableHai(mx, my)){
+			} else if (buttonList.size() == 1 && isInSelectableHai(mx, my)) {
 				sc = getSelectHaiFromSelect(buttonList.get(0));
-			}
-			else{
-				for(StateCode subSc:buttonList){
+			} else {
+				for (StateCode subSc : buttonList) {
 					dispatch(subSc);
 				}
 				refreshStateCodes();
@@ -768,7 +727,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			refreshStateCodes();
 			addStateCode(sc);
 			refreshNakiListExclude(sc);
-			switch(sc){
+			switch (sc) {
 			case SELECT_RON:
 				operator.sendRon(true);
 				refreshStateCodes();
@@ -795,7 +754,7 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			}
 		}
 		for (StateCode sc : stateCodes) {
-			if(info.ableIndexList.containsKey(sc) && info.ableIndexList.get(sc).size() == 1){
+			if (info.ableIndexList.containsKey(sc) && info.ableIndexList.get(sc).size() == 1) {
 				info.selectedIndexes = info.ableIndexList.get(sc).get(0);
 				dispatch(sc);
 				info.selectedIndexes.clear();
@@ -808,17 +767,14 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			int i = selectedIndexes.isEmpty() ? -1 : selectedIndexes.get(0);
 			int j = -1;
 			if (sc == StateCode.DISCARD_SELECT) {
-				j = addSelectedIndexes(mx, my, sc.getNum(),
-						new ArrayList<List<Integer>>());
+				j = addSelectedIndexes(mx, my, sc.getNum(), new ArrayList<List<Integer>>());
 			} else {
-				j = addSelectedIndexes(mx, my, sc.getNum(),
-						info.ableIndexList.get(sc));
+				j = addSelectedIndexes(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 			}
 			boolean flag = false;
 			if (sc.getNum() != 1) {
 				if (size == sc.getNum() && j == -1) {
-					addSelectedIndexes(mx, my, sc.getNum(),
-							info.ableIndexList.get(sc));
+					addSelectedIndexes(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 				}
 				if (selectedIndexes.size() == sc.getNum()) {
 					flag = true;
@@ -836,31 +792,28 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	}
 
 	@Override
-	public void mouseEntered(java.awt.event.MouseEvent e) {}
-	@Override
-	public void mouseExited(java.awt.event.MouseEvent e) {}
-	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {}
-	@Override
-	public void mouseReleased(java.awt.event.MouseEvent e) {}
-	
+	public void mouseReleased(java.awt.event.MouseEvent e) {
+	}
 
 	public void addStateCode(StateCode stateCode) {
 		while (stateCodes.contains(StateCode.WAIT))
 			stateCodes.remove(StateCode.WAIT);
-		if(stateCode != null){
+		if (stateCode != null) {
 			stateCodes.add(stateCode);
-		}else if(stateCodes.size() == 0){
+		} else if (stateCodes.size() == 0) {
 			stateCodes.add(StateCode.WAIT);
 		}
 	}
+
 	public void refreshStateCodes() {
 		stateCodes.clear();
 		stateCodes.add(StateCode.WAIT);
 	}
+
 	public void refreshButtonList() {
 		buttonList.clear();
 	}
+
 	public void addButtonList(StateCode sc) {
 		buttonList.add(sc);
 	}
@@ -869,35 +822,31 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 		this.existTsumo = existTsumo;
 	}
 
-	private void drawFrameBasedOnRule(Graphics2D g2, int index, int x, int y,
-			List<List<Integer>> rule) {
+	private void drawFrameBasedOnRule(Graphics2D g2, int index, int x, int y, List<List<Integer>> rule) {
 		List<Integer> selectedIndexes = info.selectedIndexes;
 		g2.setColor(Color.RED);
 		int size = info.selectedIndexes.size();
-		if(rule != null)
+		if (rule != null)
 			for (List<Integer> l : rule) {
 				if (l == null)
 					continue;
-				if ((size == 0 || l.containsAll(selectedIndexes))
-						&& l.contains(index))
-					g2.drawRoundRect(x, y, HAI_WIDTH, HAI_HEIGHT, BUTTON_CURVE,
-							BUTTON_CURVE);
+				if ((size == 0 || l.containsAll(selectedIndexes)) && l.contains(index))
+					g2.drawRoundRect(x, y, HAI_WIDTH, HAI_HEIGHT, BUTTON_CURVE, BUTTON_CURVE);
 			}
 	}
 
 	private void drawColoredFrame(Graphics2D g2, int index, int x, int y) {
 		Map<StateCode, List<List<Integer>>> ableIndexMap = getInfo().ableIndexList;
 		for (StateCode sc : ableIndexMap.keySet()) {
-			if (stateCodes.contains(StateCode.SELECT_BUTTON)
-					|| stateCodes.contains(sc))
+			if (stateCodes.contains(StateCode.SELECT_BUTTON) || stateCodes.contains(sc))
 				drawFrameBasedOnRule(g2, index, x, y, ableIndexMap.get(sc));
 		}
 	}
 
 	private void refreshNakiListExclude(StateCode sc) {
 		for (StateCode key : getInfo().ableIndexList.keySet()) {
-			if (key == StateCode.SELECT_MINKAN){
-				if(sc != StateCode.SELECT_MINKAN)
+			if (key == StateCode.SELECT_MINKAN) {
+				if (sc != StateCode.SELECT_MINKAN)
 					getInfo().ableIndexList.get(StateCode.SELECT_MINKAN).clear();
 				continue;
 			}
@@ -920,8 +869,8 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 	 * @param sc input
 	 * @return output
 	 */
-	public StateCode getSelectHaiFromSelect(StateCode sc){
-		switch(sc){
+	public StateCode getSelectHaiFromSelect(StateCode sc) {
+		switch (sc) {
 		case SELECT_CHI:
 			return StateCode.SELECT_CHI_HAI;
 		case SELECT_PON:
@@ -936,63 +885,72 @@ public class MajanCanvas extends GraphicalPage implements MouseListener,MouseMot
 			return sc;
 		}
 	}
-	
+
 	@Override
-	public void mouseDragged(MouseEvent e) {}
-	
+	public void mouseDragged(MouseEvent e) {
+	}
+
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(stateCodes.contains(StateCode.WAIT))
+		if (stateCodes.contains(StateCode.WAIT))
 			return;
 		int mx = e.getPoint().x;
 		int my = e.getPoint().y;
-		for(StateCode sc:stateCodes){
+		for (StateCode sc : stateCodes) {
 			addSelectedIndexesWhenOverHai(mx, my, sc.getNum(), info.ableIndexList.get(sc));
 		}
 	}
-	
-	public Image getImage(){
+
+	public Image getImage() {
 		return imgBuffer;
 	}
-	public void kill(){
+
+	public void kill() {
 		isAlive = false;
 	}
-	public void movePage(String order){
+
+	public void movePage(String order) {
 		kill();
 		repaint();
-		getFrame().setPage(order,imgBuffer);
+		getFrame().setPage(order, imgBuffer);
 	}
-	public void setFocus(){
-//		getFrame().setLocation(0, 0);
-//		getFrame().setAlwaysOnTop(true);
+
+	public void setFocus() {
+		//		getFrame().setLocation(0, 0);
+		//		getFrame().setAlwaysOnTop(true);
 	}
-	public void hideFocus(){
+
+	public void hideFocus() {
 		getFrame().setAlwaysOnTop(false);
 	}
-	public void setPlayers(Player[] players,int index){
+
+	public void setPlayers(Player[] players, int index) {
 		number = index;
 		ClientInfo info = getFrame().getInfo();
-		if(info != null)
+		if (info != null)
 			info = new ClientInfo(number);
 		this.info = info;
 		info.sekiMap = new HashMap<Player, Integer>(4);
 		for (int i = 0; i < 4; i++) {
-			info.sekiMap.put(info.players[(4 - number)%4], i);
+			info.sekiMap.put(info.players[(4 - number) % 4], i);
 		}
 	}
-	public void setBakaze(Kaze kaze){
+
+	public void setBakaze(Kaze kaze) {
 		info.bakaze = kaze;
 	}
-	public void setKyokusu(int kyokusu){
-		if(info.kyokusu != kyokusu)
+
+	public void setKyokusu(int kyokusu) {
+		if (info.kyokusu != kyokusu)
 			moveKaze();
 		info.kyokusu = kyokusu;
 	}
-	private void moveKaze(){
-		Map<Kaze,Integer> kaze = info.kaze;
-		for(Kaze k:kaze.keySet()){
-			kaze.put(k, (kaze.get(k) + 1)%4);
+
+	private void moveKaze() {
+		Map<Kaze, Integer> kaze = info.kaze;
+		for (Kaze k : kaze.keySet()) {
+			kaze.put(k, (kaze.get(k) + 1) % 4);
 		}
-		info.finish = (info.finish + kaze.get(Kaze.TON)*17)%68;
+		info.finish = (info.finish + kaze.get(Kaze.TON) * 17) % 68;
 	}
 }

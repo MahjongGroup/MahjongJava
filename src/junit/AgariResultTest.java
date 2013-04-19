@@ -14,9 +14,11 @@ import static system.MajanHai.YO_MAN;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Test;
 
+import system.AgariParam;
 import system.AgariResult;
 import system.Field;
 import system.Hai;
@@ -25,7 +27,7 @@ import system.HurohaiList;
 import system.Kaze;
 import system.MatiType;
 import system.NormalYaku;
-import system.Param;
+import system.CheckParam;
 import system.Rule;
 import system.TehaiList;
 import system.Yaku;
@@ -41,37 +43,51 @@ public class AgariResultTest {
 
 	static Field field = new Field(new Rule(), Kaze.TON);
 	
+	static List<HaiType> odora = new ArrayList<HaiType>();
+	static List<HaiType> udora = new ArrayList<HaiType>();
+	
+	static {
+		odora.add(HaiType.ITI_MAN);
+		odora.add(HaiType.ROKU_MAN);
+	}
+	
 	@Test
 	public void testList1() {
 		// 1,2,2,3,3,3,4,4, TON,TON,TON, NAN,NAN
 		
-		Param param = new Param();
-		param.setTsumo(true);
-		param.setNaki(false);
-		param.setJikaze(Kaze.TON);
-		param.setFlagCheckYakuSet(new HashSet<Yaku>());
-		param.setAgariHai(NI_MAN);
+		AgariParam param = new AgariParam(true, false, NI_MAN, Kaze.TON);
 		
-		AgariResult ar = AgariResult.createAgariResult(list1, new HurohaiList(), param, field, Kaze.NAN, new ArrayList<HaiType>(0), new ArrayList<HaiType>(0));
-		assertEquals(ar.getMatiTye(), MatiType.KANTYAN);
+		AgariResult.Builder builder = new AgariResult.Builder();
+		builder.setAgariParam(param);
+		builder.setField(field);
+		builder.setHojuKaze(Kaze.NAN);
+		builder.setHurohaiList(new HurohaiList());
+		builder.setOpenDoraList(odora);
+		builder.setTehaiList(list1);
+		builder.setUraDoraList(udora);
+		builder.setYakuFlag(new HashSet<Yaku>());
+		
+		AgariResult ar = builder.build();
+		System.out.println(ar);
 	}
 	
 	@Test
 	public void testList2() {
 		// 1,1,1,2,2,2,3,3,3,4,5,6,6
-		// agarihai 3
-		Param param = new Param();
-		param.setTsumo(false);
-		param.setNaki(false);
-		param.setJikaze(Kaze.TON);
-		param.setAgariHai(SAN_MAN);
-		param.setFlagCheckYakuSet(new HashSet<Yaku>());
+		AgariParam param = new AgariParam(true, false, SAN_MAN, Kaze.TON);
 		
-		AgariResult ar = AgariResult.createAgariResult(list2, new HurohaiList(), param, field, Kaze.NAN, new ArrayList<HaiType>(0), new ArrayList<HaiType>(0));
-		assertEquals(ar.getMatiTye(), MatiType.RYANMEN);
-		assertTrue(ar.getYakuSet().contains(NormalYaku.SANNANKO));
-		assertTrue(!ar.getYakuSet().contains(NormalYaku.IPEKO));
-		assertTrue(!ar.getYakuSet().contains(NormalYaku.PINHU));
+		AgariResult.Builder builder = new AgariResult.Builder();
+		builder.setAgariParam(param);
+		builder.setField(field);
+		builder.setHojuKaze(Kaze.NAN);
+		builder.setHurohaiList(new HurohaiList());
+		builder.setOpenDoraList(odora);
+		builder.setTehaiList(list2);
+		builder.setUraDoraList(udora);
+		builder.setYakuFlag(new HashSet<Yaku>());
+		
+		AgariResult ar = builder.build();
+		System.out.println(ar);
 	}
 	
 

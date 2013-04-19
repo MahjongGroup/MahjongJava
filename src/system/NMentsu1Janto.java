@@ -25,6 +25,18 @@ public class NMentsu1Janto extends UnmodifiableList<Mentu>{
 		return janto;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Mentu m : this) {
+			if(sb.length() != 0)
+				sb.append(", ");
+			sb.append(m);
+		}
+		sb.append(", 雀頭 : " + janto.toString());
+		return sb.toString();
+	}
+	
 	/**
 	 * 雀頭->順子->刻子の順番に面子を取り除いて出来たn面子1雀頭オブジェクトを生成してそれを返す．
 	 * 

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import system.Hai;
-import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;

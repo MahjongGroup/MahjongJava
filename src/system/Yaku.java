@@ -46,6 +46,5 @@ public interface Yaku {
 	 * @param field 局のルール,場風など.
 	 * @return この役をあがっている場合true
 	 */
-	public boolean check(Param param, Field field);
-	
+	public boolean check(AgariParam agParam, CheckParam chParam, Field field);	
 }
