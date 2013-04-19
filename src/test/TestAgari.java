@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import system.AgariMethods;
+import system.AgariParam;
+import system.AgariResult;
+import system.Field;
 import system.Hai;
 import system.HaiType;
+import system.HurohaiList;
+import system.Kaze;
 import system.MajanHai;
+import system.Rule;
 import system.TehaiList;
+import system.Yaku;
 import client.ImageLoader;
 import client.MajanHaiIDMapper;
 
@@ -43,7 +51,8 @@ public class TestAgari extends JFrame {
 		setVisible(true);
 	}
 
-	public class MajanCanvas extends Canvas implements MouseListener, MouseMotionListener, KeyListener {
+	public class MajanCanvas extends Canvas implements MouseListener,
+			MouseMotionListener, KeyListener {
 		private Map<Hai, Image> haiImageMap;
 		private Map<Hai, Image> scaledHaiImageMap;
 		private Image haiBackImage;
@@ -59,8 +68,15 @@ public class TestAgari extends JFrame {
 		private List<Hai> tehai;
 		private Hai tsumohai;
 
+		private List<HaiType> odora;
+		private List<HaiType> udora;
+
+		private Rule rule;
+		private Field field;
+		private Kaze jikaze;
+
 		private int cursorPosition;
-		
+
 		private boolean checked;
 		private boolean isTenpai;
 		private boolean isNMentu1Janto;
@@ -72,12 +88,12 @@ public class TestAgari extends JFrame {
 
 				while (true) {
 					repaint();
-					
-					if(!checked) {
+
+					if (!checked) {
 						checked = true;
 						check();
 					}
-					
+
 					try {
 						long dt = System.currentTimeMillis() - preTime;
 						if (dt < 33) {
@@ -94,16 +110,22 @@ public class TestAgari extends JFrame {
 		public MajanCanvas(TestAgari frame) {
 			this.haiImageMap = new HashMap<Hai, Image>();
 			for (Hai hai : MajanHai.values()) {
-				haiImageMap.put(hai, ImageLoader.load(MajanHaiIDMapper.getID(hai)));
+				haiImageMap.put(hai,
+						ImageLoader.load(MajanHaiIDMapper.getID(hai)));
 			}
 			this.scaledHaiImageMap = new HashMap<Hai, Image>();
 			for (Hai hai : MajanHai.values()) {
-				scaledHaiImageMap.put(hai, ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai)));
+				scaledHaiImageMap.put(hai,
+						ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai)));
 			}
 
 			addMouseListener(this);
 			addMouseMotionListener(this);
 			addKeyListener(this);
+
+			rule = new Rule();
+			field = new Field(rule, Kaze.TON);
+			jikaze = Kaze.TON;
 
 			tehai = new ArrayList<Hai>();
 			tehai.add(MajanHai.AKA_GO_PIN);
@@ -121,6 +143,9 @@ public class TestAgari extends JFrame {
 			tehai.add(MajanHai.AKA_GO_PIN);
 
 			tsumohai = MajanHai.AKA_GO_MAN;
+
+			odora = new ArrayList<HaiType>(0);
+			udora = new ArrayList<HaiType>(0);
 
 			this.gthread = new GameThread();
 			this.gthread.start();
@@ -140,7 +165,7 @@ public class TestAgari extends JFrame {
 			gg.setColor(Color.RED);
 
 			gg.drawString("", 200, 200);
-			
+
 			int x = 40;
 			int y = 40;
 
@@ -162,24 +187,42 @@ public class TestAgari extends JFrame {
 			gg.drawRect(cx + 1, cy + 1, 49, 69);
 			gg.drawRect(cx + 2, cy + 2, 48, 68);
 
-			if(isTenpai) {
+			if (isTenpai) {
 				gg.drawString("手牌は聴牌しています。", 200, 200);
 			}
-			if(isNMentu1Janto){
+			if (isNMentu1Janto) {
 				gg.drawString("n面子1雀頭です。", 200, 300);
 			}
-			
-			
+
 			g.drawImage(imgBuffer, 0, 0, this);
 
 		}
-		
+
 		public void check() {
 			TehaiList tlist1 = new TehaiList(tehai);
 			isTenpai = AgariMethods.isTenpai(tlist1, false);
 			TehaiList tlist2 = new TehaiList(tehai);
 			tlist2.add(tsumohai);
 			isNMentu1Janto = AgariMethods.isNMentu1Janto(tlist2);
+
+			if (AgariMethods.isAgari(tlist1, new HurohaiList(0), tsumohai,
+					null, true, false, jikaze, field)) {
+				AgariResult.Builder b = new AgariResult.Builder();
+				AgariParam ag = new AgariParam(true, false, tsumohai, Kaze.TON,
+						null);
+				b.setAgariParam(ag);
+				Rule rule = new Rule();
+				Field f = new Field(rule, Kaze.TON);
+				b.setField(f);
+				b.setHojuKaze(null);
+				b.setHurohaiList(new HurohaiList());
+				b.setOpenDoraList(odora);
+				b.setTehaiList(tlist1);
+				b.setUraDoraList(udora);
+				b.setYakuFlag(new HashSet<Yaku>(0));
+				AgariResult result = b.build();
+				System.out.println(result.toString());
+			}
 		}
 
 		@Override
@@ -239,7 +282,7 @@ public class TestAgari extends JFrame {
 			case 37:
 				cursorPosition--;
 				break;
-			//up
+			// up
 			case 38:
 				y = 1;
 				break;
@@ -247,15 +290,15 @@ public class TestAgari extends JFrame {
 			case 39:
 				cursorPosition++;
 				break;
-			//down
+			// down
 			case 40:
-				y = -1;				
+				y = -1;
 				break;
 			}
 
 			if (y != 0) {
 				checked = false;
-				HaiType haiType = null;				
+				HaiType haiType = null;
 				if (cursorPosition == 13) {
 					haiType = tsumohai.type();
 				} else {
@@ -263,9 +306,12 @@ public class TestAgari extends JFrame {
 				}
 				int id = haiType.id();
 				id += y;
-				if(id == 0) id = 36;
-				if(id == 37) id = 1;
-				if(id == 10 || id == 20) id += y;
+				if (id == 0)
+					id = 36;
+				if (id == 37)
+					id = 1;
+				if (id == 10 || id == 20)
+					id += y;
 				haiType = HaiType.valueOf(id);
 				Hai hai = MajanHai.valueOf(haiType, false);
 				if (cursorPosition == 13) {
