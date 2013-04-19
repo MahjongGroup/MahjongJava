@@ -151,6 +151,7 @@ public class KyokuRunner {
 
 				case STATE_CODE_NEXTTURN:
 					if (kyoku.isRyukyoku()) {
+						doTempai();//(仮にここにおいているだけ)
 						kyoku.doRyukyoku();
 						stateCode = STATE_CODE_ENDOFKYOKU;
 					} else {
@@ -1000,7 +1001,7 @@ public class KyokuRunner {
 		notifyTempai(tempaiMap,ttempai);
 	}
 	
-	
+	//聴牌したことを周りに知らせる、
 	private void notifyTempai(Map<Player,List<Hai>> tehaimap,Server tr){
 		tr.notifyTempai(tehaimap);		
 	}
