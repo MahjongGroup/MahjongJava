@@ -274,6 +274,15 @@ public enum HaiType{
 		return null;
 	}
 
+	public static HaiType valueOf(int id) {
+		for (HaiType ht : values()) {
+			if (ht.id() == id) {
+				return ht;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		return notation;
