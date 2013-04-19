@@ -1,7 +1,6 @@
 package system;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -131,10 +130,10 @@ public class AgariMethods {
 
 		// 4面子1雀頭である
 		if (isNMentu1Janto(tehaiPlusAgariHai)) {
-			if (!setMentuListAndJanto(tlist, agParam.getAgarihai(), hlist, chParam)) {
-				throw new IllegalStateException();
-			}
-
+			NMentsu1Janto nmj = NMentsu1Janto.newInstanceFromSyuntsu(tehaiPlusAgariHai);
+			chParam.setJanto(nmj.getJanto());
+			chParam.setMentuList(nmj);
+			
 			// 両面待ちととれる場合
 			if (MatiType.RYANMEN.check(chParam.getMentuList(), agParam.getAgarihai().type(), chParam.getJanto())) {
 				chParam.setMatiType(MatiType.RYANMEN);
@@ -393,148 +392,148 @@ public class AgariMethods {
 //		return BackTrackMethod.isNMentu1Janto(haiList);
 	}
 
-	/**
-	 * あがり形がn面子1雀頭の場合に手牌リストの牌を順子刻子->とって出来た面子リストを返す．
-	 * 
-	 * @param haiList 手牌リスト
-	 * @param agariHai 上がり牌
-	 * @param huroList 副露牌リスト
-	 * @param chParam チェッカーパラメータ
-	 * @return 面子リストの設定に成功した場合true
-	 */
-	public static boolean getMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai, HurohaiList huroList, CheckParam chParam) {
-		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
-		List<HaiType> haiListCopy = new ArrayList<HaiType>();
-		for (Hai hai : haiList) {
-			haiListCopy.add(hai.type());
-		}
-		haiListCopy.add(agariHai.type());
+//	/**
+//	 * あがり形がn面子1雀頭の場合に手牌リストの牌を順子刻子->とって出来た面子リストを返す．
+//	 * 
+//	 * @param haiList 手牌リスト
+//	 * @param agariHai 上がり牌
+//	 * @param huroList 副露牌リスト
+//	 * @param chParam チェッカーパラメータ
+//	 * @return 面子リストの設定に成功した場合true
+//	 */
+//	public static boolean getMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai, HurohaiList huroList, CheckParam chParam) {
+//		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
+//		List<HaiType> haiListCopy = new ArrayList<HaiType>();
+//		for (Hai hai : haiList) {
+//			haiListCopy.add(hai.type());
+//		}
+//		haiListCopy.add(agariHai.type());
+//
+//		for (HaiType haiType : haiTypeSet) {
+//			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
+//				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
+//				HaiType janto = haiType;
+//				List<Mentu> tempMentuList = new ArrayList<Mentu>();
+//
+//				tempList.remove(haiType);
+//				tempList.remove(haiType);
+//
+//				// 刻子を取り除く
+//				for (HaiType haiType2 : haiTypeSet) {
+//					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
+//						Hai hai = MajanHai.valueOf(haiType2, false);
+//						tempMentuList.add(new Mentu(hai, hai, hai));
+//
+//						tempList.remove(haiType2);
+//						tempList.remove(haiType2);
+//						tempList.remove(haiType2);
+//					}
+//				}
+//
+//				// 順子を取り除く
+//				for (SuType suType : SuType.values()) {
+//					for (int i = 1; i <= 7; i++) {
+//						HaiType haiArray[] = new HaiType[3];
+//						haiArray[0] = HaiType.valueOf(suType, i);
+//						haiArray[1] = HaiType.valueOf(suType, i + 1);
+//						haiArray[2] = HaiType.valueOf(suType, i + 2);
+//
+//						if (tempList.containsAll(Arrays.asList(haiArray))) {
+//							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
+//							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
+//							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
+//
+//							tempMentuList.add(new Mentu(hai0, hai1, hai2));
+//							tempList.remove(haiArray[0]);
+//							tempList.remove(haiArray[1]);
+//							tempList.remove(haiArray[2]);
+//							i--;
+//						}
+//					}
+//				}
+//
+//				if (tempList.size() == 0) {
+//					tempMentuList.addAll(huroList);
+//
+//					chParam.setJanto(janto);
+//					chParam.setMentuList(tempMentuList);
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
-		for (HaiType haiType : haiTypeSet) {
-			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
-				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
-				HaiType janto = haiType;
-				List<Mentu> tempMentuList = new ArrayList<Mentu>();
-
-				tempList.remove(haiType);
-				tempList.remove(haiType);
-
-				// 刻子を取り除く
-				for (HaiType haiType2 : haiTypeSet) {
-					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
-						Hai hai = MajanHai.valueOf(haiType2, false);
-						tempMentuList.add(new Mentu(hai, hai, hai));
-
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-					}
-				}
-
-				// 順子を取り除く
-				for (SuType suType : SuType.values()) {
-					for (int i = 1; i <= 7; i++) {
-						HaiType haiArray[] = new HaiType[3];
-						haiArray[0] = HaiType.valueOf(suType, i);
-						haiArray[1] = HaiType.valueOf(suType, i + 1);
-						haiArray[2] = HaiType.valueOf(suType, i + 2);
-
-						if (tempList.containsAll(Arrays.asList(haiArray))) {
-							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
-							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
-							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
-
-							tempMentuList.add(new Mentu(hai0, hai1, hai2));
-							tempList.remove(haiArray[0]);
-							tempList.remove(haiArray[1]);
-							tempList.remove(haiArray[2]);
-							i--;
-						}
-					}
-				}
-
-				if (tempList.size() == 0) {
-					tempMentuList.addAll(huroList);
-
-					chParam.setJanto(janto);
-					chParam.setMentuList(tempMentuList);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * チェッカーパラメータの面子リスト,雀頭を設定する。
-	 * 
-	 * @param haiList 手牌リスト
-	 * @param agariHai 上がり牌
-	 * @param huroList 副露牌リスト
-	 * @param chParam チェッカーパラメータ
-	 * @return 面子リストの設定に成功した場合true
-	 */
-	public static boolean setMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai, HurohaiList huroList, CheckParam chParam) {
-		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
-		List<HaiType> haiListCopy = new ArrayList<HaiType>();
-		for (Hai hai : haiList) {
-			haiListCopy.add(hai.type());
-		}
-		haiListCopy.add(agariHai.type());
-
-		for (HaiType haiType : haiTypeSet) {
-			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
-				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
-				HaiType janto = haiType;
-				List<Mentu> tempMentuList = new ArrayList<Mentu>();
-
-				tempList.remove(haiType);
-				tempList.remove(haiType);
-
-				// 刻子を取り除く
-				for (HaiType haiType2 : haiTypeSet) {
-					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
-						Hai hai = MajanHai.valueOf(haiType2, false);
-						tempMentuList.add(new Mentu(hai, hai, hai));
-
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-						tempList.remove(haiType2);
-					}
-				}
-
-				// 順子を取り除く
-				for (SuType suType : SuType.values()) {
-					for (int i = 1; i <= 7; i++) {
-						HaiType haiArray[] = new HaiType[3];
-						haiArray[0] = HaiType.valueOf(suType, i);
-						haiArray[1] = HaiType.valueOf(suType, i + 1);
-						haiArray[2] = HaiType.valueOf(suType, i + 2);
-
-						if (tempList.containsAll(Arrays.asList(haiArray))) {
-							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
-							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
-							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
-
-							tempMentuList.add(new Mentu(hai0, hai1, hai2));
-							tempList.remove(haiArray[0]);
-							tempList.remove(haiArray[1]);
-							tempList.remove(haiArray[2]);
-							i--;
-						}
-					}
-				}
-
-				if (tempList.size() == 0) {
-					tempMentuList.addAll(huroList);
-
-					chParam.setJanto(janto);
-					chParam.setMentuList(tempMentuList);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//	/**
+//	 * チェッカーパラメータの面子リスト,雀頭を設定する。
+//	 * 
+//	 * @param haiList 手牌リスト
+//	 * @param agariHai 上がり牌
+//	 * @param huroList 副露牌リスト
+//	 * @param chParam チェッカーパラメータ
+//	 * @return 面子リストの設定に成功した場合true
+//	 */
+//	public static boolean setMentuListAndJanto(List<? extends Hai> haiList, Hai agariHai, HurohaiList huroList, CheckParam chParam) {
+//		Set<HaiType> haiTypeSet = HaiType.toHaiTypeSet(haiList);
+//		List<HaiType> haiListCopy = new ArrayList<HaiType>();
+//		for (Hai hai : haiList) {
+//			haiListCopy.add(hai.type());
+//		}
+//		haiListCopy.add(agariHai.type());
+//
+//		for (HaiType haiType : haiTypeSet) {
+//			if (Functions.sizeOfHaiTypeList(haiType, haiListCopy) >= 2) {
+//				List<HaiType> tempList = new ArrayList<HaiType>(haiListCopy);
+//				HaiType janto = haiType;
+//				List<Mentu> tempMentuList = new ArrayList<Mentu>();
+//
+//				tempList.remove(haiType);
+//				tempList.remove(haiType);
+//
+//				// 刻子を取り除く
+//				for (HaiType haiType2 : haiTypeSet) {
+//					if (Functions.sizeOfHaiTypeList(haiType2, tempList) >= 3) {
+//						Hai hai = MajanHai.valueOf(haiType2, false);
+//						tempMentuList.add(new Mentu(hai, hai, hai));
+//
+//						tempList.remove(haiType2);
+//						tempList.remove(haiType2);
+//						tempList.remove(haiType2);
+//					}
+//				}
+//
+//				// 順子を取り除く
+//				for (SuType suType : SuType.values()) {
+//					for (int i = 1; i <= 7; i++) {
+//						HaiType haiArray[] = new HaiType[3];
+//						haiArray[0] = HaiType.valueOf(suType, i);
+//						haiArray[1] = HaiType.valueOf(suType, i + 1);
+//						haiArray[2] = HaiType.valueOf(suType, i + 2);
+//
+//						if (tempList.containsAll(Arrays.asList(haiArray))) {
+//							Hai hai0 = MajanHai.valueOf(haiArray[0], false);
+//							Hai hai1 = MajanHai.valueOf(haiArray[1], false);
+//							Hai hai2 = MajanHai.valueOf(haiArray[2], false);
+//
+//							tempMentuList.add(new Mentu(hai0, hai1, hai2));
+//							tempList.remove(haiArray[0]);
+//							tempList.remove(haiArray[1]);
+//							tempList.remove(haiArray[2]);
+//							i--;
+//						}
+//					}
+//				}
+//
+//				if (tempList.size() == 0) {
+//					tempMentuList.addAll(huroList);
+//
+//					chParam.setJanto(janto);
+//					chParam.setMentuList(tempMentuList);
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
 }

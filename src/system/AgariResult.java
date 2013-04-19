@@ -272,6 +272,7 @@ public class AgariResult {
 
 				// 刻子からとれるかどうか
 				if (pvalue.isKotsuRm()) {
+					System.out.println("刻子");
 					NMentsu1Janto nmj = NMentsu1Janto.newInstanceFromKotsu(tehaiPlusAgariHai);
 					CheckParam p = new CheckParam(chParam);
 					AgariParam agp = new AgariParam(agariParam);
@@ -279,6 +280,7 @@ public class AgariResult {
 					p.setJanto(nmj.getJanto());
 
 					if (pvalue.isIpekoByKotsuRm()) {
+						System.out.println("IPEKO");
 						agp.addFlagCheckYaku(NormalYaku.IPEKO);
 					}
 
@@ -286,6 +288,7 @@ public class AgariResult {
 				}
 				// 順子からとれるかどうか
 				if (pvalue.isSyuntsuRm()) {
+					System.out.println("順子");
 					NMentsu1Janto nmj = NMentsu1Janto.newInstanceFromSyuntsu(tehaiPlusAgariHai);
 					CheckParam p = new CheckParam(chParam);
 					AgariParam agp = new AgariParam(agariParam);
@@ -293,6 +296,7 @@ public class AgariResult {
 					p.setJanto(nmj.getJanto());
 
 					if (pvalue.isIpekoBySyuntsuRm()) {
+						System.out.println("IPEKO");
 						agp.addFlagCheckYaku(NormalYaku.IPEKO);
 					}
 
@@ -372,7 +376,7 @@ public class AgariResult {
 
 			Builder builder = new Builder();
 			builder.setCheckParam(param);
-			builder.setAgariParam(agariParam);
+			builder.setAgariParam(agp);
 			builder.setField(field);
 			builder.setHojuKaze(hoju);
 			builder.setHurohaiList(huro);
