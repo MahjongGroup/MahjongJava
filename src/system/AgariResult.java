@@ -305,10 +305,15 @@ public class AgariResult {
 
 				AgariResult agari = null;
 				int max = 0;
+				int max_han = 0;
+				
 				for (AgariResult ar : agarilist) {
 					int sc = ar.getBaseScore();
-					if (sc > max) {
+					int han = ar.getHan();
+					
+					if (sc > max || (sc == max && han > max_han)) {
 						max = sc;
+						max_han = han;
 						agari = ar;
 					}
 				}
