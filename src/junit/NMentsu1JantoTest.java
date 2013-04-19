@@ -1,38 +1,30 @@
 package junit;
 
 import static system.MajanHai.GO_MAN;
-import static system.MajanHai.GO_PIN;
 import static system.MajanHai.GO_SOU;
 import static system.MajanHai.HATI_MAN;
-import static system.MajanHai.HATI_PIN;
 import static system.MajanHai.ITI_MAN;
-import static system.MajanHai.ITI_PIN;
-import static system.MajanHai.ITI_SOU;
 import static system.MajanHai.KYU_MAN;
-import static system.MajanHai.KYU_PIN;
 import static system.MajanHai.KYU_SOU;
 import static system.MajanHai.NAN;
 import static system.MajanHai.NANA_MAN;
 import static system.MajanHai.NANA_SOU;
 import static system.MajanHai.NI_MAN;
 import static system.MajanHai.NI_PIN;
-import static system.MajanHai.NI_SOU;
 import static system.MajanHai.ROKU_MAN;
-import static system.MajanHai.ROKU_PIN;
 import static system.MajanHai.ROKU_SOU;
 import static system.MajanHai.SAN_MAN;
 import static system.MajanHai.SAN_PIN;
-import static system.MajanHai.SAN_SOU;
 import static system.MajanHai.TON;
 import static system.MajanHai.YO_MAN;
 import static system.MajanHai.YO_PIN;
-import static system.MajanHai.YO_SOU;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
 import system.Hai;
+import system.NMentsu1Janto;
 import system.TehaiList;
 import system.algo.PatternMethod;
 
@@ -45,6 +37,7 @@ public class NMentsu1JantoTest {
 
 	static {
 		PatternMethod.loadClass();
+		
 		// 1,2,2,2,3,3,3,4,4, TON,TON,TON, NAN,NAN
 		// 一盃口
 		list1 = new TehaiList(Arrays.asList(new Hai[] { ITI_MAN, NI_MAN, NI_MAN, NI_MAN, SAN_MAN, SAN_MAN, SAN_MAN, YO_MAN, YO_MAN, TON, TON, TON, NAN, NAN }));
@@ -59,6 +52,10 @@ public class NMentsu1JantoTest {
 
 	@Test
 	public void test() {
-		
+		NMentsu1Janto nmj = NMentsu1Janto.newInstanceFromSyuntsu(list1);
+		nmj = NMentsu1Janto.newInstanceFromSyuntsu(list2);
+		nmj = NMentsu1Janto.newInstanceFromKotsu(list2);
+		nmj = NMentsu1Janto.newInstanceFromSyuntsu(list3);
+		System.out.println(nmj);
 	}
 }

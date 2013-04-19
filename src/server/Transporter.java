@@ -401,6 +401,11 @@ public class Transporter implements Server {
 		endResultPage = true;
 	}
 	
+	@Override
+	public  void notifyTempai(Map<Player,List<Hai>> map){
+		client.onTempaiReceived(map);
+	}	
+	
 	public void notifyGameResult(int[] score){
 		client.onGameResultReceived(score);
 	}

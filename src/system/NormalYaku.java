@@ -12,14 +12,14 @@ import java.util.Set;
 public enum NormalYaku implements Yaku {
 	RICHI("立直", 1, false, false, true, false) {
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(RICHI);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(RICHI);
 		}
 
 	},
 	YAKUHAI_HAKU("役牌　白", 1, true, false, false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
 				if (m.get(0).type() == HaiType.HAKU) {
 					return true;
@@ -30,7 +30,7 @@ public enum NormalYaku implements Yaku {
 	},
 	YAKUHAI_HATSU("役牌　撥", 1, true, false, false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
 				if (m.get(0).type() == HaiType.HATU) {
 					return true;
@@ -41,7 +41,7 @@ public enum NormalYaku implements Yaku {
 	},
 	YAKUHAI_TYUN("役牌　中", 1, true, false, false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
 				if (m.get(0).type() == HaiType.TYUN) {
 					return true;
@@ -53,7 +53,7 @@ public enum NormalYaku implements Yaku {
 	BAHUHAI("場風牌", 1, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
 				if (m.get(0).type() == HaiType.valueOf(field.getBakaze())) {
 					return true;
@@ -65,9 +65,9 @@ public enum NormalYaku implements Yaku {
 	JIHUHAI("自風牌", 1, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
-				if (m.get(0).type() == HaiType.valueOf(param.getJikaze())) {
+				if (m.get(0).type() == HaiType.valueOf(agParam.getJikaze())) {
 					return true;
 				}
 			}
@@ -76,7 +76,7 @@ public enum NormalYaku implements Yaku {
 	},
 	TANNYAO("断么九", 1, true, false, false, false) {
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Hai hai : param.getHaiList()) {
 				if (!hai.isTyuntyanhai())
 					return false;
@@ -87,15 +87,15 @@ public enum NormalYaku implements Yaku {
 	PINHU("平和", 1, false, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			if (param.isNaki())
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			if (agParam.isNaki())
 				return false;
 			HaiType jantohai = param.getJanto();
 			if (jantohai.group3() == HaiGroup3.SANGEN) {
 				return false;
 			} else if (jantohai.group3() == HaiGroup3.KAZE) {
 				Kaze kaze = jantohai.kaze();
-				if (kaze == field.getBakaze() || kaze == param.getJikaze())
+				if (kaze == field.getBakaze() || kaze == agParam.getJikaze())
 					return false;
 			}
 
@@ -112,8 +112,8 @@ public enum NormalYaku implements Yaku {
 	},
 	TSUMO("門前清自摸和", 1, false, false, false, false) {
 		@Override
-		public boolean check(Param param, Field field) {
-			if (param.isTsumo() && !param.isNaki())
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			if (agParam.isTsumo() && !agParam.isNaki())
 				return true;
 			return false;
 		}
@@ -121,8 +121,8 @@ public enum NormalYaku implements Yaku {
 	IPPATSU("一発", 1, false, false, true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(IPPATSU);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(IPPATSU);
 		}
 
 	},
@@ -130,57 +130,57 @@ public enum NormalYaku implements Yaku {
 	IPEKO("一盃口", 1, false, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			if (param.isNaki())
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			if (agParam.isNaki())
 				return false;
-			return param.getFlagCheckYakuSet().contains(NormalYaku.IPEKO);
+			return agParam.getFlagCheckYakuSet().contains(NormalYaku.IPEKO);
 		}
 
 	},
 	HOTEI("河底撈魚", 1, true, false, true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(HOTEI);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(HOTEI);
 		}
 
 	},
 	HAITEI("海底摸月", 1, true, false, true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(HAITEI);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(HAITEI);
 		}
 
 	},
 	RINSYANKAIHO("嶺上開花", 1, true, false, true, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(RINSYANKAIHO);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(RINSYANKAIHO);
 		}
 
 	},
 	TYANKAN("搶槓", 1, true, false, true, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(TYANKAN);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(TYANKAN);
 		}
 
 	},
 	DABURURICHI("両立直", 2, false, false, true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(DABURURICHI);
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(DABURURICHI);
 		}
 
 	},
 	TOITOI("対々和", 2, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Mentu m : param.getMentuList()) {
 				if (m.type() == Mentu.Type.SYUNTU) {
 					return false;
@@ -193,7 +193,7 @@ public enum NormalYaku implements Yaku {
 	SANSYOKUDOJUN("三色同順", 2, true, true, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			ArrayList<Integer> idList = new ArrayList<Integer>();
 			for (Mentu mentu : mlist) {
@@ -216,7 +216,7 @@ public enum NormalYaku implements Yaku {
 	SANSYOKUDOKO("三色同刻", 2, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			ArrayList<Integer> idList = new ArrayList<Integer>();
 			for (Mentu mentu : mlist) {
@@ -239,7 +239,7 @@ public enum NormalYaku implements Yaku {
 	CHITOI("七対子", 2, false, false, false, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Hai> haiList = param.getHaiList();
 
 			if (haiList.size() != 14) {
@@ -263,9 +263,9 @@ public enum NormalYaku implements Yaku {
 	IKKI("一気通貫", 2, true, true, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			// 鳴いている場合は面子から計算
-			if(param.isNaki()) {
+			if(agParam.isNaki()) {
 				List<Mentu> mlist = param.getMentuList();
 				ArrayList<Integer> idList = new ArrayList<Integer>();
 				for (Mentu mentu : mlist) {
@@ -285,14 +285,14 @@ public enum NormalYaku implements Yaku {
 				}
 				return false;
 			}
-			return param.getFlagCheckYakuSet().contains(NormalYaku.IKKI);
+			return agParam.getFlagCheckYakuSet().contains(NormalYaku.IKKI);
 		}
 
 	},
 	TYANTA("混全帯么九", 2, true, true, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			HaiType janto = param.getJanto();
 			if (janto.isTyuntyanhai())
 				return false;
@@ -315,7 +315,7 @@ public enum NormalYaku implements Yaku {
 	SANNANKO("三暗刻", 2, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			int anko = 0;
 			for (Mentu mentu : mlist) {
@@ -331,7 +331,7 @@ public enum NormalYaku implements Yaku {
 	SYOSANGEN("小三元", 2, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			HaiType janto = param.getJanto();
 			List<Mentu> mlist = param.getMentuList();
 			if (janto.group3() != HaiGroup3.SANGEN) {
@@ -353,7 +353,7 @@ public enum NormalYaku implements Yaku {
 	HONROTO("混老頭", 2, true, false, false, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();
 				if (haiType.isTyuntyanhai())
@@ -366,7 +366,7 @@ public enum NormalYaku implements Yaku {
 	SANKANTSU("三槓子", 2, true, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			int kanSize = 0;
 			for (Mentu mentu : mlist) {
@@ -382,7 +382,7 @@ public enum NormalYaku implements Yaku {
 	JUNTYAN("純全帯么九", 3, true, true, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			List<Mentu> mlist = param.getMentuList();
 			HaiType janto = param.getJanto();
 			if (janto.isTyuntyanhai() || janto.isTsuhai())
@@ -403,7 +403,7 @@ public enum NormalYaku implements Yaku {
 	HONNITSU("混一色", 3, true, true, false, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			SuType suType = null;
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();
@@ -421,17 +421,17 @@ public enum NormalYaku implements Yaku {
 	RYANPEKO("二盃口", 3, false, false, false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			if (param.isNaki())
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
+			if (agParam.isNaki())
 				return false;
-			return param.getFlagCheckYakuSet().contains(NormalYaku.RYANPEKO);
+			return agParam.getFlagCheckYakuSet().contains(NormalYaku.RYANPEKO);
 		}
 
 	},
 	CHINNITSU("清一色", 6, true, false, false, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
+		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			SuType suType = null;
 			for (Hai hai : param.getHaiList()) {
 				HaiType haiType = hai.type();

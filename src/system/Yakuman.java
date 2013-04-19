@@ -9,8 +9,8 @@ public enum Yakuman implements Yaku {
 	KOKUSIMUSOU("国士無双", false, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Hai> haiList = param.getHaiList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Hai> haiList = chParam.getHaiList();
 			if (haiList.size() != 14) {
 				return false;
 			}
@@ -39,11 +39,11 @@ public enum Yakuman implements Yaku {
 	},
 	KOKUSIMUSOU_13MEN("国士無双13面待ち", false, false) {
 		@Override
-		public boolean check(Param param, Field field) {
-			Hai agariHai = param.getAgariHai();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			Hai agariHai = agParam.getAgarihai();
 			if (agariHai.type().isTyuntyanhai())
 				return false;
-			List<Hai> haiList = param.getHaiList();
+			List<Hai> haiList = chParam.getHaiList();
 			List<HaiType> list = HaiType.toHaiTypeList(haiList);
 			list.remove(agariHai.type());
 
@@ -63,8 +63,8 @@ public enum Yakuman implements Yaku {
 	},
 	SUANKO("四暗刻", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Mentu> mlist = chParam.getMentuList();
 			int anko = 0;
 			for (Mentu mentu : mlist) {
 				if (mentu.type() != Mentu.Type.SYUNTU && !mentu.isNaki()) {
@@ -83,15 +83,15 @@ public enum Yakuman implements Yaku {
 	},
 	SUANKO_TANKI("四暗刻単騎待ち", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Mentu> mlist = chParam.getMentuList();
 			int anko = 0;
 			for (Mentu mentu : mlist) {
 				if (mentu.type() != Mentu.Type.SYUNTU && !mentu.isNaki()) {
 					anko++;
 				}
 			}
-			if (anko == 4 && param.getMatiType() == MatiType.TANKI)
+			if (anko == 4 && chParam.getMatiType() == MatiType.TANKI)
 				return true;
 			return false;
 		}
@@ -105,8 +105,8 @@ public enum Yakuman implements Yaku {
 	},
 	DAISANGEN("大三元", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Mentu> mlist = chParam.getMentuList();
 			int sangenSize = 0;
 			for (Mentu mentu : mlist) {
 				if (mentu.get(0).type().group3() == HaiGroup3.SANGEN) {
@@ -125,8 +125,8 @@ public enum Yakuman implements Yaku {
 	},
 	TSUISO("字一色", false, false) {
 		@Override
-		public boolean check(Param param, Field field) {
-			for (Hai hai : param.getHaiList()) {
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			for (Hai hai : chParam.getHaiList()) {
 				HaiType haiType = hai.type();
 				if (!haiType.isTsuhai())
 					return false;
@@ -141,11 +141,11 @@ public enum Yakuman implements Yaku {
 	},
 	CHINROTO("清老頭", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			HaiType janto = param.getJanto();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			HaiType janto = chParam.getJanto();
 			if (janto.isTyuntyanhai() || janto.isTsuhai())
 				return false;
-			List<Mentu> mlist = param.getMentuList();
+			List<Mentu> mlist = chParam.getMentuList();
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.SYUNTU || mentu.get(0).type().isTyuntyanhai() || mentu.get(0).type().isTsuhai())
 					return false;
@@ -160,8 +160,8 @@ public enum Yakuman implements Yaku {
 	},
 	SUKANTSU("四槓子", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Mentu> mlist = chParam.getMentuList();
 			int kanSize = 0;
 			for (Mentu mentu : mlist) {
 				if (mentu.type() == Mentu.Type.KANTU)
@@ -180,12 +180,12 @@ public enum Yakuman implements Yaku {
 
 	TYURENPOTO("九蓮宝燈", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			Hai hai = param.getAgariHai();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			Hai hai = agParam.getAgarihai();
 			if (hai.type().isTsuhai())
 				return false;
 			SuType suType = hai.type().suType();
-			List<Hai> haiList = param.getHaiList();
+			List<Hai> haiList = chParam.getHaiList();
 			List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
 			for (int i = 1; i < 10; i++) {
 				HaiType TyurenHaiType = HaiType.valueOf(suType, i);
@@ -212,12 +212,12 @@ public enum Yakuman implements Yaku {
 
 	JUNTYANTYUREN("純正九蓮宝燈", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			Hai hai = param.getAgariHai();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			Hai hai = agParam.getAgarihai();
 			if (hai.type().isTsuhai())
 				return false;
 			SuType suType = hai.type().suType();
-			List<Hai> haiList = param.getHaiList();
+			List<Hai> haiList = chParam.getHaiList();
 			List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
 			haiTypeList.remove(hai.type());
 
@@ -244,8 +244,8 @@ public enum Yakuman implements Yaku {
 
 	RYUISO("緑一色", false, true) {
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Hai> haiList = param.getHaiList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Hai> haiList = chParam.getHaiList();
 			List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
 			return !haiTypeList.retainAll(RYUISO_SET);
 		}
@@ -259,8 +259,8 @@ public enum Yakuman implements Yaku {
 	TENHO("天和", true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(TENHO);
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(TENHO);
 		}
 
 		@Override
@@ -273,8 +273,8 @@ public enum Yakuman implements Yaku {
 	CHIHO("地和", true, false) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			return param.getFlagCheckYakuSet().contains(CHIHO);
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			return agParam.getFlagCheckYakuSet().contains(CHIHO);
 		}
 
 		@Override
@@ -287,9 +287,9 @@ public enum Yakuman implements Yaku {
 	SYOSUSHI("小四喜", false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			HaiType janto = param.getJanto();
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			HaiType janto = chParam.getJanto();
+			List<Mentu> mlist = chParam.getMentuList();
 			if (janto.group3() != HaiGroup3.KAZE) {
 				return false;
 			}
@@ -314,8 +314,8 @@ public enum Yakuman implements Yaku {
 	DAISUSHI("大四喜", false, true) {
 
 		@Override
-		public boolean check(Param param, Field field) {
-			List<Mentu> mlist = param.getMentuList();
+		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
+			List<Mentu> mlist = chParam.getMentuList();
 			int kazeSize = 0;
 			for (Mentu mentu : mlist) {
 				if (mentu.get(0).type().group3() == HaiGroup3.KAZE) {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import system.Hai;
-import system.HaiType;
 import system.HurohaiList;
 import system.Kaze;
 import system.KyokuResult;
@@ -239,6 +238,11 @@ public interface Server {
 
 	public void notifyKyokuResult(KyokuResult kr,int[] newScore,int[] oldScore,List<Integer> soten,List<Hai> uradoraList);
 
+	/**
+	 * 局が終わったあと、聴牌しているプレイヤーとその手牌を送るメソッド
+	 */
+	public void notifyTempai(Map<Player ,List<Hai>> map);
+	
 	
 	/**
 	 * 局が終わったあとの結果表示を終わらせるメソッド
@@ -252,6 +256,11 @@ public interface Server {
 	 */
 	public void notifyGameResult(int[] Score);
 
+	/**
+	 * 
+	 */
+	
+	
 	/** 
 	 *　ゲームが終わったことをクライアントに送信
 	 */

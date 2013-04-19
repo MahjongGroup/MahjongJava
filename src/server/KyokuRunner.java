@@ -30,6 +30,7 @@ public class KyokuRunner {
 	private final Map<Kaze, Transporter> transporterMap;
 
 	private int stateCode;
+	private boolean discardFlag;
 
 	/**
 	 * 指定された局を動かす局ランナーのコンストラクタ.
@@ -69,6 +70,7 @@ public class KyokuRunner {
 				switch (stateCode) {
 				case STATE_CODE_TSUMO:
 					initTransporterFlag();
+					initDiscardFlag();
 					doTsumo();
 					kyoku.sortTehaiList();
 					kyoku.disp();
@@ -100,6 +102,7 @@ public class KyokuRunner {
 
 				case STATE_CODE_RINSYANTSUMO:
 					initTransporterFlag();
+					onDiscardFlag();
 					doRinsyanTsumo();
 					sendNeededInformation();
 					stateCode = STATE_CODE_SEND;
@@ -140,6 +143,7 @@ public class KyokuRunner {
 					sendNeededInformation();
 					doChi();
 					sendNeededInformation();
+					onDiscardFlag();
 					if (stateCode == STATE_CODE_NAKI) {
 						stateCode = STATE_CODE_NEXTTURN;
 					}
@@ -792,7 +796,17 @@ public class KyokuRunner {
 			tr.init();
 		}
 	}
+	
+	//discardFlagを初期化にする
+	private void initDiscardFlag(){
+		discardFlag =false;
+	}
 
+	//discardFlagをonにする
+	private void onDiscardFlag(){
+		discardFlag = true;
+	}
+	
 	/*
 	 * **********************A()******************************
 	 */
@@ -819,7 +833,9 @@ public class KyokuRunner {
 
 	// 捨て牌を選べという命令を送って,待つ
 	private int waitDiscarded(Transporter tr, boolean tumoari) {
-	//	tr.sendDiscard(tumoari);
+		if(discardFlag)
+			tr.sendDiscard(tumoari);
+		
 		while (!tr.isDiscardedReceived()) {
 			try {
 				Thread.sleep(100);
@@ -965,10 +981,30 @@ public class KyokuRunner {
 		tr.notifyRon(map);
 	}
 
+	//リーチしたプレイヤーと何の牌でリーチしたかを各プレイヤーに送る。
 	private void notifyReach(Kaze currentTurn, int sutehaiIndex, Server tr) {
 		tr.notifyReach(currentTurn, sutehaiIndex);
 	}
 
+	//聴牌したプレイヤーの手牌を周りに見せる
+	@SuppressWarnings("null")
+	private void doTempai(){
+		Map<Player,List<Hai>> tempaiMap = null;
+		Server ttempai = null;
+		for (Kaze kaze : Kaze.values()){
+			if(kyoku.isTenpai(kaze)){
+				tempaiMap.put(kyoku.getPlayer(kaze),kyoku.getTehaiList(kaze));
+			}
+			ttempai = transporterMap.get(kaze);
+		}
+		notifyTempai(tempaiMap,ttempai);
+	}
+	
+	
+	private void notifyTempai(Map<Player,List<Hai>> tehaimap,Server tr){
+		tr.notifyTempai(tehaimap);		
+	}
+	
 	public static final int STATE_CODE_TSUMO = 0;
 	public static final int STATE_CODE_KYUSYUKYUHAI = 1;
 	public static final int STATE_CODE_TSUMOAGARI = 2;
