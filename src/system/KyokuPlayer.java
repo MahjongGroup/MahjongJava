@@ -192,6 +192,26 @@ public class KyokuPlayer {
 		if (this.kanSize == 4) {
 			return false;
 		}
+		// おくりカン判定
+		if (reachFlag) {
+			List<List<Integer>> indexes = tehaiList.getAnkanableIndexList(tsumohai);
+			for (List<Integer> list : indexes) {
+				if (list.contains(13)) {
+					TehaiList tempList = new TehaiList(tehaiList);
+					for (Integer i : list) {
+						tempList.remove(i);
+					}
+					if (!AgariMethods.isTenpai(tempList, nakiFlag))
+						return false;
+					List<Hai> machi = AgariMethods.getMachiHaiList(tempList, nakiFlag);
+					if (machi.equals(this.getMachihaiList())) {
+						return true;
+					}
+					return false;
+				}
+			}
+			return false;
+		}
 		return tehaiList.isAnkanable(tsumohai);
 	}
 
@@ -342,8 +362,7 @@ public class KyokuPlayer {
 		onStateChanged();
 		HaiType type = minkanhai.type();
 
-		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type),
-				tehaiList.remove(type), tehaiList.remove(type));
+		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
 		hurohaiList.add(m);
 		nakiFlag = true;
 		return m;
@@ -439,8 +458,7 @@ public class KyokuPlayer {
 		int index0 = tiList.get(0);
 		int index1 = tiList.get(1);
 
-		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0),
-				tehaiList.get(index1));
+		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0), tehaiList.get(index1));
 		if (index0 < index1) {
 			tehaiList.remove(index1);
 			tehaiList.remove(index0);
