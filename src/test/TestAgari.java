@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import system.AgariMethods;
 import system.AgariParam;
 import system.AgariResult;
 import system.Field;
+import system.Functions;
 import system.Hai;
 import system.HaiType;
 import system.HurohaiList;
@@ -128,21 +130,21 @@ public class TestAgari extends JFrame {
 			jikaze = Kaze.TON;
 
 			tehai = new ArrayList<Hai>();
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
-			tehai.add(MajanHai.AKA_GO_PIN);
+			tehai.add(MajanHai.ITI_MAN);
+			tehai.add(MajanHai.YO_MAN);
+			tehai.add(MajanHai.NANA_MAN);
+			tehai.add(MajanHai.NI_PIN);
+			tehai.add(MajanHai.GO_PIN);
+			tehai.add(MajanHai.HATI_PIN);
+			tehai.add(MajanHai.SAN_SOU);
+			tehai.add(MajanHai.ROKU_SOU);
+			tehai.add(MajanHai.KYU_SOU);
+			tehai.add(MajanHai.NAN);
+			tehai.add(MajanHai.SYA);
+			tehai.add(MajanHai.PE);
+			tehai.add(MajanHai.HAKU);
 
-			tsumohai = MajanHai.AKA_GO_MAN;
+			tsumohai = MajanHai.AKA_GO_PIN;
 
 			odora = new ArrayList<HaiType>(0);
 			udora = new ArrayList<HaiType>(0);
@@ -188,10 +190,18 @@ public class TestAgari extends JFrame {
 			gg.drawRect(cx + 2, cy + 2, 48, 68);
 
 			if (isTenpai) {
-				gg.drawString("手牌は聴牌しています。", 200, 200);
+				gg.drawString("手牌は聴牌しています。", 100, 200);
+				TehaiList tlist = new TehaiList(tehai);
+				List<Hai> list = AgariMethods.getMachiHaiList(tlist, false);
+				int i = 0;
+				for (Hai hai : list) {
+					Image image = this.haiImageMap.get(hai);
+					gg.drawImage(image, 100 + i, 300, this);
+					i += 50;
+				}
 			}
 			if (isNMentu1Janto) {
-				gg.drawString("n面子1雀頭です。", 200, 300);
+				gg.drawString("n面子1雀頭です。", 100, 250);
 			}
 
 			g.drawImage(imgBuffer, 0, 0, this);
@@ -294,6 +304,10 @@ public class TestAgari extends JFrame {
 			case 40:
 				y = -1;
 				break;
+			// s
+			case 83:
+				Collections.sort(tehai);
+				break;
 			}
 
 			if (y != 0) {
@@ -305,14 +319,18 @@ public class TestAgari extends JFrame {
 					haiType = tehai.get(cursorPosition).type();
 				}
 				int id = haiType.id();
-				id += y;
-				if (id == 0)
-					id = 36;
-				if (id == 37)
-					id = 1;
-				if (id == 10 || id == 20)
+				while (true) {
 					id += y;
-				haiType = HaiType.valueOf(id);
+					if (id == 0)
+						id = 36;
+					if (id == 37)
+						id = 1;
+					if (id == 10 || id == 20)
+						id += y;
+					haiType = HaiType.valueOf(id);
+					if(Functions.sizeOf(haiType, tehai) == 4) continue;
+					break;
+				}
 				Hai hai = MajanHai.valueOf(haiType, false);
 				if (cursorPosition == 13) {
 					tsumohai = hai;
@@ -327,11 +345,10 @@ public class TestAgari extends JFrame {
 			if (cursorPosition > 13)
 				cursorPosition = 0;
 		}
-
+		
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
-
 		}
 
 	}

@@ -187,8 +187,6 @@ public enum Yakuman implements Yaku {
 			SuType suType = hai.type().suType();
 			List<Hai> haiList = chParam.getHaiList();
 			List<HaiType> haiTypeList = HaiType.toHaiTypeList(haiList);
-			if (haiTypeList.get(0).suType() != suType)
-				return false;
 			for (int i = 1; i < 10; i++) {
 				HaiType TyurenHaiType = HaiType.valueOf(suType, i);
 				if (i == 1 || i == 9) {
