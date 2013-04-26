@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.AgariResult;
 import system.Kyoku;
-import system.KyokuResult;
 import system.Mahjong;
 import system.Player;
 import system.Rule;
+import system.agari.AgariResult;
+import system.result.KyokuResult;
 import test.Console;
 
 /**
@@ -80,11 +80,12 @@ public class MahjongGame {
 			
 			if(kr.isRonAgari()) {
 				for (Player player : playerList) {
-					if(kr.isAgari(player)) 
-						System.out.println(kr.getAgariResult(player));
+					if(kr.isAgari(player)) {
+//						System.out.println(kr.getAgariResult(player));
+					}
 				}
 			}else if(kr.isTsumoAgari()) {
-				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
+//				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
 			}
 		}
 		

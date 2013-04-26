@@ -6,30 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import system.Mentu.Type;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.Mentsu;
+import system.hai.SuType;
+import system.hai.Mentsu.Type;
 
 
 public class Functions {
-	
-	public static int max(int a, int ...array) {
-		int max = a;
-		
-		for (int i : array) {
-			if(i > max)
-				max = i;
-		}
-		return max;
-	}
-
-	public static int min(int a, int ...array) {
-		int min = a;
-		
-		for (int i : array) {
-			if(i < min)
-				min = i;
-		}
-		return min;
-	}
 	
 	/**
 	 * 指定された牌コレクションの中に含まれる指定された種類の牌の数を返す。
@@ -146,7 +130,7 @@ public class Functions {
 		return true;
 	}
 
-	public static Mentu.Type getMentuType(Hai ...hais) {
+	public static Mentsu.Type getMentuType(Hai ...hais) {
 		if(hais.length != 3 && hais.length != 4)
 			throw new IllegalArgumentException();
 

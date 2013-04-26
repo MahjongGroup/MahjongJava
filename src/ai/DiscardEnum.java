@@ -2,13 +2,13 @@ package ai;
 
 import java.util.List;
 
-import system.Hai;
-import system.HaiType;
-import system.Kaze;
 import system.Kyoku;
-import system.MajanHai;
 import system.Player;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.TehaiList;
 
 /**
  * AIのdiscardの戦略を実際に実装したオブジェクトの列挙型．

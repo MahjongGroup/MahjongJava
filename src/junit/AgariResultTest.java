@@ -2,14 +2,14 @@ package junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static system.MajanHai.GO_MAN;
-import static system.MajanHai.ITI_MAN;
-import static system.MajanHai.NAN;
-import static system.MajanHai.NI_MAN;
-import static system.MajanHai.ROKU_MAN;
-import static system.MajanHai.SAN_MAN;
-import static system.MajanHai.TON;
-import static system.MajanHai.YO_MAN;
+import static system.hai.MajanHai.GO_MAN;
+import static system.hai.MajanHai.ITI_MAN;
+import static system.hai.MajanHai.NAN;
+import static system.hai.MajanHai.NI_MAN;
+import static system.hai.MajanHai.ROKU_MAN;
+import static system.hai.MajanHai.SAN_MAN;
+import static system.hai.MajanHai.TON;
+import static system.hai.MajanHai.YO_MAN;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,19 +18,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import system.AgariParam;
-import system.AgariResult;
 import system.Field;
-import system.Hai;
-import system.HaiType;
-import system.HurohaiList;
-import system.Kaze;
-import system.MatiType;
-import system.NormalYaku;
-import system.CheckParam;
 import system.Rule;
-import system.TehaiList;
-import system.Yaku;
+import system.agari.AgariParam;
+import system.agari.AgariResult;
+import system.agari.CheckParam;
+import system.agari.MatiType;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.TehaiList;
+import system.yaku.NormalYaku;
+import system.yaku.Yaku;
 
 public class AgariResultTest {
 	// 1,2,2,3,3,3,4,4, TON,TON,TON, NAN,NAN

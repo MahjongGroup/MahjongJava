@@ -1,7 +1,7 @@
 package system;
 
-import static system.Kaze.PE;
-import static system.Kaze.TON;
+import static system.hai.Kaze.PE;
+import static system.hai.Kaze.TON;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +12,28 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import system.Hai.HaiComparator;
+import system.agari.AgariMethods;
+import system.agari.AgariParam;
+import system.agari.AgariResult;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.Mentsu;
+import system.hai.Sutehai;
+import system.hai.SutehaiList;
+import system.hai.TehaiList;
+import system.hai.Hai.HaiComparator;
+import system.result.KyokuResult;
+import system.result.KyokuRonAgariResult;
+import system.result.KyokuRyukyokuResult;
+import system.result.KyokuTotyuRyukyokuResult;
+import system.result.KyokuTsumoAgariResult;
+import system.result.TotyuRyukyokuType;
+import system.yaku.NormalYaku;
+import system.yaku.Yaku;
+import system.yaku.Yakuman;
 
 /**
  * 1局を表すクラス。
@@ -122,7 +143,7 @@ public class Kyoku {
 		if (field.getRule().isAkaAri()) {
 			for (HaiType type : HaiType.values()) {
 				// 数牌5は赤がある
-				if (type.group3() == HaiGroup3.SU && type.number() == 5) {
+				if (type.isSuhai() && type.number() == 5) {
 					// 赤は1枚ずつ
 					this.yamahai.add(MajanHai.valueOf(type, true));
 
@@ -277,11 +298,11 @@ public class Kyoku {
 	 * @param index 暗槓する牌のインデックス.13の場合,ツモ牌を表す.
 	 * @return 加槓して出来た面子.
 	 */
-	public Mentu doKakan(int index) {
+	public Mentsu doKakan(int index) {
 		this.openAtomekuriDora();
 
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
-		Mentu mentu = null;
+		Mentsu mentu = null;
 		// ツモ牌を加槓する場合
 		if (index == 13) {
 			this.currentSutehai = this.currentTumohai;
@@ -352,11 +373,11 @@ public class Kyoku {
 	 * 
 	 * @param 暗槓する牌のインデックス(13はツモ牌を表す).
 	 */
-	public Mentu doAnkan(List<Integer> list) {
+	public Mentsu doAnkan(List<Integer> list) {
 		this.openAtomekuriDora();
 		
 		KyokuPlayer kp = kyokuPlayerMap.get(currentTurn);
-		Mentu m = kp.doAnkan(currentTumohai, list);
+		Mentsu m = kp.doAnkan(currentTumohai, list);
 
 		this.newDoraSize++;
 		this.firstTurn = false;
@@ -541,13 +562,13 @@ public class Kyoku {
 	 * @param kaze 風.
 	 * @return 明槓して出来た面子.
 	 */
-	public Mentu doMinkan(Kaze kaze) {
+	public Mentsu doMinkan(Kaze kaze) {
 		assert isMinkanable(kaze);
 
 		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
 		KyokuPlayer nkp = kyokuPlayerMap.get(kaze);
 
-		Mentu m = nkp.doMinkan(currentSutehai, currentTurn);
+		Mentsu m = nkp.doMinkan(currentSutehai, currentTurn);
 		ckp.addSutehai(new Sutehai(currentSutehai, currentTurn));
 
 		this.naku();
@@ -589,13 +610,13 @@ public class Kyoku {
 	 * @param ponList ポンするインデックスリスト.
 	 * @return ポンして出来た面子.
 	 */
-	public Mentu doPon(Kaze kaze, List<Integer> ponList) {
+	public Mentsu doPon(Kaze kaze, List<Integer> ponList) {
 		assert isPonable(kaze);
 		assert ponList.size() == 2;
 
 		KyokuPlayer nkp = kyokuPlayerMap.get(kaze);
 		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
-		Mentu m = nkp.doPon(ponList, currentSutehai, currentTurn);
+		Mentsu m = nkp.doPon(ponList, currentSutehai, currentTurn);
 
 		ckp.addSutehai(new Sutehai(currentSutehai, kaze));
 
@@ -634,7 +655,7 @@ public class Kyoku {
 	 * @param tiList チーする牌インデックスのリスト.
 	 * @return チーして出来た面子.
 	 */
-	public Mentu doChi(List<Integer> tiList) {
+	public Mentsu doChi(List<Integer> tiList) {
 		assert isChiable();
 		assert tiList.size() == 2;
 
@@ -642,7 +663,7 @@ public class Kyoku {
 		KyokuPlayer nkp = kyokuPlayerMap.get(next);
 		KyokuPlayer ckp = kyokuPlayerMap.get(currentTurn);
 
-		Mentu m = nkp.doChi(tiList, currentSutehai, currentTurn);
+		Mentsu m = nkp.doChi(tiList, currentSutehai, currentTurn);
 		ckp.addSutehai(new Sutehai(currentSutehai, next));
 
 		this.naku();
@@ -753,7 +774,7 @@ public class Kyoku {
 				continue;
 			if (haiType == null) {
 				HaiType type = kyokuPlayerMap.get(kaze).getSutehai(0).type();
-				if (type.group3() != HaiGroup3.KAZE)
+				if (!type.isKazehai())
 					return false;
 				haiType = type;
 			} else {
@@ -1003,7 +1024,7 @@ public class Kyoku {
 	 * @param kaze
 	 * @return
 	 */
-	public List<Mentu> getFuroHaiList(Kaze kaze) {
+	public List<Mentsu> getFuroHaiList(Kaze kaze) {
 		return kyokuPlayerMap.get(kaze).getHurohaiList();
 	}
 

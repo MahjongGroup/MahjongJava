@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import server.KyokuRunner;
-import system.Hai;
-import system.HaiType;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.result.KyokuResult;
 
 /**
  * サーバーとの通信を行うメソッドを実装するインターフェース。
@@ -187,7 +187,7 @@ public interface Client {
 	 * @param p 鳴いたプレイヤー。
 	 * @param m 鳴いて出来た面子。
 	 */
-	public void onNakiReceived(Player p, Mentu m);
+	public void onNakiReceived(Player p, Mentsu m);
 
 	/**
 	 * サーバーから誰かがロンをしたことを知らされる。

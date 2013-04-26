@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import system.HaiType;
+import system.hai.HaiType;
 
-import static system.HaiType.*;
+import static system.hai.HaiType.*;
 
 public class HaiTypeTest {
 

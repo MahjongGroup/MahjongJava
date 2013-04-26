@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import system.Functions;
-import system.Hai;
-import system.HaiType;
-import system.Kaze;
-import system.MajanHai;
 import system.Player;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.TehaiList;
 
 /**
  * おふざけAIその1。 国士無双しか狙いません。

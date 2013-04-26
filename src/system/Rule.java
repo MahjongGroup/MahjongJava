@@ -1,5 +1,7 @@
 package system;
 
+import system.hai.Kaze;
+
 /**
  * 麻雀のルールを表すクラス。
  * @author kohei

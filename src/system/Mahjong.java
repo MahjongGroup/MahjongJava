@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import system.hai.Kaze;
+import system.result.KyokuResult;
+
 /**
  * 1回(1東風,1半荘)の麻雀を表すクラス。
  */
@@ -28,10 +31,8 @@ public class Mahjong {
 	/**
 	 * 麻雀ゲームのコンストラクタ.プレイヤーのリストは親から順番に入っている必要がある.
 	 * 
-	 * @param players
-	 *            親から席順にはいったプレイヤーのリスト.
-	 * @param rule
-	 *            ルール.
+	 * @param players 親から席順にはいったプレイヤーのリスト.
+	 * @param rule ルール.
 	 */
 	public Mahjong(List<Player> players, Rule rule) {
 		this.players = players.toArray(new Player[0]);
@@ -138,17 +139,13 @@ public class Mahjong {
 							continue;
 						// 親の場合
 						if (p.equals(oya)) {
-							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getBaseScore(), 6)
-									+ 300 * honba;
+							int tmpScore = getCeilScore(kyokuResult.getAgariResult(p).getBaseScore(), 6) + 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore + 1000 * tsumibo;
 							scores[sekiMap.get(p2)] -= tmpScore;
 							honba += 1;
 							tsumibo = 0;
 						} else {
-							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getBaseScore(), 4)
-									+ 300 * honba;
+							int tmpScore = getCeilScore(kyokuResult.getAgariResult(p).getBaseScore(), 4) + 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore;
 							scores[sekiMap.get(p2)] -= tmpScore;
 						}
@@ -160,9 +157,7 @@ public class Mahjong {
 						for (Player p : players) {
 							if (!kyokuResult.isAgari(p))
 								continue;
-							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getBaseScore(), 4)
-									+ 300 * honba;
+							int tmpScore = getCeilScore(kyokuResult.getAgariResult(p).getBaseScore(), 4) + 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore + 1000 * tsumibo;
 							scores[sekiMap.get(p2)] -= tmpScore;
 							tsumibo = 0;
@@ -184,9 +179,7 @@ public class Mahjong {
 						for (Player p : players) {
 							if (!kyokuResult.isAgari(p))
 								continue;
-							int tmpScore = getCeilScore(kyokuResult
-									.getAgariResult(p).getBaseScore(), 4)
-									+ 300 * honba;
+							int tmpScore = getCeilScore(kyokuResult.getAgariResult(p).getBaseScore(), 4) + 300 * honba;
 							scores[sekiMap.get(p)] += tmpScore;
 							scores[sekiMap.get(p2)] -= tmpScore;
 						}
@@ -204,10 +197,7 @@ public class Mahjong {
 					for (Player player : players) {
 						if (player.equals(oya))
 							continue;
-						int tmpScore = getCeilScore(
-								kyokuResult.getAgariResult(tsumoPlayer)
-										.getBaseScore(), 2)
-								+ 100 * honba;
+						int tmpScore = getCeilScore(kyokuResult.getAgariResult(tsumoPlayer).getBaseScore(), 2) + 100 * honba;
 						scores[sekiMap.get(player)] -= tmpScore;
 						totalScore += tmpScore;
 					}
@@ -224,25 +214,18 @@ public class Mahjong {
 						int tmpScore = 0;
 						// 　親の場合,子の２倍支払う.
 						if (p.equals(oya)) {
-							tmpScore = getCeilScore(
-									kyokuResult.getAgariResult(tsumoPlayer)
-											.getBaseScore(), 2)
-									+ 100 * honba;
+							tmpScore = getCeilScore(kyokuResult.getAgariResult(tsumoPlayer).getBaseScore(), 2) + 100 * honba;
 							scores[sekiMap.get(p)] -= tmpScore;
 							totalScore += tmpScore;
 						}
 						// 子の場合
 						else {
-							tmpScore = getCeilScore(
-									kyokuResult.getAgariResult(tsumoPlayer)
-											.getBaseScore(), 1)
-									+ 100 * honba;
+							tmpScore = getCeilScore(kyokuResult.getAgariResult(tsumoPlayer).getBaseScore(), 1) + 100 * honba;
 							scores[sekiMap.get(p)] -= tmpScore;
 							totalScore += tmpScore;
 						}
 					}
-					scores[sekiMap.get(tsumoPlayer)] += totalScore + 1000
-							* tsumibo;
+					scores[sekiMap.get(tsumoPlayer)] += totalScore + 1000 * tsumibo;
 					honba = 0;
 					tsumibo = 0;
 					kyokusu += 1;
@@ -250,10 +233,7 @@ public class Mahjong {
 			}
 		}
 
-		if (lastKyoku
-				&& !(rule.isSyanyu() && isSyanyuScore())
-				&& ((getOyaIndex() == getMaxScorePlayerIndex())
-						|| !(isOyaTenpai() || isOyaAgari()))) {
+		if (lastKyoku && !(rule.isSyanyu() && isSyanyuScore()) && ((getOyaIndex() == getMaxScorePlayerIndex()) || !(isOyaTenpai() || isOyaAgari()))) {
 			endFlag = true;
 		}
 		if (kyokusu == 5) {
@@ -418,9 +398,7 @@ public class Mahjong {
 	}
 
 	public static void main(String[] args) {
-		Player players[] = { new Player(11, "Kohei", true),
-				new Player(22, "Shishido", true),
-				new Player(33, "Moseshi", true), new Player(44, "Mori", true), };
+		Player players[] = { new Player(11, "Kohei", true), new Player(22, "Shishido", true), new Player(33, "Moseshi", true), new Player(44, "Mori", true), };
 		Mahjong game = new Mahjong(Arrays.asList(players), new Rule());
 		game.init();
 
@@ -434,8 +412,7 @@ public class Mahjong {
 	}
 
 	public void disp() {
-		System.out.println(bakaze + "" + kyokusu + "局　" + honba + "本場　"
-				+ "積み棒：" + tsumibo);
+		System.out.println(bakaze + "" + kyokusu + "局　" + honba + "本場　" + "積み棒：" + tsumibo);
 		System.out.println("親 :" + players[getOyaIndex()].getName());
 		// System.out.println("endFlag: " +endFlag);
 		if (lastKyoku)
@@ -445,9 +422,7 @@ public class Mahjong {
 
 	@Override
 	public String toString() {
-		return "players:" + Arrays.toString(players) + " scores:"
-				+ Arrays.toString(scores) + " bakaze:" + bakaze + " kyokusu:"
-				+ kyokusu + " tsumibo:" + tsumibo + " honba:" + honba;
+		return "players:" + Arrays.toString(players) + " scores:" + Arrays.toString(scores) + " bakaze:" + bakaze + " kyokusu:" + kyokusu + " tsumibo:" + tsumibo + " honba:" + honba;
 	}
 
 	public void disp2() {
@@ -472,14 +447,9 @@ public class Mahjong {
 			for (Player p : players) {
 				if (kyokuResult.isAgari(p)) {
 					if (kyokuResult.isRonAgari())
-						System.out.println("和了 :" + p.getName() + "  放銃 :"
-								+ kyokuResult.getHojuPlayer().getName() + "  "
-								+ kyokuResult.getAgariResult(p).getBaseScore()
-								+ "点");
+						System.out.println("和了 :" + p.getName() + "  放銃 :" + kyokuResult.getHojuPlayer().getName() + "  " + kyokuResult.getAgariResult(p).getBaseScore() + "点");
 					if (kyokuResult.isTsumoAgari())
-						System.out.println("和了 :" + p.getName() + "  自獏 "
-								+ kyokuResult.getAgariResult(p).getBaseScore()
-								+ "点");
+						System.out.println("和了 :" + p.getName() + "  自獏 " + kyokuResult.getAgariResult(p).getBaseScore() + "点");
 				}
 			}
 		}

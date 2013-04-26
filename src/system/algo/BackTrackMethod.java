@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import system.Functions;
-import system.Hai;
-import system.HaiType;
-import system.SuType;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.SuType;
 
 /**
  * バックトラック法によるn面子1雀頭の判定アルゴリズムを表すクラス．

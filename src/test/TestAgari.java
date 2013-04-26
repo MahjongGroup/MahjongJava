@@ -19,19 +19,19 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import system.AgariMethods;
-import system.AgariParam;
-import system.AgariResult;
 import system.Field;
 import system.Functions;
-import system.Hai;
-import system.HaiType;
-import system.HurohaiList;
-import system.Kaze;
-import system.MajanHai;
 import system.Rule;
-import system.TehaiList;
-import system.Yaku;
+import system.agari.AgariMethods;
+import system.agari.AgariParam;
+import system.agari.AgariResult;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.TehaiList;
+import system.yaku.Yaku;
 import client.ImageLoader;
 import client.MajanHaiIDMapper;
 
@@ -283,7 +283,6 @@ public class TestAgari extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			System.out.println(code);
 
 			int y = 0;
 
