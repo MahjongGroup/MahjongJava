@@ -119,7 +119,6 @@ public class KyokuRunner {
 					break;
 
 				case STATE_CODE_DISCARD:
-					initTransporterFlag();
 					kyoku.sortTehaiList();
 					kyoku.disp();
 					discard();
@@ -147,6 +146,7 @@ public class KyokuRunner {
 					if (stateCode == STATE_CODE_NAKI) {
 						stateCode = STATE_CODE_NEXTTURN;
 					}
+					initTransporterFlag();
 					break;
 
 				case STATE_CODE_NEXTTURN:
