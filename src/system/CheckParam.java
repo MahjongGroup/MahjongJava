@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 役判定のときに使われるパラメータクラス.
- * 役判定の中で取得される.
+ * 面子を取り出した後に分かる情報で構成される.
  */
 public class CheckParam {
 

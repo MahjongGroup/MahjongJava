@@ -139,7 +139,10 @@ public class AgariMethods {
 				NMentsu1Janto nmj = NMentsu1Janto.newInstanceFromSyuntsu(tehaiPlusAgariHai);
 				chParam.setJanto(nmj.getJanto());
 				chParam.setMentuList(nmj);
-
+			} else if(pvalue.isException()) {
+				NMentsu1Janto nmj = NMentsu1Janto.newInstanceOfException(tehaiPlusAgariHai);
+				chParam.setJanto(nmj.getJanto());
+				chParam.setMentuList(nmj);
 			}
 
 			// 両面待ちととれる場合
@@ -393,7 +396,7 @@ public class AgariMethods {
 		if (tlist.size() % 3 != 2)
 			return false;
 		// パターン法を採用
-		return (PatternMethod.isNMentsu1Janto(tlist) & 0x3) != 0x0;
+		return (PatternMethod.isNMentsu1Janto(tlist) & 0x43) != 0x0;
 
 		// バックトラック法
 		//		return BackTrackMethod.isNMentu1Janto(haiList);

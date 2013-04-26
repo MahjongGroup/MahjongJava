@@ -283,6 +283,14 @@ public class AgariResult {
 						System.out.println("IPEKO");
 						agp.addFlagCheckYaku(NormalYaku.IPEKO);
 					}
+					
+					// 三暗刻と二盃口が同時に存在し刻子からとる場合は二盃口を消す
+					if(agp.getFlagCheckYakuSet().contains(NormalYaku.RYANPEKO)) {
+						p.setMentuList(nmj);
+						if(NormalYaku.SANNANKO.check(agp, p, field)) {
+							agp.removeFlagCheckYaku(NormalYaku.RYANPEKO);
+						}
+					}
 
 					agarilist.add(checkYakuOnMentsuFetchedEnd(hurohaiList, nmj, p, agp));
 				}
@@ -300,6 +308,22 @@ public class AgariResult {
 						agp.addFlagCheckYaku(NormalYaku.IPEKO);
 					}
 
+					agarilist.add(checkYakuOnMentsuFetchedEnd(hurohaiList, nmj, p, agp));
+				}
+				
+				// 例外的な構成か
+				if (pvalue.isException()) {
+					System.out.println("例外");
+					NMentsu1Janto nmj = NMentsu1Janto.newInstanceOfException(tehaiPlusAgariHai);
+					CheckParam p = new CheckParam(chParam);
+					AgariParam agp = new AgariParam(agariParam);
+
+					p.setJanto(nmj.getJanto());
+
+					if (pvalue.isIpeko()) {
+						System.out.println("IPEKO");
+						agp.addFlagCheckYaku(NormalYaku.IPEKO);
+					}
 					agarilist.add(checkYakuOnMentsuFetchedEnd(hurohaiList, nmj, p, agp));
 				}
 

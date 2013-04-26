@@ -12,9 +12,12 @@ import system.Yakuman;
  */
 public class Test {
 	public static void main(String[] args) {
-		Set<HaiType> set = Yakuman.getKokusiSet();
-		System.out.println(set);
-		set.remove(HaiType.PE);
-		System.out.println(set);
+		byte x = (byte) 0xc0;
+		byte y = (byte) 0x40;
+		System.out.println("0xc0 = " + x);
+		System.out.println("0x40 = " + y);
+		
+		System.out.println(x & 0x43);
+		
 	}
 }

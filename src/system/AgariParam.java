@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * あがり判定、役判定に必要な情報.
- * 計算をせずに事前にわかっている情報.
+ * 面子を取り出す前に分かっている情報で構成される.
  * ツモかどうか、自風、鳴いているか、あがり牌がある.
  */
 public class AgariParam {
@@ -90,5 +90,9 @@ public class AgariParam {
 
 	public boolean addFlagCheckYaku(Yaku addedYaku) {
 		return flagCheckYakuSet.add(addedYaku);
+	}
+	
+	public boolean removeFlagCheckYaku(Yaku yaku) {
+		return flagCheckYakuSet.remove(yaku);
 	}
 }
