@@ -65,7 +65,7 @@ public class KyokuRunner {
 		stateCode = STATE_CODE_TSUMO;
 
 		kyokuLoop: while (true) {
-			System.out.println("ターンチェンジ");
+//			System.out.println("ターンチェンジ");
 			playerLoop: while (true) {
 				switch (stateCode) {
 				case STATE_CODE_TSUMO:
@@ -73,7 +73,7 @@ public class KyokuRunner {
 					initDiscardFlag();
 					doTsumo();
 					kyoku.sortTehaiList();
-					kyoku.disp();
+//					kyoku.disp();
 					sendNeededInformation();
 					stateCode = STATE_CODE_SEND;
 					break;
@@ -121,7 +121,7 @@ public class KyokuRunner {
 				case STATE_CODE_DISCARD:
 					initTransporterFlag();
 					kyoku.sortTehaiList();
-					kyoku.disp();
+//					kyoku.disp();
 					discard();
 					sendNeededInformation();
 					stateCode = STATE_CODE_RON;
@@ -212,7 +212,7 @@ public class KyokuRunner {
 	private void doRinsyanTsumo() {
 		kyoku.doRinsyanTsumo();
 		kyoku.sortTehaiList();
-		kyoku.disp();
+//		kyoku.disp();
 
 		Server tr = transporterMap.get(kyoku.getCurrentTurn());
 		if (tr != null) {
@@ -289,7 +289,7 @@ public class KyokuRunner {
 				if (tsumoagari) {
 					kyoku.doTsumoAgari();
 					kyoku.doSyukyoku();
-					System.out.println(kyoku.getCurrentPlayer() + " : ツモちゃった！");
+					//System.out.println(kyoku.getCurrentPlayer() + " : ツモちゃった！");
 					Console.wairEnter();
 					stateCode = STATE_CODE_ENDOFKYOKU;
 					return;
@@ -302,7 +302,7 @@ public class KyokuRunner {
 				if (ai.isTumoAgari()) {
 					kyoku.doTsumoAgari();
 					kyoku.doSyukyoku();
-					System.out.println(kyoku.getCurrentPlayer() + " : ツモちゃった！");
+					//System.out.println(kyoku.getCurrentPlayer() + " : ツモちゃった！");
 					Console.wairEnter();
 					stateCode = STATE_CODE_ENDOFKYOKU;
 					return;
@@ -359,7 +359,7 @@ public class KyokuRunner {
 						kyoku.getAnkanableHaiList());
 				if (ankanlist != null) {
 					Mentsu ankanMentu = kyoku.doAnkan(ankanlist);
-					System.out.println(ankanMentu);
+					//System.out.println(ankanMentu);
 					notifyNaki(p, ankanMentu);
 
 					stateCode = STATE_CODE_RINSYANTSUMO;
@@ -392,7 +392,7 @@ public class KyokuRunner {
 					kyoku.discardTsumoHai();
 					sendTsumoGiri(tr);
 
-					System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
+					//System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 					Console.wairEnter();
 
 					stateCode = STATE_CODE_RON;
@@ -407,8 +407,8 @@ public class KyokuRunner {
 						kyoku.doReach();
 						kyoku.discard(reach);
 
-						System.out
-								.println("現在捨て牌：" + kyoku.getCurrentSutehai());
+						//System.out
+						//		.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 						Console.wairEnter();
 
 						for (Kaze kaze : transporterMap.keySet()) {
@@ -441,7 +441,7 @@ public class KyokuRunner {
 				// try {
 				// Thread.sleep(1000);
 				kyoku.discardTsumoHai();
-				System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
+				//System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 				Console.wairEnter();
 
 				stateCode = STATE_CODE_RON;
@@ -468,7 +468,7 @@ public class KyokuRunner {
 				for (Transporter t : transporterMap.values()) {
 					t.notifyReach(kyoku.getCurrentTurn(), reachSutehaiIndex);
 				}
-				System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
+				//System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 				Console.wairEnter();
 				stateCode = STATE_CODE_RON;
 				return;
@@ -495,7 +495,7 @@ public class KyokuRunner {
 				afterDiscard();
 
 			} else {
-				System.out.println("不正な入力です");
+				//System.out.println("不正な入力です");
 			}
 		} else {
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
@@ -507,7 +507,7 @@ public class KyokuRunner {
 
 	// 捨てられた牌とそのプレイヤーを各プレイヤーに伝える。
 	private void afterDiscard() {
-		System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
+		//System.out.println("現在捨て牌：" + kyoku.getCurrentSutehai());
 		Console.wairEnter();
 		for (Kaze kaze : transporterMap.keySet()) {
 			Server tnotify = transporterMap.get(kaze);
@@ -549,8 +549,8 @@ public class KyokuRunner {
 						for (Kaze ronKaze : transporterMap.keySet()) {
 							Server tron = transporterMap.get(ronKaze);
 							notifyRon(map, tron);
-							System.out.println(playerMap.get(ronKaze)
-									+ " : ロンだ！");
+							//System.out.println(playerMap.get(ronKaze)
+							//		+ " : ロンだ！");
 							Console.wairEnter();
 						}
 
@@ -575,8 +575,8 @@ public class KyokuRunner {
 						for (Kaze ronKaze : transporterMap.keySet()) {
 							Server tron = transporterMap.get(ronKaze);
 							notifyRon(map, tron);
-							System.out.println(playerMap.get(ronKaze)
-									+ " : ロンだ！");
+							//System.out.println(playerMap.get(ronKaze)
+							//		+ " : ロンだ！");
 							Console.wairEnter();
 						}
 
@@ -655,7 +655,7 @@ public class KyokuRunner {
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
 						notifyNaki(p, minkanMentu);
 
-						System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
+						//System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
 						Console.wairEnter();
 
 						stateCode = STATE_CODE_RINSYANTSUMO;
@@ -667,7 +667,7 @@ public class KyokuRunner {
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
 						notifyNaki(p, minkanMentu);
 
-						System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
+						//System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
 						Console.wairEnter();
 
 						stateCode = STATE_CODE_RINSYANTSUMO;
@@ -705,7 +705,7 @@ public class KyokuRunner {
 						Mentsu ponMentu = kyoku.doPon(kaze, ponlist);
 						notifyNaki(p, ponMentu);
 
-						System.out.println(kyoku.getPlayer(kaze) + " : ポン！");
+						//System.out.println(kyoku.getPlayer(kaze) + " : ポン！");
 						Console.wairEnter();
 
 						stateCode = STATE_CODE_DISCARD;
@@ -721,7 +721,7 @@ public class KyokuRunner {
 										ai.pon(kyoku.getPonableHaiList(kaze))));
 						notifyNaki(p, ponMentu);
 
-						System.out.println(kyoku.getPlayer(kaze) + " : ポン！");
+						//System.out.println(kyoku.getPlayer(kaze) + " : ポン！");
 						Console.wairEnter();
 
 						stateCode = STATE_CODE_DISCARD;
@@ -754,16 +754,16 @@ public class KyokuRunner {
 			if (p.isMan()) {
 				Transporter tr = transporterMap.get(kyoku.getCurrentTurn()
 						.simo());
-				System.out.println(tr.isChiReceived());
+				//System.out.println(tr.isChiReceived());
 
 				List<Integer> chilist = waitChi(tr, kyoku.getChiableHaiList());
-				System.out.println("SystemThreadReceived: ");
+				//System.out.println("SystemThreadReceived: ");
 				if (chilist != null) {
 					Mentsu chiMentu = kyoku.doChi(chilist);
 					notifyNaki(p, chiMentu);
 
-					System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()
-							.simo()) + " : チーだぜ");
+					//System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()
+					//		.simo()) + " : チーだぜ");
 					Console.wairEnter();
 
 					stateCode = STATE_CODE_DISCARD;
@@ -779,8 +779,8 @@ public class KyokuRunner {
 							index));
 					notifyNaki(p, chiMentu);
 
-					System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()
-							.simo()) + " : チーだぜ");
+					//System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()
+					//		.simo()) + " : チーだぜ");
 					Console.wairEnter();
 
 					stateCode = STATE_CODE_DISCARD;

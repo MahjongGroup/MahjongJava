@@ -80,11 +80,12 @@ public class MahjongGame {
 			
 			if(kr.isRonAgari()) {
 				for (Player player : playerList) {
-					if(kr.isAgari(player)) 
-						System.out.println(kr.getAgariResult(player));
+					if(kr.isAgari(player)) {
+//						System.out.println(kr.getAgariResult(player));
+					}
 				}
 			}else if(kr.isTsumoAgari()) {
-				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
+//				System.out.println(kr.getAgariResult(kr.getTsumoAgariPlayer()));
 			}
 		}
 		

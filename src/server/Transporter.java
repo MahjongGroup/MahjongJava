@@ -403,7 +403,7 @@ public class Transporter implements Server {
 	
 	@Override
 	public  void notifyTempai(Map<Player,List<Hai>> map){
-		client.onTempaiReceived(map);
+//		client.onTempaiReceived(map);
 	}	
 	
 	public void notifyGameResult(int[] score){

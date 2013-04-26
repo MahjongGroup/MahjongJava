@@ -411,5 +411,11 @@ public class ConsoleClient implements Client {
 		
 	}
 
+	@Override
+	public void onGameOverReceived() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

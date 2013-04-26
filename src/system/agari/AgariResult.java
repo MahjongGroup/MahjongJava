@@ -184,24 +184,17 @@ public class AgariResult {
 			this.agariParam = ap;
 		}
 		
-		public void setCheckParam(CheckParam p) {
+		private void setCheckParam(CheckParam p) {
 			this.chParam = p;
 		}
 		
 		public void setYakuFlag(Set<Yaku> yaku) {
+			if(yaku == null)
+				yaku = new HashSet<Yaku>();
 			this.yakuFlag = yaku;
 		}
 
-		public boolean isValidState() {
-			if (tehai == null || huro == null || field == null || odora == null || udora == null || yakuFlag == null || agariParam == null) {
-				return false;
-			}
-			return true;
-		}
-
 		public AgariResult build() {
-			if(!isValidState())
-				throw new IllegalStateException();
 			if(chParam == null)
 				chParam = new CheckParam();
 			
@@ -228,8 +221,6 @@ public class AgariResult {
 		 * @return
 		 */
 		public AgariResult buildTest() {
-			if(!isValidState() )
-				throw new IllegalStateException();
 			if(chParam == null)
 				chParam = new CheckParam();
 			

@@ -283,7 +283,6 @@ public class TestAgari extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			System.out.println(code);
 
 			int y = 0;
 
