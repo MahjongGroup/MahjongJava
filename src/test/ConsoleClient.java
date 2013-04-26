@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import client.Client;
-
 import server.Server;
 import system.Player;
 import system.hai.Hai;
@@ -17,6 +15,7 @@ import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import client.Client;
 
 /**
  * コンソール入力を受け付けるクライアント.
@@ -417,5 +416,9 @@ public class ConsoleClient implements Client {
 		
 	}
 
-
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+		// TODO Auto-generated method stub
+		
+	}
 }
