@@ -122,7 +122,7 @@ public class Kyoku {
 		if (field.getRule().isAkaAri()) {
 			for (HaiType type : HaiType.values()) {
 				// 数牌5は赤がある
-				if (type.group3() == HaiGroup3.SU && type.number() == 5) {
+				if (type.isSuhai() && type.number() == 5) {
 					// 赤は1枚ずつ
 					this.yamahai.add(MajanHai.valueOf(type, true));
 
@@ -753,7 +753,7 @@ public class Kyoku {
 				continue;
 			if (haiType == null) {
 				HaiType type = kyokuPlayerMap.get(kaze).getSutehai(0).type();
-				if (type.group3() != HaiGroup3.KAZE)
+				if (!type.isKazehai())
 					return false;
 				haiType = type;
 			} else {

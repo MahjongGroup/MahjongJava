@@ -461,12 +461,12 @@ public class AgariResult {
 				hu += param.getMatiType().hu();
 
 				HaiType jantoType = param.getJanto();
-				if (jantoType.group3() == HaiGroup3.KAZE) {
+				if (jantoType.isKazehai()) {
 					Kaze jantoKaze = jantoType.kaze();
 					if (jantoKaze == field.getBakaze() || jantoKaze == agp.getJikaze()) {
 						hu += 2;
 					}
-				} else if (jantoType.group3() == HaiGroup3.SANGEN) {
+				} else if (jantoType.isSangenhai()) {
 					hu += 2;
 				}
 
@@ -590,12 +590,12 @@ public class AgariResult {
 				this.hu += chParam.getMatiType().hu();
 
 				HaiType jantoType = chParam.getJanto();
-				if (jantoType.group3() == HaiGroup3.KAZE) {
+				if (jantoType.isKazehai()) {
 					Kaze jantoKaze = jantoType.kaze();
 					if (jantoKaze == field.getBakaze() || jantoKaze == agariParam.getJikaze()) {
 						this.hu += 2;
 					}
-				} else if (jantoType.group3() == HaiGroup3.SANGEN) {
+				} else if (jantoType.isSangenhai()) {
 					this.hu += 2;
 				}
 

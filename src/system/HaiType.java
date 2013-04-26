@@ -103,16 +103,6 @@ public enum HaiType{
 	}
 
 	/**
-	 * HaiGroup2の値を返す.
-	 * @return HaiGroup2の値.
-	 */
-	public HaiGroup2 group2() {
-		if (id < 30)
-			return HaiGroup2.SU;
-		return HaiGroup2.TU;
-	}
-
-	/**
 	 * この牌タイプが数牌の場合trueを返す.
 	 * このメソッドとisTsuhai()メソッドは対称なものであり,isTsuhai() == !isSuhai() が常に成り立つ.
 	 * 
@@ -143,17 +133,13 @@ public enum HaiType{
 	public boolean isSangenhai() {
 		return id == 34 || id == 35 || id == 36;
 	}
-
+	
 	/**
-	 * HaiGroup3の値を返す.
-	 * @return HaiGroup3の値.
+	 * この牌タイプが風牌の場合trueを返す.
+	 * @return この牌タイプが三元牌の場合true
 	 */
-	public HaiGroup3 group3() {
-		if (id < 30)
-			return HaiGroup3.SU;
-		if (id < 34)
-			return HaiGroup3.KAZE;
-		return HaiGroup3.SANGEN;
+	public boolean isKazehai() {
+		return 30 <= id && id <= 33;
 	}
 
 	/**
@@ -276,7 +262,7 @@ public enum HaiType{
 
 	public static HaiType valueOf(Kaze kaze) {
 		for (HaiType ht : values()) {
-			if (ht.group3() == HaiGroup3.KAZE && kaze == ht.kaze()) {
+			if (ht.isKazehai() && kaze == ht.kaze()) {
 				return ht;
 			}
 		}

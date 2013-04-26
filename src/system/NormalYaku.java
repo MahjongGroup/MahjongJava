@@ -91,9 +91,9 @@ public enum NormalYaku implements Yaku {
 			if (agParam.isNaki())
 				return false;
 			HaiType jantohai = param.getJanto();
-			if (jantohai.group3() == HaiGroup3.SANGEN) {
+			if (jantohai.isSangenhai()) {
 				return false;
-			} else if (jantohai.group3() == HaiGroup3.KAZE) {
+			} else if (jantohai.isKazehai()) {
 				Kaze kaze = jantohai.kaze();
 				if (kaze == field.getBakaze() || kaze == agParam.getJikaze())
 					return false;
@@ -334,12 +334,12 @@ public enum NormalYaku implements Yaku {
 		public boolean check(AgariParam agParam, CheckParam param, Field field) {
 			HaiType janto = param.getJanto();
 			List<Mentu> mlist = param.getMentuList();
-			if (janto.group3() != HaiGroup3.SANGEN) {
+			if (!janto.isSangenhai()) {
 				return false;
 			}
 			int sangenSize = 0;
 			for (Mentu mentu : mlist) {
-				if (mentu.get(0).type().group3() == HaiGroup3.SANGEN) {
+				if (mentu.get(0).type().isSangenhai()) {
 					sangenSize++;
 				}
 			}

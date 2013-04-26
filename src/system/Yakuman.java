@@ -109,7 +109,7 @@ public enum Yakuman implements Yaku {
 			List<Mentu> mlist = chParam.getMentuList();
 			int sangenSize = 0;
 			for (Mentu mentu : mlist) {
-				if (mentu.get(0).type().group3() == HaiGroup3.SANGEN) {
+				if (mentu.get(0).type().isSangenhai()) {
 					sangenSize++;
 				}
 			}
@@ -288,12 +288,12 @@ public enum Yakuman implements Yaku {
 		public boolean check(AgariParam agParam, CheckParam chParam, Field field) {
 			HaiType janto = chParam.getJanto();
 			List<Mentu> mlist = chParam.getMentuList();
-			if (janto.group3() != HaiGroup3.KAZE) {
+			if (!janto.isKazehai()) {
 				return false;
 			}
 			int kazeSize = 0;
 			for (Mentu mentu : mlist) {
-				if (mentu.get(0).type().group3() == HaiGroup3.KAZE) {
+				if (mentu.get(0).type().isKazehai()) {
 					kazeSize++;
 				}
 			}
@@ -316,7 +316,7 @@ public enum Yakuman implements Yaku {
 			List<Mentu> mlist = chParam.getMentuList();
 			int kazeSize = 0;
 			for (Mentu mentu : mlist) {
-				if (mentu.get(0).type().group3() == HaiGroup3.KAZE) {
+				if (mentu.get(0).type().isKazehai()) {
 					kazeSize++;
 				}
 			}

@@ -189,11 +189,6 @@ public class MajanHai implements Hai {
 	}
 
 	@Override
-	public HaiGroup2 group2() {
-		return type.group2();
-	}
-
-	@Override
 	public boolean isSuhai() {
 		return type.isSuhai();
 	}
@@ -206,11 +201,6 @@ public class MajanHai implements Hai {
 	@Override
 	public boolean isSangenhai() {
 		return type.isSangenhai();
-	}
-
-	@Override
-	public HaiGroup3 group3() {
-		return type.group3();
 	}
 
 	@Override

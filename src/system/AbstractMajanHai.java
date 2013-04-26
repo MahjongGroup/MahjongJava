@@ -35,16 +35,6 @@ public abstract class AbstractMajanHai implements Hai{
 	}
 
 	@Override
-	public HaiGroup2 group2() {
-		return hai.group2();
-	}
-
-	@Override
-	public HaiGroup3 group3() {
-		return hai.group3();
-	}
-	
-	@Override
 	public int hashCode() {
 		return hai.hashCode();
 	}

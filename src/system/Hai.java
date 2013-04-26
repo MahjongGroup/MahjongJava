@@ -44,18 +44,6 @@ public interface Hai extends Comparable<Hai> {
 	public boolean aka();
 
 	/**
-	 * HaiGroup2の値を返す.
-	 * @return HaiGroup2の値.
-	 */
-	public HaiGroup2 group2();
-
-	/**
-	 * HaiGroup3の値を返す.
-	 * @return HaiGroup3の値.
-	 */
-	public HaiGroup3 group3();
-	
-	/**
 	 * この牌タイプが三元牌の場合trueを返す.
 	 * @return 三元牌の場合true.
 	 */
