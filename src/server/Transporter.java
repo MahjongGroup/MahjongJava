@@ -11,6 +11,7 @@ import system.KyokuResult;
 import system.Mahjong;
 import system.Mentu;
 import system.Player;
+import test.ConsoleClient;
 import client.Client;
 
 /**
@@ -51,9 +52,14 @@ public class Transporter implements Server {
 	 * 
 	 * @param client
 	 */
-	public Transporter(Client client) {
+//	public Transporter(Client client) {
+//		this.client = client;
+//	}
+	
+	public Transporter(ConsoleClient client){
 		this.client = client;
 	}
+	//consoleDebug
 	
 	/**
 	 * コンストラクタ.
@@ -91,6 +97,7 @@ public class Transporter implements Server {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+	
 	
 	public boolean getGrandFlag(){
 		return grandFlag;

@@ -228,6 +228,13 @@ public interface Client {
 	 */
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex);
 
+	
+	/**
+	 * 流局時に、テンパイしているプレイヤーの情報とその手牌を受信する
+	 * @param map
+	 */
+	public void onTempaiReceived(Map<Player,List<Hai>> map);
+	
 	/**
 	 * 局が終わったときのその結果をサーバーから受け取る.
 	 * @param result 局の結果．

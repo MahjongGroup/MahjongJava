@@ -411,5 +411,17 @@ public class ConsoleClient implements Client {
 		
 	}
 
+	@Override
+	public void onGameOverReceived() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
