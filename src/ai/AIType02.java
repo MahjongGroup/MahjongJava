@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import system.Functions;
-import system.Hai;
-import system.HaiType;
-import system.Kaze;
 import system.Player;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.Kaze;
+import system.hai.TehaiList;
 /**
  * AI弐号機。
  * 戦略を用いる（つもり）

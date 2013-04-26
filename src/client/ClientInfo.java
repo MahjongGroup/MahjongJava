@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.Kaze;
-import system.MajanHai;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.Mentsu;
 
 public class ClientInfo {
 	List<Hai> tehai;
@@ -21,7 +21,7 @@ public class ClientInfo {
 	Map<Integer,Integer> scoreMap;
 	Map<Integer,Integer> IDMap;
 	Map<Integer,String> nameMap;
-	Map<Integer, List<Mentu>> hurohaiMap;
+	Map<Integer, List<Mentsu>> hurohaiMap;
 	Map<Integer, Integer> tehaiSizeMap;
 	Map<StateCode, List<List<Integer>>> ableIndexList;
 	Map<Integer, Integer> reachPosMap;
@@ -70,7 +70,7 @@ public class ClientInfo {
 		this.sutehaiMap = Collections
 				.synchronizedMap(new HashMap<Integer, List<Hai>>());
 		this.hurohaiMap = Collections
-				.synchronizedMap(new HashMap<Integer, List<Mentu>>());
+				.synchronizedMap(new HashMap<Integer, List<Mentsu>>());
 		this.tehaiSizeMap = Collections
 				.synchronizedMap(new HashMap<Integer, Integer>());
 		this.tsumoHai = MajanHai.ITI_MAN;
@@ -119,7 +119,7 @@ public class ClientInfo {
 		this.tehai.add(MajanHai.KYU_MAN);
 		this.tehai.add(MajanHai.HAKU);
 		for (int i = 0; i < 4; i++)
-			this.hurohaiMap.put(i, new ArrayList<Mentu>());
+			this.hurohaiMap.put(i, new ArrayList<Mentsu>());
 
 		this.reachableIndexList = new ArrayList<Integer>();
 		this.tehaiSizeMap.put(0, 13);

@@ -10,13 +10,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import system.Functions;
-import system.Hai;
-import system.HaiType;
-import system.Kaze;
 import system.Kyoku;
-import system.MajanHai;
-import system.SuType;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.Kaze;
+import system.hai.MajanHai;
+import system.hai.SuType;
+import system.hai.TehaiList;
 
 /**
  * AIに用いる様々なお便利メソッドを持つクラス。

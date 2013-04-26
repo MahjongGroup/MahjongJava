@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.TehaiList;
 
 /**
  * パターン法によるn面子1雀頭の判定アルゴリズムを表すクラス．

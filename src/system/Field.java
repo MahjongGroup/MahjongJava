@@ -1,5 +1,7 @@
 package system;
 
+import system.hai.Kaze;
+
 /**
  * Fieldクラスはルール,場風を持つ.
  * このオブジェクトは1局ごとに生成される.

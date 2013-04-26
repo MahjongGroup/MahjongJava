@@ -2,8 +2,8 @@ package test;
 
 import java.util.Set;
 
-import system.HaiType;
-import system.Yakuman;
+import system.hai.HaiType;
+import system.yaku.Yakuman;
 
 /**
  * a

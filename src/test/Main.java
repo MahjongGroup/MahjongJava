@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import system.Kaze;
 import system.Kyoku;
 import system.Mahjong;
 import system.Player;
 import system.Rule;
+import system.hai.Kaze;
 import ai.AI;
 import ai.AIType01;
 import ai.AIType_Debug;

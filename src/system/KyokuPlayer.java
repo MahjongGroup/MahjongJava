@@ -6,7 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import system.Hai.HaiComparator;
+import system.agari.AgariMethods;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.hai.Sutehai;
+import system.hai.SutehaiList;
+import system.hai.TehaiList;
+import system.hai.Hai.HaiComparator;
 
 /**
  * ある一つの局の中のプレイヤーを表す.手牌,捨牌,副露牌などを持つ.
@@ -154,11 +163,11 @@ public class KyokuPlayer {
 	 * @throws IllegalArgumentException
 	 *             指定された牌で加槓出来ない場合.
 	 */
-	public Mentu doKakan(Hai hai) {
+	public Mentsu doKakan(Hai hai) {
 		if (!hurohaiList.isKakan(hai.type()))
 			throw new IllegalArgumentException("指定された牌で加槓出来ません : " + hai);
 		onStateChanged();
-		Mentu m = hurohaiList.doKakan(hai);
+		Mentsu m = hurohaiList.doKakan(hai);
 		return m;
 	}
 
@@ -171,12 +180,12 @@ public class KyokuPlayer {
 	 * @throws IllegalArgumentException
 	 *             指定された牌で加槓出来ない場合.
 	 */
-	public Mentu doKakan(int index, Hai tsumohai) {
+	public Mentsu doKakan(int index, Hai tsumohai) {
 		Hai hai = tehaiList.get(index);
 		if (!hurohaiList.isKakan(hai.type()))
 			throw new IllegalArgumentException("指定された牌で加槓出来ません : " + hai);
 		onStateChanged();
-		Mentu m = hurohaiList.doKakan(hai);
+		Mentsu m = hurohaiList.doKakan(hai);
 		tehaiList.remove(index);
 		tehaiList.add(tsumohai);
 		return m;
@@ -234,7 +243,7 @@ public class KyokuPlayer {
 	 * @throws IllegalArgumentException
 	 *             指定された牌で暗槓できない場合.
 	 */
-	public Mentu doAnkan(Hai tsumohai, List<Integer> list) {
+	public Mentsu doAnkan(Hai tsumohai, List<Integer> list) {
 		onStateChanged();
 
 		int index = -1;
@@ -265,7 +274,7 @@ public class KyokuPlayer {
 			tehaiList.add(tsumohai);
 		}
 
-		Mentu m = new Mentu(haiArray);
+		Mentsu m = new Mentsu(haiArray);
 		hurohaiList.add(m);
 		kanSize++;
 
@@ -358,11 +367,11 @@ public class KyokuPlayer {
 	 * @param kaze 鳴かれたプレイヤーの風.
 	 * @return 明槓して出来た面子.
 	 */
-	public Mentu doMinkan(Hai minkanhai, Kaze kaze) {
+	public Mentsu doMinkan(Hai minkanhai, Kaze kaze) {
 		onStateChanged();
 		HaiType type = minkanhai.type();
 
-		Mentu m = new Mentu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
+		Mentsu m = new Mentsu(minkanhai, kaze, tehaiList.remove(type), tehaiList.remove(type), tehaiList.remove(type));
 		hurohaiList.add(m);
 		nakiFlag = true;
 		return m;
@@ -399,7 +408,7 @@ public class KyokuPlayer {
 	 * @param kaze 鳴かれた人の風.
 	 * @return ポンして出来た面子.
 	 */
-	public Mentu doPon(List<Integer> ponList, Hai sutehai, Kaze kaze) {
+	public Mentsu doPon(List<Integer> ponList, Hai sutehai, Kaze kaze) {
 		onStateChanged();
 		int index0 = ponList.get(0);
 		int index1 = ponList.get(1);
@@ -407,7 +416,7 @@ public class KyokuPlayer {
 		Hai hai0 = tehaiList.get(index0);
 		Hai hai1 = tehaiList.get(index1);
 
-		Mentu m = new Mentu(sutehai, kaze, hai0, hai1);
+		Mentsu m = new Mentsu(sutehai, kaze, hai0, hai1);
 		hurohaiList.add(m);
 
 		if (index0 < index1) {
@@ -453,12 +462,12 @@ public class KyokuPlayer {
 	 * @param kaze 鳴かれた人の風.
 	 * @return チーして出来た面子.
 	 */
-	public Mentu doChi(List<Integer> tiList, Hai chihai, Kaze kaze) {
+	public Mentsu doChi(List<Integer> tiList, Hai chihai, Kaze kaze) {
 		onStateChanged();
 		int index0 = tiList.get(0);
 		int index1 = tiList.get(1);
 
-		Mentu m = new Mentu(chihai, kaze, tehaiList.get(index0), tehaiList.get(index1));
+		Mentsu m = new Mentsu(chihai, kaze, tehaiList.get(index0), tehaiList.get(index1));
 		if (index0 < index1) {
 			tehaiList.remove(index1);
 			tehaiList.remove(index0);

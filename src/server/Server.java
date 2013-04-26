@@ -3,12 +3,12 @@ package server;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.result.KyokuResult;
 
 /**
  * クライアントとの通信を行うメソッドを実装するインターフェース。
@@ -191,7 +191,7 @@ public interface Server {
 	 * @param p 鳴いたプレイヤー。
 	 * @param m 鳴いて出来た面子。
 	 */
-	public void notifyNaki(Player p, Mentu m);
+	public void notifyNaki(Player p, Mentsu m);
 
 	/**
 	 * 誰かがロンをしたことを各プレイヤーに伝える。

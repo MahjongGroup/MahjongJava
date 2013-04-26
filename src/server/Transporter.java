@@ -3,14 +3,14 @@ package server;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.HaiType;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
 import system.Mahjong;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.result.KyokuResult;
 import client.Client;
 
 /**
@@ -345,7 +345,7 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void notifyNaki(Player player, Mentu mentu) {
+	public void notifyNaki(Player player, Mentsu mentu) {
 		client.onNakiReceived(player, mentu);
 	}
 

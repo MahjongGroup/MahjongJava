@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.AgariResult;
 import system.Kyoku;
-import system.KyokuResult;
 import system.Mahjong;
 import system.Player;
 import system.Rule;
+import system.agari.AgariResult;
+import system.result.KyokuResult;
 import test.Console;
 
 /**

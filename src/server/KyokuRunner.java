@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.HurohaiList;
-import system.Kaze;
 import system.Kyoku;
-import system.Mentu;
 import system.Player;
-import system.Sutehai;
-import system.SutehaiList;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.hai.Sutehai;
+import system.hai.SutehaiList;
+import system.hai.TehaiList;
 import test.Console;
 import ai.AI;
 import ai.AIType01;
@@ -320,7 +320,7 @@ public class KyokuRunner {
 				Transporter tr = transporterMap.get(kyoku.getCurrentTurn());
 				int kakanindex = waitKakan(tr, kyoku.getKakanableHaiList());
 				if (kakanindex != -1) {
-					Mentu kakanMentu = kyoku.doKakan(kakanindex);
+					Mentsu kakanMentu = kyoku.doKakan(kakanindex);
 					notifyNaki(p, kakanMentu);
 					stateCode = STATE_CODE_CHANKANRON;
 					return;
@@ -329,7 +329,7 @@ public class KyokuRunner {
 				AI ai = aiMap.get(kyoku.getCurrentTurn());
 				int index = -1;
 				if ((index = ai.kakan(kyoku.getKakanableHaiList())) != -1) {
-					Mentu kakanMentu = kyoku.doKakan(kyoku
+					Mentsu kakanMentu = kyoku.doKakan(kyoku
 							.getKakanableHaiList().get(index));
 					notifyNaki(p, kakanMentu);
 					stateCode = STATE_CODE_CHANKANRON;
@@ -342,7 +342,7 @@ public class KyokuRunner {
 	}
 
 	// 鳴いたこととその牌を各プレイヤーに伝える
-	private void notifyNaki(Player player, Mentu mentu) {
+	private void notifyNaki(Player player, Mentsu mentu) {
 		for (Kaze kaze : transporterMap.keySet()) {
 			transporterMap.get(kaze).notifyNaki(player, mentu);
 		}
@@ -358,7 +358,7 @@ public class KyokuRunner {
 				List<Integer> ankanlist = waitAnkan(tr,
 						kyoku.getAnkanableHaiList());
 				if (ankanlist != null) {
-					Mentu ankanMentu = kyoku.doAnkan(ankanlist);
+					Mentsu ankanMentu = kyoku.doAnkan(ankanlist);
 					System.out.println(ankanMentu);
 					notifyNaki(p, ankanMentu);
 
@@ -369,7 +369,7 @@ public class KyokuRunner {
 				// AI
 				AI ai = aiMap.get(kyoku.getCurrentTurn());
 				if (ai.ankan(kyoku.getAnkanableHaiList()) != -1) {
-					Mentu ankanMentu = kyoku.doAnkan(kyoku
+					Mentsu ankanMentu = kyoku.doAnkan(kyoku
 							.getAnkanableHaiList().get(0));
 					notifyNaki(p, ankanMentu);
 					stateCode = STATE_CODE_RINSYANTSUMO;
@@ -652,7 +652,7 @@ public class KyokuRunner {
 					boolean isMinkanDo = waitMinkan(tr,
 							kyoku.getMinkanableList(kaze));
 					if (isMinkanDo) {
-						Mentu minkanMentu = kyoku.doMinkan(kaze);
+						Mentsu minkanMentu = kyoku.doMinkan(kaze);
 						notifyNaki(p, minkanMentu);
 
 						System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
@@ -664,7 +664,7 @@ public class KyokuRunner {
 				} else {
 					AIType01 ai = new AIType01(p);
 					if (ai.minkan()) {
-						Mentu minkanMentu = kyoku.doMinkan(kaze);
+						Mentsu minkanMentu = kyoku.doMinkan(kaze);
 						notifyNaki(p, minkanMentu);
 
 						System.out.println(kyoku.getPlayer(kaze) + " : 明槓します");
@@ -702,7 +702,7 @@ public class KyokuRunner {
 					Transporter tr = transporterMap.get(kaze);
 					List<Integer> ponlist = waitPon(tr);
 					if (ponlist != null) {
-						Mentu ponMentu = kyoku.doPon(kaze, ponlist);
+						Mentsu ponMentu = kyoku.doPon(kaze, ponlist);
 						notifyNaki(p, ponMentu);
 
 						System.out.println(kyoku.getPlayer(kaze) + " : ポン！");
@@ -715,7 +715,7 @@ public class KyokuRunner {
 					// AI
 					AI ai = aiMap.get(kaze);
 					if (ai.pon(kyoku.getPonableHaiList(kaze)) != -1) {
-						Mentu ponMentu = kyoku.doPon(
+						Mentsu ponMentu = kyoku.doPon(
 								kaze,
 								kyoku.getPonableHaiList(kaze).get(
 										ai.pon(kyoku.getPonableHaiList(kaze))));
@@ -759,7 +759,7 @@ public class KyokuRunner {
 				List<Integer> chilist = waitChi(tr, kyoku.getChiableHaiList());
 				System.out.println("SystemThreadReceived: ");
 				if (chilist != null) {
-					Mentu chiMentu = kyoku.doChi(chilist);
+					Mentsu chiMentu = kyoku.doChi(chilist);
 					notifyNaki(p, chiMentu);
 
 					System.out.println(kyoku.getPlayer(kyoku.getCurrentTurn()
@@ -775,7 +775,7 @@ public class KyokuRunner {
 				AI ai = aiMap.get(kyoku.getCurrentTurn().simo());
 				int index = -1;
 				if ((index = ai.chi(kyoku.getChiableHaiList())) != -1) {
-					Mentu chiMentu = kyoku.doChi(kyoku.getChiableHaiList().get(
+					Mentsu chiMentu = kyoku.doChi(kyoku.getChiableHaiList().get(
 							index));
 					notifyNaki(p, chiMentu);
 

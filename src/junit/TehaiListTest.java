@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static system.MajanHai.GO_MAN;
-import static system.MajanHai.NI_MAN;
-import static system.MajanHai.ROKU_MAN;
-import static system.MajanHai.SAN_MAN;
-import static system.MajanHai.TON;
-import static system.MajanHai.YO_MAN;
-import static system.MajanHai.NAN;
+import static system.hai.MajanHai.GO_MAN;
+import static system.hai.MajanHai.NAN;
+import static system.hai.MajanHai.NI_MAN;
+import static system.hai.MajanHai.ROKU_MAN;
+import static system.hai.MajanHai.SAN_MAN;
+import static system.hai.MajanHai.TON;
+import static system.hai.MajanHai.YO_MAN;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import system.Hai;
-import system.HaiType;
-import system.MajanHai;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.MajanHai;
+import system.hai.TehaiList;
 
 public class TehaiListTest {
 

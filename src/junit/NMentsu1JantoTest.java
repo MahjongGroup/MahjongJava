@@ -1,32 +1,32 @@
 package junit;
 
-import static system.MajanHai.GO_MAN;
-import static system.MajanHai.GO_SOU;
-import static system.MajanHai.HATI_MAN;
-import static system.MajanHai.ITI_MAN;
-import static system.MajanHai.KYU_MAN;
-import static system.MajanHai.KYU_SOU;
-import static system.MajanHai.NAN;
-import static system.MajanHai.NANA_MAN;
-import static system.MajanHai.NANA_SOU;
-import static system.MajanHai.NI_MAN;
-import static system.MajanHai.NI_PIN;
-import static system.MajanHai.ROKU_MAN;
-import static system.MajanHai.ROKU_SOU;
-import static system.MajanHai.SAN_MAN;
-import static system.MajanHai.SAN_PIN;
-import static system.MajanHai.TON;
-import static system.MajanHai.YO_MAN;
-import static system.MajanHai.YO_PIN;
+import static system.hai.MajanHai.GO_MAN;
+import static system.hai.MajanHai.GO_SOU;
+import static system.hai.MajanHai.HATI_MAN;
+import static system.hai.MajanHai.ITI_MAN;
+import static system.hai.MajanHai.KYU_MAN;
+import static system.hai.MajanHai.KYU_SOU;
+import static system.hai.MajanHai.NAN;
+import static system.hai.MajanHai.NANA_MAN;
+import static system.hai.MajanHai.NANA_SOU;
+import static system.hai.MajanHai.NI_MAN;
+import static system.hai.MajanHai.NI_PIN;
+import static system.hai.MajanHai.ROKU_MAN;
+import static system.hai.MajanHai.ROKU_SOU;
+import static system.hai.MajanHai.SAN_MAN;
+import static system.hai.MajanHai.SAN_PIN;
+import static system.hai.MajanHai.TON;
+import static system.hai.MajanHai.YO_MAN;
+import static system.hai.MajanHai.YO_PIN;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import system.Hai;
-import system.NMentsu1Janto;
-import system.TehaiList;
 import system.algo.PatternMethod;
+import system.hai.Hai;
+import system.hai.NMentsu1Janto;
+import system.hai.TehaiList;
 
 public class NMentsu1JantoTest {
 	static TehaiList list1;
