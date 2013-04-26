@@ -52,15 +52,10 @@ public class Transporter implements Server {
 	 * 
 	 * @param client
 	 */
-//	public Transporter(Client client) {
-//		this.client = client;
-//	}
-	
-	public Transporter(ConsoleClient client){
+	public Transporter(Client client) {
 		this.client = client;
 	}
-	//consoleDebug
-	
+		
 	/**
 	 * コンストラクタ.
 	 */
