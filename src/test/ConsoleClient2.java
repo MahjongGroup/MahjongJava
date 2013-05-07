@@ -469,6 +469,12 @@ public class ConsoleClient2 implements Client, Runnable {
 		return "　";
 	}
 
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
 class DisplayConsole {
