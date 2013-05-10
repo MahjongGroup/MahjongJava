@@ -1,7 +1,5 @@
 package junit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static system.hai.MajanHai.GO_MAN;
 import static system.hai.MajanHai.ITI_MAN;
 import static system.hai.MajanHai.NAN;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -22,14 +21,11 @@ import system.Field;
 import system.Rule;
 import system.agari.AgariParam;
 import system.agari.AgariResult;
-import system.agari.CheckParam;
-import system.agari.MatiType;
 import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.TehaiList;
-import system.yaku.NormalYaku;
 import system.yaku.Yaku;
 
 public class AgariResultTest {
@@ -43,6 +39,8 @@ public class AgariResultTest {
 
 	static Field field = new Field(new Rule(), Kaze.TON);
 	
+	static Set<Yaku> yakuFlags = new HashSet<Yaku>(0);
+	
 	static List<HaiType> odora = new ArrayList<HaiType>();
 	static List<HaiType> udora = new ArrayList<HaiType>();
 	
@@ -55,7 +53,7 @@ public class AgariResultTest {
 	public void testList1() {
 		// 1,2,2,3,3,3,4,4, TON,TON,TON, NAN,NAN
 		
-		AgariParam param = new AgariParam(true, false, NI_MAN, Kaze.TON);
+		AgariParam param = new AgariParam(true, false, NI_MAN, Kaze.TON, yakuFlags);
 		
 		AgariResult.Builder builder = new AgariResult.Builder();
 		builder.setAgariParam(param);
@@ -74,7 +72,7 @@ public class AgariResultTest {
 	@Test
 	public void testList2() {
 		// 1,1,1,2,2,2,3,3,3,4,5,6,6
-		AgariParam param = new AgariParam(true, false, SAN_MAN, Kaze.TON);
+		AgariParam param = new AgariParam(true, false, SAN_MAN, Kaze.TON, yakuFlags);
 		
 		AgariResult.Builder builder = new AgariResult.Builder();
 		builder.setAgariParam(param);

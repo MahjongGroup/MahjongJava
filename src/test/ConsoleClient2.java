@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,26 +21,58 @@ import system.result.KyokuResult;
 import client.Client;
 
 public class ConsoleClient2 implements Client, Runnable {
-	private BufferedReader reader;
+	static final MyLogger logger = MyLogger.getLogger();
+	BufferedReader reader;
 	Server server;
 	Player p;
 	int playerindex;
 	List<Player> playerlist;
-	int scores[];
+	
 
 	Kaze bakaze;
 	List<Hai> tehai;
 	Hai tsumohai;
+	Map<Kaze, List<Hai>> sutehai;
+	Map<Kaze, List<Mentsu>> hurohai;
+	Map<Kaze, Integer> score;
+	Map<Integer, Kaze> kazemap; // playerのid -> 風
 	
+	Kaze pkaze;
 	
 	public ConsoleClient2(Player p, Server server) {
-		reader = new BufferedReader(new InputStreamReader(System.in));
+		this.reader = new BufferedReader(new InputStreamReader(System.in));
 		this.server = server;
 		this.p = p;
-	}
+		
+		this.sutehai = new HashMap<Kaze, List<Hai>>(4);
+		this.hurohai = new HashMap<Kaze, List<Mentsu>>(4);
+
+		this.score = new HashMap<Kaze, Integer>(4);
+		this.score.put(Kaze.TON, 0);
+		this.score.put(Kaze.NAN, 0);
+		this.score.put(Kaze.SYA, 0);
+		this.score.put(Kaze.PE, 0);
+		
+		this.kazemap = new HashMap<Integer, Kaze>(4);
+		
+		initKyoku();
+}
 
 	public void run() {
 		requestGame(p.getId());
+	}
+	
+	public void initKyoku() {
+		this.sutehai.put(Kaze.TON, new ArrayList<Hai>());
+		this.sutehai.put(Kaze.NAN, new ArrayList<Hai>());
+		this.sutehai.put(Kaze.SYA, new ArrayList<Hai>());
+		this.sutehai.put(Kaze.PE, new ArrayList<Hai>());
+		
+		this.hurohai.put(Kaze.TON, new ArrayList<Mentsu>());
+		this.hurohai.put(Kaze.NAN, new ArrayList<Mentsu>());
+		this.hurohai.put(Kaze.SYA, new ArrayList<Mentsu>());
+		this.hurohai.put(Kaze.PE, new ArrayList<Mentsu>());
+		
 	}
 
 	@Override
@@ -49,21 +83,31 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onGameStartReceived(List<Player> playerList, int index, int[] scores) {
-		System.out.println("Client : onGameStartReceived");
+		logger.debug("Server -> Client");
 		this.playerlist = playerList;
 		this.playerindex = index;
-		this.scores = scores.clone();
+		
+		score.put(Kaze.TON, scores[0]);
+		score.put(Kaze.NAN, scores[1]);
+		score.put(Kaze.SYA, scores[2]);
+		score.put(Kaze.PE, scores[3]);
+		
+		pkaze = Kaze.valueOf(index);
+		
+		for(int i = 0; i < playerList.size(); i++) {
+			kazemap.put(playerList.get(i).getId(), Kaze.valueOf(i));
+		}
 	}
 
 	@Override
 	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba, int tsumibou) {
-		System.out.println("Client : onStartKyokuReceived");
+		logger.debug("Server -> Client");
 		this.bakaze = bakaze;
 	}
 
 	@Override
 	public void onKyusyukyuhaiRequested() {
-		System.out.println("Client : onKyusyukyuhaiRequested");
+		logger.debug("Server -> Client");
 		System.out.print("Kyusyukyuhai>");
 		int index = 0;
 		try {
@@ -83,16 +127,17 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onTsumoHaiReceived(Hai hai) {
-		System.out.println("Client : onTsumoHaiReceived");
+		logger.debug("Server -> Client");
 		this.tsumohai = hai;
 	}
 
 	@Override
 	public void onDiscardReceived(boolean tumoari) {
+		logger.debug("Server -> Client");
 		DisplayConsole dc = new DisplayConsole();
-		getDispTehai(tehai, dc);
+		dc.addTehai(tehai);
 		if(tsumohai != null) 
-			getDispTsumoHai(tsumohai, dc);
+			dc.addTsumoHai(tsumohai);
 		dc.disp();
 		
 		System.out.print("Discard>");
@@ -114,6 +159,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onChiableIndexListsReceived(List<List<Integer>> lists) {
+		logger.debug("Server -> Client");
 		System.out.println("CHI");
 		System.out.println("-1 : チーしない");
 		for (int i = 0; i < lists.size(); i++) {
@@ -140,6 +186,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onPonableIndexListsReceived(List<List<Integer>> lists) {
+		logger.debug("Server -> Client");
 		System.out.println("PON");
 		System.out.println("-1 : ポンしない");
 		for (int i = 0; i < lists.size(); i++) {
@@ -166,6 +213,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onAnkanableIndexListsReceived(List<List<Integer>> lists) {
+		logger.debug("Server -> Client");
 		System.out.println("ANKAN");
 		System.out.println("-1 : 暗槓しない");
 		for (int i = 0; i < lists.size(); i++) {
@@ -192,6 +240,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onMinkanableIndexListReceived(List<Integer> hais) {
+		logger.debug("Server -> Client");
 		System.out.println("MINKAN");
 		System.out.println("-1 : 明槓しない");
 		for (int i = 0; i < hais.size(); i++) {
@@ -218,6 +267,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onKakanableIndexListReceived(List<Integer> list) {
+		logger.debug("Server -> Client");
 		System.out.println("KAKAN");
 		System.out.println("-1 : 加槓しない");
 		for (int i = 0; i < list.size(); i++) {
@@ -244,6 +294,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onReachableIndexListReceived(List<Integer> list) {
+		logger.debug("Server -> Client");
 		System.out.println("REACH");
 		System.out.println("-1 : 立直しない");
 		for (int i = 0; i < list.size(); i++) {
@@ -270,6 +321,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onRonRequested() {
+		logger.debug("Server -> Client");
 		System.out.println("RON");
 		System.out.println("-1:ロンしない");
 		System.out.println("-1以外:ロンする");
@@ -294,6 +346,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onTsumoAgariRequested() {
+		logger.debug("Server -> Client");
 		System.out.println("TSUMO");
 		System.out.println("-1:ツモあがりしない");
 		System.out.println("-1以外:ツモあがりする");
@@ -319,55 +372,55 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onDiscardReceived(Player p, Hai hai, boolean tumokiri) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
+		Kaze kaze = kazemap.get(p.getId());
+		sutehai.get(kaze).add(hai);
+		
+		DisplayConsole dc = new DisplayConsole();
+		dc.addDiscardhai(hai, kaze, tumokiri);
+		dc.disp();
 	}
 
 	@Override
 	public void onNakiReceived(Player p, Mentsu m) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
 	public void onRonReceived(Map<Player, List<Hai>> map) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
 	public void onTsumoAgariReceived() {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
 	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize, int yamaSize, int wanpaiSize, List<Hai> doraList) {
+		logger.debug("Server -> Client");
 		this.tehai = tehai;
 	}
 
 	@Override
 	public void onTsumoGiriReceived() {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
 	public void onGameResultReceived(int[] score) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
-		// TODO Auto-generated method stub
+		logger.debug("Server -> Client");
 
 	}
 
 	@Override
 	public void onKyokuResultReceived(KyokuResult result, int[] newScores, int[] oldScores, List<Integer> soten, List<Hai> uradoraList) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	@Override
@@ -378,8 +431,7 @@ public class ConsoleClient2 implements Client, Runnable {
 
 	@Override
 	public void onGameOverReceived() {
-		// TODO Auto-generated method stub
-
+		logger.debug("Server -> Client");
 	}
 
 	public static int getInt(BufferedReader b) throws IOException {
@@ -401,8 +453,38 @@ public class ConsoleClient2 implements Client, Runnable {
 		return ret;
 	}
 
-	public static DisplayConsole getDispTehai(List<Hai> tehai, DisplayConsole dc) {
-		dc.add("　\n｜\n｜\n　");
+
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+				logger.debug("Server -> Client");
+		
+	}
+
+}
+
+class DisplayConsole {
+	List<StringBuilder> buffer;
+
+	public DisplayConsole() {
+		buffer = new ArrayList<StringBuilder>();
+	}
+
+	public void add(String str) {
+		String array[] = str.split("\n");
+		for (int i = 0; i < array.length; i++) {
+			StringBuilder sb = null;
+			if (i + 1 > buffer.size()) {
+				sb = new StringBuilder();
+				buffer.add(sb);
+			} else {
+				sb = buffer.get(i);
+			}
+			sb.append(array[i]);
+		}
+	}
+
+	public void addTehai(List<Hai> tehai) {
+		add("　\n｜\n｜\n　");
 
 		for (int i = 0; i < tehai.size(); i++) {
 			Hai hai = tehai.get(i);
@@ -414,21 +496,19 @@ public class ConsoleClient2 implements Client, Runnable {
 			}
 			if (hai.aka()) {
 				if (i >= 10)
-					dc.add(String.format("赤　\n%s｜\n%s｜\nー　\n　%d", notation.charAt(0), notation.charAt(1), i));
+					add(String.format("赤　\n%s｜\n%s｜\nー　\n　%d", notation.charAt(0), notation.charAt(1), i));
 				else
-					dc.add(String.format("赤　\n%s｜\n%s｜\nー　\n　%s", notation.charAt(0), notation.charAt(1), getStringZenkaku(i)));
+					add(String.format("赤　\n%s｜\n%s｜\nー　\n　%s", notation.charAt(0), notation.charAt(1), getStringZenkaku(i)));
 			} else {
 				if (i >= 10)
-					dc.add(String.format("ー　\n%s｜\n%s｜\nー　\n　%d", notation.charAt(0), notation.charAt(1), i));
+					add(String.format("ー　\n%s｜\n%s｜\nー　\n　%d", notation.charAt(0), notation.charAt(1), i));
 				else
-					dc.add(String.format("ー　\n%s｜\n%s｜\nー　\n　%s", notation.charAt(0), notation.charAt(1), getStringZenkaku(i)));
+					add(String.format("ー　\n%s｜\n%s｜\nー　\n　%s", notation.charAt(0), notation.charAt(1), getStringZenkaku(i)));
 			}
 		}
-		return dc;
 	}
 
-	public static DisplayConsole getDispTsumoHai(Hai hai, DisplayConsole dc) {
-		dc.add("　\n｜\n｜\n　");
+	public void addHai(Hai hai) {
 		String notation = hai.notation();
 		if (notation.length() == 1) {
 			notation = notation + "　";
@@ -436,13 +516,79 @@ public class ConsoleClient2 implements Client, Runnable {
 			notation = notation.substring(1);
 		}
 		if (hai.aka()) {
-			dc.add(String.format("赤　\n%s｜\n%s｜\nー　\n　13", notation.charAt(0), notation.charAt(1)));
+			add(String.format("赤　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
 		} else {
-			dc.add(String.format("ー　\n%s｜\n%s｜\nー　\n　13", notation.charAt(0), notation.charAt(1)));
+			add(String.format("ー　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
 		}
-		return dc;
 	}
 
+	public void addYokoHai(Hai hai) {
+		String notation = hai.notation();
+		if (notation.length() == 1) {
+			notation = notation + "　";
+		} else if (notation.length() == 3) {
+			notation = notation.substring(1);
+		}
+		add(String.format("赤　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
+		if (hai.aka()) {
+			add(String.format("赤　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
+		} else {
+			add(String.format("ー　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
+		}
+	}
+
+	public void addTsumoHai(Hai hai) {
+		add("　\n｜\n｜\n　");
+		String notation = hai.notation();
+		if (notation.length() == 1) {
+			notation = notation + "　";
+		} else if (notation.length() == 3) {
+			notation = notation.substring(1);
+		}
+		if (hai.aka()) {
+			add(String.format("赤　\n%s｜\n%s｜\nー　\n　13", notation.charAt(0), notation.charAt(1)));
+		} else {
+			add(String.format("ー　\n%s｜\n%s｜\nー　\n　13", notation.charAt(0), notation.charAt(1)));
+		}
+	}
+
+	public void addDiscardhai(Hai hai, Kaze k, boolean tsumokiri) {
+		String notation = hai.notation();
+		if (notation.length() == 1) {
+			notation = notation + "　";
+		} else if (notation.length() == 3) {
+			notation = notation.substring(1);
+		}
+		
+		if(tsumokiri) {
+			add(String.format("　　　　　　　\n%s（ツモ切り）\n　　　　　　　\n　　　　　　　", k.notation()));
+		}else {
+			add(String.format("　　\n%s　\n　　\n　　", k.notation()));
+		}
+		add("　\n｜\n｜\n　");
+		if (hai.aka()) {
+			add(String.format("赤　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
+		} else {
+			add(String.format("ー　\n%s｜\n%s｜\nー　", notation.charAt(0), notation.charAt(1)));
+		}
+	}
+
+	/**
+	 * 
+	 * @param m
+	 * @param place 鳴いた家.南->下家、西->対面、北->上家に対応する.
+	 */
+	public void addNaki(Mentsu m, Kaze place) {
+		if(m.type() == Mentsu.Type.KANTU) {
+			
+		}else {
+			switch(place) {
+			case NAN:
+				
+			}
+		}
+	}
+	
 	public static String getStringZenkaku(int i) {
 		switch (i) {
 		case 0:
@@ -469,29 +615,7 @@ public class ConsoleClient2 implements Client, Runnable {
 		return "　";
 	}
 
-}
-
-class DisplayConsole {
-	List<StringBuilder> buffer;
-
-	public DisplayConsole() {
-		buffer = new ArrayList<StringBuilder>();
-	}
-
-	public void add(String str) {
-		String array[] = str.split("\n");
-		for (int i = 0; i < array.length; i++) {
-			StringBuilder sb = null;
-			if (i + 1 > buffer.size()) {
-				sb = new StringBuilder();
-				buffer.add(sb);
-			} else {
-				sb = buffer.get(i);
-			}
-			sb.append(array[i]);
-		}
-	}
-
+	
 	public void disp() {
 		for (StringBuilder sb : buffer) {
 			System.out.println(sb.toString());

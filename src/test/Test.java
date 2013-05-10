@@ -19,5 +19,10 @@ public class Test {
 		
 		System.out.println(x & 0x43);
 		
+		
 	}
 }
+
+
+
+

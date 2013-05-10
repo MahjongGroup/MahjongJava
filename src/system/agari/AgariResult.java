@@ -184,19 +184,22 @@ public class AgariResult {
 			this.agariParam = ap;
 		}
 		
+		public void setYakuFlag(Set<Yaku> yaku) {
+			this.yakuFlag = yaku;
+		}
+
 		private void setCheckParam(CheckParam p) {
 			this.chParam = p;
 		}
 		
-		public void setYakuFlag(Set<Yaku> yaku) {
-			if(yaku == null)
-				yaku = new HashSet<Yaku>();
-			this.yakuFlag = yaku;
-		}
 
 		public AgariResult build() {
-			if(chParam == null)
-				chParam = new CheckParam();
+			if(udora == null)
+				udora = new ArrayList<HaiType>();
+			if(odora == null)
+				odora = new ArrayList<HaiType>();
+			if(yakuFlag == null)
+				yakuFlag = new HashSet<Yaku>();
 			
 			if(!testOrder(tehai, huro)) {
 				checkYaku();
@@ -220,7 +223,7 @@ public class AgariResult {
 		 * すでに面子が確定しているとき.
 		 * @return
 		 */
-		public AgariResult buildTest() {
+		private AgariResult buildTest() {
 			if(chParam == null)
 				chParam = new CheckParam();
 			

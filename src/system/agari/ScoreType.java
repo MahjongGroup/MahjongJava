@@ -21,6 +21,10 @@ public enum ScoreType {
 		this.notation = notation;
 	}
 	
+	/**
+	 * この点数のタイプの日本語表記の文字列を返す.
+	 * @return この点数のタイプの日本語表記の文字列.
+	 */
 	public String notation() {
 		return this.notation;
 	}
