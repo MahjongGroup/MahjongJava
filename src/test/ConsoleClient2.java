@@ -615,7 +615,35 @@ class DisplayConsole {
 		return "　";
 	}
 
-	
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
+
+class DisplayConsole {
+	List<StringBuilder> buffer;
+
+	public DisplayConsole() {
+		buffer = new ArrayList<StringBuilder>();
+	}
+
+	public void add(String str) {
+		String array[] = str.split("\n");
+		for (int i = 0; i < array.length; i++) {
+			StringBuilder sb = null;
+			if (i + 1 > buffer.size()) {
+				sb = new StringBuilder();
+				buffer.add(sb);
+			} else {
+				sb = buffer.get(i);
+			}
+			sb.append(array[i]);
+		}
+	}
+
 	public void disp() {
 		for (StringBuilder sb : buffer) {
 			System.out.println(sb.toString());
