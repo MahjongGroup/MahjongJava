@@ -3,28 +3,28 @@ package junit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static system.MajanHai.GO_PIN;
-import static system.MajanHai.HATI_SOU;
-import static system.MajanHai.ITI_MAN;
-import static system.MajanHai.KYU_SOU;
-import static system.MajanHai.NAN;
-import static system.MajanHai.NANA_SOU;
-import static system.MajanHai.NI_MAN;
-import static system.MajanHai.ROKU_PIN;
-import static system.MajanHai.SAN_MAN;
-import static system.MajanHai.TON;
-import static system.MajanHai.YO_PIN;
+import static system.hai.MajanHai.GO_PIN;
+import static system.hai.MajanHai.HATI_SOU;
+import static system.hai.MajanHai.ITI_MAN;
+import static system.hai.MajanHai.KYU_SOU;
+import static system.hai.MajanHai.NAN;
+import static system.hai.MajanHai.NANA_SOU;
+import static system.hai.MajanHai.NI_MAN;
+import static system.hai.MajanHai.ROKU_PIN;
+import static system.hai.MajanHai.SAN_MAN;
+import static system.hai.MajanHai.TON;
+import static system.hai.MajanHai.YO_PIN;
 
 import org.junit.Test;
 
-import system.MatiType;
-import system.Mentu;
+import system.agari.MatiType;
+import system.hai.Mentsu;
 
 public class MatiTypeTest {
-	static Mentu m1 = new Mentu(ITI_MAN, NI_MAN, SAN_MAN);
-	static Mentu m2 = new Mentu(NANA_SOU, HATI_SOU, KYU_SOU);
-	static Mentu m3 = new Mentu(YO_PIN, GO_PIN, ROKU_PIN);
-	static Mentu m4 = new Mentu(NAN, NAN, NAN);
+	static Mentsu m1 = new Mentsu(ITI_MAN, NI_MAN, SAN_MAN);
+	static Mentsu m2 = new Mentsu(NANA_SOU, HATI_SOU, KYU_SOU);
+	static Mentsu m3 = new Mentsu(YO_PIN, GO_PIN, ROKU_PIN);
+	static Mentsu m4 = new Mentsu(NAN, NAN, NAN);
 	
 	@Test
 	public void testGetMatiType() {

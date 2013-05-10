@@ -9,12 +9,12 @@ import pages.Page;
 import pages.ResultPage;
 import server.Server;
 import server.Transporter;
-import system.Hai;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
-import system.Mentu;
-import system.Mentu.Type;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.hai.Mentsu.Type;
+import system.result.KyokuResult;
 import system.Player;
 
 public class ClientOperator implements Client {
@@ -249,7 +249,7 @@ public class ClientOperator implements Client {
 		canvas.addButtonList(StateCode.SELECT_RON);
 	}
 
-	public void onNakiReceived(Player player, Mentu mentu) {
+	public void onNakiReceived(Player player, Mentsu mentu) {
 		if (page == null || !isPageIsCanvas())
 			return;
 		MahjongCanvas canvas = (MahjongCanvas) page;

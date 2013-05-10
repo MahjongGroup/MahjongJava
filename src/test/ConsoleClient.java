@@ -8,15 +8,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import client.Client;
-
 import server.Server;
-import system.Hai;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.result.KyokuResult;
+import client.Client;
 
 /**
  * コンソール入力を受け付けるクライアント.
@@ -324,7 +323,7 @@ public class ConsoleClient implements Client {
 	}
 
 	@Override
-	public void onNakiReceived(Player player, Mentu mentu) {
+	public void onNakiReceived(Player player, Mentsu mentu) {
 		// 何もしない
 	}
 
@@ -411,5 +410,15 @@ public class ConsoleClient implements Client {
 		
 	}
 
+	@Override
+	public void onGameOverReceived() {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void onTempaiReceived(Map<Player, List<Hai>> map) {
+		// TODO Auto-generated method stub
+		
+	}
 }

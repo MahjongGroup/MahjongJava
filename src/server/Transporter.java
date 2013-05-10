@@ -3,16 +3,13 @@ package server;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.HaiType;
-import system.HurohaiList;
-import system.Kaze;
-import system.KyokuResult;
-import system.Mahjong;
-import system.Mentu;
 import system.Player;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.result.KyokuResult;
 import client.Client;
-
 /**
  * クライアントと通信を行う,サーバー-クライアント間のインターフェースとなるクラス.
  */
@@ -54,7 +51,7 @@ public class Transporter implements Server {
 	public Transporter(Client client) {
 		this.client = client;
 	}
-	
+		
 	/**
 	 * コンストラクタ.
 	 */
@@ -91,6 +88,7 @@ public class Transporter implements Server {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+	
 	
 	public boolean getGrandFlag(){
 		return grandFlag;
@@ -345,7 +343,7 @@ public class Transporter implements Server {
 	}
 
 	@Override
-	public void notifyNaki(Player player, Mentu mentu) {
+	public void notifyNaki(Player player, Mentsu mentu) {
 		client.onNakiReceived(player, mentu);
 	}
 
@@ -403,7 +401,7 @@ public class Transporter implements Server {
 	
 	@Override
 	public  void notifyTempai(Map<Player,List<Hai>> map){
-		client.onTempaiReceived(map);
+//		client.onTempaiReceived(map);
 	}	
 	
 	public void notifyGameResult(int[] score){

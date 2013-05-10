@@ -1,11 +1,11 @@
 package test;
 
 import ai.AIMethods;
-import system.AgariMethods;
-import system.Hai;
-import system.HaiType;
-import system.MajanHai;
-import system.TehaiList;
+import system.agari.AgariMethods;
+import system.hai.Hai;
+import system.hai.HaiType;
+import system.hai.MajanHai;
+import system.hai.TehaiList;
 
 public class AITest {
 	public static void main(String[] args) {

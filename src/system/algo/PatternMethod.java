@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Hai;
-import system.TehaiList;
+import system.hai.Hai;
+import system.hai.TehaiList;
 
 /**
  * パターン法によるn面子1雀頭の判定アルゴリズムを表すクラス．
@@ -34,7 +34,7 @@ public class PatternMethod {
 		 */
 		public boolean isIpeko() {
 			//			return (value & 0x1c) != 0x0 && (value & 0x4) != 0x4;
-			return isIpekoByKotsuRm() || isIpekoBySyuntsuRm();
+			return isIpekoByKotsuRm() || isIpekoBySyuntsuRm() || isIpekoOfException();
 		}
 
 		public boolean isIpekoBySyuntsuRm() {
@@ -43,6 +43,14 @@ public class PatternMethod {
 
 		public boolean isIpekoByKotsuRm() {
 			return (value & 0x10) == 0x10;
+		}
+		
+		public boolean isIpekoOfException() {
+			return (value & 0x80) == 0x80;
+		}
+
+		public boolean isException() {
+			return (value & 0x40) == 0x40;
 		}
 
 		/**
@@ -73,7 +81,7 @@ public class PatternMethod {
 		 * @return true if you successfully remove N mentsu 1 janto from tehai list.
 		 */
 		public boolean isSuccessful() {
-			return (value & 0x3) != 0;
+			return (value & 0x3) != 0 || (value & 0x40) != 0;
 		}
 	}
 
@@ -128,10 +136,16 @@ public class PatternMethod {
 	 * </br>
 	 * フラグは8bitのフラグで1bit目から「刻子からとれるか」、「順子からとれるか」、</br>
 	 * 「二盃口か」、「順子からとって一盃口か」、「刻子からとって一盃口か」、「一気通貫か」を表す．残り2bitは未定である．</br>
+	 * 2012/4/27追記
+	 * 残り2bitについて
+	 * 「例外的な牌の並びである」,[例外的な並びで一盃口である]
 	 * </br>
 	 * 実際に面子を構成するときは「刻子からとれる」フラグ、「順子からとれる」フラグの立っているほうを選択すればよい.</br>
 	 * しかし、刻子からとるか順子からとるかによって役が変わる場合(一盃口か三暗刻かなど)は役の高い方を採用するように</br>
 	 * 気をつける必要がある．</br>
+	 * 
+	 * 2012/4/27追記
+	 * 例外的に刻子->順子->刻子...などの取り方をしなければならない構成もある
 	 * 
 	 * @param keys calcKey()メソッドによって生成されたキーの配列．
 	 * @return n面子1雀頭であれば0以外の整数値.
@@ -171,8 +185,17 @@ public class PatternMethod {
 				}
 			}
 
+			// 一気通貫
 			if ((value & 0x20) != 0) {
 				ret |= 0x20;
+			}
+			
+			// 例外的な構成
+			if((value & 0x40) != 0) {
+				ret |= 0x40;
+				if((value & 0x80) != 0) {
+					ret |= 0x80;
+				}
 			}
 		}
 
@@ -215,6 +238,7 @@ public class PatternMethod {
 		map1.put(3411111, (byte) 1);
 		map1.put(112113111, (byte) 1);
 		map1.put(114111111, (byte) 33);
+		map1.put(32331, (byte) -64);
 		map1.put(111111411, (byte) 35);
 		map1.put(11241111, (byte) 3);
 		map1.put(1121322, (byte) 10);
@@ -259,6 +283,7 @@ public class PatternMethod {
 		map1.put(111112221, (byte) 35);
 		map1.put(311241, (byte) 1);
 		map1.put(33222, (byte) 17);
+		map1.put(14322, (byte) -64);
 		map1.put(333, (byte) 11);
 		map1.put(11131221, (byte) 1);
 		map1.put(22211211, (byte) 27);
@@ -325,6 +350,7 @@ public class PatternMethod {
 		map1.put(411114, (byte) 3);
 		map1.put(141111111, (byte) 35);
 		map1.put(11214, (byte) 3);
+		map1.put(31332, (byte) -64);
 		map1.put(3141111, (byte) 1);
 		map1.put(41214, (byte) 3);
 		map1.put(122322, (byte) 10);
@@ -377,6 +403,7 @@ public class PatternMethod {
 		map1.put(33111, (byte) 1);
 		map1.put(3112113, (byte) 1);
 		map1.put(341211, (byte) 1);
+		map1.put(311322, (byte) -64);
 		map1.put(331221, (byte) 1);
 		map1.put(112332, (byte) 10);
 		map1.put(3122211, (byte) 1);
@@ -394,6 +421,7 @@ public class PatternMethod {
 		map1.put(11211411, (byte) 3);
 		map1.put(412221, (byte) 3);
 		map1.put(311214, (byte) 1);
+		map1.put(4332, (byte) -64);
 		map1.put(222222, (byte) 31);
 		map1.put(122214, (byte) 3);
 		map1.put(33411, (byte) 11);
@@ -410,6 +438,7 @@ public class PatternMethod {
 		map1.put(223221, (byte) 10);
 		map1.put(414111, (byte) 1);
 		map1.put(22311, (byte) 10);
+		map1.put(322311, (byte) 64);
 		map1.put(144111, (byte) 1);
 		map1.put(1113411, (byte) 1);
 		map1.put(11112213, (byte) 3);
@@ -461,6 +490,7 @@ public class PatternMethod {
 		map1.put(111222, (byte) 27);
 		map1.put(11112321, (byte) 2);
 		map1.put(441111, (byte) 3);
+		map1.put(312321, (byte) 64);
 		map1.put(3333, (byte) 11);
 		map1.put(111141, (byte) 3);
 		map1.put(111114111, (byte) 33);
@@ -487,6 +517,7 @@ public class PatternMethod {
 		map1.put(111122211, (byte) 35);
 		map1.put(12321, (byte) 2);
 		map1.put(1143, (byte) 3);
+		map1.put(42321, (byte) 64);
 		map1.put(112413, (byte) 3);
 		map2.put(1113224, (byte) 3);
 		map2.put(2, (byte) 3);
@@ -666,6 +697,7 @@ public class PatternMethod {
 		map2.put(411131111, (byte) 35);
 		map2.put(3332, (byte) 10);
 		map2.put(1113341, (byte) 1);
+		map2.put(342311, (byte) -64);
 		map2.put(11214221, (byte) 3);
 		map2.put(1313411, (byte) 1);
 		map2.put(2111114, (byte) 3);
@@ -722,6 +754,7 @@ public class PatternMethod {
 		map2.put(1421114, (byte) 3);
 		map2.put(414311, (byte) 1);
 		map2.put(3323, (byte) 3);
+		map2.put(324311, (byte) -64);
 		map2.put(2423, (byte) 27);
 		map2.put(3221114, (byte) 3);
 		map2.put(1223, (byte) 3);
@@ -737,6 +770,7 @@ public class PatternMethod {
 		map2.put(1232411, (byte) 2);
 		map2.put(4313, (byte) 3);
 		map2.put(3413, (byte) 3);
+		map2.put(311342, (byte) -64);
 		map2.put(144311, (byte) 1);
 		map2.put(413411, (byte) 3);
 		map2.put(4433, (byte) 3);
@@ -882,6 +916,7 @@ public class PatternMethod {
 		map2.put(1112243, (byte) 27);
 		map2.put(21121322, (byte) 10);
 		map2.put(3211322, (byte) 10);
+		map2.put(2311322, (byte) -64);
 		map2.put(311112212, (byte) 1);
 		map2.put(314132, (byte) 1);
 		map2.put(111112412, (byte) 3);
@@ -896,6 +931,7 @@ public class PatternMethod {
 		map2.put(111332, (byte) 3);
 		map2.put(43211, (byte) 3);
 		map2.put(211211114, (byte) 3);
+		map2.put(231332, (byte) -64);
 		map2.put(321332, (byte) 10);
 		map2.put(111443, (byte) 3);
 		map2.put(2122133, (byte) 3);
@@ -994,11 +1030,14 @@ public class PatternMethod {
 		map2.put(11112212, (byte) 3);
 		map2.put(212321, (byte) 2);
 		map2.put(1113413, (byte) 3);
+		map2.put(3223112, (byte) -64);
 		map2.put(11113133, (byte) 3);
+		map2.put(332321, (byte) 64);
 		map2.put(43421, (byte) 10);
 		map2.put(11411141, (byte) 3);
 		map2.put(14112212, (byte) 3);
 		map2.put(211141211, (byte) 3);
+		map2.put(242321, (byte) 64);
 		map2.put(34421, (byte) 1);
 		map2.put(11133221, (byte) 1);
 		map2.put(112221113, (byte) 35);
@@ -1009,9 +1048,11 @@ public class PatternMethod {
 		map2.put(22212212, (byte) 27);
 		map2.put(14321, (byte) 2);
 		map2.put(21132311, (byte) 10);
+		map2.put(314321, (byte) 64);
 		map2.put(112111142, (byte) 3);
 		map2.put(111312212, (byte) 1);
 		map2.put(1332131, (byte) 10);
+		map2.put(44321, (byte) 64);
 		map2.put(311111213, (byte) 1);
 		map2.put(113141111, (byte) 35);
 		map2.put(1123322, (byte) 10);
@@ -1021,6 +1062,7 @@ public class PatternMethod {
 		map2.put(111112421, (byte) 35);
 		map2.put(11211242, (byte) 27);
 		map2.put(1221422, (byte) 27);
+		map2.put(34331, (byte) -64);
 		map2.put(114224, (byte) 3);
 		map2.put(3112241, (byte) 1);
 		map2.put(2231213, (byte) 10);
@@ -1037,12 +1079,14 @@ public class PatternMethod {
 		map2.put(11114321, (byte) 2);
 		map2.put(1122323, (byte) 2);
 		map2.put(111422111, (byte) 59);
+		map2.put(232331, (byte) -64);
 		map2.put(1131143, (byte) 3);
 		map2.put(322331, (byte) 10);
 		map2.put(31221131, (byte) 1);
 		map2.put(11141213, (byte) 3);
 		map2.put(12321131, (byte) 2);
 		map2.put(1113323, (byte) 3);
+		map2.put(311324, (byte) -64);
 		map2.put(3212213, (byte) 3);
 		map2.put(33131, (byte) 1);
 		map2.put(2312213, (byte) 1);
@@ -1060,6 +1104,7 @@ public class PatternMethod {
 		map2.put(3222311, (byte) 10);
 		map2.put(122324, (byte) 10);
 		map2.put(1221143, (byte) 3);
+		map2.put(2322311, (byte) 64);
 		map2.put(331111211, (byte) 1);
 		map2.put(22331, (byte) 10);
 		map2.put(211111211, (byte) 3);
@@ -1132,6 +1177,7 @@ public class PatternMethod {
 		map2.put(4221311, (byte) 1);
 		map2.put(114131, (byte) 1);
 		map2.put(22211213, (byte) 27);
+		map2.put(3123212, (byte) 64);
 		map2.put(333131, (byte) 11);
 		map2.put(144131, (byte) 1);
 		map2.put(11232221, (byte) 3);
@@ -1305,6 +1351,7 @@ public class PatternMethod {
 		map2.put(3131411, (byte) 1);
 		map2.put(211241, (byte) 3);
 		map2.put(1142141, (byte) 3);
+		map2.put(34322, (byte) -64);
 		map2.put(13212221, (byte) 3);
 		map2.put(112442, (byte) 3);
 		map2.put(43322, (byte) 10);
@@ -1377,6 +1424,7 @@ public class PatternMethod {
 		map2.put(312121211, (byte) 3);
 		map2.put(111341, (byte) 3);
 		map2.put(1141421, (byte) 1);
+		map2.put(24332, (byte) -64);
 		map2.put(11311214, (byte) 3);
 		map2.put(21113222, (byte) 17);
 		map2.put(412112111, (byte) 3);
@@ -1396,6 +1444,7 @@ public class PatternMethod {
 		map2.put(222341, (byte) 10);
 		map2.put(111113411, (byte) 35);
 		map2.put(1222313, (byte) 3);
+		map2.put(312341, (byte) 64);
 		map2.put(3221141, (byte) 3);
 		map2.put(2111141, (byte) 3);
 		map2.put(111223112, (byte) 10);
@@ -1433,6 +1482,7 @@ public class PatternMethod {
 		map2.put(21112331, (byte) 10);
 		map2.put(311111222, (byte) 59);
 		map2.put(11124311, (byte) 10);
+		map2.put(14342, (byte) -64);
 		map2.put(1224311, (byte) 1);
 		map2.put(23342, (byte) 10);
 		map2.put(322214, (byte) 3);
@@ -1552,6 +1602,7 @@ public class PatternMethod {
 		map2.put(12323, (byte) 2);
 		map2.put(142223, (byte) 1);
 		map2.put(111113141, (byte) 35);
+		map2.put(42323, (byte) 64);
 		map2.put(232223, (byte) 17);
 		map2.put(32111111, (byte) 3);
 		map2.put(322223, (byte) 27);
@@ -1587,6 +1638,7 @@ public class PatternMethod {
 		map2.put(3212321, (byte) 2);
 		map2.put(1412111, (byte) 3);
 		map2.put(4111412, (byte) 3);
+		map2.put(2312321, (byte) 64);
 		map2.put(4412111, (byte) 3);
 		map2.put(44213, (byte) 1);
 		map2.put(11241113, (byte) 3);
@@ -1788,6 +1840,7 @@ public class PatternMethod {
 		map2.put(122123111, (byte) 1);
 		map2.put(3143111, (byte) 1);
 		map2.put(14123111, (byte) 1);
+		map2.put(312323, (byte) 64);
 		map2.put(2221223, (byte) 27);
 		map2.put(1343111, (byte) 1);
 		map2.put(12411113, (byte) 3);
@@ -1829,6 +1882,7 @@ public class PatternMethod {
 		map2.put(11414, (byte) 3);
 		map2.put(3111431, (byte) 1);
 		map2.put(311112113, (byte) 3);
+		map2.put(322313, (byte) -64);
 		map2.put(412112, (byte) 3);
 		map2.put(21332111, (byte) 10);
 		map2.put(412313, (byte) 3);
@@ -1974,6 +2028,7 @@ public class PatternMethod {
 		map2.put(33111131, (byte) 1);
 		map2.put(3232211, (byte) 2);
 		map2.put(13114211, (byte) 1);
+		map2.put(31334, (byte) -64);
 		map2.put(1113242, (byte) 17);
 		map2.put(11322113, (byte) 10);
 		map2.put(32321111, (byte) 2);
@@ -2204,6 +2259,7 @@ public class PatternMethod {
 		map2.put(23111222, (byte) 17);
 		map2.put(132111113, (byte) 3);
 		map2.put(32111222, (byte) 27);
+		map2.put(323312, (byte) -64);
 		map2.put(312111113, (byte) 3);
 		map2.put(12213113, (byte) 3);
 		map2.put(1114331, (byte) 10);
@@ -2244,6 +2300,7 @@ public class PatternMethod {
 		map2.put(313211111, (byte) 1);
 		map2.put(212211113, (byte) 3);
 		map2.put(111131141, (byte) 35);
+		map2.put(423212, (byte) 64);
 		map2.put(311243, (byte) 1);
 		map2.put(122211113, (byte) 35);
 		map2.put(1113233, (byte) 3);
@@ -2328,9 +2385,11 @@ public class PatternMethod {
 		map2.put(321111221, (byte) 3);
 		map2.put(131114111, (byte) 33);
 		map2.put(322322, (byte) 10);
+		map2.put(313322, (byte) -64);
 		map2.put(11213114, (byte) 3);
 		map2.put(112114112, (byte) 3);
 		map2.put(4113221, (byte) 3);
+		map2.put(214322, (byte) -64);
 		map2.put(112121411, (byte) 3);
 		map2.put(3111233, (byte) 1);
 		map2.put(113114111, (byte) 33);
@@ -2363,6 +2422,7 @@ public class PatternMethod {
 		map2.put(1113134, (byte) 1);
 		map2.put(211322, (byte) 10);
 		map2.put(113333, (byte) 11);
+		map2.put(331322, (byte) -64);
 		map2.put(322211, (byte) 3);
 		map2.put(113222, (byte) 27);
 		map2.put(122211311, (byte) 35);

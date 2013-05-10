@@ -3,8 +3,8 @@ package client;
 import java.util.HashMap;
 import java.util.Map;
 
-import system.Hai;
-import system.MajanHai;
+import system.hai.Hai;
+import system.hai.MajanHai;
 
 
 public class MajanHaiIDMapper {
