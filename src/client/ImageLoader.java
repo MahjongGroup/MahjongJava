@@ -23,7 +23,7 @@ public class ImageLoader {
 		IMAGE_MAP.put(ImageID.man_7, "man_7");
 		IMAGE_MAP.put(ImageID.man_8, "man_8");
 		IMAGE_MAP.put(ImageID.man_9, "man_9");
-
+ 
 		IMAGE_MAP.put(ImageID.aka_pin_5, "aka_pin_5");
 		IMAGE_MAP.put(ImageID.pin_1, "pin_1");
 		IMAGE_MAP.put(ImageID.pin_2, "pin_2");

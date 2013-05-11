@@ -14,7 +14,7 @@ public class Constant {
 	public static final int PLAYER_BLOCK1_Y = 380;
 
 	public static final int TEHAI_INDENT = 170;
-
+ 
 	public static final int PLAYER_BLOCK2_X = 80;
 	public static final int PLAYER_BLOCK2_Y = 610;
 	

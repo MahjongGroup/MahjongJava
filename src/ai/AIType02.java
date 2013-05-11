@@ -12,7 +12,7 @@ import system.hai.TehaiList;
 import system.test.Functions;
 import system.test.Player;
 /**
- * AI弐号機。
+ *  AI弐号機。
  * 戦略を用いる（つもり）
  * AI01の再現を目安に。
  * @author shio

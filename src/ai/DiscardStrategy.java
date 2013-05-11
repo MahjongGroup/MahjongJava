@@ -3,7 +3,7 @@ package ai;
 import system.test.Kyoku;
 import system.test.Player;
 
-/**
+/** 
  * AIが牌をdiscardするときに用いられる戦略のインターフェース．
  */
 public interface DiscardStrategy {

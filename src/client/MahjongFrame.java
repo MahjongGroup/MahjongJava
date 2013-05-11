@@ -31,6 +31,7 @@ public class MahjongFrame extends JFrame {
 		setVisible(true);
 	}
 
+
 	/**
 	 * 持っているcanvasを取得する
 	 * 

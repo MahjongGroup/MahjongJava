@@ -21,7 +21,7 @@ public class MajanHaiIDMapper {
 		ID_MAP.put(MajanHai.NANA_MAN, ImageID.man_7);
 		ID_MAP.put(MajanHai.HATI_MAN, ImageID.man_8);
 		ID_MAP.put(MajanHai.KYU_MAN, ImageID.man_9);
-
+ 
 		ID_MAP.put(MajanHai.AKA_GO_PIN, ImageID.aka_pin_5);
 		ID_MAP.put(MajanHai.ITI_PIN, ImageID.pin_1);
 		ID_MAP.put(MajanHai.NI_PIN, ImageID.pin_2);
