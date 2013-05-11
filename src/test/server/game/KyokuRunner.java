@@ -260,6 +260,16 @@ public class KyokuRunner {
 	}
 
 	private void STATE_CODE_TYANKANRON() {
+		for (Kaze kaze : Kaze.values()) {
+			Player p = playerMap.get(kaze);
+			if (p.isMan()) {
+				if (kyoku.isRonable(kaze)){
+					SingleServerSender server = sender.get(p);
+					server.requestRon();
+				}
+			}
+		}
+
 		List<Player> doRonPlayer = new ArrayList<Player>();
 		doRon(doRonPlayer);
 		if (doRonPlayer.size() == 0) {
@@ -384,10 +394,10 @@ public class KyokuRunner {
 		if (p.isMan()) {
 			SingleServerSender server = sender.get(p);
 			SingleServerReceiver rec = receiver.get(p);
-			
+
 			if (discardFlag)
 				server.sendDiscard(kyoku.getCurrentTsumoHai() != null);
-			
+
 			ServerMessageType mType = ServerMessageType.DISCARD_INDEX_RECEIVED;
 			receiver.wait(p, mType, 0);
 			int i = ((IntegerMessage) rec.fetchMessage(mType)).getData();
@@ -404,11 +414,11 @@ public class KyokuRunner {
 			kyoku.discard(ai.discard());
 			sender.notifyDiscard(kyoku.getCurrentPlayer(), kyoku.getCurrentSutehai(), false);
 		}
-		
+
 		sendNeededInformation();
 		stateCode = STATE_CODE_RON;
 	}
-	
+
 	private void STATE_CODE_RON() {
 		for (Kaze kaze : Kaze.values()) {
 			Player p = playerMap.get(kaze);
@@ -416,26 +426,85 @@ public class KyokuRunner {
 				SingleServerSender server = sender.get(p);
 				if (kyoku.isRonable(kaze))
 					server.requestRon();
-				
-				if(kyoku.isMinkanable(kaze))
+
+				if (kyoku.isMinkanable(kaze))
 					server.sendMinkanableIndexList(kyoku.getMinkanableList(kaze));
 
-				if(kyoku.isPonable(kaze))
+				if (kyoku.isPonable(kaze))
 					server.sendPonableIndexLists(kyoku.getPonableHaiList(kaze));
-				
-				if(kyoku.isChiable())
+
+				if (kyoku.isChiable())
 					server.sendChiableIndexLists(kyoku.getChiableHaiList());
 			}
 		}
-		
-		doRonAgari();
+
+		List<Player> ronPlayer = new ArrayList<Player>(4);
+		Map<Player, List<Hai>> ronMap = new HashMap<Player, List<Hai>>();
+
+		for (Kaze kaze : Kaze.values()) {
+			if (kyoku.isRonable(kaze)) {
+				Player p = playerMap.get(kaze);
+				if (p.isMan()) {
+					SingleServerReceiver rec = receiver.get(p);
+					ServerMessageType mType = ServerMessageType.RON_RECEIVED;
+
+					boolean answer = false;
+					while (true) {
+						if (rec.isMessageReceived(mType)) {
+							ServerMessage m = rec.fetchMessage(mType);
+							answer = ((BooleanMessage) m).getData();
+							break;
+						}
+					}
+
+					// kazeがロンする場合
+					if (answer) {
+						kyoku.doRon(kaze);
+						ronPlayer.add(p);
+
+						for (int i = 0; i < kyoku.getTehaiList(kaze).size(); i++) {
+							ronMap.put(p, kyoku.getTehaiList(kaze));
+						}
+					} else {
+						kyoku.onRonRejected(kaze);
+					}
+				} else {
+					AI ai = aiMap.get(kaze);
+					if (ai.isRon()) {
+						kyoku.doRon(kaze);
+						for (int i = 0; i < kyoku.getTehaiList(kaze).size(); i++) {
+							ronMap.put(p, kyoku.getTehaiList(kaze));
+						}
+						ronPlayer.add(p);
+					} else {
+						kyoku.onRonRejected(kaze);
+					}
+				}
+			}
+		}
+
+		// ロンしたプレイヤーがいた場合
+		if (ronPlayer.size() > 0) {
+			sender.notifyRon(ronMap);
+
+			if (kyoku.isSanchaho()) {
+				kyoku.doTotyuRyukyokuSanchaho();
+			}
+			kyoku.doSyukyoku();
+		}
+
 		sendNeededInformation();
 	}
 
 	private void STATE_CODE_SUCHA() {
-		isSucha(kyoku);
+		if (kyoku.isSuchaReach() || kyoku.isSufontsuRenta() || kyoku.isSukaikan()) {
+			kyoku.doSuchaReach();
+			stateCode = STATE_CODE_ENDOFKYOKU;
+			return;
+		}
+		stateCode = STATE_CODE_NAKI;
 	}
-	
+
 	private void STATE_CODE_NAKI() {
 		doMinkan();
 		sendNeededInformation();
@@ -449,7 +518,7 @@ public class KyokuRunner {
 		}
 		initTransporterFlag();
 	}
-	
+
 	private void STATE_CODE_NEXTTURN() {
 		if (kyoku.isRyukyoku()) {
 			doTempai();// (仮にここにおいているだけ)
@@ -460,7 +529,7 @@ public class KyokuRunner {
 			stateCode = STATE_CODE_TSUMO;
 		}
 	}
-	
+
 	/**
 	 * 各クライアントに場(捨て牌,副露牌,手牌など)の情報を送る.
 	 */
@@ -488,108 +557,20 @@ public class KyokuRunner {
 		}
 	}
 
-	// ロン上がりできると送った後,その回答が送られてくるのを待つ
-	private void doRon(List<Player> doRonPlayer) {
-
-		for (Kaze kaze : Kaze.values()) {
-			if (kyoku.isRonable(kaze)) {
-				Player p = playerMap.get(kaze);
-				if (p.isMan()) {
-					Transporter tr = transporterMap.get(kaze);
-					boolean doRon = waitRon(tr);
-					if (doRon) {
-						kyoku.doRon(kaze);
-						doRonPlayer.add(p);
-
-						Map<Player, List<Hai>> map = new HashMap<Player, List<Hai>>();
-						for (int i = 0; i < kyoku.getTehaiList(kaze).size(); i++) {
-							map.put(p, kyoku.getTehaiList(kaze));
-						}
-
-						for (Kaze ronKaze : transporterMap.keySet()) {
-							Server tron = transporterMap.get(ronKaze);
-							notifyRon(map, tron);
-							// System.out.println(playerMap.get(ronKaze)
-							// + " : ロンだ！");
-							Console.wairEnter();
-						}
-
-						if (kyoku.isSanchaho()) {
-							kyoku.doTotyuRyukyokuSanchaho();
-						}
-						kyoku.doSyukyoku();
-					} else {
-						kyoku.onRonRejected(kaze);
-					}
-				} else {
-					// AI
-					AI ai = aiMap.get(kaze);
-					if (ai.isRon()) {
-						kyoku.doRon(kaze);
-						Map<Player, List<Hai>> map = new HashMap<Player, List<Hai>>();
-						for (int i = 0; i < kyoku.getTehaiList(kaze).size(); i++) {
-							map.put(p, kyoku.getTehaiList(kaze));
-						}
-						doRonPlayer.add(p);
-
-						for (Kaze ronKaze : transporterMap.keySet()) {
-							Server tron = transporterMap.get(ronKaze);
-							notifyRon(map, tron);
-							// System.out.println(playerMap.get(ronKaze)
-							// + " : ロンだ！");
-							Console.wairEnter();
-						}
-
-						if (kyoku.isSanchaho()) {
-							kyoku.doTotyuRyukyokuSanchaho();
-						}
-						kyoku.doSyukyoku();
-					} else {
-						kyoku.onRonRejected(kaze);
-					}
-				}
-			}
-
-		}
-
-	}
-
-	// 捨て牌からロンあがりする。
-	private void doRonAgari() {
-		List<Player> doRonPlayer = new ArrayList<Player>();
-		doRon(doRonPlayer);
-		if (doRonPlayer.size() == 0) {
-			stateCode = STATE_CODE_SUCHA;
-		} else {
-			stateCode = STATE_CODE_ENDOFKYOKU;
-		}
-	}
-
-	// 四家立直,四家連打,四開槓の判定
-	private void isSucha(Kyoku k) {
-		if (kyoku.isSuchaReach() || kyoku.isSufontsuRenta() || kyoku.isSukaikan()) {
-			kyoku.doSuchaReach();
-			stateCode = STATE_CODE_ENDOFKYOKU;
-		} else {
-			stateCode = STATE_CODE_NAKI;
-		}
-	}
-
 	// 明槓すると返ってきたら明槓する。
 	private void doMinkan() {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isMinkanable(kaze)) {
 				Player p = playerMap.get(kaze);
 				if (p.isMan()) {
-					Transporter tr = transporterMap.get(kaze);
-					boolean isMinkanDo = waitMinkan(tr, kyoku.getMinkanableList(kaze));
-					if (isMinkanDo) {
+					ServerMessageType mType = ServerMessageType.MINKAN_RECEIVED;
+					receiver.wait(p, mType, 0);
+					SingleServerReceiver rec = receiver.get(p);
+					
+					boolean answer = ((BooleanMessage) rec.fetchMessage(mType)).getData();
+					if (answer) {
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
-						notifyNaki(p, minkanMentu);
-
-						// System.out.println(kyoku.getPlayer(kaze) +
-						// " : 明槓します");
-						Console.wairEnter();
+						sender.notifyNaki(p, minkanMentu);
 
 						stateCode = STATE_CODE_RINSYANTSUMO;
 						return;
@@ -598,18 +579,14 @@ public class KyokuRunner {
 					AIType01 ai = new AIType01(p);
 					if (ai.minkan()) {
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
-						notifyNaki(p, minkanMentu);
-
-						// System.out.println(kyoku.getPlayer(kaze) +
-						// " : 明槓します");
-						Console.wairEnter();
+						sender.notifyNaki(p, minkanMentu);
 
 						stateCode = STATE_CODE_RINSYANTSUMO;
+						return;
 					}
 				}
 			}
 		}
-
 	}
 
 	// ポンすると返ってきたら,ポンする。
@@ -771,18 +748,6 @@ public class KyokuRunner {
 			}
 		}
 		return tr.isMinkanDo();
-	}
-
-	// ロン上がりできると送った後,その回答が返ってくるのを待つ
-	private boolean waitRon(Transporter tr) {
-		while (!tr.isRonReceived()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		return tr.isRonDo();
 	}
 
 	// ロンしたプレイヤーのリストとそのあがった手牌を各プレイヤーに送る。
