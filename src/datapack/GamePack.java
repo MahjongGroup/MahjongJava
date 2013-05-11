@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -40,66 +39,10 @@ import system.hai.Mentsu.MentsuHai;
 import system.test.Player;
 import client.BackgroundSystemOfClient;
 import client.ClientPlayer;
-import client.ImageID;
-import client.ImageLoader;
-import client.MajanHaiIDMapper;
 import client.StateCode;
 
 public class GamePack extends DataPack {
-	private static class ImageData {
-		private final Image haiBackImage;
-		private final Map<Hai, Image> haiImageMap;
-		private final Image reachImage;
-		private final Image scaledDarkHaiBackImage;
-		private final Image scaledHaiBackImage;
-		private final Map<Hai, Image> scaledHaiImageMap;
-
-		{
-			players = new ClientPlayer[4];
-			this.haiImageMap = new HashMap<Hai, Image>();
-
-			for (Hai hai : MajanHai.values()) {
-				haiImageMap.put(hai,
-						ImageLoader.load(MajanHaiIDMapper.getID(hai)));
-			}
-			this.scaledHaiImageMap = new HashMap<Hai, Image>();
-			for (Hai hai : MajanHai.values()) {
-				scaledHaiImageMap.put(hai,
-						ImageLoader.loadScaled(MajanHaiIDMapper.getID(hai)));
-			}
-			this.haiBackImage = ImageLoader.load(ImageID.hai_back);
-			this.scaledHaiBackImage = ImageLoader.loadScaled(ImageID.hai_back);
-			this.scaledDarkHaiBackImage = ImageLoader
-					.loadScaled(ImageID.hai_darkback);
-			this.reachImage = Toolkit.getDefaultToolkit().createImage(
-					"image/reach.png");
-		}
-
-		public Image getHaiBackImage() {
-			return haiBackImage;
-		}
-
-		public Map<Hai, Image> getHaiImageMap() {
-			return haiImageMap;
-		}
-
-		public Image getReachImage() {
-			return reachImage;
-		}
-
-		public Image getScaledDarkHaiBackImage() {
-			return scaledDarkHaiBackImage;
-		}
-
-		public Image getScaledHaiBackImage() {
-			return scaledHaiBackImage;
-		}
-
-		public Map<Hai, Image> getScaledHaiImageMap() {
-			return scaledHaiImageMap;
-		}
-
-	}
+	
 	private class ListenerForGame extends CommunicatableListener {
 		public void chooseHai(java.awt.event.MouseEvent e) {
 			int mx = e.getX();
@@ -591,7 +534,8 @@ public class GamePack extends DataPack {
 	private StateCode animeState;
 
 	static {
-		imageData = new ImageData();
+		imageData = ImageData.getInstance();
+		players = new ClientPlayer[4];
 	}
 
 	public static int getObjSize() {
