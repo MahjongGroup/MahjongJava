@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import system.Functions;
+import system.Player;
 import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.SuType;
 import system.hai.TehaiList;
-import system.test.Functions;
-import system.test.Player;
 /**
  * デバッグ用AI。
  * 鳴きフラグと和了フラグを用いて様々なケースに対応します。
@@ -61,8 +61,8 @@ public class AIType_Debug extends AbstractAI{
 	}
 
 	@Override
-	public boolean isReach() {
-		return true;
+	public int reach(List<Integer> list) {
+		return -1;
 	}
 
 	@Override

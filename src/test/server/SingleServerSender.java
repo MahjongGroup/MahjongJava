@@ -62,18 +62,18 @@ public interface SingleServerSender {
 	 */
 	public void sendDiscard(boolean tumoari);
 
-	/**
-	 * クライアントにチーするかを問い合わせる。
-	 * 
-	 * @param lists チーできる牌のインデックスのリスト(サイズは必ず2)のリスト。
-	 */
-	public void sendChiableIndexLists(List<List<Integer>> lists);
+//	/**
+//	 * クライアントにチーするかを問い合わせる。
+//	 * 
+//	 * @param lists チーできる牌のインデックスのリスト(サイズは必ず2)のリスト。
+//	 */
+//	public void sendChiableIndexLists(List<List<Integer>> lists);
 
-	/**
-	 * クライアントにポンするかを問い合わせる。
-	 * @param lists ポンできる牌のインデックスのリスト(サイズは必ず2)のリスト。
-	 */
-	public void sendPonableIndexLists(List<List<Integer>> lists);
+//	/**
+//	 * クライアントにポンするかを問い合わせる。
+//	 * @param lists ポンできる牌のインデックスのリスト(サイズは必ず2)のリスト。
+//	 */
+//	public void sendPonableIndexLists(List<List<Integer>> lists);
 
 	/**
 	 * クライアントに暗槓するかを問い合わせる。
@@ -82,10 +82,20 @@ public interface SingleServerSender {
 	public void sendAnkanableIndexLists(List<List<Integer>> lists);
 
 	/**
-	 * クライアントに明槓するかを問い合わせる。
-	 * @param list 明槓できる牌のインデックスのリスト(サイズは必ず3)。
+	 * クライアントに可能ならばロン、明槓、ポン、チーするかどうかを問い合わせる.
+	 * 
+	 * @param ron ロンできるならばtrue.
+	 * @param minkan 明槓できる牌のインデックスのリスト(サイズは必ず3).明槓できない場合null.
+	 * @param pon ポンできる牌のインデックスのリスト(サイズは必ず2)のリスト.ポンできない場合null.
+	 * @param chi チーできる牌のインデックスのリスト(サイズは必ず2)のリスト.チーできない場合null.
 	 */
-	public void sendMinkanableIndexList(List<Integer> list);
+	public void requestNaki(boolean ron, List<Integer> minkan, List<List<Integer>> pon, List<List<Integer>> chi);
+	
+//	/**
+//	 * クライアントに明槓するかを問い合わせる。
+//	 * @param list 明槓できる牌のインデックスのリスト(サイズは必ず3)。
+//	 */
+//	public void sendMinkanableIndexList(List<Integer> list);
 
 	/**
 	 * クライアントに加槓するかを問い合わせる。
@@ -99,10 +109,10 @@ public interface SingleServerSender {
 	 */
 	public void sendReachableIndexList(List<Integer> list);
 
-	/**
-	 * クライアントにロンするか問い合わせる。
-	 */
-	public void requestRon();
+//	/**
+//	 * クライアントにロンするか問い合わせる。
+//	 */
+//	public void requestRon();
 
 	/**
 	 * クライアントにツモ上がりするか問い合わせる。

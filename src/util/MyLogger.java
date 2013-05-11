@@ -46,6 +46,21 @@ public class MyLogger {
 			write(msg);
 	}
 
+	public void info() {
+		if (Level.INFO.ordinal() <= this.level.ordinal())
+			write("");
+	}
+
+	public void debug() {
+		if (Level.DEBUG.ordinal() <= this.level.ordinal())
+			write("");
+	}
+
+	public void warning() {
+		if (Level.WARNING.ordinal() <= this.level.ordinal())
+			write("");
+	}
+
 	public void write(String msg) {
 		StackTraceElement st = new Throwable().getStackTrace()[2];
 		String cname = st.getFileName();

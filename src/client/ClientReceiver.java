@@ -3,12 +3,12 @@ package client;
 import java.util.List;
 import java.util.Map;
 
+import system.Player;
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
-import system.test.Player;
 
 public interface ClientReceiver {
 

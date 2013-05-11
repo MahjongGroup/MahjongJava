@@ -1,16 +1,13 @@
 package ai;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import system.Player;
 import system.hai.Hai;
 import system.hai.HaiType;
-import system.hai.Kaze;
 import system.hai.TehaiList;
-import system.test.Functions;
-import system.test.Player;
 /**
  *  AI弐号機。
  * 戦略を用いる（つもり）
@@ -50,9 +47,8 @@ public class AIType02 extends AbstractAI {
 	}
 
 	@Override
-	public boolean isReach() {
-		// TODO Auto-generated method stub
-		return false;
+	public int reach(List<Integer> list) {
+		return -1;
 	}
 
 	@Override

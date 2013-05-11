@@ -452,7 +452,7 @@ public class KyokuRunner {
 			}
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
 
-			if (kyoku.isReachable() && ai.isReach()) {
+			if (kyoku.isReachable() && ai.reach(null)) {
 				kyoku.doReach();
 				int index = ai.discard();
 				kyoku.discard(index);

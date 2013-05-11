@@ -51,7 +51,7 @@ public abstract class AbstractKyokuResult implements KyokuResult {
 	public int getReachPlayerSize() {
 		int size = 0;
 		for(KyokuPlayer kp : playerMap.values()) { 
-			if(kp.isReach() || kp.isDoubleReach()){
+			if(kp.reach(null) || kp.isDoubleReach()){
 				size++;
 			}
 		}
@@ -69,6 +69,6 @@ public abstract class AbstractKyokuResult implements KyokuResult {
 
 	public boolean isReach(Player p) {
 		KyokuPlayer kp = playerMap.get(p);
-		return kp.isReach() || kp.isDoubleReach();
+		return kp.reach(null) || kp.isDoubleReach();
 	}
 }

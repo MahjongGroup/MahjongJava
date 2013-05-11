@@ -173,7 +173,7 @@ public class Main {
 								input = getIntFromIn(reader, -1, 0);
 							} else {
 								AI ai = ais.get(kyoku.getCurrentTurn());
-								if (ai.isReach())
+								if (ai.reach(null))
 									input = 0;
 							}
 							if (input == 0) {

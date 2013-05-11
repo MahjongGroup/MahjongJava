@@ -2,6 +2,7 @@ package test.server.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import system.Kyoku;
 import system.Mahjong;
@@ -12,8 +13,10 @@ import system.result.KyokuResult;
 import test.server.ServerMessageType;
 import test.server.ServerReceiver;
 import test.server.ServerSender;
+import test.server.SingleServerReceiver;
 import test.server.SingleServerSender;
 import util.MyLogger;
+import ai.AI;
 
 /**
  * 1半荘(東風)を実行するクラス.
@@ -25,12 +28,14 @@ public class MahjongGame {
 	private final List<Player> playerList;
 	private final ServerSender sender;
 	private final ServerReceiver receiver;
+	private final Map<Player, AI> aiMap;
 
-	public MahjongGame(List<Player> playerList, Rule rule, ServerSender sender, ServerReceiver receiver) {
+	public MahjongGame(List<Player> playerList, Rule rule, ServerSender sender, ServerReceiver receiver,Map<Player, AI> aiMap) {
 		this.playerList = new ArrayList<Player>(playerList);
 		this.mahjong = new Mahjong(this.playerList, rule);
 		this.sender = sender;
 		this.receiver = receiver;
+		this.aiMap = aiMap;
 	}
 	
 	/**
@@ -46,6 +51,10 @@ public class MahjongGame {
 
 		while (!mahjong.isEnd()) {
 			Kyoku kyoku = mahjong.startKyoku();
+			for (AI ai : aiMap.values()) {
+				ai.update(kyoku);
+			}
+			
 			mahjong.disp();
 			
 			logger.debug("notifyStartKyoku");
@@ -82,7 +91,11 @@ public class MahjongGame {
 			sender.notifyKyokuResult(kr,newScores,oldScores,soten,kyoku.getUraDoraList());
 
 			logger.debug("wait for next kyoku requested");
-			receiver.wait(ServerMessageType.NEXT_KYOKU_REQUESTED, 0);
+			
+			receiver.wait(ServerMessageType.NEXT_KYOKU_REQUESTED, 1000);
+			for (SingleServerReceiver rec : receiver.values()) {
+				rec.fetchMessage(ServerMessageType.NEXT_KYOKU_REQUESTED);
+			}
 		}
 		
 		logger.debug("notifyGameResult");

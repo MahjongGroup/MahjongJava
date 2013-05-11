@@ -9,114 +9,87 @@ import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import test.client.ClientListener;
 import test.server.SingleServerSender;
 
 /**
  * オフラインにおけるサーバーセンダーの実装.
  */
 public class SingleServerSenderImpl implements SingleServerSender{
+	private ClientListener listener;
+	
+	public SingleServerSenderImpl() {
+		
+	}
+	
+	public void setListener(ClientListener l) {
+		this.listener = l;
+	}
 	
 	@Override
 	public void sendGameStart(List<Player> playerList, int index, int[] scores) {
-		// TODO Auto-generated method stub
-		
+		listener.onGameStartReceived(playerList, index, scores);
 	}
 
 	@Override
 	public void notifyStartKyoku(Kaze bakaze, int kyokusu, int honba,
 			int tsumibou) {
-		// TODO Auto-generated method stub
-		
+		listener.onStartKyokuReceived(bakaze, kyokusu, honba, tsumibou);
 	}
 
 	@Override
 	public void requestKyusyukyuhai() {
-		// TODO Auto-generated method stub
-		
+		listener.onKyusyukyuhaiRequested();
 	}
 
 	@Override
 	public void sendTsumoHai(Hai hai) {
-		// TODO Auto-generated method stub
-		
+		listener.onTsumoHaiReceived(hai);
 	}
 
 	@Override
 	public void sendTsumoGiri() {
-		// TODO Auto-generated method stub
-		
+		listener.onTsumoGiriReceived();
 	}
 
 	@Override
 	public void sendDiscard(boolean tumoari) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendChiableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendPonableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
+		listener.onDiscardReceived(tumoari);
 	}
 
 	@Override
 	public void sendAnkanableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
+		listener.onAnkanableIndexListsReceived(lists);		
 	}
-
-	@Override
-	public void sendMinkanableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void sendKakanableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
+		listener.onKakanableIndexListReceived(list);
 	}
 
 	@Override
 	public void sendReachableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void requestRon() {
-		// TODO Auto-generated method stub
-		
+		listener.onReachableIndexListReceived(list);
 	}
 
 	@Override
 	public void requestTsumoAgari() {
-		// TODO Auto-generated method stub
-		
+		listener.onTsumoAgariRequested();
 	}
 
 	@Override
 	public void notifyDiscard(Player p, Hai hai, boolean tumokiri) {
-		// TODO Auto-generated method stub
-		
+		listener.onDiscardReceived(p, hai, tumokiri);
 	}
 
 	@Override
 	public void notifyNaki(Player p, Mentsu m) {
-		// TODO Auto-generated method stub
-		
+		listener.onNakiReceived(p, m);
 	}
 
 	@Override
 	public void notifyRon(Map<Player, List<Hai>> map) {
-		// TODO Auto-generated method stub
-		
+		listener.onRonReceived(map);
 	}
 
 	@Override
@@ -124,39 +97,38 @@ public class SingleServerSenderImpl implements SingleServerSender{
 			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
 			List<Integer> tehaiSize, int yamaSize, int wanpaiSize,
 			List<Hai> doraList) {
-		// TODO Auto-generated method stub
-		
+		listener.onFieldReceived(tehai, nakihai, sutehai, currentTurn, currentSutehai, tehaiSize, yamaSize, wanpaiSize, doraList);		
 	}
 
 	@Override
 	public void notifyReach(Kaze currentTurn, int sutehaiIndex) {
-		// TODO Auto-generated method stub
-		
+		listener.onReachReceived(currentTurn, sutehaiIndex);
 	}
 
 	@Override
 	public void notifyKyokuResult(KyokuResult kr, int[] newScore,
 			int[] oldScore, List<Integer> soten, List<Hai> uradoraList) {
-		// TODO Auto-generated method stub
-		
+		listener.onKyokuResultReceived(kr, newScore, oldScore, soten, uradoraList);		
 	}
 
 	@Override
 	public void notifyTempai(Map<Player, List<Hai>> map) {
-		// TODO Auto-generated method stub
-		
+		listener.onTempaiReceived(map);		
 	}
 
 	@Override
-	public void notifyGameResult(int[] Score) {
-		// TODO Auto-generated method stub
-		
+	public void notifyGameResult(int[] score) {
+		listener.onGameResultReceived(score);		
 	}
 
 	@Override
 	public void sendGameOver() {
-		// TODO Auto-generated method stub
-		
+		listener.onGameOverReceived();		
+	}
+
+	@Override
+	public void requestNaki(boolean ron, List<Integer> minkan, List<List<Integer>> pon, List<List<Integer>> chi) {
+		listener.onNakiRequested(ron, minkan, pon, chi);
 	}
 
 }
