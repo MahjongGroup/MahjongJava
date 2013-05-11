@@ -2,6 +2,7 @@ package client;
 
 import java.awt.event.MouseListener;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -291,7 +292,11 @@ public class BackgroundSystemOfClient implements Serializable {
 		return operator;
 	}
 	public void onTempaiReceived(Map<Player,List<Hai>> map){
-		
+		List<List<Hai>> tmp = new ArrayList<List<Hai>>();
+		for(int i = 0;i < 4;i++){
+			tmp.add(map.get(datas.getGame().getPlayers()[i]));
+		}
+		datas.getResult().setTehais(tmp);
 	}
 
 	public void connectServer() {
@@ -299,5 +304,9 @@ public class BackgroundSystemOfClient implements Serializable {
 		operator.setBackground(this);
 		operator.requestGame(22);
 		setMode(PackName.Game);
+	}
+	
+	public void requestNextKyoku(){
+		operator.requestNextKyoku();
 	}
 }	
