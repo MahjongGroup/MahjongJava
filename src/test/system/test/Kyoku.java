@@ -1,4 +1,4 @@
-package system;
+package test.system.test;
 
 import static system.hai.Kaze.PE;
 import static system.hai.Kaze.TON;
@@ -16,7 +16,6 @@ import system.agari.AgariMethods;
 import system.agari.AgariParam;
 import system.agari.AgariResult;
 import system.hai.Hai;
-import system.hai.Hai.HaiComparator;
 import system.hai.HaiType;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
@@ -25,6 +24,7 @@ import system.hai.Mentsu;
 import system.hai.Sutehai;
 import system.hai.SutehaiList;
 import system.hai.TehaiList;
+import system.hai.Hai.HaiComparator;
 import system.result.KyokuResult;
 import system.result.KyokuRonAgariResult;
 import system.result.KyokuRyukyokuResult;
@@ -212,6 +212,17 @@ public class Kyoku {
 			return false;
 		}
 		return kyokuPlayerMap.get(currentTurn).isKyusyukyuhai(currentTumohai);
+	}
+
+	public void doKyusyukyuhai() {
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.KYUSYUKYUHAI, playerMap.get(TON), map);
 	}
 
 	/**
@@ -422,14 +433,9 @@ public class Kyoku {
 		this.krbuilder.put(playerMap.get(kaze), ar);
 	}
 
-	/**
-	 * 指定された風の人がリーチできるのに、そのリーチを蹴った場合呼び出す.
-	 * @param kaze
-	 */
 	public void onRonRejected(Kaze kaze){
 		kyokuPlayerMap.get(kaze).setTatyaFuritenFlag(true);
 	}
-	
 	/**
 	 * 指定された風の人がリーチしている場合はtrueを返す.
 	 * 
@@ -813,11 +819,7 @@ public class Kyoku {
 		return true;
 	}
 
-	/**
-	 * 指定された種類の途中流局をする.
-	 * @param type　途中流局の種類.
-	 */
-	public void doTotyuRyukyoku(TotyuRyukyokuType type) {
+	public void doSuchaReach() {
 		if (this.result != null)
 			throw new IllegalStateException("既にKyokuResultは生成されている");
 
@@ -825,7 +827,7 @@ public class Kyoku {
 		for (Player p : playerMap.values()) {
 			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
 		}
-		this.result = new KyokuTotyuRyukyokuResult(type, playerMap.get(TON), map);
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SUCHAREACH, playerMap.get(TON), map);
 	}
 
 	/**
@@ -857,6 +859,21 @@ public class Kyoku {
 			return false;
 
 		return result.isTotyuRyukyoku();
+	}
+
+	/**
+	 * 途中流局(三家和)する.
+	 * @throw IllegalStateException 既に局が終わっている場合.
+	 */
+	public void doTotyuRyukyokuSanchaho() {
+		if (this.result != null)
+			throw new IllegalStateException("既にKyokuResultは生成されている");
+
+		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
+		for (Player p : playerMap.values()) {
+			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
+		}
+		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SANCHAHO, playerMap.get(TON), map);
 	}
 
 	/**

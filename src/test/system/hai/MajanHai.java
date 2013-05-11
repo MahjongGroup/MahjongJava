@@ -1,5 +1,6 @@
-package system.hai;
+package test.system.hai;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * 四人麻雀用,赤ありの麻雀牌を表すクラス。
  */
-public class MajanHai implements Hai{
+public class MajanHai implements Hai ,Serializable{
 	public static Hai ITI_MAN = new MajanHai("一萬", HaiType.ITI_MAN, false, 0);
 	public static Hai NI_MAN = new MajanHai("二萬", HaiType.NI_MAN, false, 1);
 	public static Hai SAN_MAN = new MajanHai("三萬", HaiType.SAN_MAN, false, 2);

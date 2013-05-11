@@ -1,17 +1,18 @@
-package system.result;
+package test.system.result;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import system.KyokuPlayer;
-import system.Player;
 import system.agari.AgariResult;
 import system.hai.Hai;
+import system.test.KyokuPlayer;
+import system.test.Player;
 
 /**
  * ロンあがりの場合の局の結果を表すクラス.不変クラスである.
  */
-public class KyokuRonAgariResult extends AbstractKyokuResult implements KyokuResult {
+public class KyokuRonAgariResult extends AbstractKyokuResult implements KyokuResult, Serializable {
 	private final Map<Player, AgariResult> agariMap;
 	private final Player hoju;
 	private final Hai agariHai;

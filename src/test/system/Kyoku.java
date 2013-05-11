@@ -1,4 +1,4 @@
-package system;
+package test.system;
 
 import static system.hai.Kaze.PE;
 import static system.hai.Kaze.TON;

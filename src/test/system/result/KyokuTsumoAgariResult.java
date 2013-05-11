@@ -1,11 +1,11 @@
-package system.result;
+package test.system.result;
 
 import java.util.Map;
 
-import system.KyokuPlayer;
-import system.Player;
 import system.agari.AgariResult;
 import system.hai.Hai;
+import system.test.KyokuPlayer;
+import system.test.Player;
 
 /**
  * ツモ上がった場合の局の結果を表すクラス.不変クラス.

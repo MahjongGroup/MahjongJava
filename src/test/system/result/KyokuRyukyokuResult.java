@@ -1,46 +1,39 @@
-package system.result;
+package test.system.result;
 
 import java.util.Map;
 
-import system.KyokuPlayer;
-import system.Player;
 import system.agari.AgariResult;
 import system.hai.Hai;
-
+import system.test.KyokuPlayer;
+import system.test.Player;
 
 /**
- * 途中流局した場合の局の結果を表すクラス.
+ * 途中流局を表す結果.
  */
-public class KyokuTotyuRyukyokuResult extends AbstractKyokuResult implements KyokuResult {
-	private final TotyuRyukyokuType type;
-	
+public class KyokuRyukyokuResult extends AbstractKyokuResult implements KyokuResult{
 	/**
 	 * コンストラクタ.
-	 * @param type 途中流局の種類.
+	 * 
 	 * @param oya 親.
 	 * @param map プレイヤー->そのプレイヤー局.
-	 * @throws NullPointerException
 	 */
-	public KyokuTotyuRyukyokuResult(TotyuRyukyokuType type, Player oya, Map<Player, KyokuPlayer> map) {
+	public KyokuRyukyokuResult(Player oya, Map<Player, KyokuPlayer> map) {
 		super(oya, map);
-		if(type == null)
-			throw new NullPointerException();
-		this.type = type;
 	}
 
 	@Override
 	public boolean isTotyuRyukyoku() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public TotyuRyukyokuType getTotyuryukyokuType() {
-		return type;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean isRyukyoku() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -82,4 +75,5 @@ public class KyokuTotyuRyukyokuResult extends AbstractKyokuResult implements Kyo
 	public Player getTsumoAgariPlayer() {
 		throw new UnsupportedOperationException();
 	}
+
 }

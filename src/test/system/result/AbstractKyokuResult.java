@@ -1,10 +1,10 @@
-package system.result;
+package test.system.result;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import system.KyokuPlayer;
-import system.Player;
+import system.test.KyokuPlayer;
+import system.test.Player;
 
 /**
  * 局結果の抽象クラス.
