@@ -12,12 +12,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import server.Server;
-import system.Player;
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import system.test.Player;
 import client.Client;
 
 public class ConsoleClient2 implements Client, Runnable {
@@ -27,7 +27,6 @@ public class ConsoleClient2 implements Client, Runnable {
 	Player p;
 	int playerindex;
 	List<Player> playerlist;
-	
 
 	Kaze bakaze;
 	List<Hai> tehai;
@@ -56,7 +55,7 @@ public class ConsoleClient2 implements Client, Runnable {
 		this.kazemap = new HashMap<Integer, Kaze>(4);
 		
 		initKyoku();
-}
+	}
 
 	public void run() {
 		requestGame(p.getId());
@@ -80,7 +79,6 @@ public class ConsoleClient2 implements Client, Runnable {
 		System.out.println("Client : requestGame");
 		server.onGameRequested(id);
 	}
-
 	@Override
 	public void onGameStartReceived(List<Player> playerList, int index, int[] scores) {
 		logger.debug("Server -> Client");
@@ -621,28 +619,6 @@ class DisplayConsole {
 		
 	}
 
-}
-
-class DisplayConsole {
-	List<StringBuilder> buffer;
-
-	public DisplayConsole() {
-		buffer = new ArrayList<StringBuilder>();
-	}
-
-	public void add(String str) {
-		String array[] = str.split("\n");
-		for (int i = 0; i < array.length; i++) {
-			StringBuilder sb = null;
-			if (i + 1 > buffer.size()) {
-				sb = new StringBuilder();
-				buffer.add(sb);
-			} else {
-				sb = buffer.get(i);
-			}
-			sb.append(array[i]);
-		}
-	}
 
 	public void disp() {
 		for (StringBuilder sb : buffer) {

@@ -9,12 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import server.Server;
-import system.Player;
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import system.test.Player;
 import client.Client;
 
 /**

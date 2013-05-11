@@ -1,7 +1,7 @@
 package test;
 
 import server.Server;
-import system.Player;
+import system.test.Player;
 import client.ClientOperator;
 
 /**

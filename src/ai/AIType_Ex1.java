@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import system.Functions;
-import system.Player;
 import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.TehaiList;
+import system.test.Functions;
+import system.test.Player;
 
 /**
  * おふざけAIその1。 国士無双しか狙いません。

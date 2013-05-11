@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import system.Functions;
-import system.Player;
 
 import system.hai.Hai;
 import system.hai.HaiType;
@@ -14,6 +12,8 @@ import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.SuType;
 import system.hai.TehaiList;
+import system.test.Functions;
+import system.test.Player;
 
 /**
  * AI初号機。

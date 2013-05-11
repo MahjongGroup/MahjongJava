@@ -8,8 +8,8 @@ import java.util.Map;
 import server.MahjongGame;
 import server.Server;
 import server.Transporter;
-import system.Player;
-import system.Rule;
+import system.test.Player;
+import system.test.Rule;
 
 /**
  * コンソール用の麻雀サーバー

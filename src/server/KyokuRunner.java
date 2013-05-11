@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Kyoku;
-import system.Player;
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
@@ -14,6 +12,8 @@ import system.hai.Mentsu;
 import system.hai.Sutehai;
 import system.hai.SutehaiList;
 import system.hai.TehaiList;
+import system.test.Kyoku;
+import system.test.Player;
 import test.Console;
 import ai.AI;
 import ai.AIType01;

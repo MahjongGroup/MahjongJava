@@ -3,14 +3,12 @@ package client;
 import java.util.List;
 import java.util.Map;
 
-import server.KyokuRunner;
-import system.Player;
 import system.hai.Hai;
-import system.hai.HaiType;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import system.test.Player;
 
 /**
  * サーバーとの通信を行うメソッドを実装するインターフェース。
@@ -53,6 +51,7 @@ public interface Client {
 	// 局
 
 	/**
+
 	 * サーバーから九種九牌するかの問い合わせを受け取る。
 	 */
 	public void onKyusyukyuhaiRequested();

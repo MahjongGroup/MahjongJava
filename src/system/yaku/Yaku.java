@@ -1,8 +1,8 @@
 package system.yaku;
 
-import system.Field;
 import system.agari.AgariParam;
 import system.agari.CheckParam;
+import system.test.Field;
 
 /**
  * 役であることを表すインターフェース。
