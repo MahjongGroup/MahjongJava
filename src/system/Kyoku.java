@@ -433,9 +433,14 @@ public class Kyoku {
 		this.krbuilder.put(playerMap.get(kaze), ar);
 	}
 
+	/**
+	 * 指定された風の人がリーチできるのに、そのリーチを蹴った場合呼び出す.
+	 * @param kaze
+	 */
 	public void onRonRejected(Kaze kaze){
 		kyokuPlayerMap.get(kaze).setTatyaFuritenFlag(true);
 	}
+	
 	/**
 	 * 指定された風の人がリーチしている場合はtrueを返す.
 	 * 
