@@ -1,25 +1,24 @@
 package test;
 
-public class Test {
-	private String pass;
-	public void test(){
-		System.out.println(pass);
-	}
-	public Test(String pass){
-		this.pass = pass;
-	}
-	public void printTest(){
-		System.out.println(pass);
-	}
+import java.util.Set;
 
-	public void printUoooooo(){
-		System.out.println("uooooooooooooo");
-	}
-	public void printMoseshi(){
-		System.out.println("mosemosemoseshi");
+import system.hai.HaiType;
+import system.yaku.Yakuman;
+
+/**
+ * a
+ * @author shio
+ *
+ */
+public class Test {
+	public static void main(String[] args) {
+		byte x = (byte) 0xc0;
+		byte y = (byte) 0x40;
+		System.out.println("0xc0 = " + x);
+		System.out.println("0x40 = " + y);
 		
-	}
-	public void testConflict(){
-		System.out.println("test");
+		System.out.println(x & 0x43);
+		
+		
 	}
 }
