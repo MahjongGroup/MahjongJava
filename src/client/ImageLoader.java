@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
+
 public class ImageLoader {
 	private static final Map<Integer, String> IMAGE_MAP = new HashMap<Integer, String>(1000);
 	static {

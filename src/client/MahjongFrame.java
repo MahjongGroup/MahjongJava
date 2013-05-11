@@ -3,6 +3,8 @@ package client;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseListener;
+import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

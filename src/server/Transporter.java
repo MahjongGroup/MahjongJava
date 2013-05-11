@@ -342,7 +342,6 @@ public class Transporter implements Server ,Serializable{
 		client.onFieldReceived(tehai,nakihai,sutehai,currentTurn,currentSutehai,tehaiSize,yamaSize,wanpaiSize,doraList);
 	}
 
-	
 	@Override
 	public void notifyDiscard(Player player, Hai hai, boolean tumokiri) {
 		client.onDiscardReceived(player, hai, tumokiri);
@@ -405,6 +404,10 @@ public class Transporter implements Server ,Serializable{
 		endResultPage = true;
 	}
 	
+	@Override
+	public  void notifyTempai(Map<Player,List<Hai>> map){
+//		client.onTempaiReceived(map);
+	}	
 	
 	public void notifyGameResult(int[] score){
 		client.onGameResultReceived(score);
@@ -420,13 +423,5 @@ public class Transporter implements Server ,Serializable{
 //			List<HaiType> doraList) {
 //		// TODO Auto-generated method stub
 //		
-
-
-
-	@Override
-	public void notifyTempai(Map<Player, List<system.hai.Hai>> map) {
-		// TODO Auto-generated method stub
-		
-	}
 }
 

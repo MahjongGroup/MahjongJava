@@ -25,7 +25,11 @@ import ai.AbstractAI;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Main.run();
+		ServerMessageType.ANKAN_INDEX_LIST_RECEIVED.newInstance(0);
+		Class<Integer> c = Integer.class;
+		Object obj = 100;
+		System.out.println(c.cast(obj));
+//		Main.run();
 	}
 	// DEBUG
 	public static void run() throws IOException {

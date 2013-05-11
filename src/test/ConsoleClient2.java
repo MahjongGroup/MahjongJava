@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,7 +79,6 @@ public class ConsoleClient2 implements Client, Runnable {
 		System.out.println("Client : requestGame");
 		server.onGameRequested(id);
 	}
-	
 	@Override
 	public void onGameStartReceived(List<Player> playerList, int index, int[] scores) {
 		logger.debug("Server -> Client");
@@ -613,16 +613,16 @@ class DisplayConsole {
 		return "　";
 	}
 
+	@Override
 	public void onTempaiReceived(Map<Player, List<Hai>> map) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	public void disp() {
 		for (StringBuilder sb : buffer) {
 			System.out.println(sb.toString());
 		}
 	}
-
 }
-
