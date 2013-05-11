@@ -10,7 +10,7 @@ public enum StateCode {
 	SELECT_KAKAN(106,"加槓"),
 	SELECT_KAN(1000,"槓"),
 	DISCARD_HAI(1,""),
-
+ 
 	
 	//numは選択枚数
 	DISCARD_SELECT(1,""),

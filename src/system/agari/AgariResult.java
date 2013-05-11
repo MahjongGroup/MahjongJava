@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import system.Field;
 import system.algo.PatternMethod;
 import system.hai.Hai;
 import system.hai.HaiType;
@@ -15,7 +16,6 @@ import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.hai.NMentsu1Janto;
 import system.hai.TehaiList;
-import system.test.Field;
 import system.yaku.NormalYaku;
 import system.yaku.Yaku;
 import system.yaku.Yakuman;

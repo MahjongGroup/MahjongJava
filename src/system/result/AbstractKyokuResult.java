@@ -3,8 +3,8 @@ package system.result;
 import java.util.HashMap;
 import java.util.Map;
 
-import system.test.KyokuPlayer;
-import system.test.Player;
+import system.KyokuPlayer;
+import system.Player;
 
 /**
  * 局結果の抽象クラス.

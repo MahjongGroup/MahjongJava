@@ -19,7 +19,7 @@ import system.test.Functions;
 import system.test.Kyoku;
 
 /**
- * AIに用いる様々なお便利メソッドを持つクラス。
+ *  AIに用いる様々なお便利メソッドを持つクラス。
  * 
  * @author shio
  * 

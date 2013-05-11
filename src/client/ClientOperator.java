@@ -1,6 +1,423 @@
 package client;
 
 import server.Transporter;
+import system.hai.Hai;
+import system.hai.HurohaiList;
+import system.hai.Kaze;
+import system.hai.Mentsu;
+import system.hai.Mentsu.Type;
+import system.result.KyokuResult;
+import system.Player;
+
+public class ClientOperator implements Client {
+	private Server tr;
+	private Page page;
+	private MahjongFrame frame;
+
+	public void setFrame(MahjongFrame frame) {
+		this.frame = frame;
+	}
+
+	public ClientOperator() {
+	}
+ 
+	public void setTransporter(Transporter tr) {
+		this.tr = tr;
+	}
+
+	public boolean isPageIsCanvas() {
+		return page instanceof MahjongCanvas;
+	}
+
+	public ClientOperator(Server tr) {
+		this.tr = tr;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	public ClientOperator(MahjongCanvas c) {
+		this.page = c;
+	}
+
+	public void setTransporter(Server tr) {
+		this.tr = tr;
+	}
+
+	public void sendDiscardIndex(int index) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onDiscardIndexReceived(index);
+		canvas.getInfo().tsumoHai = null;
+		canvas.refreshStateCodes();
+	}
+
+	public void onTsumoGiriReceived() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.getInfo().tsumoHai = null;
+		canvas.refreshStateCodes();
+	}
+
+	public void sendChiIndexList(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onChiIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
+				: null);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendPonIndexList(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onPonIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
+				: null);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendAnkanIndexList(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onAnkanIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
+				: null);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendMinkan(boolean answer) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onMinkanableIndexReceived(answer);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendKakanIndex(int index) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onKakanableIndexReceived(index);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendReachIndex(int index) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onReachIndexReceived(index);
+		canvas.refreshStateCodes();
+		if (index != -1)
+			canvas.getInfo().tsumoHai = null;
+	}
+
+	public void sendRon(boolean answer) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onRonReceived(answer);
+		canvas.refreshStateCodes();
+	}
+
+	public void sendKyusyukyuhai(boolean flag) {
+		tr.onKyusyukyuhaiReceived(flag);
+	}
+
+	public void onChiableIndexListsReceived(List<List<Integer>> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		// TODO to be removed
+		canvas.getInfo().tsumoHai = null;
+		canvas.addButtonList(StateCode.SELECT_CHI);
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_CHI_HAI, hais);
+	}
+
+	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		// TODO to be removed
+		canvas.getInfo().tsumoHai = null;
+
+		canvas.addButtonList(StateCode.SELECT_PON);
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_PON_HAI, hais);
+	}
+
+	public void onMinkanableIndexListReceived(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		// TODO to be removed
+		canvas.getInfo().tsumoHai = null;
+
+		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
+		tmpList.add(hais);
+		canvas.addButtonList(StateCode.SELECT_MINKAN);
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_MINKAN, tmpList);
+	}
+
+	public void onKyusyukyuhaiRequested() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		canvas.addButtonList(StateCode.KYUSYUKYUHAI);
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+	}
+
+	public void onAnkanableIndexListsReceived(List<List<Integer>> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.addButtonList(StateCode.SELECT_ANKAN);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_ANKAN_HAI, hais);
+	}
+
+	public void onKakanableIndexListReceived(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
+		tmpList.add(hais);
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.addButtonList(StateCode.SELECT_KAKAN);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_KAKAN_HAI, tmpList);
+	}
+
+	public void onReachableIndexListReceived(List<Integer> hais) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
+		for (Integer i : hais) {
+			List<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(i);
+			tmpList.add(tmp);
+		}
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.addButtonList(StateCode.SELECT_REACH);
+		canvas.getInfo().ableIndexList.put(StateCode.SELECT_REACH_HAI, tmpList);
+	}
+
+	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		ClientInfo info = canvas.getInfo();
+		canvas.startAnimation(info.kaze.get(currentTurn),
+				StateCode.SELECT_REACH);
+		int currentIndex = info.kaze.get(currentTurn);
+		info.reachPosMap.put(currentIndex, sutehaiIndex + 1);
+	}
+
+	public void onTsumoAgariRequested() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.addButtonList(StateCode.SELECT_TSUMO);
+	}
+
+	public void onRonRequested() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		// TODO to be removed
+		canvas.getInfo().tsumoHai = null;
+
+		canvas.addStateCode(StateCode.SELECT_BUTTON);
+		canvas.addButtonList(StateCode.SELECT_RON);
+	}
+
+	public void onNakiReceived(Player player, Mentsu mentu) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		int index;
+		for (index = 0; index < canvas.getInfo().players.length; index++) {
+			if (canvas.getInfo().players[index] == player)
+				break;
+		}
+		switch (mentu.type()) {
+		case KANTU:
+			canvas.startAnimation(index, StateCode.SELECT_KAN);
+			break;
+		case SYUNTU:
+			canvas.startAnimation(index, StateCode.SELECT_CHI);
+			break;
+		case KOTU:
+			canvas.startAnimation(index, StateCode.SELECT_PON);
+			break;
+		default:
+			break;
+		}
+		canvas.refreshStateCodes();
+		canvas.refreshButtonList();
+	}
+
+	public void onRonReceived(Map<Player, List<Hai>> playerHaiMap) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.startAnimation(-1, StateCode.SELECT_RON);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+		page.movePage("result");
+	}
+
+	public void onTsumoHaiReceived(Hai hai) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.getInfo().tsumoHai = hai;
+		canvas.addStateCode(StateCode.DISCARD_SELECT);
+	}
+
+	public void onDiscardReceived(boolean existTsumo) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		canvas.addStateCode(StateCode.DISCARD_SELECT);
+	}
+
+	public void onDiscardReceived(Player player, Hai hai, boolean isTsumo) {
+		System.out.println(page == null);
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+
+		canvas.getInfo().tsumoHai = null;
+	}
+
+	@Override
+	public void sendTsumoAgari() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		tr.onTsumoAgariReceived();
+		canvas.refreshStateCodes();
+	}
+
+	@Override
+	public void onTsumoAgariReceived() {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.startAnimation(-1, StateCode.SELECT_TSUMO);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+		page.movePage("result");
+	}
+
+	@Override
+	public void requestGame(int id) {
+		tr.onGameRequested(id);
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onGameStartReceived(List<Player> playerList, int index,
+			int[] score) {
+		Map<Kaze, Player> playerMap = new HashMap<Kaze, Player>(4);
+		for (int i = 0; i < playerList.size(); i++) {
+			playerMap.put(Kaze.valueOf(i), playerList.get(i));
+		}
+
+		Kaze playerKaze = Kaze.valueOf(index);
+
+		// TODO insert score
+		Player[] players = new Player[playerList.size()];
+		for (int i = 0; i < playerList.size(); i++)
+			players[i] = playerList.get(i);
+		// TODO to be changed
+		index = 1;
+		ClientInfo tmpInfo = frame.getInfo();
+		tmpInfo.setIndex(index);
+		tmpInfo.playerNumber = index;
+		tmpInfo.players = players;
+		tmpInfo.sekiMap = new HashMap<Player, Integer>(4);
+		for (int i = 0; i < 4; i++) {
+			tmpInfo.sekiMap.put(tmpInfo.players[i], (4 - index + i) % 4);
+			tmpInfo.setScore((4 - index + i) % 4, score[i]);
+		}
+		// tmpInfo.setIndex(index);
+		frame.setInfo(tmpInfo);
+		frame.setPage("game");
+	}
+
+	@Override
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba,
+			int tsumibou) {
+		// TODO Auto-generated method stub
+		if (page == null)
+			return;
+		page.movePage("game");
+		frame.getInfo().honba = honba;
+		frame.getInfo().tsumiBou = tsumibou;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		canvas.number = frame.getInfo().playerNumber;
+		canvas.setKyokusu(kyokusu);
+		canvas.setBakaze(bakaze);
+	}
+
+	public void requestNextKyoku() {
+		System.out.println("requestNextKyoku");
+		tr.onNextKyokuRequested();
+	}
+
+	public void onGameResultReceived(int[] score) {
+		// TODO to be changed
+	}
+
+	@Override
+	public void onFieldReceived(List<Hai> tehai,
+			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
+			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
+			int yamaSize, int wanpaiSize, List<Hai> doraList) {
+		if (page == null || !isPageIsCanvas())
+			return;
+		MahjongCanvas canvas = (MahjongCanvas) page;
+		ClientInfo info = canvas.getInfo();
+		info.tehai = tehai;
+		info.currentTurn = info.kaze.get(currentTurn);
+		for (Kaze k : Kaze.values()) {
+			int i = info.kaze.get(k);
+			synchronized (info.sutehaiMap) {
+				info.sutehaiMap.put(i, sutehai.get(k));
+			}
+			if (k == currentTurn)
+				info.sutehaiMap.get(i).add(currentSutehai);
+			info.hurohaiMap.put(i, nakihai.get(k));
+		}
+
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.TON), tehaiSize.get(0));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.NAN), tehaiSize.get(1));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.SYA), tehaiSize.get(2));
+		info.tehaiSizeMap.put(info.kaze.get(Kaze.PE), tehaiSize.get(3));
+
+		info.yamaSize = yamaSize;
+		info.wanpaiSize = wanpaiSize;
+		info.doraList = doraList;
+	}
+=======
+>>>>>>> 4bc2f67f4c07fd04e6b951bcdd9956f30c11294c
 
 
 public abstract class ClientOperator implements Client{
@@ -58,65 +475,49 @@ public abstract class ClientOperator implements Client{
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onChiIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 //				: null);
 //		background.refreshStateCodes();
 //	}
 //
 //	public void sendPonIndexList(List<Integer> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onPonIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 //				: null);
 //		background.refreshStateCodes();
 //	}
 //
 //	public void sendAnkanIndexList(List<Integer> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onAnkanIndexListReceived(hais != null ? new ArrayList<Integer>(hais)
 //				: null);
 //		background.refreshStateCodes();
 //	}
 //
 //	public void sendMinkan(boolean answer) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onMinkanableIndexReceived(answer);
 //		background.refreshStateCodes();
 //	}
 //
 //	public void sendKakanIndex(int index) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onKakanableIndexReceived(index);
 //		background.refreshStateCodes();
 //	}
 //
 //	public void sendReachIndex(int index) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onReachIndexReceived(index);
 //		background.refreshStateCodes();
 //		if (index != -1)
@@ -124,12 +525,9 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void sendRon(boolean answer) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onRonReceived(answer);
 //		background.refreshStateCodes();
 //	}
@@ -139,12 +537,9 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onChiableIndexListsReceived(List<List<Integer>> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		// TODO to be removed
 //		background.setTsumoHai(null);
 //		background.addButtonList(StateCode.SELECT_CHI);
@@ -153,12 +548,9 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onPonableIndexListsReceived(List<List<Integer>> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		// TODO to be removed
 //		background.setTsumoHai(null);
 //		
@@ -168,12 +560,9 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onMinkanableIndexListReceived(List<Integer> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		// TODO to be removed
 //		background.setTsumoHai(null);
 //
@@ -185,24 +574,18 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onKyusyukyuhaiRequested() {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //
 //		background.addButtonList(StateCode.KYUSYUKYUHAI);
 //		background.addStateCode(StateCode.SELECT_BUTTON);
 //	}
 //
 //	public void onAnkanableIndexListsReceived(List<List<Integer>> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //
 //		background.addStateCode(StateCode.SELECT_BUTTON);
 //		background.addButtonList(StateCode.SELECT_ANKAN);
@@ -210,13 +593,10 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onKakanableIndexListReceived(List<Integer> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 //		tmpList.add(hais);
 //		background.addStateCode(StateCode.SELECT_BUTTON);
@@ -225,13 +605,10 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onReachableIndexListReceived(List<Integer> hais) {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		List<List<Integer>> tmpList = new ArrayList<List<Integer>>();
 //		for (Integer i : hais) {
 //			List<Integer> tmp = new ArrayList<Integer>();
@@ -244,20 +621,6 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
-//<<<<<<< HEAD
-////		background.startAnimation(background.kaze.get(currentTurn),
-////				StateCode.SELECT_REACH);
-//		int currentIndex = background.getKaze().get(currentTurn);
-//		background.getReachPosMap().put(currentIndex, sutehaiIndex + 1);
-//	}
-//
-//	public void onTsumoAgariRequested() {
-//		background.addStateCode(StateCode.SELECT_BUTTON);
-//		background.addButtonList(StateCode.SELECT_TSUMO);
-//	}
-//
-//	public void onRonRequested() {
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
@@ -280,7 +643,6 @@ public abstract class ClientOperator implements Client{
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		// TODO to be removed
 //		background.setTsumoHai(null);
 //
@@ -288,15 +650,10 @@ public abstract class ClientOperator implements Client{
 //		background.addButtonList(StateCode.SELECT_RON);
 //	}
 //
-//<<<<<<< HEAD
-//	public void onNakiReceived(Player player, Mentu mentu) {
-//
-//=======
 //	public void onNakiReceived(Player player, Mentsu mentu) {
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		int index;
 //		for (index = 0; index < background.getPlayers().length; index++) {
 //			if (background.getPlayers()[index] == player)
@@ -320,14 +677,10 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onRonReceived(Map<Player, List<Hai>> playerHaiMap) {
-//<<<<<<< HEAD
-////		background.startAnimation(-1, StateCode.SELECT_RON);
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //		canvas.startAnimation(-1, StateCode.SELECT_RON);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		try {
 //			Thread.sleep(1000);
 //		} catch (InterruptedException e) {
@@ -337,68 +690,47 @@ public abstract class ClientOperator implements Client{
 //	}
 //
 //	public void onTsumoHaiReceived(Hai hai) {
-//<<<<<<< HEAD
-//		background.setTsumoHai(hai);
-//		background.addStateCode(StateCode.DISCARD_SELECT);
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //		canvas.getInfo().tsumoHai = hai;
 //		canvas.addStateCode(StateCode.DISCARD_SELECT);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //	}
 //
 //	
 //	//ON_DISCARD_RECEIVED_0に対応
 //	public void onDiscardReceived(boolean existTsumo) {
-//<<<<<<< HEAD
-//		background.addStateCode(StateCode.DISCARD_SELECT);
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //
 //		canvas.addStateCode(StateCode.DISCARD_SELECT);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //	}
 //	//ON_DISCARD_RECEIVED_1に対応
 //	public void onDiscardReceived(Player player, Hai hai, boolean isTsumo) {
-//<<<<<<< HEAD
-//		background.setTsumoHai(null);
-//=======
 //		System.out.println(page == null);
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //
 //		canvas.getInfo().tsumoHai = null;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //	}
 //
 //	@Override
 //	public void sendTsumoAgari() {
-//<<<<<<< HEAD
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		tr.onTsumoAgariReceived();
 //		background.refreshStateCodes();
 //	}
 //
 //	@Override
 //	public void onTsumoAgariReceived() {
-//<<<<<<< HEAD
-//		//TODO animation
-////		background.startAnimation(-1, StateCode.SELECT_TSUMO);
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //		canvas.startAnimation(-1, StateCode.SELECT_TSUMO);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		try {
 //			Thread.sleep(1000);
 //		} catch (InterruptedException e) {
@@ -441,14 +773,6 @@ public abstract class ClientOperator implements Client{
 //	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba,
 //			int tsumibou) {
 //		// TODO Auto-generated method stub
-//<<<<<<< HEAD
-//		background.setMode(PackName.Game);
-//		background.setHonba(honba);
-//		background.setTsumiBou(tsumibou);
-//		background.setNumber(background.getPlayerNumber());
-//		background.setKyokusu(kyokusu);
-//		background.setBakaze(bakaze);
-//=======
 //		if (page == null)
 //			return;
 //		page.movePage("game");
@@ -458,7 +782,6 @@ public abstract class ClientOperator implements Client{
 //		canvas.number = frame.getInfo().playerNumber;
 //		canvas.setKyokusu(kyokusu);
 //		canvas.setBakaze(bakaze);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //	}
 //
 //	public void requestNextKyoku() {
@@ -474,17 +797,12 @@ public abstract class ClientOperator implements Client{
 //			Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai,
 //			Kaze currentTurn, Hai currentSutehai, List<Integer> tehaiSize,
 //			int yamaSize, int wanpaiSize, List<Hai> doraList) {
-//<<<<<<< HEAD
-//		background.setTehai(tehai);
-//		background.setCurrentTurn(background.getKaze().get(currentTurn));
-//=======
 //		if (page == null || !isPageIsCanvas())
 //			return;
 //		MahjongCanvas canvas = (MahjongCanvas) page;
 //		ClientInfo info = canvas.getInfo();
 //		info.tehai = tehai;
 //		info.currentTurn = info.kaze.get(currentTurn);
-//>>>>>>> 59048d61396abfaf3fc8e051137796334e3876bb
 //		for (Kaze k : Kaze.values()) {
 //			int i = background.getKaze().get(k);
 //			synchronized (background.getSutehaiMap()) {

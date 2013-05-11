@@ -1,6 +1,5 @@
 package system.hai;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,13 +9,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import system.test.Functions;
+import system.Functions;
 
 /**
  * 手牌を表すリストクラス。
  */
 
-public class TehaiList implements List<Hai> ,Serializable{
+public class TehaiList implements List<Hai>{
 	private static final int zeroarr[];
 
 	static {

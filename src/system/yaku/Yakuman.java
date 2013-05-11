@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import system.Field;
+import system.Rule;
 import system.agari.AgariParam;
 import system.agari.CheckParam;
 import system.agari.MatiType;
@@ -12,8 +14,6 @@ import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.Mentsu;
 import system.hai.SuType;
-import system.test.Field;
-import system.test.Rule;
 
 public enum Yakuman implements Yaku {
 	KOKUSIMUSOU("国士無双", false, false) {

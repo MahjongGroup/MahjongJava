@@ -2,10 +2,10 @@ package system.result;
 
 import java.util.Map;
 
+import system.KyokuPlayer;
+import system.Player;
 import system.agari.AgariResult;
 import system.hai.Hai;
-import system.test.KyokuPlayer;
-import system.test.Player;
 
 
 /**

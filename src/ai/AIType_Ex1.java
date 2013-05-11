@@ -12,7 +12,7 @@ import system.hai.TehaiList;
 import system.test.Functions;
 import system.test.Player;
 
-/**
+/** 
  * おふざけAIその1。 国士無双しか狙いません。
  * 
  * @author shio

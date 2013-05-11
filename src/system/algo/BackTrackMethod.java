@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import system.Functions;
 import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.SuType;
-import system.test.Functions;
 
 /**
  * バックトラック法によるn面子1雀頭の判定アルゴリズムを表すクラス．

@@ -5,7 +5,7 @@ import java.util.List;
 import system.test.Kyoku;
 
 /**
- * 麻雀を行うAIを表すインターフェース.
+ *  麻雀を行うAIを表すインターフェース.
  * このインターフェースを実装したオブジェクトは麻雀におけるすべての選択肢における判断を提供する.
  */
 public interface AI {

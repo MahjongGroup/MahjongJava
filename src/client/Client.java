@@ -229,7 +229,7 @@ public interface Client {
 	 */
 	public void sendMinkan(boolean result);
 
-	
+	 
 	/**
 	 * サーバーへポンする牌のインデックスのリストを送信する。
 	 * @param list ポンする牌のインデックスのリスト。ポンしない場合はnull。

@@ -4,7 +4,7 @@ package client;
  * すべての画像IDを保持するクラス。
  * 
  * @author kohei
- *
+ * 
  */
 public class ImageID {
 	public static final int aka_man_5 = 100;
