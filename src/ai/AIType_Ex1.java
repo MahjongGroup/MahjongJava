@@ -12,7 +12,7 @@ import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.TehaiList;
 
-/**
+/** 
  * おふざけAIその1。 国士無双しか狙いません。
  * 
  * @author shio

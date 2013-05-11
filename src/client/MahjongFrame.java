@@ -34,7 +34,7 @@ public class MahjongFrame extends JFrame {
 		}
 		return info;
 	}
-
+ 
 	public Client getOperator() {
 		if (operator == null) {
 			operator = new ClientOperator(server);

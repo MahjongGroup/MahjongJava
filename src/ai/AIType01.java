@@ -16,7 +16,7 @@ import system.hai.SuType;
 import system.hai.TehaiList;
 
 /**
- * AI初号機。
+ *  AI初号機。
  * 名前：ユイ　（命名：もせし）
  * 難しい計算はしないアホの子。
  * 面子を確定させて浮いた牌を切ります。

@@ -13,7 +13,7 @@ import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.SuType;
 import system.hai.TehaiList;
-/**
+/** 
  * デバッグ用AI。
  * 鳴きフラグと和了フラグを用いて様々なケースに対応します。
  * 他のAIを余りいじらないように。

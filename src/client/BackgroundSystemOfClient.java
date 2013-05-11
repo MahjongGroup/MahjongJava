@@ -7,7 +7,7 @@ public class BackgroundSystemOfClient {
 	private Page currentPage;
 	private ClientInfo info;
 	private MahjongFrame frame;
-
+ 
 	private class pageManageThread extends Thread {
 		private boolean isFinish;
 

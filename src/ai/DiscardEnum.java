@@ -10,7 +10,7 @@ import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.TehaiList;
 
-/**
+/** 
  * AIのdiscardの戦略を実際に実装したオブジェクトの列挙型．
  */
 public enum DiscardEnum implements DiscardStrategy {

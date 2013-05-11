@@ -14,7 +14,7 @@ import system.hai.Mentsu;
 
 public class ClientInfo {
 	List<Hai> tehai;
-
+ 
 	// 　自分->0, 上家->1,,,,
 	Map<Player, Integer> sekiMap;
 	Map<Integer, List<Hai>> sutehaiMap;

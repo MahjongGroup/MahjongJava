@@ -228,7 +228,7 @@ public interface Client {
 	 */
 	public void onReachReceived(Kaze currentTurn, int sutehaiIndex);
 
-	
+	 
 	/**
 	 * 流局時に、テンパイしているプレイヤーの情報とその手牌を受信する
 	 * @param map

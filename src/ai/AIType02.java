@@ -12,7 +12,7 @@ import system.hai.HaiType;
 import system.hai.Kaze;
 import system.hai.TehaiList;
 /**
- * AI弐号機。
+ *  AI弐号機。
  * 戦略を用いる（つもり）
  * AI01の再現を目安に。
  * @author shio

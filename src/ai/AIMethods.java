@@ -19,7 +19,7 @@ import system.hai.SuType;
 import system.hai.TehaiList;
 
 /**
- * AIに用いる様々なお便利メソッドを持つクラス。
+ *  AIに用いる様々なお便利メソッドを持つクラス。
  * 
  * @author shio
  * 

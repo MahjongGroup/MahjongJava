@@ -28,7 +28,7 @@ public class ClientOperator implements Client {
 
 	public ClientOperator() {
 	}
-
+ 
 	public void setTransporter(Transporter tr) {
 		this.tr = tr;
 	}
