@@ -1,4 +1,0 @@
-MahjongJava
-===========
-
-Mahjong Java Application
