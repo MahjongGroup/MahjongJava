@@ -17,8 +17,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import system.Field;
-import system.Rule;
 import system.agari.AgariParam;
 import system.agari.AgariResult;
 import system.hai.Hai;
@@ -26,6 +24,8 @@ import system.hai.HaiType;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.TehaiList;
+import system.test.Field;
+import system.test.Rule;
 import system.yaku.Yaku;
 
 public class AgariResultTest {
@@ -53,6 +53,18 @@ public class AgariResultTest {
 	public void testList1() {
 		// 1,2,2,3,3,3,4,4, TON,TON,TON, NAN,NAN
 		
+//		AgariParam param = new AgariParam(true, false, NI_MAN, Kaze.TON);
+//		
+//		AgariResult.Builder builder = new AgariResult.Builder();
+//		builder.setAgariParam(param);
+//		builder.setField(field);
+//		builder.setHojuKaze(Kaze.NAN);
+//		builder.setHurohaiList(new HurohaiList());
+//		builder.setOpenDoraList(odora);
+//		builder.setTehaiList(list1);
+//		builder.setUraDoraList(udora);
+//		builder.setYakuFlag(new HashSet<Yaku>());
+		
 		AgariParam param = new AgariParam(true, false, NI_MAN, Kaze.TON, yakuFlags);
 		
 		AgariResult.Builder builder = new AgariResult.Builder();
@@ -72,6 +84,7 @@ public class AgariResultTest {
 	@Test
 	public void testList2() {
 		// 1,1,1,2,2,2,3,3,3,4,5,6,6
+//		AgariParam param = new AgariParam(true, false, SAN_MAN, Kaze.TON);
 		AgariParam param = new AgariParam(true, false, SAN_MAN, Kaze.TON, yakuFlags);
 		
 		AgariResult.Builder builder = new AgariResult.Builder();

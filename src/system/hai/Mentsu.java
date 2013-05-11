@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import system.Functions;
+import system.test.Functions;
 
 /**
  * 面子を表すクラス.面子は３枚か４枚の牌で構成される.

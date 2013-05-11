@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import system.Functions;
-import system.Kyoku;
 import system.hai.Hai;
 import system.hai.HaiType;
 import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.SuType;
 import system.hai.TehaiList;
+import system.test.Functions;
+import system.test.Kyoku;
 
 /**
  *  AIに用いる様々なお便利メソッドを持つクラス。

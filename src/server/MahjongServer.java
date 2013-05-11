@@ -1,20 +1,22 @@
 package server;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Player;
-import system.Rule;
+import system.test.Player;
+import system.test.Rule;
 import test.ConsoleClient;
 import client.Client;
-import client.ClientOperator;
-import client.MahjongFrame;
 
 /**
- * 麻雀サーバーを表すクラス.
- * とりあえずテスト用にメイン関数のみ実装.
+ * 麻雀サーバーを表すクラス. とりあえずテスト用にメイン関数のみ実装.
  */
 public class MahjongServer {
 
@@ -28,58 +30,83 @@ public class MahjongServer {
 		plist.add(new Player(47, "morimitsu", false));
 
 		Map<Player, Transporter> transMap = new HashMap<Player, Transporter>(4);
-		transMap.put(plist.get(0), new Transporter());
-//		transMap.put(plist.get(1), new Transporter());
-//		transMap.put(plist.get(2), new Transporter());
-//		transMap.put(plist.get(3), new Transporter());
-		
-		// 結合用
-		int count = 0;
-		for (Transporter tr : transMap.values()) {
-			if(count == 0){
-				(new Runnable(){
-					private Server tr;
-					
-					public Runnable setTransporter(Server tr){
-						this.tr = tr;
-						return this;
+		transMap.put(plist.get(0), new DummyTransporter());
+		// transMap.put(plist.get(1), new Transporter());
+		// transMap.put(plist.get(2), new Transporter());
+		// transMap.put(plist.get(3), new Transporter());
+		try {
+			ServerSocket serverS = new ServerSocket(5555);
+			System.out.println("server launched");
+			// 結合用
+			int count = 0;
+			Socket s = null;
+			for (Transporter tr : transMap.values()) {
+				if (count == 0) {
+					DummyTransporter dtr = (DummyTransporter) tr;
+					while (s == null) {
+						try {
+							s = serverS.accept();
+							ObjectOutputStream oos = new ObjectOutputStream(
+									s.getOutputStream());
+							oos.flush();
+							ObjectInputStream ois = new ObjectInputStream(
+									s.getInputStream());
+							dtr.connectClient(ois, oos);
+						} catch (Exception e) {
+							System.out.println("ServerSideError:"
+									+ e.getMessage());
+						}
 					}
-					
-					@Override
-					public void run() {
-						MahjongFrame frame = new MahjongFrame();
-						frame.setServer(tr);
-						frame.setPage("start");
-					}
-				}).setTransporter(tr).run();
-			}else{
-				Client client = new ConsoleClient(tr);
-				tr.setClient(client);
-				tr.setWait(false);
+					// (new Runnable(){
+					// private Server tr;
+					//
+					// public Runnable setTransporter(Server tr){
+					// this.tr = tr;
+					// return this;
+					// }
+					//
+					// @Override
+					// public void run() {
+					//
+					// MahjongFrame frame = new MahjongFrame();
+					// frame.setServer(tr);
+					// }
+					// }).setTransporter(tr).run();
+				} else {
+					Client client = new ConsoleClient(tr);
+					tr.setClient(client);
+					tr.setWait(false);
+				}
+				count++;
 			}
-			count++;
-		}
-		boolean isWait = true;
-		while(isWait){
-			isWait = false;
-			for(Transporter tr:transMap.values()){
-				if(tr.isWait()){
-					isWait = true;
-					break;
+			boolean isWait = true;
+			System.out.println(s);
+			while (isWait) {
+				isWait = false;
+				for (Transporter tr : transMap.values()) {
+					if (tr.isWait()) {
+						isWait = true;
+						break;
+					}
 				}
 			}
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+			}
+
+			Rule rule = new Rule();
+			MahjongGame game = new MahjongGame(plist, rule, transMap);
+			game.run();
+			serverS.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return;
 		}
 
-		try{
-			Thread.sleep(3000);
-		}catch(InterruptedException e){}
-		
-		Rule rule = new Rule();
-		
-		MahjongGame game = new MahjongGame(plist, rule, transMap);
-		game.run();
-		
 	}
+
+
 	public MahjongServer() {
 	}
 }

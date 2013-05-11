@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.Player;
 import system.hai.Hai;
 import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.Mentsu;
+import system.test.Player;
 
 public class ClientInfo {
 	List<Hai> tehai;

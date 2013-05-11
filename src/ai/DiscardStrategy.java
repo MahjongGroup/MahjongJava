@@ -1,7 +1,7 @@
 package ai;
 
-import system.Kyoku;
-import system.Player;
+import system.test.Kyoku;
+import system.test.Player;
 
 /** 
  * AIが牌をdiscardするときに用いられる戦略のインターフェース．

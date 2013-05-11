@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import system.Field;
-import system.Functions;
 import system.agari.AgariParam;
 import system.agari.CheckParam;
 import system.agari.MatiType;
@@ -14,6 +12,8 @@ import system.hai.HaiType;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.hai.SuType;
+import system.test.Field;
+import system.test.Functions;
 import util.MyMath;
 
 /**

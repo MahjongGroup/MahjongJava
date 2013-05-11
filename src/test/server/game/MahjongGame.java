@@ -1,29 +1,26 @@
 package test.server.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import server.KyokuRunner;
 import system.Kyoku;
 import system.Mahjong;
 import system.Player;
 import system.Rule;
 import system.agari.AgariResult;
 import system.result.KyokuResult;
-import test.Console;
 import test.server.ServerMessageType;
 import test.server.ServerReceiver;
 import test.server.ServerSender;
-import test.server.SingleServerReceiver;
 import test.server.SingleServerSender;
+import util.MyLogger;
 
 /**
  * 1半荘(東風)を実行するクラス.
  */
 public class MahjongGame {
+	private static MyLogger logger = MyLogger.getLogger();
+	
 	private final Mahjong mahjong;
 	private final List<Player> playerList;
 	private final ServerSender sender;
@@ -48,18 +45,20 @@ public class MahjongGame {
 		}
 
 		while (!mahjong.isEnd()) {
-			
 			Kyoku kyoku = mahjong.startKyoku();
 			mahjong.disp();
-			Console.wairEnter();
 			
+			logger.debug("notifyStartKyoku");
 			sender.notifyStartKyoku(kyoku.getBakaze(), mahjong.getKyokusu(),mahjong.getHonba(),mahjong.getTsumibo());
 			
+
+			logger.debug("kyoku runner start");
 			KyokuRunner runner = new KyokuRunner(kyoku, sender, receiver);
 			runner.run();
 
 			int oldScores[] = mahjong.getScores();
 			
+			logger.debug("kyoku end");
 			mahjong.endKyoku();
 			mahjong.disp2();
 			
@@ -79,10 +78,14 @@ public class MahjongGame {
 				soten.add(karisoten);
 			}
 			
+			logger.debug("notifyKyokuResult");
 			sender.notifyKyokuResult(kr,newScores,oldScores,soten,kyoku.getUraDoraList());
+
+			logger.debug("wait for next kyoku requested");
 			receiver.wait(ServerMessageType.NEXT_KYOKU_REQUESTED, 0);
 		}
 		
+		logger.debug("notifyGameResult");
 		sender.notifyGameResult(mahjong.getScores());
 	}
 	

@@ -10,12 +10,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import system.Kyoku;
-import system.Mahjong;
-import system.Player;
-import system.Rule;
 import system.hai.Kaze;
-import test.server.ServerMessageType;
+import system.test.Kyoku;
+import system.test.Mahjong;
+import system.test.Player;
+import system.test.Rule;
 import ai.AI;
 import ai.AIType01;
 import ai.AIType_Debug;

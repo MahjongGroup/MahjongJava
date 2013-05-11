@@ -214,17 +214,6 @@ public class Kyoku {
 		return kyokuPlayerMap.get(currentTurn).isKyusyukyuhai(currentTumohai);
 	}
 
-	public void doKyusyukyuhai() {
-		if (this.result != null)
-			throw new IllegalStateException("既にKyokuResultは生成されている");
-
-		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
-		for (Player p : playerMap.values()) {
-			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
-		}
-		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.KYUSYUKYUHAI, playerMap.get(TON), map);
-	}
-
 	/**
 	 * ツモ上がり出来る場合trueを返す.
 	 * 
@@ -824,7 +813,11 @@ public class Kyoku {
 		return true;
 	}
 
-	public void doSuchaReach() {
+	/**
+	 * 指定された種類の途中流局をする.
+	 * @param type　途中流局の種類.
+	 */
+	public void doTotyuRyukyoku(TotyuRyukyokuType type) {
 		if (this.result != null)
 			throw new IllegalStateException("既にKyokuResultは生成されている");
 
@@ -832,7 +825,7 @@ public class Kyoku {
 		for (Player p : playerMap.values()) {
 			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
 		}
-		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SUCHAREACH, playerMap.get(TON), map);
+		this.result = new KyokuTotyuRyukyokuResult(type, playerMap.get(TON), map);
 	}
 
 	/**
@@ -864,21 +857,6 @@ public class Kyoku {
 			return false;
 
 		return result.isTotyuRyukyoku();
-	}
-
-	/**
-	 * 途中流局(三家和)する.
-	 * @throw IllegalStateException 既に局が終わっている場合.
-	 */
-	public void doTotyuRyukyokuSanchaho() {
-		if (this.result != null)
-			throw new IllegalStateException("既にKyokuResultは生成されている");
-
-		Map<Player, KyokuPlayer> map = new HashMap<Player, KyokuPlayer>();
-		for (Player p : playerMap.values()) {
-			map.put(p, kyokuPlayerMap.get(getKazeOf(p)));
-		}
-		this.result = new KyokuTotyuRyukyokuResult(TotyuRyukyokuType.SANCHAHO, playerMap.get(TON), map);
 	}
 
 	/**
