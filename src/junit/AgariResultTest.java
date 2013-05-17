@@ -17,6 +17,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import system.Field;
+import system.Rule;
 import system.agari.AgariParam;
 import system.agari.AgariResult;
 import system.hai.Hai;
@@ -24,8 +26,6 @@ import system.hai.HaiType;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.TehaiList;
-import system.test.Field;
-import system.test.Rule;
 import system.yaku.Yaku;
 
 public class AgariResultTest {

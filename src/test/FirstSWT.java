@@ -1,15 +1,6 @@
 package test;
 
 import java.awt.Canvas;
-import java.awt.event.PaintEvent;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 
 public class FirstSWT {

@@ -2,21 +2,23 @@ package server;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import system.Player;
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
-import system.test.Order;
-import system.test.OrderCommunicator;
-import system.test.OrderPacket;
-import system.test.Player;
-import system.test.SerializableHurohaiList;
-import system.test.SerializableMentsu;
+import test.system.test.Order;
+import test.system.test.OrderCommunicator;
+import test.system.test.OrderPacket;
+import test.system.test.SerializableHurohaiList;
+import test.system.test.SerializableMentsu;
+import test.system.test.SerializablePlayer;
 
 public class DummyTransporter extends Transporter implements Server {
 	private boolean grandFlag = false;
@@ -166,7 +168,11 @@ public class DummyTransporter extends Transporter implements Server {
 
 	@Override
 	public void sendGameStart(List<Player> playerList, int index, int[] scores) {
-		sendPacket(new OrderPacket(Order.ON_GAME_START_RECEIVED, 1, playerList));
+		List<SerializablePlayer> dummy = new ArrayList<SerializablePlayer>();
+		for(int i = 0;i < playerList.size();i++){
+			dummy.add(new SerializablePlayer(playerList.get(i)));
+		}
+		sendPacket(new OrderPacket(Order.ON_GAME_START_RECEIVED, 1, dummy));
 		sendPacket(new OrderPacket(Order.ON_GAME_START_RECEIVED, 2,
 				Integer.valueOf(index)));
 		sendPacket(new OrderPacket(Order.ON_GAME_START_RECEIVED, 3, scores));

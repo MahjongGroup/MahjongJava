@@ -44,14 +44,13 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import system.Kyoku;
+import system.KyokuPlayer;
+import system.Player;
+import system.Rule;
 import system.hai.Hai;
-import system.hai.HaiType;
 import system.hai.Kaze;
 import system.result.KyokuResult;
-import system.test.Kyoku;
-import system.test.KyokuPlayer;
-import system.test.Player;
-import system.test.Rule;
 
 public class KyokuTest {
 

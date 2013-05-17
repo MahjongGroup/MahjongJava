@@ -32,8 +32,8 @@ import system.hai.Kaze;
 import system.hai.MajanHai;
 import system.hai.TehaiList;
 import system.yaku.Yaku;
-import client.ImageLoader;
-import client.MajanHaiIDMapper;
+import client.system.ImageLoader;
+import client.system.MajanHaiIDMapper;
 
 public class TestAgari extends JFrame {
 	private JPanel mainPanel;
@@ -105,7 +105,7 @@ public class TestAgari extends JFrame {
 						// nothing to do
 					}
 					preTime = System.currentTimeMillis();
-				}
+				}	
 			}
 		}
 

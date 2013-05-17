@@ -1,7 +1,7 @@
 package ai;
 
-import system.test.Kyoku;
-import system.test.Player;
+import system.Kyoku;
+import system.Player;
 
 
 public abstract class AbstractAI implements AI{

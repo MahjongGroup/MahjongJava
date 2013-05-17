@@ -2,9 +2,8 @@ package test;
 
 import java.util.Arrays;
 
-import mahjong.system.AgariChecker;
-import mahjong.system.Hai;
-import mahjong.system.HaiType;
+import system.hai.Hai;
+import system.hai.HaiType;
 
 public class AgariCheckTest {
 	public static void main(String[] args) {

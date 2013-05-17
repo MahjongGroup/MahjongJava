@@ -2,7 +2,7 @@ package ai;
 
 import java.util.List;
 
-import system.test.Kyoku;
+import system.Kyoku;
 
 /**
  *  麻雀を行うAIを表すインターフェース.

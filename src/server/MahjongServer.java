@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import system.test.Player;
-import system.test.Rule;
+import system.Player;
+import system.Rule;
 import test.ConsoleClient;
-import client.Client;
+import client.system.Client;
 
 /**
  * 麻雀サーバーを表すクラス. とりあえずテスト用にメイン関数のみ実装.

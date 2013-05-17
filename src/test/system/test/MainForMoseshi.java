@@ -1,6 +1,6 @@
 package test.system.test;
 
-import client.BackgroundSystemOfClient;
+import client.system.BackgroundSystemOfClient;
 import server.MahjongServer;
 
 public class MainForMoseshi {

@@ -1,8 +1,8 @@
 package test;
 
 import server.Server;
-import system.test.Player;
-import client.ClientOperator;
+import system.Player;
+import client.system.ClientOperator;
 
 /**
  * 結合テスト用クラス
