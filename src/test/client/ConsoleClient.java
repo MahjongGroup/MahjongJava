@@ -26,6 +26,8 @@ public class ConsoleClient implements ClientListener {
 	private BufferedReader reader;
 	private ClientSender sender;
 
+	private Hai sutehai;
+	
 	public ConsoleClient(ClientSender sender) {
 		this.setSender(sender);
 		this.onConstructed();
@@ -238,6 +240,9 @@ public class ConsoleClient implements ClientListener {
 	@Override
 	public void onDiscardReceived(Player player, Hai hai, boolean tumokiri) {
 		logger.debug();
+		sutehai = hai;
+		
+		System.out.println(hai);
 	}
 
 	@Override

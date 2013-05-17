@@ -214,7 +214,8 @@ public class KyokuRunner {
 			server.sendAnkanableIndexLists(kyoku.getAnkanableHaiList());
 		if (kyoku.isReachable())
 			server.sendReachableIndexList(kyoku.getReachableHaiList());
-		server.sendDiscard(kyoku.getCurrentTsumoHai() != null);
+		if(!kyoku.isReach(kyoku.getCurrentTurn()))
+			server.sendDiscard(kyoku.getCurrentTsumoHai() != null);
 
 		SingleServerReceiver rec = receiver.get(p);
 		while (true) {
@@ -734,7 +735,6 @@ public class KyokuRunner {
 				Player p = playerMap.get(kaze);
 				if (true) {
 					ServerMessageType mType = ServerMessageType.MINKAN_RECEIVED;
-					receiver.wait(p, mType, 0);
 					SingleServerReceiver rec = receiver.get(p);
 
 					if (rec.isMessageReceived(mType)) {
