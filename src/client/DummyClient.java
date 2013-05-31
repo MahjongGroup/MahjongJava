@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import client.datapack.PackName;
+
 import system.hai.Hai;
 import system.hai.HurohaiList;
 import system.hai.Kaze;
@@ -18,7 +20,6 @@ import system.test.Order;
 import system.test.OrderCommunicator;
 import system.test.OrderPacket;
 import system.test.Player;
-import datapack.PackName;
 
 public class DummyClient extends ClientOperator implements Client {
 	private BackgroundSystemOfClient background;

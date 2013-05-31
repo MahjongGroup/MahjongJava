@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import client.datapack.CommunicatableListener;
+import client.datapack.DataPacks;
+import client.datapack.PackName;
+
 import server.Transporter;
 import system.hai.Hai;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
 import system.test.Player;
-import datapack.CommunicatableListener;
-import datapack.DataPacks;
-import datapack.PackName;
 
 public class BackgroundSystemOfClient implements Serializable {
 	/**
