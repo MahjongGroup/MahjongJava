@@ -349,7 +349,7 @@ public class Transporter implements Server ,Serializable{
 
 	@Override
 	public void notifyNaki(Player player, Mentsu mentu) {
-		client.onNakiReceived(player, mentu);
+		client.onNakiNotified(player, mentu);
 	}
 
 	@Override

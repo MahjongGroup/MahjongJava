@@ -80,26 +80,17 @@ public class ServerSenderImpl implements ServerSender{
 		return map.values();
 	}
 
-
 	@Override
-	public void notifyStartKyoku(Kaze bakaze, int kyokusu, int honba,
-			int tsumibou) {
+	public void notifyDiscard(Kaze kaze, Hai hai, boolean tumokiri) {
 		for (SingleServerSender sender : map.values()) {
-			sender.notifyStartKyoku(bakaze, kyokusu, honba, tsumibou);
+			sender.notifyDiscard(kaze, hai, tumokiri);
 		}
 	}
 
 	@Override
-	public void notifyDiscard(Player p, Hai hai, boolean tumokiri) {
+	public void notifyNaki(Kaze kaze, Mentsu m) {
 		for (SingleServerSender sender : map.values()) {
-			sender.notifyDiscard(p, hai, tumokiri);
-		}
-	}
-
-	@Override
-	public void notifyNaki(Player p, Mentsu m) {
-		for (SingleServerSender sender : map.values()) {
-			sender.notifyNaki(p, m);
+			sender.notifyNaki(kaze, m);
 		}
 	}
 
@@ -111,31 +102,30 @@ public class ServerSenderImpl implements ServerSender{
 	}
 
 	@Override
-	public void notifyReach(Kaze currentTurn, int sutehaiIndex) {
+	public void notifyReach(Kaze currentTurn, Hai hai, boolean tsumokiri) {
 		for (SingleServerSender sender : map.values()) {
-			sender.notifyReach(currentTurn, sutehaiIndex);
+			sender.notifyReach(currentTurn, hai, tsumokiri);
 		}
 	}
 
 	@Override
-	public void notifyKyokuResult(KyokuResult kr, int[] newScore,
-			int[] oldScore, List<Integer> soten, List<Hai> uradoraList) {
+	public void notifyKyokuResult(KyokuResult kr, Map<Kaze, Integer> scoreDiff, List<Hai> uradoraList) {
 		for (SingleServerSender sender : map.values()) {
-			sender.notifyKyokuResult(kr, newScore, oldScore, soten, uradoraList);
+			sender.notifyKyokuResult(kr, scoreDiff, uradoraList);
 		}
 	}
 
 	@Override
-	public void notifyTempai(Map<Player, List<Hai>> map) {
+	public void notifyTempai(Map<Kaze, List<Hai>> map) {
 		for (SingleServerSender sender : this.map.values()) {
 			sender.notifyTempai(map);
 		}
 	}
 
 	@Override
-	public void notifyGameResult(int[] Score) {
+	public void notifyGameResult(Map<Kaze, Integer> smap) {
 		for (SingleServerSender sender : map.values()) {
-			sender.notifyGameResult(Score);
+			sender.notifyGameResult(smap);
 		}
 	}
 }

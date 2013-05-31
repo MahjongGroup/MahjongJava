@@ -1,18 +1,12 @@
 package test.client;
 
 import java.util.List;
-import java.util.Map;
 
 import system.Kyoku;
-import system.Player;
 import system.hai.Hai;
-import system.hai.HurohaiList;
-import system.hai.Kaze;
-import system.hai.Mentsu;
-import system.result.KyokuResult;
 import ai.AI;
 
-public class AIClient implements ClientListener {
+public class AIClient implements MahjongListener {
 	private final AI ai;
 	private ClientSender sender;
 
@@ -33,39 +27,7 @@ public class AIClient implements ClientListener {
 	}
 
 	@Override
-	public void onDiscardReceived(boolean tumoari) {
-		int index = ai.discard();
-		sender.sendDiscardIndex(index);
-	}
-
-	@Override
-	public void onDiscardReceived(Player p, Hai hai, boolean tumokiri) {
-		// to do nothind
-	}
-
-	@Override
-	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai, Kaze currentTurn,
-			Hai currentSutehai, List<Integer> tehaiSize, int yamaSize, int wanpaiSize, List<Hai> doraList) {
-		// to do nothind
-	}
-
-	@Override
-	public void onGameOverReceived() {
-		// to do nothind
-	}
-
-	@Override
-	public void onGameResultReceived(int[] score) {
-		// to do nothind
-	}
-
-	@Override
-	public void onGameStartReceived(List<Player> playerList, int index, int[] scores) {
-		// to do nothind
-	}
-
-	@Override
-	public void onKakanableIndexListReceived(List<Integer> list) {
+	public void onKakanableIndexRequested(List<Integer> list) {
 		int index = ai.kakan(list);
 		if (index != -1)
 			sender.sendKakanIndex(index);
@@ -115,11 +77,6 @@ public class AIClient implements ClientListener {
 	}
 
 	@Override
-	public void onKyokuResultReceived(KyokuResult result, int[] newScores, int[] oldScores, List<Integer> soten, List<Hai> uradoraList) {
-		// to do nothind
-	}
-
-	@Override
 	public void onKyusyukyuhaiRequested() {
 		boolean flag = ai.isKyusyukyuhai();
 		if (flag) {
@@ -128,40 +85,10 @@ public class AIClient implements ClientListener {
 	}
 
 	@Override
-	public void onNakiReceived(Player p, Mentsu m) {
-		// to do nothind
-	}
-
-	@Override
-	public void onReachableIndexListReceived(List<Integer> list) {
+	public void onReachableIndexRequested(List<Integer> list) {
 		int index = ai.reach(list);
 		if (index != -1)
 			sender.sendReachIndex(index);
-	}
-
-	@Override
-	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
-		// to do nothind
-	}
-
-	@Override
-	public void onRonReceived(Map<Player, List<Hai>> map) {
-		// to do nothind
-	}
-
-	@Override
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba, int tsumibou) {
-		// to do nothind
-	}
-
-	@Override
-	public void onTempaiReceived(Map<Player, List<Hai>> map) {
-		// to do nothind
-	}
-
-	@Override
-	public void onTsumoAgariReceived() {
-		// to do nothind
 	}
 
 	@Override
@@ -171,13 +98,9 @@ public class AIClient implements ClientListener {
 	}
 
 	@Override
-	public void onTsumoGiriReceived() {
-		// to do nothind
-	}
-
-	@Override
-	public void onTsumoHaiReceived(Hai hai) {
-		// to do nothind
+	public void onDiscardRequested(Hai tsumohai) {
+		int index = ai.discard();
+		sender.sendDiscardIndex(index);
 	}
 
 }

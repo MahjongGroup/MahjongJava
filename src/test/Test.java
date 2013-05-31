@@ -1,9 +1,7 @@
 package test;
 
-import java.util.Set;
-
-import system.hai.HaiType;
-import system.yaku.Yakuman;
+import system.hai.Hai;
+import system.hai.MajanHai;
 
 /**
  * a
@@ -12,6 +10,10 @@ import system.yaku.Yakuman;
  */
 public class Test {
 	public static void main(String[] args) {
+		for (Hai hai : MajanHai.values()) {
+			System.out.println(hai);
+		}
+		
 		byte x = (byte) 0xc0;
 		byte y = (byte) 0x40;
 		System.out.println("0xc0 = " + x);

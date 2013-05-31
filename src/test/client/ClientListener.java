@@ -5,7 +5,6 @@ import java.util.Map;
 
 import system.Player;
 import system.hai.Hai;
-import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
@@ -13,128 +12,54 @@ import system.result.KyokuResult;
 /**
  * サーバーとの通信を行うメソッドを実装するインターフェース。
  */
-public interface ClientListener {
-	/**
-	 * サーバーから暗槓するかの問い合わせを受け取る。
-	 * @param lists 暗槓できる牌のインデックスのリスト(サイズは必ず4)のリスト。
-	 */
-	public void onAnkanableIndexListsReceived(List<List<Integer>> lists);
-
-//	/**
-//	 * サーバーからチーするかの問い合わせを受け取る。
-//	 * @param lists チーできる牌のインデックスのリスト(サイズは必ず2)のリスト。
-//	 */
-//	public void onChiableIndexListsReceived(List<List<Integer>> lists);
-
-	// 局開始前
-
-	/**
-	 * サーバーからどの牌を捨てるかの問い合わせを受け取る。
-	 * @param tumoari ツモ牌がある場合true
-	 */
-	public void onDiscardReceived(boolean tumoari);
-
-	// 局
+public interface ClientListener extends MahjongListener {
 
 	/**
 	 * サーバーから誰かが牌を切ったことを知らされる。
-	 * @param p 牌を切ったプレイヤー。
-	 * @param hai 切った牌。
-	 * @param tumokiri ツモ切りの場合true。
+	 * @param kaze 牌を切った人の風.
+	 * @param hai 切った牌.
+	 * @param tsumokiri ツモ切りの場合true.
 	 */
-	public void onDiscardReceived(Player p, Hai hai, boolean tumokiri);
-
-	/**
-	 * サーバーから場の情報(手牌リスト,鳴き牌マップ,捨て牌マップ)を受け取る.
-	 * @param tehai クライアントの手牌リスト.
-	 * @param nakihaiMap 場の鳴き牌マップ.
-	 * @param sutehaiMap 場の捨て牌マップ(鳴かれた牌は除く).
-	 * @param currentTurn 現在の誰の番か.
-	 * @param currentSutehai 
-	 */
-	public void onFieldReceived(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai, Map<Kaze, List<Hai>> sutehai, Kaze currentTurn,
-			Hai currentSutehai, List<Integer> tehaiSize, int yamaSize, int wanpaiSize, List<Hai> doraList);
+	public void onDiscardReceived(Kaze kaze, Hai hai, boolean tsumokiri);
 
 	/**
 	 * ゲームが終了したことをサーバ側から受け取る
 	 */
 	public void onGameOverReceived();
 
-	public void onGameResultReceived(int[] score);
+	public void onGameResultReceived(Map<Kaze, Integer> scoreMap);
 
 	/**
-	 * 対局が開始したことをサーバーから受け取る.引数のプレイヤーリストは
-	 * 自分を含めた対局するプレイヤーのリストである.0には東(起親)が入る.
+	 * 対局が開始したことをサーバーから受け取る.
 	 * 
-	 * @param playerList 自分を含めた対局するプレイヤーのリスト.
-	 * @param index そのプレイヤーの上のリストにおけるインデックス
-	 * @param scores それぞれのプレイヤーの最初の持ち点の配列
+	 * @param pMap 風->その風のプレイヤーを表すマップ.
+	 * @param kaze 自分の風.
 	 */
-	public void onGameStartReceived(List<Player> playerList, int index, int[] scores);
-
-	/**
-	 * サーバーから加槓するかの問い合わせを受け取る。
-	 * @param list 加槓できる牌のインデックスのリスト。
-	 */
-	public void onKakanableIndexListReceived(List<Integer> list);
-
-	/**
-	 * サーバーから可能ならばロン、明槓、ポン、チーするかどうかの問い合わせを受けたときに呼び出される.
-	 * 
-	 * @param ron ロンできるならばtrue.
-	 * @param minkan 明槓できる牌のインデックスのリスト(サイズは必ず3).明槓できない場合null.
-	 * @param pon ポンできる牌のインデックスのリスト(サイズは必ず2)のリスト.ポンできない場合null.
-	 * @param chi チーできる牌のインデックスのリスト(サイズは必ず2)のリスト.チーできない場合null.
-	 */
-	public void onNakiRequested(boolean ron, List<Integer> minkan, List<List<Integer>> pon, List<List<Integer>> chi);
+	public void onGameStartReceived(Map<Kaze, Player> pMap, Kaze kaze, int initialScore);
 
 	/**
 	 * 局が終わったときのその結果をサーバーから受け取る.
 	 * @param result 局の結果．
-	 * @param newScores 新しいスコア
-	 * @param oldScores 前のスコア
-	 * @param soten 役点数の素点のリスト
+	 * @param scoreDiff 点数の差.
 	 * @param uradoraList 裏ドラのリスト
 	 */
-	public void onKyokuResultReceived(KyokuResult result, int[] newScores, int[] oldScores, List<Integer> soten, List<Hai> uradoraList);
-
-	/**
-	 * サーバーから九種九牌するかの問い合わせを受け取る。
-	 */
-	public void onKyusyukyuhaiRequested();
-
-//	/**
-//	 * サーバーから明槓するかの問い合わせを受け取る。
-//	 * @param list 明槓できる牌のインデックスのリスト。
-//	 */
-//	public abstract void onMinkanableIndexListReceived(List<Integer> hais);
+	public void onKyokuResultReceived(KyokuResult result, Map<Kaze, Integer> scoreDiff, List<Hai> uradoraList);
 
 	/**
 	 * サーバーから誰かが鳴いたことを知らされる。
-	 * @param p 鳴いたプレイヤー。
+	 * 鳴きのアニメーションなどを実行する.
+	 * @param kaze 鳴いた人の風.
 	 * @param m 鳴いて出来た面子。
 	 */
-	public void onNakiReceived(Player p, Mentsu m);
+	public void onNakiNotified(Kaze kaze, Mentsu m);
 
-//	/**
-//	 * サーバーからポンするかの問い合わせを受け取る。
-//	 * @param lists ポンできる牌のインデックスのリスト(サイズは必ず2)のリスト。
-//	 */
-//	public void onPonableIndexListsReceived(List<List<Integer>> lists);
-
-	/**
-	 * サーバーからリーチするかの問い合わせを受け取る。
-	 * @param list (それを切って)リーチできる牌のインデックスのリスト。
-	 */
-	public void onReachableIndexListReceived(List<Integer> list);
-
-	// TODO 引数currentTurn確認.
 	/**
 	 * サーバーから立直したことを受信する.
-	 * @param currentTurn
-	 * @param sutehaiIndex
+	 * @param currentTurn 立直した人の風.
+	 * @param hai 立直牌.
+	 * @param tsumokiri ツモ切りの場合true.
 	 */
-	public void onReachReceived(Kaze currentTurn, int sutehaiIndex);
+	public void onReachNotified(Kaze currentTurn, Hai hai, boolean tsumokiri);
 
 	/**
 	 * サーバーから誰かがロンをしたことを知らされる。
@@ -142,49 +67,30 @@ public interface ClientListener {
 	 */
 	public void onRonReceived(Map<Player, List<Hai>> map);
 
-//	/**
-//	 * サーバーからロンするかの問い合わせを受け取る。
-//	 */
-//	public void onRonRequested();
-
 	/**
 	 * 局が開始したことをサーバーから受け取る.引数はその局の場風,局数である.
 	 * 例えば「南場3局目」のときはKaze.NANと3を渡す.
 	 * 
 	 * @param bakaze その局の場風.
+	 * @param kaze そのプレイヤーの風.
 	 * @param kyokusu その局の局数.
 	 * @param honba その局の本場.
 	 * @param tsumibou 現在の積み棒の数.
+	 * @param haipai 配牌.
+	 * @param dora ドラ牌.
 	 */
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba, int tsumibou);
+	public void onStartKyokuReceived(Kaze bakaze, Kaze kaze, int kyokusu, int honba, int tsumibou, List<Hai> haipai, Hai dora);
 
 	/**
 	 * 流局時に、テンパイしているプレイヤーの情報とその手牌を受信する
 	 * @param map
 	 */
-	public void onTempaiReceived(Map<Player, List<Hai>> map);
+	public void onTempaiReceived(Map<Kaze, List<Hai>> map);
 
 	/**
 	 * ツモあがったことをサーバーから受信する.
+	 * ツモあがり時のアニメーションを表示するなどするとよい.
 	 */
 	public void onTsumoAgariReceived();
-
-	/**
-	 * サーバーからツモ上がりするかの問い合わせを受け取る。
-	 */
-	public void onTsumoAgariRequested();
-
-	/**
-	 * サーバーから立直後のツモ切りしたことを受け取る.
-	 * これを受け取ったクライアントは牌を強制的に切ることになる.
-	 */
-	// TODO これ必要？
-	public void onTsumoGiriReceived();
-
-	/**
-	 * サーバーからツモ牌を受け取る。
-	 * @param hai ツモ牌。
-	 */
-	public void onTsumoHaiReceived(Hai hai);
 
 }

@@ -65,7 +65,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onDiscardReceived(boolean tumoari) {
+	public void onDiscardRequested(boolean tumoari) {
 		logger.debug();
 		System.out.print("Discard>");
 		int index = -1;
@@ -150,7 +150,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onKakanableIndexListReceived(List<Integer> list) {
+	public void onKakanableIndexRequested(List<Integer> list) {
 		logger.debug();
 		System.out.println("KAKAN");
 		System.out.println("-1 : 加槓しない");
@@ -173,7 +173,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onReachableIndexListReceived(List<Integer> list) {
+	public void onReachableIndexRequested(List<Integer> list) {
 		logger.debug();
 		System.out.println("REACH");
 		System.out.println("-1 : 立直しない");
@@ -246,7 +246,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onNakiReceived(Player player, Mentsu mentu) {
+	public void onNakiNotified(Player player, Mentsu mentu) {
 		logger.debug();
 	}
 
@@ -270,7 +270,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onReachReceived(Kaze currentTurn, int sutehaiIndex) {
+	public void onReachNotified(Kaze currentTurn, int sutehaiIndex) {
 		logger.debug();
 	}
 
@@ -299,7 +299,7 @@ public class ConsoleClient implements ClientListener {
 	}
 
 	@Override
-	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba, int tsumibou) {
+	public void onStartKyokuReceived(Kaze bakaze, int kyokusu, int honba, int tsumibou, List<Hai> haipai) {
 		logger.debug();
 	}
 
@@ -431,6 +431,12 @@ public class ConsoleClient implements ClientListener {
 			sb.append(msg);
 			return sb.toString();
 		}
+	}
+
+	@Override
+	public void onTehaiUpdated(List<Hai> tehai) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -11,6 +11,7 @@ import test.client.AIClient;
 import test.client.ClientListener;
 import test.client.ClientSenderImpl;
 import test.client.ConsoleClient;
+import test.client.MahjongClient;
 import test.server.ServerReceiver;
 import test.server.ServerSender;
 import test.server.SingleServerReceiver;
@@ -75,9 +76,9 @@ public class Test {
 		csend4.setServerReceiver(rec4);
 		
 		ClientListener listener1 = new ConsoleClient(csend1);
-		ClientListener listener2 = new AIClient(csend2, ai2);
-		ClientListener listener3 = new AIClient(csend3, ai3);
-		ClientListener listener4 = new AIClient(csend4, ai4);
+		ClientListener listener2 = new MahjongClient(new AIClient(csend2, ai2));
+		ClientListener listener3 = new MahjongClient(new AIClient(csend3, ai3));
+		ClientListener listener4 = new MahjongClient(new AIClient(csend4, ai4));
 		
 		send1.setListener(listener1);
 		send2.setListener(listener2);
