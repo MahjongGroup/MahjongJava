@@ -424,7 +424,7 @@ public class DummyClient extends ClientOperator implements Client {
 			case ON_MINKANABLE_INDEX_RECEIVED:
 				break;
 			case ON_NAKI_RECEIVED:
-				onNakiReceived((Player) packets.get(0).getArg(),
+				onNakiNotified((Player) packets.get(0).getArg(),
 						(Mentsu) packets.get(1).getArg());
 				break;
 			case ON_NEXT_KYOKU_REQUESTED:

@@ -47,9 +47,8 @@ public class AIType02 extends AbstractAI {
 	}
 
 	@Override
-	public boolean isReach() {
-		// TODO Auto-generated method stub
-		return false;
+	public int reach(List<Integer> list) {
+		return -1;
 	}
 
 	@Override

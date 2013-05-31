@@ -44,8 +44,8 @@ public class AIType_Ex1 extends AbstractAI {
 	}
 
 	@Override
-	public boolean isReach() {
-		return false;
+	public int reach(List<Integer> list) {
+		return -1;
 	}
 
 	@Override

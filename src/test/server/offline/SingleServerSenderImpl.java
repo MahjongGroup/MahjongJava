@@ -5,158 +5,109 @@ import java.util.Map;
 
 import system.Player;
 import system.hai.Hai;
-import system.hai.HurohaiList;
 import system.hai.Kaze;
 import system.hai.Mentsu;
 import system.result.KyokuResult;
+import test.client.ClientListener;
 import test.server.SingleServerSender;
 
 /**
  * オフラインにおけるサーバーセンダーの実装.
  */
 public class SingleServerSenderImpl implements SingleServerSender{
+	private ClientListener listener;
+	
+	public SingleServerSenderImpl() {
+		
+	}
+	
+	public void setListener(ClientListener l) {
+		this.listener = l;
+	}
 	
 	@Override
-	public void sendGameStart(List<Player> playerList, int index, int[] scores) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyStartKyoku(Kaze bakaze, int kyokusu, int honba,
-			int tsumibou) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void requestKyusyukyuhai() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTsumoHai(Hai hai) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendTsumoGiri() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendDiscard(boolean tumoari) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendChiableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendPonableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
+		listener.onKyusyukyuhaiRequested();
 	}
 
 	@Override
 	public void sendAnkanableIndexLists(List<List<Integer>> lists) {
-		// TODO Auto-generated method stub
-		
+		listener.onAnkanableIndexListsReceived(lists);		
+	}
+	
+	@Override
+	public void requestKakanableIndex(List<Integer> list) {
+		listener.onKakanableIndexRequested(list);
 	}
 
 	@Override
-	public void sendMinkanableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendKakanableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendReachableIndexList(List<Integer> list) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void requestRon() {
-		// TODO Auto-generated method stub
-		
+	public void requestReachableIndex(List<Integer> list) {
+		listener.onReachableIndexRequested(list);
 	}
 
 	@Override
 	public void requestTsumoAgari() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyDiscard(Player p, Hai hai, boolean tumokiri) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyNaki(Player p, Mentsu m) {
-		// TODO Auto-generated method stub
-		
+		listener.onTsumoAgariRequested();
 	}
 
 	@Override
 	public void notifyRon(Map<Player, List<Hai>> map) {
-		// TODO Auto-generated method stub
-		
+		listener.onRonReceived(map);
 	}
-
-	@Override
-	public void sendField(List<Hai> tehai, Map<Kaze, HurohaiList> nakihai,
-			Map<Kaze, List<Hai>> sutehai, Kaze currentTurn, Hai currentSutehai,
-			List<Integer> tehaiSize, int yamaSize, int wanpaiSize,
-			List<Hai> doraList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyReach(Kaze currentTurn, int sutehaiIndex) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyKyokuResult(KyokuResult kr, int[] newScore,
-			int[] oldScore, List<Integer> soten, List<Hai> uradoraList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyTempai(Map<Player, List<Hai>> map) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyGameResult(int[] Score) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void sendGameOver() {
-		// TODO Auto-generated method stub
-		
+		listener.onGameOverReceived();		
+	}
+
+	@Override
+	public void requestNaki(boolean ron, List<Integer> minkan, List<List<Integer>> pon, List<List<Integer>> chi) {
+		listener.onNakiRequested(ron, minkan, pon, chi);
+	}
+	
+	@Override
+	public void sendGameStart(Map<Kaze, Player> pMap, Kaze kaze, int initialScore) {
+		listener.onGameStartReceived(pMap, kaze, initialScore);
+	}
+
+	@Override
+	public void notifyStartKyoku(Kaze bakaze, Kaze kaze, int kyokusu, int honba, int tsumibou, List<Hai> haipai, Hai dora) {
+		listener.onStartKyokuReceived(bakaze, kaze,  kyokusu, honba, tsumibou, haipai, dora);
+	}
+
+	@Override
+	public void requestDiscardIndex(Hai tsumohai) {
+		listener.onDiscardRequested(tsumohai);
+	}
+
+	@Override
+	public void notifyDiscard(Kaze kaze, Hai hai, boolean tsumokiri) {
+		listener.onDiscardReceived(kaze, hai, tsumokiri);
+	}
+
+	@Override
+	public void notifyNaki(Kaze kaze, Mentsu m) {
+		listener.onNakiNotified(kaze, m);
+	}
+
+	@Override
+	public void notifyReach(Kaze currentTurn, Hai hai, boolean tsumokiri) {
+		listener.onReachNotified(currentTurn, hai, tsumokiri);
+	}
+
+	@Override
+	public void notifyKyokuResult(KyokuResult kr, Map<Kaze, Integer> scoreDiff, List<Hai> uradoraList) {
+		listener.onKyokuResultReceived(kr, scoreDiff, uradoraList);
+	}
+
+	@Override
+	public void notifyTempai(Map<Kaze, List<Hai>> map) {
+		listener.onTempaiReceived(map);
+	}
+
+	@Override
+	public void notifyGameResult(Map<Kaze, Integer> scoreMap) {
+		listener.onGameResultReceived(scoreMap);
 	}
 
 }

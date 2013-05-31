@@ -94,7 +94,6 @@ public class ServerReceiverImpl implements ServerReceiver {
 				SingleServerReceiver rec = map.get(p);
 
 				if (rec.isMessageReceived(mType)) {
-					rec.fetchMessage(mType);
 					removedPlayer = p;
 					break;
 				}
@@ -124,7 +123,6 @@ public class ServerReceiverImpl implements ServerReceiver {
 			SingleServerReceiver rec = map.get(p);
 
 			if (rec.isMessageReceived(mType)) {
-				rec.fetchMessage(mType);
 				return false;
 			}
 			try {

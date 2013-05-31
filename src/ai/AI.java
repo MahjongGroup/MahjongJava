@@ -53,11 +53,11 @@ public interface AI {
 	public int ankan(List<List<Integer>> lists);
 	
 	/**
-	 * このAIが立直をすると判断した場合,trueを返す.
-	 * 
-	 * @return 立直をする場合はtrue.
+	 * このAIが立直をすると判断した場合,リーチするIndexを返す.
+	 * @param list 
+	 * @return 立直をしない場合は-1.
 	 */
-	public boolean isReach();
+	public int reach(List<Integer> list);
 	
 	/**
 	 * AIが判断した切る牌の手牌のインデックスを返す.

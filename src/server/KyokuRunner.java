@@ -231,11 +231,11 @@ public class KyokuRunner {
 			if (kyoku.isTsumoAgari())
 				trserver.requestTsumoAgari();
 			if (kyoku.isKakanable())
-				trserver.sendKakanableIndexList(kyoku.getKakanableHaiList());
+				trserver.requestKakanableIndex(kyoku.getKakanableHaiList());
 			if (kyoku.isAnkanable())
 				trserver.sendAnkanableIndexLists(kyoku.getAnkanableHaiList());
 			if (kyoku.isReachable())
-				trserver.sendReachableIndexList(kyoku.getReachableHaiList());
+				trserver.requestReachableIndex(kyoku.getReachableHaiList());
 			Transporter tr = transporterMap.get(kyoku.getCurrentTurn());
 			trserver.sendDiscard(isThereTsumohai(tr));
 		} else {
@@ -451,7 +451,7 @@ public class KyokuRunner {
 			}
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
 
-			if (kyoku.isReachable() && ai.isReach()) {
+			if (kyoku.isReachable() && ai.reach(null)) {
 				kyoku.doReach();
 				int index = ai.discard();
 				kyoku.discard(index);

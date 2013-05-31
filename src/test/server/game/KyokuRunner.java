@@ -16,6 +16,7 @@ import system.hai.Mentsu;
 import system.hai.SutehaiList;
 import system.hai.TehaiList;
 import system.result.TotyuRyukyokuType;
+import test.server.ServerMessage;
 import test.server.ServerMessage.IntegerListMessage;
 import test.server.ServerMessage.IntegerMessage;
 import test.server.ServerMessageType;
@@ -25,8 +26,6 @@ import test.server.SingleServerReceiver;
 import test.server.SingleServerSender;
 import util.MyLogger;
 import ai.AI;
-import ai.AIType01;
-import ai.AIType_Debug;
 
 /**
  * 1回の局を走らせるクラス.
@@ -89,7 +88,7 @@ public class KyokuRunner {
 	private final ServerSender sender;
 
 	private int stateCode;
-
+	
 	/**
 	 * 指定された局を動かす局ランナーのコンストラクタ.
 	 * 
@@ -99,13 +98,6 @@ public class KyokuRunner {
 		this.kyoku = kyoku;
 		this.playerMap = kyoku.getPlayerMap();
 		this.aiMap = new HashMap<Kaze, AI>(4);
-		for (Player p : playerMap.values()) {
-			if (p.isMan())
-				continue;
-			AI ai = new AIType_Debug(p, false, true);
-			ai.update(kyoku);
-			this.aiMap.put(kyoku.getKazeOf(p), ai);
-		}
 
 		this.receiver = receiver;
 		this.sender = sender;
@@ -115,7 +107,6 @@ public class KyokuRunner {
 	 * 局を開始する.
 	 */
 	public void run() {
-		kyoku.init();
 		stateCode = STATE_CODE_TSUMO;
 
 		kyokuLoop: while (true) {
@@ -199,15 +190,14 @@ public class KyokuRunner {
 	private void STATE_CODE_TSUMO() {
 		clearMessage();
 		kyoku.doTsumo();
-		SingleServerSender server = sender.get(kyoku.getCurrentPlayer());
-		server.sendTsumoHai(kyoku.getCurrentTsumoHai());
 		kyoku.sortTehaiList();
-		sendNeededInformation();
 		stateCode = STATE_CODE_SEND_A;
 	}
 
 	// 九種九牌、ツモあがり、加槓、暗槓、リーチ、どの牌を切るかのリクエストはあらかじめ送信しておく
 	private void STATE_CODE_SEND_A() {
+		kyoku.disp();
+
 		Player p = kyoku.getCurrentPlayer();
 		SingleServerSender server = sender.get(p);
 		if (kyoku.isKyusyukyuhai())
@@ -215,12 +205,12 @@ public class KyokuRunner {
 		if (kyoku.isTsumoAgari())
 			server.requestTsumoAgari();
 		if (kyoku.isKakanable())
-			server.sendKakanableIndexList(kyoku.getKakanableHaiList());
+			server.requestKakanableIndex(kyoku.getKakanableHaiList());
 		if (kyoku.isAnkanable())
 			server.sendAnkanableIndexLists(kyoku.getAnkanableHaiList());
 		if (kyoku.isReachable())
-			server.sendReachableIndexList(kyoku.getReachableHaiList());
-		server.sendDiscard(kyoku.getCurrentTsumoHai() != null);
+			server.requestReachableIndex(kyoku.getReachableHaiList());
+		server.requestDiscardIndex(kyoku.getCurrentTsumoHai());
 
 		SingleServerReceiver rec = receiver.get(p);
 		while (true) {
@@ -235,17 +225,10 @@ public class KyokuRunner {
 	private void STATE_CODE_KYUSYUKYUHAI() {
 		if (kyoku.isKyusyukyuhai()) {
 			Player p = kyoku.getCurrentPlayer();
-			if (p.isMan()) {
+			if (true) {
 				SingleServerReceiver rec = receiver.get(kyoku.getCurrentPlayer());
 
-				boolean answer = false;
 				if (rec.isMessageReceived(ServerMessageType.KYUSYUKYUHAI_RECEIVED)) {
-					// 九種九牌の返事にbooleanはいらない？返信があればするものとみなせる
-					rec.fetchMessage(ServerMessageType.KYUSYUKYUHAI_RECEIVED);
-					answer = true;
-				}
-
-				if (answer) {
 					kyoku.doTotyuRyukyoku(TotyuRyukyokuType.KYUSYUKYUHAI);
 					stateCode = STATE_CODE_ENDOFKYOKU;
 					return;
@@ -267,7 +250,7 @@ public class KyokuRunner {
 	private void STATE_CODE_TSUMOAGARI() {
 		if (kyoku.isTsumoAgari()) {
 			Player p = kyoku.getCurrentPlayer();
-			if (p.isMan()) {
+			if (true) {
 				SingleServerReceiver server = receiver.get(p);
 				boolean tsumoagari = false;
 				if (server.isMessageReceived(ServerMessageType.TSUMO_AGARI_RECEIVED)) {
@@ -298,13 +281,13 @@ public class KyokuRunner {
 	private void STATE_CODE_KAKAN() {
 		if (kyoku.isKakanable()) {
 			Player p = kyoku.getCurrentPlayer();
-			if (p.isMan()) {
+			if (true) {
 				SingleServerReceiver rec = receiver.get(kyoku.getCurrentPlayer());
 				ServerMessageType mType = ServerMessageType.KAKANABLE_INDEX_RECEIVED;
 				if (rec.isMessageReceived(mType)) {
 					int kakanindex = ((IntegerMessage) rec.fetchMessage(mType)).getData();
 					Mentsu kakanMentu = kyoku.doKakan(kakanindex);
-					sender.notifyNaki(p, kakanMentu);
+					sender.notifyNaki(kyoku.getKazeOf(p), kakanMentu);
 					stateCode = STATE_CODE_CHANKANRON;
 					return;
 				}
@@ -313,7 +296,7 @@ public class KyokuRunner {
 				int index = -1;
 				if ((index = ai.kakan(kyoku.getKakanableHaiList())) != -1) {
 					Mentsu kakanMentu = kyoku.doKakan(kyoku.getKakanableHaiList().get(index));
-					sender.notifyNaki(p, kakanMentu);
+					sender.notifyNaki(kyoku.getKazeOf(p), kakanMentu);
 					stateCode = STATE_CODE_CHANKANRON;
 					return;
 				}
@@ -321,17 +304,38 @@ public class KyokuRunner {
 			}
 		}
 		stateCode = STATE_CODE_ANKAN;
-		sendNeededInformation();
 	}
 
 	private void STATE_CODE_TYANKANRON() {
 		for (Kaze kaze : Kaze.values()) {
 			Player p = playerMap.get(kaze);
-			if (p.isMan()) {
+			if (true) {
 				if (kyoku.isRonable(kaze)) {
 					SingleServerSender server = sender.get(p);
-					server.requestRon();
+					server.requestNaki(true, null, null, null);
 				}
+			}
+		}
+		
+		List<Kaze> repPlayer = new ArrayList<Kaze>(3);
+		Kaze currentKaze = kyoku.getCurrentTurn();
+		ServerMessageType mType1 = ServerMessageType.RON_RECEIVED;
+		ServerMessageType mType2 = ServerMessageType.REJECT_RECEIVED;
+		
+		while(true) {
+			if(repPlayer.size() >= 3)
+				break;
+			
+			for (Kaze kaze : Kaze.values()) {
+				if(currentKaze == kaze)
+					continue;
+				if(repPlayer.contains(kaze))
+					continue;
+				
+				Player p = kyoku.getPlayer(kaze);
+				SingleServerReceiver rec = receiver.get(p);
+				if(rec.isMessageReceived(mType1) || rec.isMessageReceived(mType2))
+					repPlayer.add(kaze);
 			}
 		}
 
@@ -347,25 +351,20 @@ public class KyokuRunner {
 		kyoku.doRinsyanTsumo();
 		kyoku.sortTehaiList();
 
-		SingleServerSender server = sender.get(kyoku.getCurrentPlayer());
-		if (server != null) {
-			server.sendTsumoHai(kyoku.getCurrentTsumoHai());
-		}
-		sendNeededInformation();
 		stateCode = STATE_CODE_SEND_A;
 	}
 
 	private void STATE_CODE_ANKAN() {
 		if (kyoku.isAnkanable()) {
 			Player p = kyoku.getCurrentPlayer();
-			if (p.isMan()) {
+			if (true) {
 				SingleServerReceiver rec = receiver.get(p);
 				ServerMessageType mType = ServerMessageType.ANKAN_INDEX_LIST_RECEIVED;
 
 				if (rec.isMessageReceived(mType)) {
 					List<Integer> ankanlist = ((IntegerListMessage) rec.fetchMessage(mType)).getData();
 					Mentsu ankanMentu = kyoku.doAnkan(ankanlist);
-					sender.notifyNaki(p, ankanMentu);
+					sender.notifyNaki(kyoku.getKazeOf(p), ankanMentu);
 					stateCode = STATE_CODE_RINSYANTSUMO;
 					return;
 				}
@@ -373,24 +372,23 @@ public class KyokuRunner {
 				AI ai = aiMap.get(kyoku.getCurrentTurn());
 				if (ai.ankan(kyoku.getAnkanableHaiList()) != -1) {
 					Mentsu ankanMentu = kyoku.doAnkan(kyoku.getAnkanableHaiList().get(0));
-					sender.notifyNaki(p, ankanMentu);
+					sender.notifyNaki(kyoku.getKazeOf(p), ankanMentu);
 					stateCode = STATE_CODE_RINSYANTSUMO;
 					return;
 				}
 			}
 		}
 		stateCode = STATE_CODE_ISREACH;
-		sendNeededInformation();
 	}
 
 	private void STATE_CODE_ISREACH() {
 		Player p = kyoku.getCurrentPlayer();
 		SingleServerSender server = sender.get(p);
-		if (p.isMan()) {
+		if (true) {
 			if (kyoku.isReach(kyoku.getCurrentTurn())) {
 				sleep();
 				kyoku.discardTsumoHai();
-				server.sendTsumoGiri();
+				server.notifyDiscard(kyoku.getKazeOf(p), kyoku.getCurrentSutehai(), true);
 				stateCode = STATE_CODE_SEND_B;
 				return;
 			} else {
@@ -408,7 +406,7 @@ public class KyokuRunner {
 								reachSutehaiIndex--;
 							}
 						}
-						sender.notifyReach(kyoku.getCurrentTurn(), reachSutehaiIndex);
+						sender.notifyReach(kyoku.getCurrentTurn(), kyoku.getCurrentSutehai(), (index == 13 ? true : false));
 						stateCode = STATE_CODE_SEND_B;
 						return;
 					}
@@ -422,49 +420,51 @@ public class KyokuRunner {
 			}
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
 
-			if (kyoku.isReachable() && ai.isReach()) {
-				kyoku.doReach();
-				int index = ai.discard();
-				kyoku.discard(index);
-				int reachSutehaiIndex = kyoku.getSutehaiList(kyoku.getCurrentTurn()).size() - 1;
-				for (int i = 0; i < kyoku.getSutehaiList(kyoku.getCurrentTurn()).size(); i++) {
-					if (kyoku.getSutehaiList(kyoku.getCurrentTurn()).get(i).isNaki()) {
-						reachSutehaiIndex--;
-					}
-				}
-
-				sender.notifyReach(kyoku.getCurrentTurn(), reachSutehaiIndex);
-				stateCode = STATE_CODE_SEND_B;
+//			if (kyoku.isReachable() && ai.reach(null)) {
+//				kyoku.doReach();
+//				int index = ai.discard();
+//				kyoku.discard(index);
+//				int reachSutehaiIndex = kyoku.getSutehaiList(kyoku.getCurrentTurn()).size() - 1;
+//				for (int i = 0; i < kyoku.getSutehaiList(kyoku.getCurrentTurn()).size(); i++) {
+//					if (kyoku.getSutehaiList(kyoku.getCurrentTurn()).get(i).isNaki()) {
+//						reachSutehaiIndex--;
+//					}
+//				}
+//
+//				sender.notifyReach(kyoku.getCurrentTurn(), reachSutehaiIndex);
+//				stateCode = STATE_CODE_SEND_B;
 				return;
-			}
+//			}
 		}
 		stateCode = STATE_CODE_DISCARD;
-		sendNeededInformation();
 	}
 
 	private void STATE_CODE_DISCARD() {
 		Player p = kyoku.getCurrentPlayer();
-		if (p.isMan()) {
+		if (true) {
 			SingleServerReceiver rec = receiver.get(p);
 
 			ServerMessageType mType = ServerMessageType.DISCARD_INDEX_RECEIVED;
 			receiver.wait(p, mType, 0);
-			int i = ((IntegerMessage) rec.fetchMessage(mType)).getData();
+			ServerMessage m = rec.fetchMessage(mType);
+			int i = ((IntegerMessage) m).getData();
 
 			if (0 <= i && i <= 12) {
 				kyoku.discard(i);
-				sender.notifyDiscard(kyoku.getCurrentPlayer(), kyoku.getCurrentSutehai(), false);
+				kyoku.sortTehaiList(kyoku.getCurrentTurn());
+				sender.notifyDiscard(kyoku.getCurrentTurn(), kyoku.getCurrentSutehai(), false);
+				List<Hai> tehai = new ArrayList<Hai>(kyoku.getTehaiList(kyoku.getCurrentTurn()));
 			} else if (i == 13) {
 				kyoku.discard(13);
-				sender.notifyDiscard(kyoku.getCurrentPlayer(), kyoku.getCurrentSutehai(), true);
+				sender.notifyDiscard(kyoku.getCurrentTurn(), kyoku.getCurrentSutehai(), true);
 			}
 		} else {
 			AI ai = aiMap.get(kyoku.getCurrentTurn());
 			kyoku.discard(ai.discard());
-			sender.notifyDiscard(kyoku.getCurrentPlayer(), kyoku.getCurrentSutehai(), false);
+			sender.notifyDiscard(kyoku.getCurrentTurn(), kyoku.getCurrentSutehai(), false);
 		}
+		
 
-		sendNeededInformation();
 		stateCode = STATE_CODE_SEND_B;
 	}
 
@@ -477,21 +477,17 @@ public class KyokuRunner {
 
 		for (Kaze kaze : Kaze.values()) {
 			Player p = playerMap.get(kaze);
-			SingleServerSender server = sender.get(p);
 			if (kyoku.isRonable(kaze)) {
-				server.requestRon();
 				ronPlayers.add(p);
 				nakiPlayers.add(p);
 			}
 
 			if (kyoku.isMinkanable(kaze)) {
-				server.sendMinkanableIndexList(kyoku.getMinkanableList(kaze));
 				minkanPlayers.add(p);
 				nakiPlayers.add(p);
 			}
 
 			if (kyoku.isPonable(kaze)) {
-				server.sendPonableIndexLists(kyoku.getPonableHaiList(kaze));
 				ponPlayers.add(p);
 				nakiPlayers.add(p);
 			}
@@ -499,10 +495,22 @@ public class KyokuRunner {
 
 		if (kyoku.isChiable()) {
 			Player p = kyoku.getPlayer(kyoku.getCurrentTurn().simo());
-			SingleServerSender server = sender.get(p);
-			server.sendChiableIndexLists(kyoku.getChiableHaiList());
 			chiPlayer = p;
 			nakiPlayers.add(p);
+		}
+		
+		for (Player player : playerMap.values()) {
+			if(!nakiPlayers.contains(player)) {
+				continue;
+			}
+			
+			Kaze kaze = kyoku.getKazeOf(player);
+			SingleServerSender server = sender.get(player);
+			boolean ron = ronPlayers.contains(player);
+			List<Integer> minkan = (minkanPlayers.contains(player) ? kyoku.getMinkanableList(kaze) : null);
+			List<List<Integer>> pon = (ponPlayers.contains(player) ? kyoku.getPonableHaiList(kaze) : null);
+			List<List<Integer>> chi = ((chiPlayer != null && kaze == kyoku.getCurrentTurn().simo()) ? kyoku.getChiableHaiList() : null);
+			server.requestNaki(ron, minkan, pon, chi);
 		}
 
 		boolean ron = false;
@@ -549,7 +557,7 @@ public class KyokuRunner {
 				}
 				if (pon)
 					continue;
-				if (chiPlayer.equals(p)) {
+				if (chiPlayer != null && chiPlayer.equals(p)) {
 					if (rec.isMessageReceived(ServerMessageType.CHIINDEX_LIST_RECEIVED)) {
 						nakiPlayers.remove(p);
 						chiPlayer = null;
@@ -567,7 +575,6 @@ public class KyokuRunner {
 		} else {
 			stateCode = STATE_CODE_RYUKYOKU;
 		}
-		sendNeededInformation();
 	}
 
 	private void STATE_CODE_RYUKYOKU() {
@@ -590,13 +597,10 @@ public class KyokuRunner {
 
 	private void STATE_CODE_NAKI() {
 		if (!doMinkan()) {
-			sendNeededInformation();
 			if (!doPon()) {
-				sendNeededInformation();
 				doChi();
 			}
 		}
-		sendNeededInformation();
 		if (stateCode == STATE_CODE_NAKI) {
 			stateCode = STATE_CODE_NEXTTURN;
 		}
@@ -604,8 +608,9 @@ public class KyokuRunner {
 	}
 
 	private void STATE_CODE_SEND_C() {
+		kyoku.disp();
 		SingleServerSender server = sender.get(kyoku.getCurrentPlayer());
-		server.sendDiscard(false);
+		server.requestDiscardIndex(null);
 		stateCode = STATE_CODE_DISCARD;
 	}
 
@@ -620,33 +625,6 @@ public class KyokuRunner {
 		}
 	}
 
-	/**
-	 * 各クライアントに場(捨て牌,副露牌,手牌など)の情報を送る.
-	 */
-	private void sendNeededInformation() {
-		Map<Kaze, HurohaiList> nakihai = kyoku.getHurohaiMap();
-
-		Map<Kaze, List<Hai>> sutehai = new HashMap<Kaze, List<Hai>>();
-		for (Kaze kaze : Kaze.values()) {
-			SutehaiList sutehailist = kyoku.getSutehaiList(kaze);
-			sutehai.put(kaze, sutehailist.toNakiExcludedHaiList());
-		}
-
-		List<Integer> tehaiSize = new ArrayList<Integer>();
-		for (Kaze kaze : Kaze.values()) {
-			tehaiSize.add(kyoku.getTehaiList(kaze).size());
-		}
-
-		for (Player p : sender.keySet()) {
-			Kaze kaze = kyoku.getKazeOf(p);
-			TehaiList tehai = kyoku.getTehaiList(kaze);
-			SingleServerSender server = sender.get(p);
-
-			server.sendField(tehai, nakihai, sutehai, kyoku.getCurrentTurn(), kyoku.getCurrentSutehai(), tehaiSize, kyoku.getYamahaiList()
-					.size(), kyoku.getWanpaiList().size(), kyoku.getOpenDoraList());
-		}
-	}
-
 	private boolean doRon() {
 		List<Player> ronPlayer = new ArrayList<Player>(4);
 		Map<Player, List<Hai>> ronMap = new HashMap<Player, List<Hai>>();
@@ -654,7 +632,7 @@ public class KyokuRunner {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isRonable(kaze)) {
 				Player p = playerMap.get(kaze);
-				if (p.isMan()) {
+				if (true) {
 					SingleServerReceiver rec = receiver.get(p);
 					ServerMessageType mType = ServerMessageType.RON_RECEIVED;
 
@@ -706,25 +684,23 @@ public class KyokuRunner {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isMinkanable(kaze)) {
 				Player p = playerMap.get(kaze);
-				if (p.isMan()) {
+				if (true) {
 					ServerMessageType mType = ServerMessageType.MINKAN_RECEIVED;
-					receiver.wait(p, mType, 0);
 					SingleServerReceiver rec = receiver.get(p);
 
 					if (rec.isMessageReceived(mType)) {
 						rec.fetchMessage(mType);
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
-						sender.notifyNaki(p, minkanMentu);
+						sender.notifyNaki(kyoku.getKazeOf(p), minkanMentu);
 
 						stateCode = STATE_CODE_RINSYANTSUMO;
 						return true;
 					}
 				} else {
-					AIType01 ai = new AIType01(p);
+					AI ai = aiMap.get(p);
 					if (ai.minkan()) {
 						Mentsu minkanMentu = kyoku.doMinkan(kaze);
-						sender.notifyNaki(p, minkanMentu);
-
+						sender.notifyNaki(kyoku.getKazeOf(p), minkanMentu);
 						stateCode = STATE_CODE_RINSYANTSUMO;
 						return true;
 					}
@@ -742,14 +718,17 @@ public class KyokuRunner {
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isPonable(kaze)) {
 				Player p = playerMap.get(kaze);
-				if (p.isMan()) {
+				if (true) {
 					ServerMessageType mType = ServerMessageType.PON_INDEX_LIST_RECEIVED;
 					SingleServerReceiver rec = receiver.get(p);
 
+					if(!rec.isMessageReceived(mType))
+						continue;
+					
 					List<Integer> ponlist = ((IntegerListMessage) rec.fetchMessage(mType)).getData();
 					if (ponlist != null) {
 						Mentsu ponMentu = kyoku.doPon(kaze, ponlist);
-						sender.notifyNaki(p, ponMentu);
+						sender.notifyNaki(kaze, ponMentu);
 
 						stateCode = STATE_CODE_SEND_C;
 						return true;
@@ -758,8 +737,7 @@ public class KyokuRunner {
 					AI ai = aiMap.get(kaze);
 					if (ai.pon(kyoku.getPonableHaiList(kaze)) != -1) {
 						Mentsu ponMentu = kyoku.doPon(kaze, kyoku.getPonableHaiList(kaze).get(ai.pon(kyoku.getPonableHaiList(kaze))));
-						sender.notifyNaki(p, ponMentu);
-
+						sender.notifyNaki(kaze, ponMentu);
 						stateCode = STATE_CODE_SEND_C;
 						return true;
 					}
@@ -777,14 +755,18 @@ public class KyokuRunner {
 	private boolean doChi() {
 		if (kyoku.isChiable()) {
 			Player p = playerMap.get(kyoku.getCurrentTurn().simo());
-			if (p.isMan()) {
+			if (true) {
 				ServerMessageType mType = ServerMessageType.CHIINDEX_LIST_RECEIVED;
 				SingleServerReceiver rec = receiver.get(p);
 
+				if(!rec.isMessageReceived(mType)) {
+					return false;
+				}
+				
 				List<Integer> chilist = ((IntegerListMessage) rec.fetchMessage(mType)).getData();
 				if (chilist != null) {
 					Mentsu chiMentu = kyoku.doChi(chilist);
-					sender.notifyNaki(p, chiMentu);
+					sender.notifyNaki(kyoku.getKazeOf(p), chiMentu);
 
 					stateCode = STATE_CODE_SEND_C;
 					return true;
@@ -794,8 +776,7 @@ public class KyokuRunner {
 				int index = -1;
 				if ((index = ai.chi(kyoku.getChiableHaiList())) != -1) {
 					Mentsu chiMentu = kyoku.doChi(kyoku.getChiableHaiList().get(index));
-					sender.notifyNaki(p, chiMentu);
-
+					sender.notifyNaki(kyoku.getKazeOf(p), chiMentu);
 					stateCode = STATE_CODE_SEND_C;
 					return true;
 				}
@@ -847,10 +828,10 @@ public class KyokuRunner {
 
 	// 聴牌したプレイヤーの手牌を周りに見せる
 	private void doTempai() {
-		Map<Player, List<Hai>> tempaiMap = new HashMap<Player, List<Hai>>();
+		Map<Kaze, List<Hai>> tempaiMap = new HashMap<Kaze, List<Hai>>();
 		for (Kaze kaze : Kaze.values()) {
 			if (kyoku.isTenpai(kaze)) {
-				tempaiMap.put(kyoku.getPlayer(kaze), kyoku.getTehaiList(kaze));
+				tempaiMap.put(kaze, kyoku.getTehaiList(kaze));
 			}
 		}
 		sender.notifyTempai(tempaiMap);

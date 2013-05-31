@@ -61,8 +61,8 @@ public class AIType_Debug extends AbstractAI{
 	}
 
 	@Override
-	public boolean isReach() {
-		return true;
+	public int reach(List<Integer> list) {
+		return -1;
 	}
 
 	@Override

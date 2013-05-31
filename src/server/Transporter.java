@@ -344,7 +344,7 @@ public class Transporter implements Server{
 
 	@Override
 	public void notifyNaki(Player player, Mentsu mentu) {
-		client.onNakiReceived(player, mentu);
+		client.onNakiNotified(player, mentu);
 	}
 
 	@Override
