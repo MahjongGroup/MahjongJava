@@ -3,4 +3,8 @@
 .settings
 .DS_Store
 bin
+<<<<<<< HEAD
 res
+=======
+res
+>>>>>>> c9df39d81ed8116d3bba4cce9748398162637e75
